@@ -1084,10 +1084,12 @@ body {
   font-size: 18px; line-height: 21px; text-align: center;
   text-transform: uppercase; text-shadow: var(--text-shadow-game, 0 0 4px #00535c, 0 0 20px #000);
 }
+/* Кнопки запуска здесь нет: это разделы ставок, а не игры —
+   запускать нечего. Затемнение при наведении остаётся. */
+.sport .card-play { display: none; }
 @media (hover: hover) {
   .sport:hover { transform: translateY(-8px); }
   .sport:hover .card-veil { opacity: 1; }
-  .sport:hover .card-play { transform: scale(1.5); }
 }
 .sport:active { transform: translateY(-4px); }
 
