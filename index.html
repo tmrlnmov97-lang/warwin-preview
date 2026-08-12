@@ -1243,7 +1243,6 @@ body {
   .srch__sel { width: calc(50% - 4px); }
 }
 
-
 /* ── Появление попапа · подложка проявляется, окно подрастает ── */
 @keyframes srch-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes srch-rise {
@@ -1336,26 +1335,6 @@ body {
 }
 .srch__menu--logos li[data-p="all"] { padding: 12px; font-size: 15px; }
 
-/* ───────────────────────────────────────────────────────────────────
-   Появление ряда на главной. Волну по карточкам, как в попапе, здесь
-   пришлось убрать: ряд шире и карточки крупнее, поэтому шаг в 30мс
-   растягивал появление на полсекунды и правая половина ряда всё это
-   время стояла пустой — читалось как недогруженный контент. Ряд
-   проступает целиком, одним движением.
-   ─────────────────────────────────────────────────────────────────── */
-@keyframes ww-card-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.rail.is-in > *, .providers-rail.is-in > * {
-  animation: ww-card-in .32s cubic-bezier(.22, .61, .36, 1) both;
-  will-change: transform, opacity;
-}
-.rail.is-settled > *, .providers-rail.is-settled > * { will-change: auto; }
-
-@media (prefers-reduced-motion: reduce) {
-  .rail.is-in > *, .providers-rail.is-in > * { animation: none; will-change: auto; }
-}
 }
 
 </style>
@@ -2002,7 +1981,6 @@ body {
   </div>
 </nav>
 
-
 <!-- 932:42896 «Search» — попап поиска, 859x1033 -->
 <div class="srch" id="search-modal" hidden>
   <div class="srch__backdrop" data-close></div>
@@ -2365,34 +2343,6 @@ body {
       el.addEventListener('scroll', function () { edges(el); }, { passive: true });
       addEventListener('resize', function () { edges(el); });
     })(strips[n]);
-
-    /* Ряд оживает, когда въезжает в поле зрения. Старт отдан
-       requestIdleCallback: на загрузке главный поток занят раскладкой, и
-       анимация, начатая в этот момент, теряет кадры. */
-    var rails = document.querySelectorAll('.rail, .providers-rail');
-    if ('IntersectionObserver' in window) {
-      var idle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 120); };
-      var startRail = function (rail) {
-        idle(function () {
-          rail.classList.add('is-in');
-          var n = Math.min(rail.children.length, 8);
-          var last = rail.children[n - 1];
-          if (last) last.addEventListener('animationend', function () {
-            rail.classList.add('is-settled');
-          }, { once: true });
-        }, { timeout: 400 });
-      };
-      var railIO = new IntersectionObserver(function (entries) {
-        for (var k = 0; k < entries.length; k++) {
-          if (!entries[k].isIntersecting) continue;
-          startRail(entries[k].target);
-          railIO.unobserve(entries[k].target);
-        }
-      }, { rootMargin: '0px 0px -8% 0px' });
-      for (var r = 0; r < rails.length; r++) railIO.observe(rails[r]);
-    } else {
-      for (var r2 = 0; r2 < rails.length; r2++) rails[r2].classList.add('is-in');
-    }
 
     /* Тень у шапки появляется только когда под ней есть прокрученный контент */
     var bar = document.querySelector('.topbar');
