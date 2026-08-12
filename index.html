@@ -1330,6 +1330,35 @@ body {
 }
 .srch__menu--logos li[data-p="all"] { padding-left: 116px; }
 
+/* ───────────────────────────────────────────────────────────────────
+   Появление карточек в рядах главной — те же параметры, что в попапе
+   поиска: 10px снизу, 340мс, затухание без отскока, шаг волны 30мс.
+   Слой заранее отдаётся композитору, а старт откладывается до свободного
+   потока: на загрузке страницы раскладка занимает его почти на полсекунды,
+   и анимация, начатая в этот момент, проигрывается рывком.
+   ─────────────────────────────────────────────────────────────────── */
+@keyframes ww-card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rail.is-in > *, .providers-rail.is-in > * {
+  animation: ww-card-in .34s cubic-bezier(.22, .61, .36, 1) both;
+  will-change: transform, opacity;
+}
+.rail.is-settled > *, .providers-rail.is-settled > * { will-change: auto; }
+.rail.is-in > :nth-child(1),  .providers-rail.is-in > :nth-child(1)  { animation-delay: 0s; }
+.rail.is-in > :nth-child(2),  .providers-rail.is-in > :nth-child(2)  { animation-delay: .03s; }
+.rail.is-in > :nth-child(3),  .providers-rail.is-in > :nth-child(3)  { animation-delay: .06s; }
+.rail.is-in > :nth-child(4),  .providers-rail.is-in > :nth-child(4)  { animation-delay: .09s; }
+.rail.is-in > :nth-child(5),  .providers-rail.is-in > :nth-child(5)  { animation-delay: .12s; }
+.rail.is-in > :nth-child(6),  .providers-rail.is-in > :nth-child(6)  { animation-delay: .15s; }
+.rail.is-in > :nth-child(7),  .providers-rail.is-in > :nth-child(7)  { animation-delay: .18s; }
+.rail.is-in > :nth-child(n+8), .providers-rail.is-in > :nth-child(n+8) { animation-delay: .21s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rail.is-in > *, .providers-rail.is-in > * { animation: none; will-change: auto; }
+}
+
 </style>
 </head>
 <body>
@@ -2337,6 +2366,34 @@ body {
       el.addEventListener('scroll', function () { edges(el); }, { passive: true });
       addEventListener('resize', function () { edges(el); });
     })(strips[n]);
+
+    /* Ряд оживает, когда въезжает в поле зрения. Старт отдан
+       requestIdleCallback: на загрузке главный поток занят раскладкой, и
+       анимация, начатая в этот момент, теряет кадры. */
+    var rails = document.querySelectorAll('.rail, .providers-rail');
+    if ('IntersectionObserver' in window) {
+      var idle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 120); };
+      var startRail = function (rail) {
+        idle(function () {
+          rail.classList.add('is-in');
+          var n = Math.min(rail.children.length, 8);
+          var last = rail.children[n - 1];
+          if (last) last.addEventListener('animationend', function () {
+            rail.classList.add('is-settled');
+          }, { once: true });
+        }, { timeout: 400 });
+      };
+      var railIO = new IntersectionObserver(function (entries) {
+        for (var k = 0; k < entries.length; k++) {
+          if (!entries[k].isIntersecting) continue;
+          startRail(entries[k].target);
+          railIO.unobserve(entries[k].target);
+        }
+      }, { rootMargin: '0px 0px -8% 0px' });
+      for (var r = 0; r < rails.length; r++) railIO.observe(rails[r]);
+    } else {
+      for (var r2 = 0; r2 < rails.length; r2++) rails[r2].classList.add('is-in');
+    }
 
     /* Тень у шапки появляется только когда под ней есть прокрученный контент */
     var bar = document.querySelector('.topbar');
