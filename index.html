@@ -856,11 +856,10 @@ body {
   .view-all { height: 15px; padding: 0; background: none; font-size: 12px; }
   .slider-btns { display: none; }
 
-  /* Живое казино и провайдеры · 891:22303, 891:22365 — тут кнопки листания есть */
-  .section--nav .section__head { height: 28px; }
-  .section--nav .view-all { width: 72px; height: 28px; padding: 0 12px; background: #272b40; border-radius: 8px; }
-  .section--nav .slider-btns { display: flex; gap: 8px; }
-  .section--nav .slider-btn { width: 28px; height: 28px; background: #181c33; }
+  /* Живое казино и провайдеры: в макете 891:22303 и 891:22365 у них есть
+     кнопки листания и «View All» плашкой. По решению — приводим к виду
+     остальных секций: только текстовая ссылка, стрелок нет. */
+  .section--nav .section__head { height: 25px; }
   .section--nav .section__title img, .section--nav .section__title .ico { width: 18px; height: 18px; }
   .section--nav .section__title h2 { font-size: 14px; }
 
