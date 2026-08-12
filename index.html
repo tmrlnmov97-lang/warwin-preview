@@ -777,12 +777,17 @@ body {
   /* Разделителя под живым казино в мобильном макете нет */
   .section__line { display: none; }
   /* 2025 — жёсткая высота десктопного кадра, на мобильной она не нужна */
-  .page { min-width: 0; min-height: 0; }
+  /* сверху место под закреплённую шапку, снизу под панель */
+  .page { min-width: 0; min-height: 0; padding-top: 62px; }
 
-  /* ── Шапка · 903:41862, высота 62, поля 16 ── */
-  .topbar { height: 62px; gap: 0; padding: 0 16px; }
+  /* ── Шапка · 903:41862, высота 62, поля 16 ──
+     Закреплена сверху, а не приклеена: fixed не участвует в прокрутке
+     документа и не едет вместе с ним. Место под неё держит .page. */
+  .topbar { position: fixed; left: 0; right: 0; top: 0; height: 62px; gap: 0; padding: 0 16px; }
   .topbar__brand { gap: 0; flex: none; width: 106px; }
-  .topbar__logo-wrap { width: 106px; height: 40px; }
+  /* 903:41863 — логотип 106x40 на x=16. Базовый отступ 20 слева сдвигал
+     картинку на 36 и сжимал её до 86 — на мобильной он не нужен. */
+  .topbar__logo-wrap { width: 106px; height: 40px; padding-left: 0; }
   .topbar__logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
   .btn-search { display: none; }
   /* В мобильной шапке только логотип и две кнопки — вкладок Casino/Sports нет */
