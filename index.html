@@ -1292,6 +1292,29 @@ body {
 /* [hidden] по умолчанию проигрывает классу с display, поэтому гасим явно */
 .srch__grid[hidden] { display: none; }
 
+/* Выпадающий список сортировки — в стиле панели фильтров */
+.srch__drop { position: relative; }
+.srch__drop.is-open .srch__sel { background: #333852; }
+.srch__drop.is-open .srch__sel img { transform: rotate(180deg); }
+.srch__sel img { transition: transform .18s cubic-bezier(.4, 0, .2, 1); }
+.srch__menu {
+  position: absolute; left: 0; top: calc(100% + 6px); z-index: 2;
+  min-width: 100%; margin: 0; padding: 6px; list-style: none;
+  background: #2a2f44; border: 1px solid var(--white-10); border-radius: 10px;
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, .6);
+  animation: srch-rise .16s cubic-bezier(.22, .61, .36, 1) both;
+}
+.srch__menu[hidden] { display: none; }
+.srch__menu li {
+  padding: 9px 12px; border-radius: 6px; cursor: pointer; white-space: nowrap;
+  font-family: 'Instrument Sans', sans-serif; font-variation-settings: 'wdth' 100;
+  font-weight: 500; font-size: 14px; line-height: normal; color: var(--muted);
+  transition: background-color .12s ease, color .12s ease;
+}
+.srch__menu li:hover { background: var(--white-06); color: var(--white); }
+.srch__menu li[aria-selected="true"] { background: var(--white-10); color: var(--white); font-weight: 600; }
+.srch__pager[hidden] { display: none; }
+
 </style>
 </head>
 <body>
@@ -1967,7 +1990,18 @@ body {
             <button class="srch__tag">Live Casino</button>
       </div>
       <div class="srch__filters" data-node-id="932:43145">
-        <button class="srch__sel"><span>Sort By</span><b>Popular</b><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExLjY2NjciIGhlaWdodD0iNi42NjY2NyIgdmlld0JveD0iMCAwIDExLjY2NjcgNi42NjY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0wLjgzMzMzMyAwLjgzMzMzM0w1LjgzMzMzIDUuODMzMzNMMTAuODMzMyAwLjgzMzMzMyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxLjY2NjY3IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt="" width="20" height="20"></button>
+        <div class="srch__drop" data-sort>
+          <button class="srch__sel" aria-haspopup="listbox" aria-expanded="false">
+            <span>Sort By</span><b data-value>Popular</b>
+            <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExLjY2NjciIGhlaWdodD0iNi42NjY2NyIgdmlld0JveD0iMCAwIDExLjY2NjcgNi42NjY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0wLjgzMzMzMyAwLjgzMzMzM0w1LjgzMzMzIDUuODMzMzNMMTAuODMzMyAwLjgzMzMzMyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxLjY2NjY3IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt="" width="20" height="20">
+          </button>
+          <ul class="srch__menu" role="listbox" hidden>
+            <li role="option" aria-selected="true"  data-k="popular">Popular</li>
+            <li role="option" aria-selected="false" data-k="newest">Newest</li>
+            <li role="option" aria-selected="false" data-k="az">A-Z</li>
+            <li role="option" aria-selected="false" data-k="za">Z-A</li>
+          </ul>
+        </div>
         <button class="srch__sel"><span>Providers</span><b>All</b><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjExLjY2NjciIGhlaWdodD0iNi42NjY2NyIgdmlld0JveD0iMCAwIDExLjY2NjcgNi42NjY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0wLjgzMzMzMyAwLjgzMzMzM0w1LjgzMzMzIDUuODMzMzNMMTAuODMzMyAwLjgzMzMzMyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxLjY2NjY3IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt="" width="20" height="20"></button>
       </div>
     </div>
@@ -2143,9 +2177,12 @@ body {
       var norm = function (t) {
         return t.toLowerCase().replace(/[’'`]/g, "'").replace(/\s+/g, ' ').trim();
       };
-      cards.forEach(function (c) {
+      cards.forEach(function (c, i) {
         var img = c.querySelector('img[alt]');
+        var nameEl = c.querySelector('.game__name');
         c._text = norm((c.textContent || '') + ' ' + (img ? img.getAttribute('alt') : ''));
+        c._name = norm(nameEl ? nameEl.textContent : (img ? img.getAttribute('alt') : ''));
+        c._i = i;
       });
       var applyFilter = function () {
         var q = norm(field.value);
@@ -2158,9 +2195,47 @@ body {
         });
         empty.hidden = shown > 0;
         grid.hidden = shown === 0;
+        /* когда ничего не нашлось, листать нечего */
+        srch.querySelector('.srch__pager').hidden = shown === 0;
         grid.scrollTop = 0;
       };
       field.addEventListener('input', applyFilter);
+
+      /* Сортировка. Настоящей даты выхода у игр в макете нет, поэтому
+         Newest — обратный порядок исходного списка: заглушка до реальных
+         данных, а не выдуманная сортировка. */
+      var sorters = {
+        popular: function (a, b) { return a._i - b._i; },
+        newest:  function (a, b) { return b._i - a._i; },
+        az:      function (a, b) { return a._name.localeCompare(b._name); },
+        za:      function (a, b) { return b._name.localeCompare(a._name); }
+      };
+      var drop = srch.querySelector('[data-sort]');
+      var dropBtn = drop.querySelector('.srch__sel');
+      var dropVal = drop.querySelector('[data-value]');
+      var menu = drop.querySelector('.srch__menu');
+      var closeMenu = function () {
+        menu.hidden = true; drop.classList.remove('is-open');
+        dropBtn.setAttribute('aria-expanded', 'false');
+      };
+      dropBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = menu.hidden;
+        menu.hidden = !open; drop.classList.toggle('is-open', open);
+        dropBtn.setAttribute('aria-expanded', String(open));
+      });
+      menu.addEventListener('click', function (e) {
+        var li = e.target.closest('li'); if (!li) return;
+        menu.querySelectorAll('li').forEach(function (o) { o.setAttribute('aria-selected', 'false'); });
+        li.setAttribute('aria-selected', 'true');
+        dropVal.textContent = li.textContent;
+        cards.slice().sort(sorters[li.dataset.k]).forEach(function (c) { grid.appendChild(c); });
+        closeMenu();
+      });
+      document.addEventListener('click', function (e) {
+        if (!drop.contains(e.target)) closeMenu();
+      });
+      addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
       /* при закрытии сбрасываем, чтобы в следующий раз открылось чистым */
       srch.addEventListener('search-reset', function () { field.value = ''; applyFilter(); });
 
