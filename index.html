@@ -1391,7 +1391,10 @@ body {
 /* 1104:13484 — поле поиска в шапке страницы казино. Оформление берём
    у поля из попапа: узел совпадает с ним до значения. Здесь это кнопка,
    которая открывает тот самый попап, поэтому текст рисуем спаном. */
-.cas-search { width: 100%; margin-bottom: 20px; cursor: pointer; text-align: left;
+/* 1089:9838 — поиск и лента чипов идут одним блоком с зазором 16.
+   Своим зазором он перебивает общий шаг вида в 24. */
+.cas-head { display: flex; flex-direction: column; gap: 16px; }
+.cas-search { width: 100%; cursor: pointer; text-align: left;
                /* В Figma обводка внутренняя, поэтому 52 — это внешний размер */
                box-sizing: border-box; height: 52px; }
 /* Лупа: коробка 20x20, сам глиф 16.67 по центру — как в макете */
@@ -2007,6 +2010,7 @@ body {
 
       <!-- 1089:9816 «Casino Page» — ряды 252 с зазором 32 -->
       <div class="view view--casino" id="view-casino" hidden data-node-id="1089:9816">
+        <div class="cas-head">
         <!-- 1104:13484 — поиск в шапке страницы казино -->
         <button type="button" class="srch__field cas-search" data-node-id="1104:13484" aria-haspopup="dialog">
           <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2LjY2NjciIGhlaWdodD0iMTYuNjY2NyIgdmlld0JveD0iMCAwIDE2LjY2NjcgMTYuNjY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0xNS44MzMzIDE1LjgzMzNMMTIuOTE2NyAxMi45MTY3TTE1IDcuOTE2NjdDMTUgMTEuODI4NyAxMS44Mjg3IDE1IDcuOTE2NjcgMTVDNC4wMDQ2NSAxNSAwLjgzMzMzMyAxMS44Mjg3IDAuODMzMzMzIDcuOTE2NjdDMC44MzMzMzMgNC4wMDQ2NSA0LjAwNDY1IDAuODMzMzMzIDcuOTE2NjcgMC44MzMzMzNDMTEuODI4NyAwLjgzMzMzMyAxNSA0LjAwNDY1IDE1IDcuOTE2NjdaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNjY2NjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" width="20" height="20">
@@ -2023,6 +2027,7 @@ body {
           <span class="chip">Video Poker</span>
           <span class="chip">Live Casino</span>
         </nav>
+        </div>
         <section class="section section--nav" data-node-id="851:3474">
           <div class="section__head">
             <div class="section__title">
