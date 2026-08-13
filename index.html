@@ -1388,6 +1388,23 @@ body {
   .rail--sport > .sport { width: calc((100% - 6 * 12px) / 7); }
 }
 
+/* 1104:13484 — поле поиска в шапке страницы казино. Оформление берём
+   у поля из попапа: узел совпадает с ним до значения. Здесь это кнопка,
+   которая открывает тот самый попап, поэтому текст рисуем спаном. */
+.cas-search { width: 100%; margin-bottom: 20px; cursor: pointer; text-align: left;
+               /* В Figma обводка внутренняя, поэтому 52 — это внешний размер */
+               box-sizing: border-box; height: 52px; }
+/* Лупа: коробка 20x20, сам глиф 16.67 по центру — как в макете */
+.cas-search img { margin: 1.665px; }
+.cas-search__label {
+  flex: 1 0 0; min-width: 0;
+  font-family: 'Instrument Sans', sans-serif; font-stretch: 75%;
+  font-variation-settings: 'wdth' 75; font-weight: 400; font-size: 16px;
+  line-height: 20px; color: var(--white);
+}
+.cas-search:hover { border-color: #17405f; }
+.cas-search:focus-visible { outline: none; border-color: var(--primary); }
+
 </style>
 </head>
 <body>
@@ -1990,6 +2007,11 @@ body {
 
       <!-- 1089:9816 «Casino Page» — ряды 252 с зазором 32 -->
       <div class="view view--casino" id="view-casino" hidden data-node-id="1089:9816">
+        <!-- 1104:13484 — поиск в шапке страницы казино -->
+        <button type="button" class="srch__field cas-search" data-node-id="1104:13484" aria-haspopup="dialog">
+          <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2LjY2NjciIGhlaWdodD0iMTYuNjY2NyIgdmlld0JveD0iMCAwIDE2LjY2NjcgMTYuNjY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0xNS44MzMzIDE1LjgzMzNMMTIuOTE2NyAxMi45MTY3TTE1IDcuOTE2NjdDMTUgMTEuODI4NyAxMS44Mjg3IDE1IDcuOTE2NjcgMTVDNC4wMDQ2NSAxNSAwLjgzMzMzMyAxMS44Mjg3IDAuODMzMzMzIDcuOTE2NjdDMC44MzMzMzMgNC4wMDQ2NSA0LjAwNDY1IDAuODMzMzMzIDcuOTE2NjcgMC44MzMzMzNDMTEuODI4NyAwLjgzMzMzMyAxNSA0LjAwNDY1IDE1IDcuOTE2NjdaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNjY2NjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" width="20" height="20">
+          <span class="cas-search__label">Search Games</span>
+        </button>
         <nav class="chips">
           <span class="chip">Lobby</span>
           <span class="chip">Crash Games</span>
@@ -2656,6 +2678,9 @@ body {
         if (lastFocus) lastFocus.focus();
       };
       srchBtn.addEventListener('click', openSearch);
+      document.querySelectorAll('.cas-search').forEach(function (b) {
+        b.addEventListener('click', openSearch);
+      });
       srch.addEventListener('click', function (e) {
         if (e.target.closest('[data-close]')) closeSearch();
       });
