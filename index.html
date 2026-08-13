@@ -13,11 +13,8 @@
 
 :root {
   /* Цвета */
-  /* Слои поверхности. Было наоборот: контент темнее рамки, из-за чего
-     основная площадь экрана читалась провалом. Теперь рамка утоплена,
-     а поле контента подсвечено — карточки лежат на сцене, а не в пустоте. */
-  --page: #151c3c;          /* поле контента */
-  --chrome: #0e132a;        /* шапка, сайдбар, нижняя панель */
+  --page: #0e132a;
+  --chrome: #181e3b;        /* шапка и сайдбар */
   --surface: #263155;       /* кнопки-чипы в шапке */
   --primary: #0794ff;       /* акцент шапки в макете */
   --register: #00c928;      /* 851:2962 — CTA регистрации, взят из макета */
@@ -1428,49 +1425,6 @@ body {
 .crash-grid > .game { animation: cas-card-in .34s cubic-bezier(.22,.61,.36,1) backwards;
                       animation-delay: calc(var(--i, 0) * 12ms); }
 @media (prefers-reduced-motion: reduce) { .crash-grid > .game { animation: none; } }
-
-/* ───────────────────────────────────────────────────────────────────
-   Живость. Три приёма, все на фирменном 0794ff и все обратимые:
-   рассеянное свечение за баннером, тень под карточками и акцент
-   в иконках секций. Ничего нового в палитру не вводим.
-   ─────────────────────────────────────────────────────────────────── */
-.page::before {
-  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1;
-  background:
-    radial-gradient(900px 420px at 62% -60px, rgba(7, 148, 255, .13), transparent 70%),
-    radial-gradient(700px 380px at 12% 44%, rgba(7, 148, 255, .06), transparent 72%);
-}
-
-.game, .lc, .sport, .provider { box-shadow: 0 6px 18px rgba(0, 0, 0, .38); }
-@media (hover: hover) {
-  .game:hover, .lc:hover, .sport:hover {
-    box-shadow: 0 16px 34px rgba(0, 0, 0, .5), 0 0 0 1px rgba(7, 148, 255, .45);
-  }
-  .provider:hover { box-shadow: 0 12px 26px rgba(0, 0, 0, .45), 0 0 0 1px rgba(7, 148, 255, .35); }
-  .view-all:hover { background: rgba(7, 148, 255, .18); color: #cfe8ff; }
-}
-/* Затемнение при наведении отдаёт в синий, а не в чистый чёрный */
-.card-veil { background: linear-gradient(180deg, rgba(4, 40, 80, .5), rgba(0, 4, 16, .72)); }
-.card-play { background: rgba(7, 148, 255, .85); }
-/* Иконка секции больше не белая точка на тёмном — берёт фирменный тон */
-.section__title img { filter: drop-shadow(0 0 10px rgba(7, 148, 255, .55)); }
-
-/* Подложка под секцией. Рисуем псевдоэлементом с отрицательными вставками,
-   а не отступами: любой padding сузил бы ленту, а от её ширины считается
-   размер карточки — поехали бы все ряды. Так геометрия не меняется вовсе. */
-@media (min-width: 1024px) {
-  /* Шаг 40 вместо 24: подложка выходит на 12 вверх и вниз, при прежнем
-     шаге соседние подложки налезали друг на друга на 8px.
-     Ряды лежат в .sections__top, а не прямо в .view — гэп задаёт он. */
-  .sections, .sections__top, .view { gap: 40px; }
-  .view .section { position: relative; }
-  .view .section::before {
-    content: ''; position: absolute; z-index: -1;
-    inset: -12px -20px; border-radius: 20px;
-    background: rgba(255, 255, 255, .025);
-    border: 1px solid rgba(255, 255, 255, .055);
-  }
-}
 
 </style>
 </head>
