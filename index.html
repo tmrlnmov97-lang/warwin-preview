@@ -1343,16 +1343,55 @@ body {
 .view[hidden] { display: none; }
 .view { display: flex; flex-direction: column; gap: 24px; }
 .cas-grid {
-  display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 20px 16px;
 }
 .cas-card { width: auto; height: 204px; }
+/* Зазоры сузили карточку со 151 до 144, и длинные названия вроде
+   «TOMBSTONE SLAUGHTER» стали обрезаться. Кегль на этой сетке меньше,
+   переносов допускаем больше. */
+.cas-card .game__info { width: 100%; padding: 16px 6px 6px; }
+.cas-card .game__name { font-size: 19px; line-height: 18px; }
+.cas-card .game__provider { font-size: 8px; }
 .cas-card > img.layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .banner[hidden] { display: none; }
-.cat-tab.is-active { background: var(--surface-active); }
+.cat-tab.is-active { background: #1bc904; }
+.cat-tab.is-active .cat-tab__label { color: var(--white); }
+
+/* Появление карточек — как в попапе поиска. Сетка плотная и узкая по шагу,
+   поэтому волна читается каскадом, а не полупустым рядом: шаг 25мс и
+   потолок на четырнадцатой карточке, иначе на 59 штуках хвост тянулся бы
+   полторы секунды. */
+@keyframes cas-card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cas-grid > * {
+  animation: cas-card-in .34s cubic-bezier(.22, .61, .36, 1) both;
+  will-change: transform, opacity;
+}
+.cas-grid > :nth-child(1)  { animation-delay: .04s; }
+.cas-grid > :nth-child(2)  { animation-delay: .065s; }
+.cas-grid > :nth-child(3)  { animation-delay: .09s; }
+.cas-grid > :nth-child(4)  { animation-delay: .115s; }
+.cas-grid > :nth-child(5)  { animation-delay: .14s; }
+.cas-grid > :nth-child(6)  { animation-delay: .165s; }
+.cas-grid > :nth-child(7)  { animation-delay: .19s; }
+.cas-grid > :nth-child(8)  { animation-delay: .215s; }
+.cas-grid > :nth-child(9)  { animation-delay: .24s; }
+.cas-grid > :nth-child(10) { animation-delay: .265s; }
+.cas-grid > :nth-child(11) { animation-delay: .29s; }
+.cas-grid > :nth-child(12) { animation-delay: .315s; }
+.cas-grid > :nth-child(13) { animation-delay: .34s; }
+.cas-grid > :nth-child(n+14) { animation-delay: .365s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cas-grid > * { animation: none; will-change: auto; }
+}
 
 @media (max-width: 1023px) { .cas-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 767px) {
-  .cas-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .cas-grid { grid-template-columns: repeat(2, 1fr); gap: 14px 10px; }
   .cas-card { height: 151px; }
 }
 
