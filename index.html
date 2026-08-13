@@ -1455,6 +1455,23 @@ body {
 /* Иконка секции больше не белая точка на тёмном — берёт фирменный тон */
 .section__title img { filter: drop-shadow(0 0 10px rgba(7, 148, 255, .55)); }
 
+/* Подложка под секцией. Рисуем псевдоэлементом с отрицательными вставками,
+   а не отступами: любой padding сузил бы ленту, а от её ширины считается
+   размер карточки — поехали бы все ряды. Так геометрия не меняется вовсе. */
+@media (min-width: 1024px) {
+  /* Шаг 40 вместо 24: подложка выходит на 12 вверх и вниз, при прежнем
+     шаге соседние подложки налезали друг на друга на 8px.
+     Ряды лежат в .sections__top, а не прямо в .view — гэп задаёт он. */
+  .sections, .sections__top, .view { gap: 40px; }
+  .view .section { position: relative; }
+  .view .section::before {
+    content: ''; position: absolute; z-index: -1;
+    inset: -12px -20px; border-radius: 20px;
+    background: rgba(255, 255, 255, .025);
+    border: 1px solid rgba(255, 255, 255, .055);
+  }
+}
+
 </style>
 </head>
 <body>
