@@ -588,6 +588,8 @@ body {
             /* Потолок колонки: дальше растёт не контент, а поле по краям */
             max-width: 1200px; margin-inline: auto; }
   .topbar  { gap: 60px; padding-right: 41px; }
+  /* Шапка идёт по той же колонке, что и контент */
+  .header-desktop { margin-left: var(--gutter, 0px); margin-right: var(--gutter, 0px); }
 }
 
 /* Ниже 1024 сайдбар скрыт. Кнопки меню в макете нет, поэтому входа в навигацию
@@ -2798,7 +2800,14 @@ body {
     var page = document.querySelector('.page');
     function fit() {
       var w = document.documentElement.clientWidth;
-      page.style.zoom = w > BASE ? (w / BASE) : 1;
+      var zoom = w > BASE ? (w / BASE) : 1;
+      page.style.zoom = zoom;
+      /* Колонка контента упирается в 1200 и встаёт по центру, а шапка тянется
+         во всю ширину. Без этой поправки кнопки в шапке переставали совпадать
+         с сеткой: на 1728 CASINO оставался на 295 при колонке с 392.
+         Полка 1536 — ширина, на которой колонка как раз достигает потолка. */
+      var gutter = Math.max(0, (w / zoom - 1536) / 2);
+      page.style.setProperty('--gutter', gutter + 'px');
     }
     fit();
     addEventListener('resize', fit);
