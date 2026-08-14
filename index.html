@@ -1443,8 +1443,7 @@ body {
 .cas-head { display: flex; flex-direction: column; gap: 16px; }
 /* Лента чипов не вылезает за колонку: полноширинный вынос нужен только
    главной, а на страницах казино она обрывалась мимо сетки. */
-.cas-head .chips { margin-right: 0; padding-right: 0;
-                   -webkit-mask-image: none; mask-image: none; }
+.cas-head .chips { margin-right: 0; padding-right: 0; }
 .cas-search { width: 100%; cursor: pointer; text-align: left;
                /* В Figma обводка внутренняя, поэтому 52 — это внешний размер */
                box-sizing: border-box; height: 52px; }
@@ -1592,6 +1591,12 @@ body {
   /* 1125:15026 — вторая карточка на пиксель выше первой, так в макете */
   .hcard--sport { height: 112px; }
 }
+
+/* Смена страницы: короткое проявление вместо мгновенной подмены.
+   Анимация запускается сама, когда с блока снимают hidden. */
+@keyframes view-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.view, .hero { animation: view-in .3s cubic-bezier(.22, .61, .36, 1) both; }
+@media (prefers-reduced-motion: reduce) { .view, .hero { animation: none; } }
 
 </style>
 </head>
