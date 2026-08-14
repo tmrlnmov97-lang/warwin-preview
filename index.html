@@ -587,7 +587,7 @@ body {
   .sidebar { display: flex; }
   .content { --edge: 40px; left: 296px;
             /* Потолок колонки: дальше растёт не контент, а поле по краям */
-            max-width: 1200px; margin-inline: auto; }
+            max-width: 1320px; margin-inline: auto; }
   .topbar  { gap: 60px; padding-right: 41px; }
   /* Шапка идёт по той же колонке, что и контент */
   .header-desktop { margin-left: var(--gutter, 0px); margin-right: var(--gutter, 0px); }
@@ -2955,8 +2955,9 @@ body {
       /* Колонка контента упирается в 1200 и встаёт по центру, а шапка тянется
          во всю ширину. Без этой поправки кнопки в шапке переставали совпадать
          с сеткой: на 1728 CASINO оставался на 295 при колонке с 392.
-         Полка 1536 — ширина, на которой колонка как раз достигает потолка. */
-      var gutter = Math.max(0, (w / zoom - 1536) / 2);
+         Полка 1656 = 296 слева + 1320 колонка + 40 справа: ширина, на которой
+         колонка как раз достигает потолка. */
+      var gutter = Math.max(0, (w / zoom - 1656) / 2);
       page.style.setProperty('--gutter', gutter + 'px');
     }
     fit();
