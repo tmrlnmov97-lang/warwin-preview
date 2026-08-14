@@ -1673,6 +1673,23 @@ body {
 .lg__switch a { color: var(--white); text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) { .lg__wrap { animation: none; } }
 
+/* Состояния входа */
+.lg__input.is-bad { border-color: #e5484d; }
+.lg__hint.is-bad  { color: #e5484d; }
+.lg__alert { margin: 0; padding: 10px 12px; border-radius: 8px; text-align: center;
+             font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+             background: rgba(229, 72, 77, .12); border: 1px solid rgba(229, 72, 77, .45); color: #ff9ea1; }
+.lg__alert[hidden] { display: none; }
+.lg__alert.is-ok { background: rgba(0, 201, 40, .12); border-color: rgba(0, 201, 40, .45); color: #7ce495; }
+.lg__submit { position: relative; }
+.lg__submit[disabled] { opacity: .75; cursor: default; }
+.lg__spin { display: none; width: 16px; height: 16px; margin-left: 10px; border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, .35); border-top-color: #fff;
+            animation: lg-spin .7s linear infinite; }
+.lg__submit.is-loading .lg__spin { display: block; }
+@keyframes lg-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .lg__spin { animation-duration: 2s; } }
+
 </style>
 </head>
 <body>
@@ -2919,13 +2936,13 @@ body {
           <div class="lg__socials" data-node-id="973:19576">
             <button class="lg__soc" type="button"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIgOS44MTgpIHNjYWxlKDEuMDAwMDEgMC45OTk5OTEpIj48cGF0aCBpZD0iVmVjdG9yIiBkPSJNMCAwVjQuNjQ3MjhINi40NTgxNkM2LjE3NDU4IDYuMTQxODIgNS4zMjM1NiA3LjQwNzMzIDQuMDQ3MjIgOC4yNTgyMkw3Ljk0MTc1IDExLjI4MDFDMTAuMjEwOCA5LjE4NTU5IDExLjUxOTkgNi4xMDkyIDExLjUxOTkgMi40NTQ2NkMxMS41MTk5IDEuNjAzNzcgMTEuNDQzNiAwLjc4NTUxMiAxMS4zMDE3IDAuMDAwMTMwNzJMMCAwWiIgZmlsbD0iIzQyODVGNCIvPjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4yODYgMTQuMjgpIHNjYWxlKDEuMDAwMDYgMC45OTk5MikiPjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0zLjk4NzUxIDBMMy4xMDkxNCAwLjY3MjM3OUwwIDMuMDk0MTZDMS45NzQ1NCA3LjAxMDQ4IDYuMDIxNTEgOS43MTU5OCAxMC43MTI0IDkuNzE1OThDMTMuOTUyMyA5LjcxNTk4IDE2LjY2ODYgOC42NDY4OCAxOC42NTQxIDYuODE0MkwxNC43NTk2IDMuNzkyMzZDMTMuNjkwNSA0LjUxMjM1IDEyLjMyNjkgNC45NDg3NiAxMC43MTI0IDQuOTQ4NzZDNy41OTI0IDQuOTQ4NzYgNC45NDE1NyAyLjg0MzMyIDMuOTkyNDEgMC4wMDY5MjgxN0wzLjk4NzUxIDBaIiBmaWxsPSIjMzRBODUzIi8+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDYuNjIyKSBzY2FsZSgxLjAwMDAxIDEuMDAwMDYpIj48cGF0aCBpZD0iVmVjdG9yIiBkPSJNMS4yODcxOCAwQzAuNDY5MDQyIDEuNjE0NDggMCAzLjQzNjMyIDAgNS4zNzgxMUMwIDcuMzE5ODkgMC40NjkwNDIgOS4xNDE3NCAxLjI4NzE4IDEwLjc1NjJDMS4yODcxOCAxMC43NjcxIDUuMjc5OTcgNy42NTgwNCA1LjI3OTk3IDcuNjU4MDRDNS4wMzk5OCA2LjkzODA0IDQuODk4MTIgNi4xNzQ0NSA0Ljg5ODEyIDUuMzc3OThDNC44OTgxMiA0LjU4MTUyIDUuMDM5OTggMy44MTc5MyA1LjI3OTk3IDMuMDk3OTNMMS4yODcxOCAwWiIgZmlsbD0iI0ZCQkMwNSIvPjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4yODYgMCkgc2NhbGUoMC45OTk5OTUgMC45OTk5OTkpIj48cGF0aCBpZD0iVmVjdG9yIiBkPSJNMTAuNzEyNiA0Ljc3ODE4QzEyLjQ3OTkgNC43NzgxOCAxNC4wNTA4IDUuMzg5MDcgMTUuMzA1NCA2LjU2NzI3TDE4Ljc0MTcgMy4xMzA5NUMxNi42NTggMS4xODkxNyAxMy45NTI3IDAgMTAuNzEyNiAwQzYuMDIxNzYgMCAxLjk3NDU0IDIuNjk0NTQgMCA2LjYyMTgzTDMuOTkyNjcgOS43MjAwMUM0Ljk0MTcxIDYuODgzNjIgNy41OTI2NSA0Ljc3ODE4IDEwLjcxMjYgNC43NzgxOFoiIGZpbGw9IiNFQTQzMzUiLz48L2c+Cjwvc3ZnPg==" alt="" width="20" height="20"><span>Google</span></button>
             <button class="lg__soc" type="button"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAwKSBzY2FsZSgxIDEpIj48cGF0aCBpZD0iVmVjdG9yIiBkPSJNMTIgMjRDMTguNjI3NCAyNCAyNCAxOC42Mjc0IDI0IDEyQzI0IDUuMzcyNTggMTguNjI3NCAwIDEyIDBDNS4zNzI1OCAwIDAgNS4zNzI1OCAwIDEyQzAgMTguNjI3NCA1LjM3MjU4IDI0IDEyIDI0WiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyXzBfMTMpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXJfMF8xMyIgeDE9IjEyMDAiIHkxPSIwIiB4Mj0iMTIwMCIgeTI9IjIzODIuMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMkFBQkVFIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzIyOUVEOSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0LjUzNiA3LjIyNCkgc2NhbGUoMSAxKSI+PHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wLjg5NTg4MiA0LjY0OTMzQzQuMzk0MTMgMy4xMjUyIDYuNzI2ODQgMi4xMjA0IDcuODk0MDEgMS42MzQ5M0MxMS4yMjY1IDAuMjQ4ODE4IDExLjkxOSAwLjAwODAzNTU3IDEyLjM3MDQgOC40NzczMmUtMDVDMTIuNDY5NiAtMC4wMDE2NjM5MSAxMi42OTE2IDAuMDIyOTM3OCAxMi44MzU0IDAuMTM5NjAxQzEyLjk1NjggMC4yMzgxMDkgMTIuOTkwMiAwLjM3MTE3OSAxMy4wMDYxIDAuNDY0NTc2QzEzLjAyMjEgMC41NTc5NzIgMTMuMDQyIDAuNzcwNzMyIDEzLjAyNjIgMC45MzY5NzZDMTIuODQ1NiAyLjgzNDQ2IDEyLjA2NDIgNy40MzkxNSAxMS42NjY3IDkuNTY0MzdDMTEuNDk4NCAxMC40NjM2IDExLjE2NzIgMTAuNzY1MSAxMC44NDY2IDEwLjc5NDZDMTAuMTQ5NyAxMC44NTg4IDkuNjIwNTUgMTAuMzM0MSA4Ljk0NTYgOS44OTE2OEM3Ljg4OTQ0IDkuMTk5MzUgNy4yOTI3OCA4Ljc2ODM4IDYuMjY3NiA4LjA5MjhDNS4wODI4MyA3LjMxMjA1IDUuODUwODcgNi44ODI5NCA2LjUyNjA3IDYuMTgxNjVDNi43MDI3NyA1Ljk5ODExIDkuNzczMTYgMy4yMDUzNiA5LjgzMjU5IDIuOTUyMDFDOS44NDAwMiAyLjkyMDMyIDkuODQ2OTIgMi44MDIyMiA5Ljc3Njc1IDIuNzM5ODVDOS43MDY1OSAyLjY3NzQ4IDkuNjAzMDMgMi42OTg4MSA5LjUyODMgMi43MTU3N0M5LjQyMjM3IDIuNzM5ODEgNy43MzUxNSAzLjg1NTAxIDQuNDY2NjMgNi4wNjEzNUMzLjk4NzcyIDYuMzkwMjEgMy41NTM5MyA2LjU1MDQ0IDMuMTY1MjggNi41NDIwNEMyLjczNjgxIDYuNTMyNzggMS45MTI2MyA2LjI5OTc4IDEuMjk5OTMgNi4xMDA2MkMwLjU0ODQyNiA1Ljg1NjMzIC0wLjA0ODg1MjQgNS43MjcxOCAwLjAwMzE1NzEyIDUuMzEyMzFDMC4wMzAyNDY5IDUuMDk2MjIgMC4zMjc4MjIgNC44NzUyMyAwLjg5NTg4MiA0LjY0OTMzWiIgZmlsbD0id2hpdGUiLz48L2c+Cjwvc3ZnPg==" alt="" width="20" height="20"><span>Telegram</span></button>
-            <button class="lg__soc" type="button"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiIGZpbGw9IiMxODc3RjIiLz4KPHBhdGggZD0iTTE2LjY3IDE1LjQ3IDE3LjIgMTJoLTMuMzNWOS43NWMwLS45NS40Ny0xLjg4IDEuOTYtMS44OGgxLjUxVjQuOTJzLTEuMzctLjIzLTIuNjktLjIzYy0yLjc0IDAtNC41MyAxLjY2LTQuNTMgNC42N1YxMkg3LjA3djMuNDdoMy4wNXY4LjM5YTEyLjEgMTIuMSAwIDAgMCAzLjc1IDB2LTguMzloMi44eiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4=" alt="" width="20" height="20"><span>Facebook</span></button>
           </div>
           <p class="lg__terms" data-node-id="973:19584">By accessing you confirm that you are at least 18 years old<br>and agree to the <a href="#">Terms and Conditions</a></p>
         </div>
       </div>
       <div class="lg__foot" data-node-id="973:19585">
-        <button class="lg__submit" type="button">Login</button>
+        <button class="lg__submit" type="button"><span class="lg__submit-label">Login</span><span class="lg__spin" aria-hidden="true"></span></button>
+          <p class="lg__alert" role="alert" hidden></p>
         <p class="lg__switch">New to Warwin? <a href="#">Login</a></p>
       </div>
     </div>
@@ -3167,6 +3184,61 @@ body {
         });
         lg.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeLogin(); });
         addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lg.hidden) closeLogin(); });
+        /* Состояния входа. Верные данные заданы задачей. */
+        var OK_MAIL = 'user@warwin.com', OK_PASS = 'Warwin666';
+        var form   = lg.querySelector('.lg__fields');
+        var mail   = lg.querySelector('input[type=email]');
+        var pass   = lg.querySelector('.lg__field:nth-child(2) input');
+        var alertP = lg.querySelector('.lg__alert');
+        var submit = lg.querySelector('.lg__submit');
+        var fields = [].slice.call(lg.querySelectorAll('.lg__field'));
+        var setBad = function (field, bad, text) {
+          field.querySelector('.lg__input').classList.toggle('is-bad', bad);
+          var hint = field.querySelector('.lg__hint');
+          hint.classList.toggle('is-bad', bad);
+          if (text) { if (!hint.dataset.base) hint.dataset.base = hint.textContent; hint.textContent = text; }
+          else if (hint.dataset.base) hint.textContent = hint.dataset.base;
+        };
+        var say = function (text, ok) {
+          alertP.hidden = !text; alertP.textContent = text || '';
+          alertP.classList.toggle('is-ok', !!ok);
+        };
+        var reset = function () { fields.forEach(function (f) { setBad(f, false); }); say(''); };
+        [mail, pass].forEach(function (i) { i.addEventListener('input', reset); });
+
+        submit.addEventListener('click', function () {
+          if (submit.disabled) return;
+          reset();
+          var m = mail.value.trim(), p = pass.value;
+          if (!m) { setBad(fields[0], true, 'Email is required.'); mail.focus(); return; }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) {
+            setBad(fields[0], true, 'Enter a valid email address.'); mail.focus(); return; }
+          if (!p) { setBad(fields[1], true, 'Password is required.'); pass.focus(); return; }
+          if (p.length < 8) {
+            setBad(fields[1], true, 'Minimum 8 characters, include a number and a symbol.'); pass.focus(); return; }
+          if (m.toLowerCase() !== OK_MAIL) {
+            setBad(fields[0], true, 'We have no account with this email.');
+            say('Account not found. Check the email and try again.'); mail.focus(); return; }
+          if (p !== OK_PASS) {
+            setBad(fields[1], true, 'Wrong password.');
+            say('Wrong password. Try again.'); pass.focus(); return; }
+
+          submit.disabled = true;
+          submit.classList.add('is-loading');
+          submit.querySelector('.lg__submit-label').textContent = 'Signing in';
+          setTimeout(function () {
+            submit.classList.remove('is-loading');
+            submit.querySelector('.lg__submit-label').textContent = 'Login';
+            submit.disabled = false;
+            say('Welcome back!', true);
+            document.body.classList.add('is-authed');
+            setTimeout(closeLogin, 700);
+          }, 1400);
+        });
+        [mail, pass].forEach(function (i) {
+          i.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit.click(); });
+        });
+
         var eye = lg.querySelector('.lg__eye');
         if (eye) eye.addEventListener('click', function () {
           var i = lg.querySelector('input[type=password], input[type=text][data-pw]');
