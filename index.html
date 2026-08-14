@@ -1473,7 +1473,9 @@ body {
     display: flex; gap: 16px; height: 272px; flex: none;
   }
   .hero__banner {
-    position: relative; flex: 0 0 737px; height: 272px; overflow: hidden;
+    /* Растёт вместе с колонкой: при жёстких 737 герой не дотягивался до
+       правого края на ширинах больше 1440. Карточки держат размер макета. */
+    position: relative; flex: 1 1 auto; min-width: 0; height: 272px; overflow: hidden;
     border-radius: 18px; border: 1px solid #464646;
     /* Тон снят с самой картинки девушки: фон у неё вшит, и при прежнем
        градиенте баннера её прямоугольник читался отдельным блоком. */
