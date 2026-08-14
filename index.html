@@ -1571,6 +1571,9 @@ body {
                  object-fit: cover; mix-blend-mode: lighten; }
   .hcard--cas   .hcard__pic { left: 184px; top: -4px; width: 222px; height: 159px; object-fit: contain; }
   .hcard--sport .hcard__pic { left: 99px;  top: -20px; width: 253px; height: 169px; object-fit: contain; }
+  /* Частицы в файле бирюзовые (тон 197°). На SPORT разворачиваем их в
+     оранжевый под сам сюжет карточки; на CASINO оставляем как есть. */
+  .hcard--sport .hcard__dust { filter: hue-rotate(208deg) saturate(1.3); }
   .hcard__title {
     position: absolute; left: 19px; top: 31px; transform: translateY(-50%); margin: 0; z-index: 2;
     font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
