@@ -1505,10 +1505,13 @@ body {
                 display: flex; flex-direction: column; gap: 32px; }
   .hero__text { display: flex; flex-direction: column; gap: 16px; }
   .hero__title {
-    /* 1143:10603 — 333x72 на две строки при кегле 40, значит интерлиньяж 36 */
-    margin: 0; width: 333px;
+    /* 1143:10603 — кегль 40, интерлиньяж 40 (100%, как в стиле макета).
+       Figma меряет текст по капительной высоте, поэтому её блок 72, а не 80.
+       Гасим половинный интерлиньяж сверху и снизу — воздух между строками
+       остаётся настоящим, а высота блока совпадает с макетом. */
+    margin: -4px 0; width: 333px;
     font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 500;
-    font-size: 40px; line-height: 36px; color: var(--white);
+    font-size: 40px; line-height: 40px; color: var(--white);
   }
   .hero__sub {
     /* line-height 14 — высота текста в макете; при обычном интерлиньяже
