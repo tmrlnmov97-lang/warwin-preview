@@ -1473,6 +1473,8 @@ body {
   .hero {
     display: flex; gap: 16px; height: 239px; flex: none;
   }
+  /* Иначе display из этого правила перебивает атрибут hidden */
+  .hero[hidden] { display: none; }
   .hero__banner {
     /* Растёт вместе с колонкой: при жёстких 737 герой не дотягивался до
        правого края на ширинах больше 1440. Карточки держат размер макета. */
@@ -3174,6 +3176,7 @@ body {
                     casino: document.getElementById('view-casino'),
                     crash: document.getElementById('view-crash') };
     var banner = document.querySelector('.banner');
+    var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
     /* Кнопка CASINO в шапке открывает лобби; чипы внутри лобби и страницы
        Crash Games переключают между этими двумя страницами. */
@@ -3181,11 +3184,14 @@ body {
     var showView = function (key) {
       Object.keys(views).forEach(function (k) { views[k].hidden = key !== k; });
       if (banner) banner.hidden = key !== 'home';
+      if (hero) hero.hidden = key !== 'home';
       tabs.forEach(function (t) {
         t.classList.toggle('is-active', (t.textContent || '').trim().toLowerCase() === 'casino'
           && (key === 'casino' || key === 'crash'));
       });
-      document.querySelectorAll('.chip').forEach(function (c) {
+      var casCard = document.querySelector('.hcard--cas');
+    if (casCard) casCard.addEventListener('click', function (e) { e.preventDefault(); showView('casino'); });
+    document.querySelectorAll('.chip').forEach(function (c) {
         c.classList.toggle('is-active', chipView[(c.textContent || '').trim().toLowerCase()] === key);
       });
       scrollTo({ top: 0, behavior: 'smooth' });
@@ -3195,6 +3201,8 @@ body {
       if (label !== 'casino') return;
       t.addEventListener('click', function (e) { e.preventDefault(); showView('casino'); });
     });
+    var casCard = document.querySelector('.hcard--cas');
+    if (casCard) casCard.addEventListener('click', function (e) { e.preventDefault(); showView('casino'); });
     document.querySelectorAll('.chip').forEach(function (c) {
       var target = chipView[(c.textContent || '').trim().toLowerCase()];
       if (!target) return;
