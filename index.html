@@ -15,7 +15,7 @@
   /* Цвета */
   /* Фон задан ещё и каналами: затемнение под нижней панелью использует
      его же с прозрачностью, и раньше значение там было продублировано. */
-  --page-rgb: 14, 19, 42;
+  --page-rgb: 0, 9, 29;
   --page: rgb(var(--page-rgb));
   --chrome: #181e3b;        /* шапка и сайдбар */
   --surface: #263155;       /* кнопки-чипы в шапке */
@@ -27,6 +27,7 @@
   --muted: #bbc6cd;
   --card-bg: #0c0c0c;
   --banner-border: #464646;
+  --hero-border: #262939;   /* канты баннера и карточек героя */
   --social-border: #314071;
   --social-bg: rgba(38, 49, 85, 0.3);
 
@@ -1476,7 +1477,7 @@ body {
     /* Растёт вместе с колонкой: при жёстких 737 герой не дотягивался до
        правого края на ширинах больше 1440. Карточки держат размер макета. */
     position: relative; flex: 1 1 auto; min-width: 0; height: 272px; overflow: hidden;
-    border-radius: 18px; border: 1px solid #464646;
+    border-radius: 18px; border: 1px solid var(--hero-border);
     /* Тон снят с самой картинки девушки: фон у неё вшит, и при прежнем
        градиенте баннера её прямоугольник читался отдельным блоком. */
     background-image: linear-gradient(182.46deg, #051434 2.83%, #061537 28.46%, #051231 86.84%);
@@ -1524,7 +1525,7 @@ body {
   .hero__side { flex: 0 0 351px; display: flex; flex-direction: column; gap: 16px; }
   .hcard {
     position: relative; height: 128px; overflow: hidden;
-    border: 1px solid #464646; border-radius: 18px; isolation: isolate;
+    border: 1px solid var(--hero-border); border-radius: 18px; isolation: isolate;
     background-image: linear-gradient(182.46deg, #051434 2.83%, #061537 28.46%, #061231 86.84%);
     transition: transform .34s cubic-bezier(.4,0,.2,1);
   }
