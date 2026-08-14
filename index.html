@@ -1505,9 +1505,10 @@ body {
                 display: flex; flex-direction: column; gap: 32px; }
   .hero__text { display: flex; flex-direction: column; gap: 16px; }
   .hero__title {
-    margin: 0; width: 263px;
+    /* 1143:10603 — 333x72 на две строки при кегле 40, значит интерлиньяж 36 */
+    margin: 0; width: 333px;
     font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 500;
-    font-size: 32px; line-height: 1.12; color: var(--white);
+    font-size: 40px; line-height: 36px; color: var(--white);
   }
   .hero__sub {
     /* line-height 14 — высота текста в макете; при обычном интерлиньяже
