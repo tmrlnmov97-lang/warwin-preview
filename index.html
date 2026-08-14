@@ -652,6 +652,14 @@ body {
 .side-item--accent:hover { background: var(--side-accent-hover); }
 .side-item:not(.side-item--active):active,
 .sub-item:active { background: var(--white-10); }
+/* Активный пункт подменю: тот же тон, что у нажатия, плюс полоска слева,
+   чтобы было видно, на какой странице находишься. */
+.sub-item.is-active { background: var(--white-10); position: relative; }
+.sub-item.is-active::before {
+  content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+  border-radius: 0 3px 3px 0; background: var(--primary);
+}
+.sub-item.is-active span { color: var(--white); font-weight: 600; }
 
 /* --- Карточки. Масштаб не используем: ряд обрезает по вертикали,
        поэтому подсвечиваем яркостью и обводкой. --- */
@@ -3186,16 +3194,10 @@ body {
         t.classList.toggle('is-active', (t.textContent || '').trim().toLowerCase() === 'casino'
           && (key === 'casino' || key === 'crash'));
       });
-      /* Пункты бокового меню открывают те же страницы, что и чипы */
-    document.querySelectorAll('.sub-item').forEach(function (it) {
-      var target = chipView[(it.textContent || '').trim().toLowerCase()];
-      if (!target) return;
-      it.addEventListener('click', function (e) { e.preventDefault(); showView(target); });
-    });
-    var casCard = document.querySelector('.hcard--cas');
-    if (casCard) casCard.addEventListener('click', function (e) { e.preventDefault(); showView('casino'); });
-    document.querySelectorAll('.chip').forEach(function (c) {
-        c.classList.toggle('is-active', chipView[(c.textContent || '').trim().toLowerCase()] === key);
+      /* Подсветка того, где мы находимся: чипы и пункты бокового меню */
+      document.querySelectorAll('.chip, .sub-item').forEach(function (el) {
+        el.classList.toggle('is-active',
+          chipView[(el.textContent || '').trim().toLowerCase()] === key);
       });
       scrollTo({ top: 0, behavior: 'smooth' });
     };
