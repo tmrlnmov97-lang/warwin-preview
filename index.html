@@ -1604,9 +1604,9 @@ body {
 /* ───────────────────────────────────────────────────────────────────
    973:19055 «Overlay» — модалка входа. Все значения из узла 973:19565.
    ─────────────────────────────────────────────────────────────────── */
-/* Арт выступает над модалкой на 274 — оставляем ему место сверху */
+/* Арт 168 из макета выступает над модалкой — оставляем ему место сверху */
 .lg { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
-      padding: 290px 16px 24px; box-sizing: border-box; overflow-y: auto; }
+      padding: 190px 16px 24px; box-sizing: border-box; overflow-y: auto; }
 .lg[hidden] { display: none; }
 .lg__scrim { position: absolute; inset: 0; background: rgba(0, 9, 16, .78);
              -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
@@ -1616,7 +1616,7 @@ body {
 /* 973:19058 — маскот 126x168, выступает над модалкой на 117 */
 /* Арт с прозрачным фоном, вписан по высоте коробки из макета и стоит на
    верхней кромке модалки — у прежнего экспорта был вшит тёмный квадрат. */
-.lg__mascot { position: absolute; left: 40px; bottom: calc(100% - 26px); height: 300px; width: auto;
+.lg__mascot { position: absolute; left: 20px; bottom: calc(100% - 8px); height: 168px; width: auto;
               display: block; pointer-events: none; z-index: -1; }
 .lg__modal {
   position: relative; display: flex; flex-direction: column; gap: 24px; padding: 20px;
