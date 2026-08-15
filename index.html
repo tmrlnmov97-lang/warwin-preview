@@ -3444,26 +3444,40 @@ body {
           login: { title: 'Continue to Warwin',
                    sub: 'Secure access with your email and password.',
                    tail: 'New to Spartans? ', link: 'Create account',
+                   submit: 'Login',
                    hints: ['', ''] },
           reg:   { title: 'Create your Warwin account',
                    sub: 'Sign up with your email, choose a username, and set<br>a secure password.',
                    tail: 'New to Warwin? ', link: 'Login',
+                   submit: 'Create account',
                    hints: ['Email is required.', 'Minimum 8 characters, include a number and a symbol.'] }
         };
         var lgHints = [].slice.call(lg.querySelectorAll('.lg__hint'));
+        var lgMode = 'login';
         var openLg = function (mode, btn) {
           var x = LG_TEXT[mode];
+          lgMode = mode;
           lg.classList.toggle('is-reg', mode === 'reg');
           lg.querySelector('.lg__title').textContent = x.title;
           lg.querySelector('.lg__sub').innerHTML = x.sub;
           var sw = lg.querySelector('.lg__switch');
           sw.firstChild.nodeValue = x.tail;
           sw.querySelector('a').textContent = x.link;
+          submitLabel.textContent = x.submit;
           lgHints.forEach(function (h, i) { h.textContent = x.hints[i]; h.dataset.base = x.hints[i]; });
+          /* Переключение состояний идёт через ту же разметку, поэтому чистим
+             подсветку полей и текст ошибки, иначе они переезжают следом. */
+          reset();
           opener = btn;
           lg.hidden = false; document.body.style.overflow = 'hidden';
           var f = lg.querySelector('input'); if (f) f.focus();
         };
+        /* Нижняя ссылка ведёт в соседнее состояние: из входа в регистрацию,
+           из регистрации во вход. Кнопку-открывашку оставляем прежней —
+           на неё возвращается фокус при закрытии. */
+        lg.querySelector('.lg__switch a').addEventListener('click', function (e) {
+          e.preventDefault(); openLg(lgMode === 'reg' ? 'login' : 'reg', opener);
+        });
         loginBtn.addEventListener('click', function (e) { e.preventDefault(); openLg('login', loginBtn); });
         regBtns.forEach(function (b) {
           b.addEventListener('click', function (e) { e.preventDefault(); openLg('reg', b); });
@@ -3477,6 +3491,7 @@ body {
         var pass   = lg.querySelector('.lg__field:nth-child(2) input');
         var alertP = lg.querySelector('.lg__alert');
         var submit = lg.querySelector('.lg__submit');
+        var submitLabel = submit.querySelector('.lg__submit-label');
         var fields = [].slice.call(lg.querySelectorAll('.lg__field'));
         var setBad = function (field, bad, text) {
           field.querySelector('.lg__input').classList.toggle('is-bad', bad);
@@ -3514,7 +3529,7 @@ body {
           submit.querySelector('.lg__submit-label').textContent = 'Signing in';
           setTimeout(function () {
             lg.querySelector('.lg__modal').classList.remove('is-busy');
-            submit.querySelector('.lg__submit-label').textContent = 'Login';
+            submitLabel.textContent = LG_TEXT[lgMode].submit;
             submit.disabled = false;
             document.body.classList.add('is-authed');
             closeLogin();
