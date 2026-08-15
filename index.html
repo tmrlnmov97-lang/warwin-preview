@@ -1612,7 +1612,7 @@ body {
 @media (prefers-reduced-motion: reduce) { .view, .hero { animation: none; } }
 
 /* ───────────────────────────────────────────────────────────────────
-   973:19055 «Overlay» — модалка входа. Все значения из узла 973:19565.
+   4:14353 «Overlay» — модалка входа. Все значения из узла 4:14357, 498x708.
    ─────────────────────────────────────────────────────────────────── */
 .lg { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
       padding: 24px 16px; box-sizing: border-box; overflow-y: auto; }
@@ -1639,7 +1639,7 @@ body {
 .lg__close:hover { background: var(--white-06); }
 
 .lg__fields { display: flex; flex-direction: column; gap: 16px; padding: 16px; }
-.lg__inputs { display: flex; flex-direction: column; gap: 8px; }
+.lg__inputs { display: flex; flex-direction: column; gap: 12px; }
 .lg__field  { display: flex; flex-direction: column; gap: 4px; }
 .lg__input {
   display: flex; align-items: center; gap: 12px; padding: 16px; overflow: hidden;
@@ -1654,6 +1654,15 @@ body {
 .lg__input:focus-within { border-color: var(--primary); }
 .lg__eye { display: flex; padding: 0; border: 0; background: none; cursor: pointer; flex: none; }
 .lg__hint { margin: 0; padding: 0 10px; font-size: 12px; line-height: 18px; color: #6f6f6f; }
+/* В макете логина подсказок под полями нет: слот пустой и не занимает места,
+   но остаётся в разметке — в него пишет ошибки проверка полей. */
+.lg__hint:empty { display: none; }
+/* 4:14361 — поля и ссылка «Forgot Password?» в одной колонке с зазором 8 */
+.lg__group  { display: flex; flex-direction: column; gap: 8px; }
+/* 4:14365 — строка 426x32, паддинги 6/20, радиус 8 */
+.lg__forgot { display: flex; align-items: center; padding: 6px 20px; border-radius: 8px; }
+.lg__forgot a { font-weight: 600; font-size: 14px; line-height: 20px;
+                color: #b1b1b1; text-decoration: underline; }
 
 .lg__alt { display: flex; flex-direction: column; gap: 20px; }
 .lg__or  { margin: 0; text-align: center; font-family: 'Inter', sans-serif; font-weight: 300;
@@ -3133,30 +3142,33 @@ body {
       <span class="lg__bar" aria-hidden="true"></span>
       <div class="lg__head" data-node-id="973:19566">
         <div class="lg__heading">
-          <h2 class="lg__title">Create your Warwin account</h2>
-          <p class="lg__sub">Sign up with your email, choose a username, and set<br>a secure password.</p>
+          <h2 class="lg__title">Continue to Warwin</h2>
+          <p class="lg__sub">Secure access with your email and password.</p>
         </div>
         <button class="lg__close" type="button" aria-label="Закрыть" data-close>
           <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0wLjQ0NzI4IDAuNDQ3MjhDMC43MzM3NTkgMC4xNjA4ODcgMS4xMjIyNiAwIDEuNTI3MzQgMEMxLjkzMjQyIDAgMi4zMjA5MiAwLjE2MDg4NyAyLjYwNzQgMC40NDcyOEw4LjAwOTIyIDUuODQ5MUwxMy40MTEgMC40NDcyOEMxMy42OTkyIDAuMTY5MDAzIDE0LjA4NTEgMC4wMTUwMjMgMTQuNDg1NiAwLjAxODUwMzdDMTQuODg2MiAwLjAyMTk4NDMgMTUuMjY5MyAwLjE4MjY0NyAxNS41NTI2IDAuNDY1ODg5QzE1LjgzNTggMC43NDkxMyAxNS45OTY1IDEuMTMyMjkgMTUuOTk5OSAxLjUzMjg0QzE2LjAwMzQgMS45MzMzOSAxNS44NDk0IDIuMzE5MjggMTUuNTcxMiAyLjYwNzRMMTAuMTY5MyA4LjAwOTIyTDE1LjU3MTIgMTMuNDExQzE1Ljg0OTQgMTMuNjk5MiAxNi4wMDM0IDE0LjA4NTEgMTUuOTk5OSAxNC40ODU2QzE1Ljk5NjUgMTQuODg2MiAxNS44MzU4IDE1LjI2OTMgMTUuNTUyNiAxNS41NTI2QzE1LjI2OTMgMTUuODM1OCAxNC44ODYyIDE1Ljk5NjUgMTQuNDg1NiAxNS45OTk5QzE0LjA4NTEgMTYuMDAzNCAxMy42OTkyIDE1Ljg0OTQgMTMuNDExIDE1LjU3MTJMOC4wMDkyMiAxMC4xNjkzTDIuNjA3NCAxNS41NzEyQzIuMzE5MjggMTUuODQ5NCAxLjkzMzM5IDE2LjAwMzQgMS41MzI4NCAxNS45OTk5QzEuMTMyMjkgMTUuOTk2NSAwLjc0OTEzIDE1LjgzNTggMC40NjU4ODkgMTUuNTUyNkMwLjE4MjY0NyAxNS4yNjkzIDAuMDIxOTg0MyAxNC44ODYyIDAuMDE4NTAzNyAxNC40ODU2QzAuMDE1MDIzIDE0LjA4NTEgMC4xNjkwMDMgMTMuNjk5MiAwLjQ0NzI4IDEzLjQxMUw1Ljg0OTEgOC4wMDkyMkwwLjQ0NzI4IDIuNjA3NEMwLjE2MDg4NyAyLjMyMDkyIDAgMS45MzI0MiAwIDEuNTI3MzRDMCAxLjEyMjI2IDAuMTYwODg3IDAuNzMzNzU5IDAuNDQ3MjggMC40NDcyOFoiIGZpbGw9IiNCMUIxQjEiLz4KPC9zdmc+Cg==" alt="" width="16" height="16">
         </button>
       </div>
       <div class="lg__fields" data-node-id="973:19568">
-        <div class="lg__inputs">
-          <div class="lg__field" data-node-id="973:19571">
+        <div class="lg__group" data-node-id="4:14361">
+        <div class="lg__inputs" data-node-id="4:14362">
+          <div class="lg__field" data-node-id="4:14363">
             <label class="lg__input">
               <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMuNzYgMy45NzQpIHNjYWxlKDEuMDAwMDQgMC45OTk5MTcpIj48ZyBpZD0iR3JvdXAiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNNi4wNjU1OSAwTDAgNi4wMjY1Mkw2LjA2NTU5IDEyLjA1M0M2LjE3NTIzIDExLjgyMzkgNi4yNDE3NiAxMS41NzA1IDYuMjQxNzYgMTEuM1YwLjc1MzA4NkM2LjI0MTc2IDAuNDgyNSA2LjE3NTIzIDAuMjI5MTggNi4wNjU1OSAwWiIgZmlsbD0iI0IxQjFCMSIvPgo8L2c+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxLjAwNCAyLjk2OCkgc2NhbGUoMS4wMDAwOCAxLjAwMDA0KSI+PGcgaWQ9Ikdyb3VwIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE3LjIzNzUgMEgwLjc1MzA4NkMwLjQ4MjUgMCAwLjIyOTE4IDAuMDY2NTIzNSAwIDAuMTc2MTcyTDcuNzUyNDYgNy44ODk1N0M4LjQzNzkzIDguNTc1MDQgOS41NTI2MiA4LjU3NTA0IDEwLjIzODEgNy44ODk1N0wxNy45OTA1IDAuMTc2MTcyQzE3Ljc2MTQgMC4wNjY1MjM1IDE3LjUwOCAwIDE3LjIzNzUgMFoiIGZpbGw9IiNCMUIxQjEiLz4KPC9nPjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAzLjk3NCkgc2NhbGUoMS4wMDAwNCAwLjk5OTkxNykiPjxnIGlkPSJHcm91cCI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0wLjE3NjE3MiAwQzAuMDY2NTIzNCAwLjIyOTE4IDAgMC40ODI1IDAgMC43NTMwODZWMTEuM0MwIDExLjU3MDUgMC4wNjY1MjM0IDExLjgyMzkgMC4xNzYxNzIgMTIuMDUzTDYuMjQxNzYgNi4wMjY1MkwwLjE3NjE3MiAwWiIgZmlsbD0iI0IxQjFCMSIvPgo8L2c+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxLjAwNCAxMC44Mykgc2NhbGUoMS4wMDAwOCAxLjAwMDIxKSI+PGcgaWQ9Ikdyb3VwIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTExLjkyNSAwTDExLjA2NjYgMC44NTgzMkM5LjkyNDQ5IDIuMDAwNDcgOC4wNjYwMiAyLjAwMDQ3IDYuOTIzODcgMC44NTgzMkw2LjA2NTU5IDBMMCA2LjAyNjUyQzAuMjI5MTggNi4xMzYxNyAwLjQ4MjUgNi4yMDI3IDAuNzUzMDg2IDYuMjAyN0gxNy4yMzc1QzE3LjUwOCA2LjIwMjcgMTcuNzYxNCA2LjEzNjE3IDE3Ljk5MDUgNi4wMjY1MkwxMS45MjUgMFoiIGZpbGw9IiNCMUIxQjEiLz4KPC9nPjwvZz4KPC9zdmc+" alt="" width="20" height="20">
               <input type="email" placeholder="user@warwin.com" aria-label="Email">
             </label>
-            <p class="lg__hint">Email is required.</p>
+            <p class="lg__hint"></p>
           </div>
-          <div class="lg__field" data-node-id="973:19572">
+          <div class="lg__field" data-node-id="4:14364">
             <label class="lg__input">
               <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS41MjIgMCkgc2NhbGUoMC45OTk5NzEgMSkiPjxnIGlkPSJHcm91cCI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xNSA4LjI2MDg2SDE0LjM0OFY1Ljg2OTU3QzE0LjM0OCAyLjYzMjkzIDExLjcxNTEgMCA4LjQ3ODQ4IDBDNS4yNDE4NCAwIDIuNjA4OTEgMi42MzI5MyAyLjYwODkxIDUuODY5NTdWOC4yNjA4NkgxLjk1NjUyQzAuODc3NjU2IDguMjYwODYgMCA5LjEzODUyIDAgMTAuMjE3NFYxOC4wNDM1QzAgMTkuMTIyMyAwLjg3NzY1NiAyMCAxLjk1NjUyIDIwSDE1QzE2LjA3ODkgMjAgMTYuOTU2NSAxOS4xMjIzIDE2Ljk1NjUgMTguMDQzNVYxMC4yMTc0QzE2Ljk1NjUgOS4xMzg1MiAxNi4wNzg5IDguMjYwODYgMTUgOC4yNjA4NlpNOS4xMzA0MyAxNC42NjI0VjE2LjczOTFDOS4xMzA0MyAxNy4wOTkzIDguODM4NDQgMTcuMzkxMyA4LjQ3ODI0IDE3LjM5MTNDOC4xMTgwOSAxNy4zOTEzIDcuODI2MDUgMTcuMDk5MyA3LjgyNjA1IDE2LjczOTFWMTQuNjYyNEM3LjA2ODA5IDE0LjM5MjcgNi41MjIzOCAxMy42NzY4IDYuNTIxNzIgMTIuODI2MUM2LjUyMjU4IDExLjc0NTMgNy4zOTc1IDEwLjg3MDQgOC40NzgyNCAxMC44Njk2QzkuNTU4OTggMTAuODcwNCAxMC40MzM5IDExLjc0NTMgMTAuNDM0OCAxMi44MjYxQzEwLjQzNDEgMTMuNjc2OCA5Ljg4ODM2IDE0LjM5MjcgOS4xMzA0MyAxNC42NjI0Wk0xMS43MzkzIDguMjYwODZINS4yMTc1OFY1Ljg2OTU3QzUuMjE3NTggNC4wNzEwMiA2LjY3OTg4IDIuNjA4NzEgOC40Nzg0NCAyLjYwODcxQzEwLjI3NyAyLjYwODcxIDExLjczOTMgNC4wNzEwMiAxMS43MzkzIDUuODY5NTdWOC4yNjA4NkgxMS43MzkzWiIgZmlsbD0iI0IxQjFCMSIvPgo8L2c+PC9nPgo8L3N2Zz4=" alt="" width="20" height="20">
               <input type="password" placeholder="Enter your password" aria-label="Пароль">
               <button class="lg__eye" type="button" aria-label="Показать пароль"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTAuMDQgMi45NjgpIHNjYWxlKDEgMS4wMDAxMSkiPjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xOS45MjQ1IDYuNjk2MDJDMTguMjUyIDMuMTc0OSAxNC40NDg5IDAgMTAgMEM0Ljk5NDIxIDAgMS4zOTYwMyAzLjkxNTg3IDAuMDc1NTMxMSA2LjY5NjAyQy0wLjAyNTE3NyA2LjkwODEyIC0wLjAyNTE3NyA3LjE1NDQgMC4wNzU1MzExIDcuMzY2NDlDMS43NDgwNSAxMC44ODc2IDUuNTUxMTUgMTQuMDYyNSAxMCAxNC4wNjI1QzE1LjAwNTggMTQuMDYyNSAxOC42MDQgMTAuMTQ2NSAxOS45MjQ1IDcuMzY2NDlDMjAuMDI1MiA3LjE1NDQgMjAuMDI1MiA2LjkwODEyIDE5LjkyNDUgNi42OTYwMlpNMTAgMTIuNUM2LjQwMDc2IDEyLjUgMy40MTY2IDEwLjEyOCAxLjY2NjExIDcuMDMxMjZDMy40MDkyNyAzLjk0NzE1IDYuMzkxNjEgMS41NjI1IDEwIDEuNTYyNUMxMy41OTg5IDEuNTYyNSAxNi41ODM0IDMuOTM0MTggMTguMzMzOSA3LjAzMTI2QzE2LjU5MDcgMTAuMTE1MiAxMy42MDg0IDEyLjUgMTAgMTIuNVpNMTAgMy4xMjVDNy44NDYwOCAzLjEyNSA2LjA5Mzc2IDQuODc3MzIgNi4wOTM3NiA3LjAzMTI2QzYuMDkzNzYgOS4xODUxOSA3Ljg0NjA4IDEwLjkzNzUgMTAgMTAuOTM3NUMxMi4xNTM5IDEwLjkzNzUgMTMuOTA2MyA5LjE4NTE5IDEzLjkwNjMgNy4wMzEyNkMxMy45MDYzIDQuODc3MzIgMTIuMTUzOSAzLjEyNSAxMCAzLjEyNVpNMTAgOS4zNzUwMUM4LjcwNzc0IDkuMzc1MDEgNy42NTYyNiA4LjMyMzUyIDcuNjU2MjYgNy4wMzEyNkM3LjY1NjI2IDUuNzM4ODQgOC43MDc3NCA0LjY4NzUgMTAgNC42ODc1QzExLjI5MjQgNC42ODc1IDEyLjM0MzggNS43Mzg4NCAxMi4zNDM4IDcuMDMxMjZDMTIuMzQzOCA4LjMyMzUyIDExLjI5MjQgOS4zNzUwMSAxMCA5LjM3NTAxWiIgZmlsbD0iI0IxQjFCMSIvPjwvZz4KPC9zdmc+" alt="" width="20" height="20"></button>
             </label>
-            <p class="lg__hint">Minimum 8 characters, include a number and a symbol.</p>
+            <p class="lg__hint"></p>
           </div>
+        </div>
+        <div class="lg__forgot" data-node-id="4:14365"><a href="#">Forgot Password?</a></div>
         </div>
         <div class="lg__alt" data-node-id="973:19573">
           <p class="lg__or">or enter via</p>
@@ -3170,7 +3182,7 @@ body {
       <div class="lg__foot" data-node-id="973:19585">
         <button class="lg__submit" type="button"><span class="lg__submit-label">Login</span></button>
           <p class="lg__alert" role="alert" hidden></p>
-        <p class="lg__switch">New to Warwin? <a href="#">Login</a></p>
+        <p class="lg__switch">New to Spartans? <a href="#">Create account</a></p>
       </div>
     </div>
   </div>
@@ -3424,7 +3436,7 @@ body {
           var hint = field.querySelector('.lg__hint');
           hint.classList.toggle('is-bad', bad);
           if (text) { if (!hint.dataset.base) hint.dataset.base = hint.textContent; hint.textContent = text; }
-          else if (hint.dataset.base) hint.textContent = hint.dataset.base;
+          else if (hint.dataset.base !== undefined) hint.textContent = hint.dataset.base;
         };
         var say = function (text, ok) {
           alertP.hidden = !text; alertP.textContent = text || '';
