@@ -1680,7 +1680,6 @@ body {
              font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
              background: rgba(229, 72, 77, .12); border: 1px solid rgba(229, 72, 77, .45); color: #ff9ea1; }
 .lg__alert[hidden] { display: none; }
-.lg__alert.is-ok { background: rgba(0, 201, 40, .12); border-color: rgba(0, 201, 40, .45); color: #7ce495; }
 .lg__submit { position: relative; }
 .lg__submit[disabled] { opacity: .75; cursor: default; }
 
@@ -3240,9 +3239,8 @@ body {
             lg.querySelector('.lg__modal').classList.remove('is-busy');
             submit.querySelector('.lg__submit-label').textContent = 'Login';
             submit.disabled = false;
-            say('Welcome back!', true);
             document.body.classList.add('is-authed');
-            setTimeout(closeLogin, 700);
+            closeLogin();
           }, 1400);
         });
         [mail, pass].forEach(function (i) {
