@@ -1829,6 +1829,18 @@ body {
    правилу .hcard > img, но теперь картинка лежит внутри span. */
 .hcard__pic { position: absolute; display: block; pointer-events: none; }
 
+@media (max-width: 1023px) {
+  /* 1159:10532 — картинка внутри коробки: 125.37% x 135.04% со сдвигом
+     -9.21% / -11.25%. Ставим после общего правила с inset: 0, иначе оно
+     перебивает сдвиги и арт вписывается целиком, выходя мелким. */
+  .hcard__pic img {
+    inset: auto; right: auto; bottom: auto;
+    left: -9.21%; top: -11.25%;
+    width: 125.37%; height: 135.04%;
+    object-fit: cover;
+  }
+}
+
 </style>
 </head>
 <body>
