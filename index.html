@@ -1506,6 +1506,11 @@ body {
                 object-fit: contain; object-position: right bottom; pointer-events: none;
                 /* Подложка у арта перекрашена в тот же градиент прямо в файле,
                    поэтому маска по краю больше не нужна. */ }
+  /* Мобильный арт висит на элементе с обоими классами, поэтому display:block
+     из .hero__bg перебивал глобальное .hero__bg--mob{none} и мобильная
+     картинка рисовалась поверх десктопной. Селектор из двух классов
+     выигрывает по специфичности независимо от порядка правил. */
+  .hero__bg.hero__bg--mob { display: none; }
   .hero__bg { position: absolute; right: 0; top: 0; height: 100%; width: auto;
               display: block; max-width: none; pointer-events: none; }
   /* Кант отдельным слоем поверх картинки. outline и border рисуются под
@@ -1569,6 +1574,11 @@ body {
   .hcard__glow { left: 40px; top: -99px; width: 465px; height: 370px; }
   .hcard__dust { right: -12px; top: -5px; width: 332px; height: 134px;
                  object-fit: cover; mix-blend-mode: lighten; }
+  /* Картинка внутри span-обёртки: правило было объявлено только в мобильном
+     брейкпоинте, из-за чего на десктопе img рисовался в натуральную величину
+     и спан 222x159 показывал его прозрачный левый верхний угол. */
+  .hcard__pic img { position: absolute; inset: 0; width: 100%; height: 100%;
+                    object-fit: contain; display: block; }
   .hcard--cas   .hcard__pic { left: 184px; top: -4px; width: 222px; height: 159px; overflow: hidden; }
   .hcard--sport .hcard__pic { left: 99px;  top: -20px; width: 253px; height: 169px; overflow: hidden; }
   /* Частицы в файле бирюзовые (тон 197°). На SPORT разворачиваем их в
