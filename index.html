@@ -1844,10 +1844,13 @@ body {
 @media (max-width: 1023px) {
   /* 1159:10544 — у спорта своя коробка: 66x59 на 114.5,11, картинка внутри
      без увеличения и прижата к низу. У казино зум, у спорта нет. */
-  .hcard--sport .hcard__pic { left: 114.5px; right: auto; top: 11px; width: 66px; height: 59px; }
+  /* Мяч с сеткой занимает правые 64% файла во всю высоту. Чтобы он вышел
+     ~73px шириной и упёрся в правый край, коробка равна всей картинке:
+     113x76 (соотношение файла 1.5), прижата вправо, сверху 8 — низ сетки
+     уходит под обрез карточки. */
+  .hcard--sport .hcard__pic { left: auto; right: 0; top: 8px; width: 113px; height: 76px; }
   .hcard--sport .hcard__pic img {
-    inset: 0; left: 0; top: 0; width: 100%; height: 100%;
-    object-fit: cover; object-position: bottom;
+    inset: 0; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain;
   }
 }
 
