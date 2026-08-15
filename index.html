@@ -1619,7 +1619,7 @@ body {
 .lg[hidden] { display: none; }
 .lg__scrim { position: absolute; inset: 0; background: rgba(0, 9, 16, .78);
              -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-.lg__wrap { position: relative; width: 540px; max-width: calc(100vw - 32px);
+.lg__wrap { position: relative; width: 498px; max-width: calc(100vw - 32px);
             animation: lg-rise .26s cubic-bezier(.22, .61, .36, 1) both; }
 @keyframes lg-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 /* 973:19058 — маскот 126x168, выступает над модалкой на 117 */
@@ -1644,6 +1644,9 @@ body {
 .lg__input {
   display: flex; align-items: center; gap: 12px; padding: 16px; overflow: hidden;
   background: #262b3f; border: 1px solid #21435e; border-radius: 12px;
+  /* 4:12339 — рамка 52. В Figma обводка рисуется внутрь, а в CSS ложится
+     поверх паддинга, поэтому высота задана явно, а не набирается сложением. */
+  box-sizing: border-box; height: 52px;
 }
 .lg__input img { display: block; flex: none; }
 .lg__input input {
@@ -1664,18 +1667,26 @@ body {
 .lg__forgot a { font-weight: 600; font-size: 14px; line-height: 20px;
                 color: #b1b1b1; text-decoration: underline; }
 
-.lg__alt { display: flex; flex-direction: column; gap: 20px; }
+/* 4:18177 — от «or enter via» до соцкнопок 16, а от них до условий 20:
+   зазоры разные, поэтому блок условий добирает свои 4 отступом. */
+.lg__alt { display: flex; flex-direction: column; gap: 16px; }
+/* 4:18178 — блок текста 12, а не 20: Figma меряет по капительной высоте.
+   Тот же приём, что у .hero__sub — гасим интерлиньяж, буквы остаются целыми. */
 .lg__or  { margin: 0; text-align: center; font-family: 'Inter', sans-serif; font-weight: 300;
-           font-size: 16px; color: var(--white); }
+           font-size: 16px; line-height: 12px; color: var(--white); }
 .lg__socials { display: flex; flex-direction: column; gap: 12px; }
 .lg__soc {
+  /* 4:18180 — кнопка 48, причина фиксированной высоты та же, что у .lg__input */
+  box-sizing: border-box; height: 48px;
   display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 8px;
   background: var(--social-bg); border: 1px solid var(--social-border); border-radius: 8px; cursor: pointer;
   font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px; line-height: 24px; color: var(--white);
 }
 .lg__soc img { display: block; }
 .lg__soc:hover { background: rgba(38, 49, 85, .55); border-color: var(--social-hover-border); }
-.lg__terms { margin: 0; padding: 12px 16px; border: 1px solid var(--hairline-field); border-radius: 8px;
+/* 4:18190 — блок 60 на две строки по 18 */
+.lg__terms { margin: 4px 0 0; box-sizing: border-box; height: 60px;
+             padding: 12px 16px; border: 1px solid var(--hairline-field); border-radius: 8px;
              font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 18px; color: #788691; }
 .lg__terms a { color: #b8b8b8; font-weight: 600; text-decoration: underline; }
 
