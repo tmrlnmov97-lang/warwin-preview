@@ -1875,6 +1875,23 @@ body {
 body.is-authed .header-actions .btn { display: none; }
 body.is-authed .authed { display: flex; }
 
+/* 1180:21418 — баланс и кнопка пополнения, видны только после входа */
+.wallet { display: none; align-items: center; overflow: hidden; border-radius: 8px; }
+body.is-authed .wallet { display: flex; }
+.wallet__balance { display: flex; align-items: center; gap: 8px; flex: none;
+                   padding: 12px; border: 0; cursor: pointer;
+                   background: var(--white-10); color: var(--white);
+                   font-family: 'Work Sans', sans-serif; font-weight: 700;
+                   font-size: 14px; line-height: 14px; white-space: nowrap; }
+.wallet__balance:hover { background: var(--white-16); }
+.wallet__balance img { display: block; }
+.wallet__deposit { display: flex; align-items: center; justify-content: center; flex: none;
+                   padding: 12px; border: 0; cursor: pointer;
+                   background: linear-gradient(to bottom, #cdfa50, #a6e22e); color: #00151f;
+                   font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+                   font-size: 14px; line-height: 14px; white-space: nowrap; }
+.wallet__deposit:hover { filter: brightness(1.06); }
+
 </style>
 </head>
 <body>
@@ -1991,6 +2008,15 @@ body.is-authed .authed { display: flex; }
         <button class="btn-search" aria-label="Поиск"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE4LjYxMDIiIGhlaWdodD0iMTguNzcxOCIgdmlld0JveD0iMCAwIDE4LjYxMDIgMTguNzcxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlNlYXJjaCBJY29uIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0xNy4yMjQzIDE3LjM4NTlMMTEuOTQ0OSAxMi4wNTI2TTEzLjcwNDYgNy42MDgxMkMxMy43MDQ2IDExLjA0NDYgMTAuOTQ3IDEzLjgzMDMgNy41NDUyNyAxMy44MzAzQzQuMTQzNTQgMTMuODMwMyAxLjM4NTkgMTEuMDQ0NiAxLjM4NTkgNy42MDgxMkMxLjM4NTkgNC4xNzE2OCA0LjE0MzU0IDEuMzg1OSA3LjU0NTI3IDEuMzg1OUMxMC45NDcgMS4zODU5IDEzLjcwNDYgNC4xNzE2OCAxMy43MDQ2IDcuNjA4MTJaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNzcxNzkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" alt=""></button>
         <button class="btn btn--ghost">LOGIN</button>
         <button class="btn btn--primary">REGISTER</button>
+        <!-- 1180:21418 — баланс и пополнение -->
+        <div class="wallet" data-node-id="1180:21418">
+          <button class="wallet__balance" type="button">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAwKSBzY2FsZSgxIDEpIj48ZyBpZD0iR3JvdXAiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNOC44NzE3NSA4LjE0MzcxSDcuMTI3ODRWNy4xOTgzOEM1LjYwMTIxIDcuMjcxNzUgNC4zNjUyMyA3LjYzNTc3IDQuMDAxMjEgNy45OTY5N0M0LjM2NTIzIDguNDM0MzYgNi4wMzg2IDguNzk1NTYgNy45OTk4IDguNzk1NTZDOS45NjEgOC43OTU1NiAxMS42MzQ0IDguNDMxNTQgMTEuOTk4NCA3Ljk5Njk3QzExLjYzNDQgNy42MzI5NSAxMC4zOTg0IDcuMzQyMyA4Ljg3MTc1IDcuMjY4OTNWOC4xNDA4OVY4LjE0MzcxWiIgZmlsbD0iIzAwOTM5MyIvPgo8cGF0aCBpZD0iVmVjdG9yXzIiIGQ9Ik04IDBDMy41NjQwMiAwIDAgMy41NjQwMiAwIDhDMCAxMi40MzYgMy41NjQwMiAxNiA4IDE2QzEyLjQzNiAxNiAxNiAxMi40MzYgMTYgOEMxNiAzLjU2NDAyIDEyLjQzNiAwIDggMFpNMTIuMTQyNSA4LjUwNzk0QzEyLjE0MjUgOS4wMTU4NyAxMC43NTk4IDkuMzc5ODkgOC44NjkxMyA5LjQ1MzI2VjExLjcwNzlINy4xMjUyMlY5LjQ1MzI2QzUuMzA3OTQgOS4zNzk4OSAzLjkyNTIyIDguOTQ1MzMgMy45MjUyMiA4LjUwNzk0VjcuNDg5MjRDMy45MjUyMiA2Ljk4MTMxIDUuMzA3OTQgNi42MTcyOCA3LjEyNTIyIDYuNTQzOTJWNS41OTg1OUg0LjUwNjUzVjQuMjg5MjRIMTEuNDg3OFY1LjU5ODU5SDguODY5MTNWNi41NDM5MkMxMC42ODY0IDYuNjE3MjggMTIuMDY5MSA3LjA1MTg1IDEyLjE0MjUgNy40ODkyNFY4LjUwNzk0WiIgZmlsbD0iIzAwOTM5MyIvPgo8L2c+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjY5MTIgMC42NjI0KSBzY2FsZSgwLjk5OTk5MyAwLjk5OTk5MykiPjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik03LjMzNjg2IDE0LjY3MzdDMTEuMzg4OSAxNC42NzM3IDE0LjY3MzcgMTEuMzg4OSAxNC42NzM3IDcuMzM2ODZDMTQuNjczNyAzLjI4NDgyIDExLjM4ODkgMCA3LjMzNjg2IDBDMy4yODQ4MiAwIDAgMy4yODQ4MiAwIDcuMzM2ODZDMCAxMS4zODg5IDMuMjg0ODIgMTQuNjczNyA3LjMzNjg2IDE0LjY3MzdaIiBmaWxsPSJ3aGl0ZSIvPjwvZz4KPC9zdmc+" alt="" width="16" height="16">
+            <span>USDT 0.00</span>
+            <img class="wallet__chev" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiB2aWV3Qm94PSIwIDAgMTIgMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpY29uX2Ryb3Bkb3duIj4KPHBhdGggaWQ9IlZlY3RvciAxMyIgZD0iTTEuMiAzLjZMNiA4LjRMMTAuOCAzLjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt="" width="12" height="12">
+          </button>
+          <button class="wallet__deposit" type="button">DEPOSIT</button>
+        </div>
         <!-- 1180:21426 — состояние после входа: профиль и уведомления -->
         <div class="authed" data-node-id="1180:21426">
           <button class="authed__btn" type="button" aria-label="Профиль">
