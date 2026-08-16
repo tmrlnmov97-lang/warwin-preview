@@ -1862,6 +1862,19 @@ body {
   }
 }
 
+/* 1180:21426 — шапка после входа: вместо LOGIN и REGISTER идут профиль
+   и колокольчик с точкой, кнопки 40x40 радиусом 10, зазор 12. */
+.authed { display: none; align-items: center; gap: 12px; }
+.authed__btn { display: flex; align-items: center; justify-content: center; position: relative;
+               width: 40px; height: 40px; flex: none; padding: 8px 16px;
+               background: none; border: 0; border-radius: 10px; cursor: pointer; }
+.authed__btn:hover { background: var(--surface); }
+.authed__btn img { display: block; }
+.authed__btn--bell i { position: absolute; left: 24.5px; top: 11px;
+                       width: 5px; height: 5px; border-radius: 50%; background: #ff4d4f; }
+body.is-authed .header-actions .btn { display: none; }
+body.is-authed .authed { display: flex; }
+
 </style>
 </head>
 <body>
@@ -1978,6 +1991,15 @@ body {
         <button class="btn-search" aria-label="Поиск"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE4LjYxMDIiIGhlaWdodD0iMTguNzcxOCIgdmlld0JveD0iMCAwIDE4LjYxMDIgMTguNzcxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlNlYXJjaCBJY29uIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0xNy4yMjQzIDE3LjM4NTlMMTEuOTQ0OSAxMi4wNTI2TTEzLjcwNDYgNy42MDgxMkMxMy43MDQ2IDExLjA0NDYgMTAuOTQ3IDEzLjgzMDMgNy41NDUyNyAxMy44MzAzQzQuMTQzNTQgMTMuODMwMyAxLjM4NTkgMTEuMDQ0NiAxLjM4NTkgNy42MDgxMkMxLjM4NTkgNC4xNzE2OCA0LjE0MzU0IDEuMzg1OSA3LjU0NTI3IDEuMzg1OUMxMC45NDcgMS4zODU5IDEzLjcwNDYgNC4xNzE2OCAxMy43MDQ2IDcuNjA4MTJaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNzcxNzkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" alt=""></button>
         <button class="btn btn--ghost">LOGIN</button>
         <button class="btn btn--primary">REGISTER</button>
+        <!-- 1180:21426 — состояние после входа: профиль и уведомления -->
+        <div class="authed" data-node-id="1180:21426">
+          <button class="authed__btn" type="button" aria-label="Профиль">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNS4xOTkgMCkgc2NhbGUoMS4wMDAxIDAuOTk5OTE0KSI+PGcgaWQ9Ikdyb3VwIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTUuODAwNzggMEMyLjYwMjIzIDAgMCAyLjYwMjIzIDAgNS44MDA3OEMwIDguOTk5MzMgMi42MDIyMyAxMS42MDE2IDUuODAwNzggMTEuNjAxNkM4Ljk5OTMzIDExLjYwMTYgMTEuNjAxNiA4Ljk5OTMzIDExLjYwMTYgNS44MDA3OEMxMS42MDE2IDIuNjAyMjMgOC45OTkzMyAwIDUuODAwNzggMFoiIGZpbGw9IndoaXRlIi8+CjwvZz48L2c+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEuMzMxIDEyLjg5KSBzY2FsZSgxLjAwMDExIDEuMDAwMDkpIj48ZyBpZD0iR3JvdXAiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNMTYuODg1MyAyLjUwMDU3QzE1LjI5NzEgMC44ODgwMzUgMTMuMTkxOCAwIDEwLjk1NyAwSDguMzc4OTFDNi4xNDQxOSAwIDQuMDM4OCAwLjg4ODAzNSAyLjQ1MDY4IDIuNTAwNTdDMC44NzAzMzIgNC4xMDUxOSAwIDYuMjIzMjkgMCA4LjQ2NDg0QzAgOC44MjA4IDAuMjg4NTc4IDkuMTA5MzggMC42NDQ1MzEgOS4xMDkzOEgxOC42OTE0QzE5LjA0NzQgOS4xMDkzOCAxOS4zMzU5IDguODIwOCAxOS4zMzU5IDguNDY0ODRDMTkuMzM1OSA2LjIyMzI5IDE4LjQ2NTYgNC4xMDUxOSAxNi44ODUzIDIuNTAwNTdaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c+PC9nPgo8L3N2Zz4=" alt="" width="22" height="22">
+          </button>
+          <button class="authed__btn authed__btn--bell" type="button" aria-label="Уведомления">
+            <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIyLjI3NTEiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyMi4yNzUxIDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBpZD0iR3JvdXAiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNMTEuMTM3MiAyNEMxMi41MDcyIDI0IDEzLjYzMzEgMjIuOTU2MSAxMy43NjM2IDIxLjYyMDRIOC41MTA3NEM4LjY0MTI0IDIyLjk1NjEgOS43NjcyMyAyNCAxMS4xMzcyIDI0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggaWQ9IlZlY3Rvcl8yIiBkPSJNMjAuMzIxIDE2LjMwNTlDMTkuNTE1OSAxNi4zMDU5IDE4Ljg2MzMgMTUuNjUzMiAxOC44NjMzIDE0Ljg0ODJWMTAuMDI2OUMxOC44NjMzIDYuNjA3ODMgMTYuNjQyMiAzLjcwNzk1IDEzLjU2NDIgMi42OTA0NEMxMy41NzI3IDIuNjA3ODkgMTMuNTc3IDIuNTI0MjIgMTMuNTc3IDIuNDM5NDdDMTMuNTc3IDEuMDk0MzQgMTIuNDgyNyAwIDExLjEzNzUgMEM5Ljc5MjQyIDAgOC42OTgwOCAxLjA5NDM0IDguNjk4MDggMi40Mzk0N0M4LjY5ODA4IDIuNTI0MjIgOC43MDI0OCAyLjYwNzg5IDguNzEwOTIgMi42OTA0NEM1LjYzMjk3IDMuNzA3OTUgMy40MTE4IDYuNjA3ODMgMy40MTE4IDEwLjAyNjlWMTQuODQ4MkMzLjQxMTggMTUuNjUzMiAyLjc1OTE2IDE2LjMwNTkgMS45NTQxMyAxNi4zMDU5QzAuODc0ODc1IDE2LjMwNTkgMCAxNy4xODA4IDAgMTguMjZDMCAxOS4zMzkzIDAuODc0OTIyIDIwLjIxNDIgMS45NTQxMyAyMC4yMTQySDIwLjMyMUMyMS40MDAzIDIwLjIxNDIgMjIuMjc1MSAxOS4zMzkzIDIyLjI3NTEgMTguMjZDMjIuMjc1MSAxNy4xODA4IDIxLjQwMDIgMTYuMzA1OSAyMC4zMjEgMTYuMzA1OVpNMTEuMTM3NSAxLjQwNjI1QzExLjY4MzggMS40MDYyNSAxMi4xMzIxIDEuODMyNDQgMTIuMTY4MSAyLjM2OTcyQzExLjgzMSAyLjMyNDc3IDExLjQ4NyAyLjMwMTE0IDExLjEzNzUgMi4zMDExNEMxMC43ODggMi4zMDExNCAxMC40NDQxIDIuMzI0NzcgMTAuMTA3IDIuMzY5NzJDMTAuMTQzIDEuODMyNDQgMTAuNTkxMyAxLjQwNjI1IDExLjEzNzUgMS40MDYyNVoiIGZpbGw9IndoaXRlIi8+CjwvZz4KPC9zdmc+Cg==" alt="" width="24" height="24"><i></i>
+          </button>
+        </div>
       </div>
     </div>
   </header>
