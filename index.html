@@ -1871,8 +1871,8 @@ body {
   #wp {
     position: fixed; inset: 0; z-index: 9999;
     display: grid; place-items: center;
-    background: var(--wp-bg);
-    transition: opacity var(--wp-exit) ease, transform var(--wp-exit) ease;
+    background: #0e1630;
+    transition: opacity 260ms ease, transform 260ms ease;
   }
   #wp.wp-done { opacity: 0; transform: scale(1.04); pointer-events: none; }
   #wp.wp-off  { display: none; }
@@ -1883,13 +1883,13 @@ body {
     stroke: #fff; fill: none;
     stroke-width: 132; stroke-linecap: round; stroke-linejoin: round;
     stroke-dasharray: 1; stroke-dashoffset: 1;
-    animation: wp-draw var(--wp-draw) cubic-bezier(.65,0,.35,1) forwards;
+    animation: wp-draw 750ms cubic-bezier(.65,0,.35,1) forwards;
   }
   @keyframes wp-draw { to { stroke-dashoffset: 0 } }
 
   #wp-crown {
     transform-box: view-box; transform-origin: 110px 70px;
-    animation: wp-drop 340ms var(--wp-crown-delay) cubic-bezier(.34,1.56,.64,1) backwards;
+    animation: wp-drop 340ms 430ms cubic-bezier(.34,1.56,.64,1) backwards;
   }
   @keyframes wp-drop { from { opacity: 0; transform: translateY(-16px) scale(.55) } }
 
@@ -1926,9 +1926,10 @@ body {
   }
   sessionStorage.setItem('wp-seen', '1');
 
-  var css = getComputedStyle(document.documentElement);
-  var ms  = function (n) { return parseInt(css.getPropertyValue(n)) || 0 };
-  var hold = Math.max(ms('--wp-draw'), ms('--wp-crown-delay') + 340);
+  /* Длительности заданы числами: переменные из :root в собранном файле
+     не резолвились, из-за чего сокращённая запись animation становилась
+     недействительной и логотип прорисовывался мгновенно. */
+  var hold = Math.max(750, 430 + 340);
 
   Promise.all([
     new Promise(function (r) {
@@ -1937,7 +1938,7 @@ body {
     new Promise(function (r) { setTimeout(r, hold) })
   ]).then(function () {
     wp.classList.add('wp-done');
-    setTimeout(function () { wp.classList.add('wp-off') }, ms('--wp-exit') + 50);
+    setTimeout(function () { wp.classList.add('wp-off') }, 310);
   });
 })();
 </script>
