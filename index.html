@@ -20,6 +20,13 @@
   --chrome: #181e3b;        /* шапка и сайдбар */
   --surface: #263155;       /* кнопки-чипы в шапке */
   --primary: #0794ff;       /* акцент шапки в макете */
+  /* ── Модалка Deposit/Withdraw, 20:24132 ── */
+  --dp-bg: #1b2139;         /* подложка модалки */
+  --dp-field: #222a45;      /* селекты, кнопка копирования, пассивный сегмент */
+  --dp-line: #2c3557;       /* канты полей и контейнеров */
+  --dp-label: #8b93a8;      /* подписи и пассивный текст */
+  --dp-text: #c5cde0;       /* текст сноски */
+  --dp-accent: #3a9bf5;     /* активная вкладка Crypto */
   --register: #00c928;      /* 851:2962 — CTA регистрации, взят из макета */
   --white: #ffffff;
   --white-10: rgba(255, 255, 255, 0.1);
@@ -1657,7 +1664,15 @@ body {
 .lg__close:hover { background: var(--white-06); }
 
 .lg__fields { display: flex; flex-direction: column; gap: 16px; padding: 16px; }
-.lg__inputs { display: flex; flex-direction: column; gap: 8px; }
+/* Во входе поля стоят реже, в регистрации плотнее — правило .lg.is-reg ниже */
+.lg__inputs { display: flex; flex-direction: column; gap: 12px; }
+.lg__group { display: flex; flex-direction: column; gap: 8px; }
+/* 4:14365 — ссылка восстановления пароля, только в окне входа */
+.lg__forgot { display: flex; align-items: center; padding: 6px 20px; border-radius: 8px; }
+.lg__forgot a { font-weight: 600; font-size: 14px; line-height: 20px;
+                color: #b1b1b1; text-decoration: underline; }
+.lg.is-reg .lg__forgot { display: none; }
+.lg.is-reg .lg__inputs { gap: 8px; }
 .lg__field  { display: flex; flex-direction: column; gap: 4px; }
 .lg__input {
   display: flex; align-items: center; gap: 12px; padding: 16px; overflow: hidden;
@@ -1672,6 +1687,8 @@ body {
 .lg__input:focus-within { border-color: var(--primary); }
 .lg__eye { display: flex; padding: 0; border: 0; background: none; cursor: pointer; flex: none; }
 .lg__hint { margin: 0; padding: 0 10px; font-size: 12px; line-height: 18px; color: #6f6f6f; }
+/* В макете входа подсказок под полями нет — пустой слот не должен занимать место */
+.lg__hint:empty { display: none; }
 
 .lg__alt { display: flex; flex-direction: column; gap: 20px; }
 .lg__or  { margin: 0; text-align: center; font-family: 'Inter', sans-serif; font-weight: 300;
@@ -1921,6 +1938,89 @@ body.is-authed .wallet { display: flex; }
                    font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
                    font-size: 14px; line-height: 14px; white-space: nowrap; }
 .wallet__deposit:hover { filter: brightness(1.06); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   20:24132 «Deposit/Withdraw» — модалка по кнопке DEPOSIT в шапке.
+   Восстановлена из сборки превью 3912cf0: её затёрли деплоем 16.08.
+   ═══════════════════════════════════════════════════════════════════ */
+.dp { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+      padding: 24px 16px; box-sizing: border-box; overflow-y: auto; }
+.dp[hidden] { display: none; }
+.dp__scrim { position: absolute; inset: 0; background: rgba(0, 9, 16, .78);
+             -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.dp__wrap { position: relative; width: 700px; max-width: calc(100vw - 32px);
+             animation: lg-rise .26s cubic-bezier(.22, .61, .36, 1) both; }
+.dp__modal {
+  display: flex; flex-direction: column; gap: 24px; padding: 24px;
+  background: var(--dp-bg); border-radius: 16px;
+  max-height: calc(100vh - 48px); overflow-y: auto; box-sizing: border-box; }
+.dp__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.dp__title { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 20px; line-height: 28px; color: var(--white); }
+.dp__close { display: flex; align-items: center; justify-content: center; flex: none;
+             width: 28px; height: 28px; padding: 0; background: none; border: 0;
+             border-radius: 8px; cursor: pointer; }
+.dp__close img { display: block; }
+.dp__close:hover { background: var(--white-06); }
+.dp__seg { display: flex; gap: 10px; }
+.dp__seg-btn {
+  flex: 1 1 0; min-width: 0; height: 40px; padding: 0 12px;
+  background: var(--dp-field); border: 0; border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-weight: 700; font-size: 16px; line-height: 22px; color: var(--dp-label); }
+.dp__seg-btn:hover { background: #293251; }
+.dp__seg-btn.is-active {
+  background: linear-gradient(90deg, #3ea2f8 0%, #1b7fe6 100%); color: var(--white);
+  filter: drop-shadow(0 0 6px rgba(26, 115, 250, .35)); }
+.dp__method { display: flex; justify-content: center; gap: 56px; }
+.dp__method-btn {
+  display: flex; align-items: center; gap: 8px; padding: 0 4px 8px;
+  background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer;
+  font-family: inherit; font-weight: 700; font-size: 16px; line-height: 22px; color: var(--dp-label); }
+.dp__method-btn img { display: block; flex: none; }
+.dp__method-btn:hover { color: var(--menu-text); }
+.dp__method-btn.is-active { color: var(--dp-accent); border-bottom-color: var(--dp-accent); }
+.dp__row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.dp__field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.dp__label { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px; color: var(--dp-label); }
+.dp__select {
+  display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 12px;
+  background: var(--dp-field); border: 1px solid var(--dp-line); border-radius: 8px; cursor: pointer;
+  font-family: inherit; }
+.dp__select-coin { display: block; flex: none; }
+.dp__select-value { flex: 1 0 0; min-width: 0; text-align: left;
+                    font-weight: 700; font-size: 16px; line-height: 22px; color: var(--white); }
+.dp__select-chev { display: block; flex: none; }
+.dp__select:hover { border-color: #3a4570; }
+.dp__qr { display: flex; align-items: center; gap: 24px;
+               padding: 20px; border: 1px solid var(--dp-line); border-radius: 12px; }
+.dp__qr-code { display: flex; flex: none; padding: 12px; background: var(--white); border-radius: 8px; }
+.dp__qr-code img { display: block; width: 136px; height: 136px; }
+.dp__qr-info { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; }
+.dp__addr { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 22px;
+               color: var(--white); word-break: break-all; }
+.dp__copy {
+  margin-top: 8px; padding: 10px 16px;
+  background: var(--dp-field); border: 1px solid var(--dp-line); border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-weight: 700; font-size: 14px; line-height: 20px; color: var(--white); }
+.dp__copy:hover { background: #293251; }
+.dp__copy.is-done { border-color: var(--register); color: var(--register); }
+.dp__note { display: flex; align-items: flex-start; gap: 12px;
+              padding: 14px 16px; background: #1b2440; border: 1px solid var(--dp-line); border-radius: 8px; }
+.dp__note img { display: block; flex: none; margin-top: 2px; }
+.dp__note p { margin: 0; font-family: 'Work Sans', sans-serif;
+                font-size: 14px; line-height: 21px; color: var(--dp-text); }
+.dp__modal { gap: 16px; padding: 16px; }
+.dp__row { grid-template-columns: 1fr; gap: 12px; }
+.dp__qr { flex-direction: column; align-items: flex-start; }
+.dp__method { gap: 32px; }
+
+@media (prefers-reduced-motion: reduce) { .dp__wrap { animation: none; } }
+@media (max-width: 640px) {
+  .dp__modal  { gap: 16px; padding: 16px; }
+  .dp__row    { grid-template-columns: 1fr; gap: 12px; }
+  .dp__qr     { flex-direction: column; align-items: flex-start; }
+  .dp__method { gap: 32px; }
+}
 
 </style>
 </head>
@@ -3300,34 +3400,39 @@ body.is-authed .wallet { display: flex; }
 <div class="lg" id="login-modal" hidden data-node-id="973:19055">
   <div class="lg__scrim" data-close></div>
   <div class="lg__wrap" role="dialog" aria-modal="true" aria-label="Вход">
-    <div class="lg__modal" data-node-id="973:19565">
+    <!-- Разметка одна на оба окна: 4:14357 — вход, 4:18168 — регистрация.
+         Тексты переставляет скрипт, блоки — правила .lg.is-reg. -->
+    <div class="lg__modal" data-node-id="4:14357">
       <span class="lg__bar" aria-hidden="true"></span>
       <div class="lg__head" data-node-id="973:19566">
         <div class="lg__heading">
-          <h2 class="lg__title">Create your Warwin account</h2>
-          <p class="lg__sub">Sign up with your email, choose a username, and set<br>a secure password.</p>
+          <h2 class="lg__title">Continue to Warwin</h2>
+          <p class="lg__sub">Secure access with your email and password.</p>
         </div>
         <button class="lg__close" type="button" aria-label="Закрыть" data-close>
           <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0wLjQ0NzI4IDAuNDQ3MjhDMC43MzM3NTkgMC4xNjA4ODcgMS4xMjIyNiAwIDEuNTI3MzQgMEMxLjkzMjQyIDAgMi4zMjA5MiAwLjE2MDg4NyAyLjYwNzQgMC40NDcyOEw4LjAwOTIyIDUuODQ5MUwxMy40MTEgMC40NDcyOEMxMy42OTkyIDAuMTY5MDAzIDE0LjA4NTEgMC4wMTUwMjMgMTQuNDg1NiAwLjAxODUwMzdDMTQuODg2MiAwLjAyMTk4NDMgMTUuMjY5MyAwLjE4MjY0NyAxNS41NTI2IDAuNDY1ODg5QzE1LjgzNTggMC43NDkxMyAxNS45OTY1IDEuMTMyMjkgMTUuOTk5OSAxLjUzMjg0QzE2LjAwMzQgMS45MzMzOSAxNS44NDk0IDIuMzE5MjggMTUuNTcxMiAyLjYwNzRMMTAuMTY5MyA4LjAwOTIyTDE1LjU3MTIgMTMuNDExQzE1Ljg0OTQgMTMuNjk5MiAxNi4wMDM0IDE0LjA4NTEgMTUuOTk5OSAxNC40ODU2QzE1Ljk5NjUgMTQuODg2MiAxNS44MzU4IDE1LjI2OTMgMTUuNTUyNiAxNS41NTI2QzE1LjI2OTMgMTUuODM1OCAxNC44ODYyIDE1Ljk5NjUgMTQuNDg1NiAxNS45OTk5QzE0LjA4NTEgMTYuMDAzNCAxMy42OTkyIDE1Ljg0OTQgMTMuNDExIDE1LjU3MTJMOC4wMDkyMiAxMC4xNjkzTDIuNjA3NCAxNS41NzEyQzIuMzE5MjggMTUuODQ5NCAxLjkzMzM5IDE2LjAwMzQgMS41MzI4NCAxNS45OTk5QzEuMTMyMjkgMTUuOTk2NSAwLjc0OTEzIDE1LjgzNTggMC40NjU4ODkgMTUuNTUyNkMwLjE4MjY0NyAxNS4yNjkzIDAuMDIxOTg0MyAxNC44ODYyIDAuMDE4NTAzNyAxNC40ODU2QzAuMDE1MDIzIDE0LjA4NTEgMC4xNjkwMDMgMTMuNjk5MiAwLjQ0NzI4IDEzLjQxMUw1Ljg0OTEgOC4wMDkyMkwwLjQ0NzI4IDIuNjA3NEMwLjE2MDg4NyAyLjMyMDkyIDAgMS45MzI0MiAwIDEuNTI3MzRDMCAxLjEyMjI2IDAuMTYwODg3IDAuNzMzNzU5IDAuNDQ3MjggMC40NDcyOFoiIGZpbGw9IiNCMUIxQjEiLz4KPC9zdmc+Cg==" alt="" width="16" height="16">
         </button>
       </div>
       <div class="lg__fields" data-node-id="973:19568">
-        <div class="lg__inputs">
-          <div class="lg__field" data-node-id="973:19571">
+        <div class="lg__group" data-node-id="4:14361">
+        <div class="lg__inputs" data-node-id="4:14362">
+          <div class="lg__field" data-node-id="4:14363">
             <label class="lg__input">
               <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMuNzYgMy45NzQpIHNjYWxlKDEuMDAwMDQgMC45OTk5MTcpIj48ZyBpZD0iR3JvdXAiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNNi4wNjU1OSAwTDAgNi4wMjY1Mkw2LjA2NTU5IDEyLjA1M0M2LjE3NTIzIDExLjgyMzkgNi4yNDE3NiAxMS41NzA1IDYuMjQxNzYgMTEuM1YwLjc1MzA4NkM2LjI0MTc2IDAuNDgyNSA2LjE3NTIzIDAuMjI5MTggNi4wNjU1OSAwWiIgZmlsbD0iI0IxQjFCMSIvPgo8L2c+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxLjAwNCAyLjk2OCkgc2NhbGUoMS4wMDAwOCAxLjAwMDA0KSI+PGcgaWQ9Ikdyb3VwIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE3LjIzNzUgMEgwLjc1MzA4NkMwLjQ4MjUgMCAwLjIyOTE4IDAuMDY2NTIzNSAwIDAuMTc2MTcyTDcuNzUyNDYgNy44ODk1N0M4LjQzNzkzIDguNTc1MDQgOS41NTI2MiA4LjU3NTA0IDEwLjIzODEgNy44ODk1N0wxNy45OTA1IDAuMTc2MTcyQzE3Ljc2MTQgMC4wNjY1MjM1IDE3LjUwOCAwIDE3LjIzNzUgMFoiIGZpbGw9IiNCMUIxQjEiLz4KPC9nPjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAzLjk3NCkgc2NhbGUoMS4wMDAwNCAwLjk5OTkxNykiPjxnIGlkPSJHcm91cCI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0wLjE3NjE3MiAwQzAuMDY2NTIzNCAwLjIyOTE4IDAgMC40ODI1IDAgMC43NTMwODZWMTEuM0MwIDExLjU3MDUgMC4wNjY1MjM0IDExLjgyMzkgMC4xNzYxNzIgMTIuMDUzTDYuMjQxNzYgNi4wMjY1MkwwLjE3NjE3MiAwWiIgZmlsbD0iI0IxQjFCMSIvPgo8L2c+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxLjAwNCAxMC44Mykgc2NhbGUoMS4wMDAwOCAxLjAwMDIxKSI+PGcgaWQ9Ikdyb3VwIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTExLjkyNSAwTDExLjA2NjYgMC44NTgzMkM5LjkyNDQ5IDIuMDAwNDcgOC4wNjYwMiAyLjAwMDQ3IDYuOTIzODcgMC44NTgzMkw2LjA2NTU5IDBMMCA2LjAyNjUyQzAuMjI5MTggNi4xMzYxNyAwLjQ4MjUgNi4yMDI3IDAuNzUzMDg2IDYuMjAyN0gxNy4yMzc1QzE3LjUwOCA2LjIwMjcgMTcuNzYxNCA2LjEzNjE3IDE3Ljk5MDUgNi4wMjY1MkwxMS45MjUgMFoiIGZpbGw9IiNCMUIxQjEiLz4KPC9nPjwvZz4KPC9zdmc+" alt="" width="20" height="20">
               <input type="email" placeholder="user@warwin.com" aria-label="Email">
             </label>
-            <p class="lg__hint">Email is required.</p>
+            <p class="lg__hint"></p>
           </div>
-          <div class="lg__field" data-node-id="973:19572">
+          <div class="lg__field" data-node-id="4:14364">
             <label class="lg__input">
               <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS41MjIgMCkgc2NhbGUoMC45OTk5NzEgMSkiPjxnIGlkPSJHcm91cCI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xNSA4LjI2MDg2SDE0LjM0OFY1Ljg2OTU3QzE0LjM0OCAyLjYzMjkzIDExLjcxNTEgMCA4LjQ3ODQ4IDBDNS4yNDE4NCAwIDIuNjA4OTEgMi42MzI5MyAyLjYwODkxIDUuODY5NTdWOC4yNjA4NkgxLjk1NjUyQzAuODc3NjU2IDguMjYwODYgMCA5LjEzODUyIDAgMTAuMjE3NFYxOC4wNDM1QzAgMTkuMTIyMyAwLjg3NzY1NiAyMCAxLjk1NjUyIDIwSDE1QzE2LjA3ODkgMjAgMTYuOTU2NSAxOS4xMjIzIDE2Ljk1NjUgMTguMDQzNVYxMC4yMTc0QzE2Ljk1NjUgOS4xMzg1MiAxNi4wNzg5IDguMjYwODYgMTUgOC4yNjA4NlpNOS4xMzA0MyAxNC42NjI0VjE2LjczOTFDOS4xMzA0MyAxNy4wOTkzIDguODM4NDQgMTcuMzkxMyA4LjQ3ODI0IDE3LjM5MTNDOC4xMTgwOSAxNy4zOTEzIDcuODI2MDUgMTcuMDk5MyA3LjgyNjA1IDE2LjczOTFWMTQuNjYyNEM3LjA2ODA5IDE0LjM5MjcgNi41MjIzOCAxMy42NzY4IDYuNTIxNzIgMTIuODI2MUM2LjUyMjU4IDExLjc0NTMgNy4zOTc1IDEwLjg3MDQgOC40NzgyNCAxMC44Njk2QzkuNTU4OTggMTAuODcwNCAxMC40MzM5IDExLjc0NTMgMTAuNDM0OCAxMi44MjYxQzEwLjQzNDEgMTMuNjc2OCA5Ljg4ODM2IDE0LjM5MjcgOS4xMzA0MyAxNC42NjI0Wk0xMS43MzkzIDguMjYwODZINS4yMTc1OFY1Ljg2OTU3QzUuMjE3NTggNC4wNzEwMiA2LjY3OTg4IDIuNjA4NzEgOC40Nzg0NCAyLjYwODcxQzEwLjI3NyAyLjYwODcxIDExLjczOTMgNC4wNzEwMiAxMS43MzkzIDUuODY5NTdWOC4yNjA4NkgxMS43MzkzWiIgZmlsbD0iI0IxQjFCMSIvPgo8L2c+PC9nPgo8L3N2Zz4=" alt="" width="20" height="20">
               <input type="password" placeholder="Enter your password" aria-label="Пароль">
               <button class="lg__eye" type="button" aria-label="Показать пароль"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTAuMDQgMi45NjgpIHNjYWxlKDEgMS4wMDAxMSkiPjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xOS45MjQ1IDYuNjk2MDJDMTguMjUyIDMuMTc0OSAxNC40NDg5IDAgMTAgMEM0Ljk5NDIxIDAgMS4zOTYwMyAzLjkxNTg3IDAuMDc1NTMxMSA2LjY5NjAyQy0wLjAyNTE3NyA2LjkwODEyIC0wLjAyNTE3NyA3LjE1NDQgMC4wNzU1MzExIDcuMzY2NDlDMS43NDgwNSAxMC44ODc2IDUuNTUxMTUgMTQuMDYyNSAxMCAxNC4wNjI1QzE1LjAwNTggMTQuMDYyNSAxOC42MDQgMTAuMTQ2NSAxOS45MjQ1IDcuMzY2NDlDMjAuMDI1MiA3LjE1NDQgMjAuMDI1MiA2LjkwODEyIDE5LjkyNDUgNi42OTYwMlpNMTAgMTIuNUM2LjQwMDc2IDEyLjUgMy40MTY2IDEwLjEyOCAxLjY2NjExIDcuMDMxMjZDMy40MDkyNyAzLjk0NzE1IDYuMzkxNjEgMS41NjI1IDEwIDEuNTYyNUMxMy41OTg5IDEuNTYyNSAxNi41ODM0IDMuOTM0MTggMTguMzMzOSA3LjAzMTI2QzE2LjU5MDcgMTAuMTE1MiAxMy42MDg0IDEyLjUgMTAgMTIuNVpNMTAgMy4xMjVDNy44NDYwOCAzLjEyNSA2LjA5Mzc2IDQuODc3MzIgNi4wOTM3NiA3LjAzMTI2QzYuMDkzNzYgOS4xODUxOSA3Ljg0NjA4IDEwLjkzNzUgMTAgMTAuOTM3NUMxMi4xNTM5IDEwLjkzNzUgMTMuOTA2MyA5LjE4NTE5IDEzLjkwNjMgNy4wMzEyNkMxMy45MDYzIDQuODc3MzIgMTIuMTUzOSAzLjEyNSAxMCAzLjEyNVpNMTAgOS4zNzUwMUM4LjcwNzc0IDkuMzc1MDEgNy42NTYyNiA4LjMyMzUyIDcuNjU2MjYgNy4wMzEyNkM3LjY1NjI2IDUuNzM4ODQgOC43MDc3NCA0LjY4NzUgMTAgNC42ODc1QzExLjI5MjQgNC42ODc1IDEyLjM0MzggNS43Mzg4NCAxMi4zNDM4IDcuMDMxMjZDMTIuMzQzOCA4LjMyMzUyIDExLjI5MjQgOS4zNzUwMSAxMCA5LjM3NTAxWiIgZmlsbD0iI0IxQjFCMSIvPjwvZz4KPC9zdmc+" alt="" width="20" height="20"></button>
             </label>
-            <p class="lg__hint">Minimum 8 characters, include a number and a symbol.</p>
+            <p class="lg__hint"></p>
           </div>
+        </div>
+        <div class="lg__forgot" data-node-id="4:14365"><a href="#">Forgot Password?</a></div>
         </div>
         <div class="lg__alt" data-node-id="973:19573">
           <p class="lg__or">or enter via</p>
@@ -3341,8 +3446,71 @@ body.is-authed .wallet { display: flex; }
       <div class="lg__foot" data-node-id="973:19585">
         <button class="lg__submit" type="button"><span class="lg__submit-label">Login</span></button>
           <p class="lg__alert" role="alert" hidden></p>
-        <p class="lg__switch">New to Warwin? <a href="#">Login</a></p>
+        <p class="lg__switch">New to Spartans? <a href="#">Create account</a></p>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="dp" id="deposit-modal" hidden data-node-id="20:24132">
+  <div class="dp__scrim" data-close></div>
+  <div class="dp__wrap" role="dialog" aria-modal="true" aria-labelledby="deposit-title">
+    <div class="dp__modal">
+
+      <div class="dp__head">
+        <h2 class="dp__title" id="deposit-title">Deposit/Withdraw</h2>
+        <button class="dp__close" type="button" aria-label="Закрыть" data-close>
+          <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiB2aWV3Qm94PSIwIDAgMTQgMTQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJJY29uIiBkPSJNMTMgMUwxIDEzTTEgMUwxMyAxMyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt="" width="14" height="14">
+        </button>
+      </div>
+
+      <div class="dp__seg" role="tablist" aria-label="Deposit или Withdraw">
+        <button class="dp__seg-btn is-active" type="button" role="tab" aria-selected="true" data-seg="deposit">Deposit</button>
+        <button class="dp__seg-btn" type="button" role="tab" aria-selected="false" data-seg="withdraw">Withdraw</button>
+      </div>
+
+      <div class="dp__method" role="tablist" aria-label="Crypto или Fiat">
+        <button class="dp__method-btn is-active" type="button" role="tab" aria-selected="true" data-method="crypto">
+          <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjQxIiBoZWlnaHQ9IjQxIiB2aWV3Qm94PSIwIDAgNDEgNDEiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIiBmaWx0ZXI9InVybCgjZmlsdGVyMF9kXzBfMTEyKSI+CjxwYXRoIGQ9Ik0xOC42MDEgMTIuNUMxOS44NjM2IDExLjI2MjggMjEuNTkyNyAxMC41IDIzLjUgMTAuNUMyNy4zNjYgMTAuNSAzMC41IDEzLjYzNCAzMC41IDE3LjVDMzAuNSAxOS40MDczIDI5LjczNzIgMjEuMTM2NSAyOC40OTk5IDIyLjM5OU0yNC41IDIzLjVDMjQuNSAyNy4zNjYgMjEuMzY2IDMwLjUgMTcuNSAzMC41QzEzLjYzNCAzMC41IDEwLjUgMjcuMzY2IDEwLjUgMjMuNUMxMC41IDE5LjYzNCAxMy42MzQgMTYuNSAxNy41IDE2LjVDMjEuMzY2IDE2LjUgMjQuNSAxOS42MzQgMjQuNSAyMy41WiIgc3Ryb2tlPSJ1cmwoI3BhaW50MF9saW5lYXJfMF8xMTIpIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8ZGVmcz4KPGZpbHRlciBpZD0iZmlsdGVyMF9kXzBfMTEyIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDEiIGhlaWdodD0iNDEiIGZpbHRlclVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj4KPGZlRmxvb2QgZmxvb2Qtb3BhY2l0eT0iMCIgcmVzdWx0PSJCYWNrZ3JvdW5kSW1hZ2VGaXgiLz4KPGZlQ29sb3JNYXRyaXggaW49IlNvdXJjZUFscGhhIiB0eXBlPSJtYXRyaXgiIHZhbHVlcz0iMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMTI3IDAiIHJlc3VsdD0iaGFyZEFscGhhIi8+CjxmZU9mZnNldC8+CjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjUiLz4KPGZlQ29sb3JNYXRyaXggdHlwZT0ibWF0cml4IiB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAuNzU2ODYzIDAgMCAwIDAgMSAwIDAgMCAwLjcgMCIvPgo8ZmVCbGVuZCBtb2RlPSJub3JtYWwiIGluMj0iQmFja2dyb3VuZEltYWdlRml4IiByZXN1bHQ9ImVmZmVjdDFfZHJvcFNoYWRvd18wXzExMiIvPgo8ZmVCbGVuZCBtb2RlPSJub3JtYWwiIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImVmZmVjdDFfZHJvcFNoYWRvd18wXzExMiIgcmVzdWx0PSJzaGFwZSIvPgo8L2ZpbHRlcj4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzBfMTEyIiB4MT0iMjAuNjY0NSIgeTE9IjEzIiB4Mj0iMjcuNTE5NSIgeTI9IjI3LjIxMSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBDMUZGIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQzFGRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=" alt="" width="16" height="16"><span>Crypto</span>
+        </button>
+        <button class="dp__method-btn" type="button" role="tab" aria-selected="false" data-method="fiat">
+          <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE3LjY2NjciIGhlaWdodD0iMTIuNjY2NyIgdmlld0JveD0iMCAwIDE3LjY2NjcgMTIuNjY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0zLjgzMzMzIDQuNjY2NjdWOE0xMy44MzMzIDQuNjY2NjdWOE0wLjUgMy4xNjY2N0wwLjUgOS41QzAuNSAxMC40MzM0IDAuNSAxMC45MDAxIDAuNjgxNjU2IDExLjI1NjdDMC44NDE0NDUgMTEuNTcwMyAxLjA5NjQxIDExLjgyNTIgMS40MTAwMiAxMS45ODVDMS43NjY1NCAxMi4xNjY3IDIuMjMzMjUgMTIuMTY2NyAzLjE2NjY3IDEyLjE2NjdMMTQuNSAxMi4xNjY3QzE1LjQzMzQgMTIuMTY2NyAxNS45MDAxIDEyLjE2NjcgMTYuMjU2NyAxMS45ODVDMTYuNTcwMyAxMS44MjUyIDE2LjgyNTIgMTEuNTcwMyAxNi45ODUgMTEuMjU2N0MxNy4xNjY3IDEwLjkwMDEgMTcuMTY2NyAxMC40MzM0IDE3LjE2NjcgOS41VjMuMTY2NjdDMTcuMTY2NyAyLjIzMzI1IDE3LjE2NjcgMS43NjY1NCAxNi45ODUgMS40MTAwMkMxNi44MjUyIDEuMDk2NDEgMTYuNTcwMyAwLjg0MTQ0NiAxNi4yNTY3IDAuNjgxNjU3QzE1LjkwMDEgMC41MDAwMDIgMTUuNDMzNCAwLjUwMDAwMSAxNC41IDAuNTAwMDAxTDMuMTY2NjcgMC41QzIuMjMzMjUgMC41IDEuNzY2NTQgMC41IDEuNDEwMDIgMC42ODE2NTZDMS4wOTY0MSAwLjg0MTQ0NSAwLjg0MTQ0NSAxLjA5NjQxIDAuNjgxNjU2IDEuNDEwMDJDMC41MDAwMDEgMS43NjY1NCAwLjUwMDAwMSAyLjIzMzI1IDAuNSAzLjE2NjY3Wk0xMC45MTY3IDYuMzMzMzNDMTAuOTE2NyA3LjQ4MzkzIDkuOTgzOTMgOC40MTY2NyA4LjgzMzMzIDguNDE2NjdDNy42ODI3NCA4LjQxNjY3IDYuNzUgNy40ODM5MyA2Ljc1IDYuMzMzMzNDNi43NSA1LjE4Mjc0IDcuNjgyNzQgNC4yNSA4LjgzMzMzIDQuMjVDOS45ODM5MyA0LjI1IDEwLjkxNjcgNS4xODI3NCAxMC45MTY3IDYuMzMzMzNaIiBzdHJva2U9IiNCQkM2Q0QiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" width="16" height="16"><span>Fiat</span>
+        </button>
+      </div>
+
+      <div class="dp__row">
+        <div class="dp__field">
+          <span class="dp__label">Deposit Currency</span>
+          <button class="dp__select" type="button">
+            <img class="dp__select-coin" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJFdGhlcmV1bSBFVEgiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNMTIgMjRDMTguNjI3NCAyNCAyNCAxOC42Mjc0IDI0IDEyQzI0IDUuMzcyNTggMTguNjI3NCAwIDEyIDBDNS4zNzI1OSAwIDcuNzU5NDhlLTA3IDUuMzcyNTggNy43NTk0OGUtMDcgMTJDNy43NTk0OGUtMDcgMTguNjI3NCA1LjM3MjU5IDI0IDEyIDI0WiIgZmlsbD0iIzVGN0VERCIvPgo8cGF0aCBpZD0iVmVjdG9yXzIiIGQ9Ik0xMS45OTU2IDE1LjI2OEw3Ljk2NTk3IDEyLjg4NDlMMTEuOTk1NiAxOC41NjUzTDE2LjAyOTUgMTIuODg0OUwxMS45OTU2IDE1LjI2OFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGlkPSJWZWN0b3JfMyIgZD0iTTE2LjAyOTcgMTIuMTIyOUwxMS45OTU4IDE0LjUwNkw3Ljk2MTkzIDEyLjEyMjlMMTEuOTk1OCA1LjQzMDgzTDE2LjAyOTcgMTIuMTIyOVoiIGZpbGw9IndoaXRlIi8+CjxnIGlkPSJHcm91cCI+CjxwYXRoIGlkPSJWZWN0b3JfNCIgZD0iTTE2LjAyOTMgMTIuMTIyOEwxMS45OTU1IDEwLjI5VjUuNDMwNzFMMTYuMDI5MyAxMi4xMjI4WiIgZmlsbD0iI0MxQ0NGNyIvPgo8cGF0aCBpZD0iVmVjdG9yXzUiIGQ9Ik0xNi4wMzM0IDEyLjg4NDdMMTEuOTk5NSAxOC41NjUxVjE1LjI2MzVMMTYuMDMzNCAxMi44ODA0VjEyLjg4NDdaIiBmaWxsPSIjQzFDQ0Y3Ii8+CjxwYXRoIGlkPSJWZWN0b3JfNiIgZD0iTTExLjk5NTQgMTAuMjg1NFYxNC41MDEzTDcuOTY1NzQgMTIuMTE4MkwxMS45OTU0IDEwLjI4NTRaIiBmaWxsPSIjQzFDQ0Y3Ii8+CjwvZz4KPHBhdGggaWQ9IlZlY3Rvcl83IiBkPSJNMTYuMDI5NiAxMi4xMjIxTDExLjk5NTcgMTQuNTA1MVYxMC4yODkzTDE2LjAyOTYgMTIuMTIyMVoiIGZpbGw9IiM4MTk4RUUiLz4KPC9nPgo8L3N2Zz4K" alt="" width="20" height="20">
+            <span class="dp__select-value">ETH</span>
+            <img class="dp__select-chev" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjkiIGhlaWdodD0iNSIgdmlld0JveD0iMCAwIDkgNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0wLjUgMC41TDQuNSA0LjVMOC41IDAuNSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" alt="" width="12" height="7">
+          </button>
+        </div>
+        <div class="dp__field">
+          <span class="dp__label">Network</span>
+          <button class="dp__select" type="button">
+            <img class="dp__select-coin" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJHcm91cCI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xMy4zMDc3IDEyLjIxNTVIMTAuNjkxOFYxMC43OTc1QzguNDAxODQgMTAuOTA3NiA2LjU0Nzg2IDExLjQ1MzYgNi4wMDE4MyAxMS45OTU0QzYuNTQ3ODYgMTIuNjUxNSA5LjA1NzkyIDEzLjE5MzMgMTEuOTk5NyAxMy4xOTMzQzE0Ljk0MTUgMTMuMTkzMyAxNy40NTE2IDEyLjY0NzMgMTcuOTk3NiAxMS45OTU0QzE3LjQ1MTYgMTEuNDQ5NCAxNS41OTc2IDExLjAxMzQgMTMuMzA3NyAxMC45MDM0VjEyLjIxMTNWMTIuMjE1NVoiIGZpbGw9IiMwMDkzOTMiLz4KPHBhdGggaWQ9IlZlY3Rvcl8yIiBkPSJNMTIgMEM1LjM0NjAzIDAgMCA1LjM0NjAzIDAgMTJDMCAxOC42NTQgNS4zNDYwMyAyNCAxMiAyNEMxOC42NTQgMjQgMjQgMTguNjU0IDI0IDEyQzI0IDUuMzQ2MDMgMTguNjU0IDAgMTIgMFpNMTguMjEzOCAxMi43NjE5QzE4LjIxMzggMTMuNTIzOCAxNi4xMzk3IDE0LjA2OTggMTMuMzAzNyAxNC4xNzk5VjE3LjU2MTlIMTAuNjg3OFYxNC4xNzk5QzcuOTYxOSAxNC4wNjk4IDUuODg3ODMgMTMuNDE4IDUuODg3ODMgMTIuNzYxOVYxMS4yMzM5QzUuODg3ODMgMTAuNDcyIDcuOTYxOSA5LjkyNTkzIDEwLjY4NzggOS44MTU4N1Y4LjM5Nzg4SDYuNzU5NzlWNi40MzM4NkgxNy4yMzE3VjguMzk3ODhIMTMuMzAzN1Y5LjgxNTg3QzE2LjAyOTYgOS45MjU5MyAxOC4xMDM3IDEwLjU3NzggMTguMjEzOCAxMS4yMzM5VjEyLjc2MTlaIiBmaWxsPSIjMDA5MzkzIi8+CjwvZz4KPC9zdmc+Cg==" alt="" width="20" height="20">
+            <span class="dp__select-value">ERC20</span>
+            <img class="dp__select-chev" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjkiIGhlaWdodD0iNSIgdmlld0JveD0iMCAwIDkgNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0wLjUgMC41TDQuNSA0LjVMOC41IDAuNSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" alt="" width="12" height="7">
+          </button>
+        </div>
+      </div>
+
+      <div class="dp__qr">
+        <div class="dp__qr-code"><img src="data:image/webp;base64,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" alt="QR-код адреса пополнения" width="136" height="136"></div>
+        <div class="dp__qr-info">
+          <span class="dp__label">Contract Address</span>
+          <p class="dp__addr">0x42ffe639f7a4aa85294S830e2c82</p>
+          <button class="dp__copy" type="button">Copy Address</button>
+        </div>
+      </div>
+
+      <div class="dp__note">
+        <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2LjY2NjciIGhlaWdodD0iMTYuNjY2NyIgdmlld0JveD0iMCAwIDE2LjY2NjcgMTYuNjY2NyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNi42NjY3IDguMzMzMzNDMTYuNjY2NyAzLjczMDk2IDEyLjkzNTcgMCA4LjMzMzMzIDBDMy43MzA5NiAwIDAgMy43MzA5NiAwIDguMzMzMzNDMCAxMi45MzU3IDMuNzMwOTYgMTYuNjY2NyA4LjMzMzMzIDE2LjY2NjdDMTIuOTM1NyAxNi42NjY3IDE2LjY2NjcgMTIuOTM1NyAxNi42NjY3IDguMzMzMzNaTTguMzMzMzMgMy41NDE2N0M4LjY3ODUxIDMuNTQxNjcgOC45NTgzMyAzLjgyMTQ5IDguOTU4MzMgNC4xNjY2N1Y5LjE2NjY3QzguOTU4MzMgOS41MTE4NCA4LjY3ODUxIDkuNzkxNjcgOC4zMzMzMyA5Ljc5MTY3QzcuOTg4MTYgOS43OTE2NyA3LjcwODMzIDkuNTExODQgNy43MDgzMyA5LjE2NjY3VjQuMTY2NjdDNy43MDgzMyAzLjgyMTQ5IDcuOTg4MTYgMy41NDE2NyA4LjMzMzMzIDMuNTQxNjdaTTguMzMzMzMgMTIuNUM4Ljc5MzU3IDEyLjUgOS4xNjY2NyAxMi4xMjY5IDkuMTY2NjcgMTEuNjY2N0M5LjE2NjY3IDExLjIwNjQgOC43OTM1NyAxMC44MzMzIDguMzMzMzMgMTAuODMzM0M3Ljg3MzEgMTAuODMzMyA3LjUgMTEuMjA2NCA3LjUgMTEuNjY2N0M3LjUgMTIuMTI2OSA3Ljg3MzEgMTIuNSA4LjMzMzMzIDEyLjVaIiBmaWxsPSIjRjRCRjJGIi8+Cjwvc3ZnPgo=" alt="" width="16" height="16">
+        <p>Send only ETH to this deposit address. Transfers below 0.0003 ETH will not be credited.</p>
+      </div>
+
     </div>
   </div>
 </div>
@@ -3572,13 +3740,58 @@ body.is-authed .wallet { display: flex; }
 
       /* 973:19055 — модалка входа по кнопке LOGIN в шапке */
       var lg = document.getElementById('login-modal');
-      var loginBtn = [].slice.call(document.querySelectorAll('.header-actions .btn'))
-        .filter(function (b) { return (b.textContent || '').trim().toLowerCase() === 'login'; })[0];
+      var headBtns = [].slice.call(document.querySelectorAll('.header-actions .btn'));
+      var byLabel = function (name) {
+        return headBtns.filter(function (b) { return (b.textContent || '').trim().toLowerCase() === name; });
+      };
+      var loginBtn = byLabel('login')[0], regBtns = byLabel('register');
       if (lg && loginBtn) {
-        var closeLogin = function () { lg.hidden = true; document.body.style.overflow = ''; loginBtn.focus(); };
-        loginBtn.addEventListener('click', function (e) {
-          e.preventDefault(); lg.hidden = false; document.body.style.overflow = 'hidden';
+        /* Кнопка, с которой открыли: на неё возвращаем фокус при закрытии. */
+        var opener = loginBtn;
+        var closeLogin = function () { lg.hidden = true; document.body.style.overflow = ''; if (opener) opener.focus(); };
+        /* Тексты обоих состояний. Подсказки под полями в макете входа
+           пустые, поэтому там пустые строки — слот скрыт правилом :empty. */
+        var LG_TEXT = {
+          login: { title: 'Continue to Warwin',
+                   sub: 'Secure access with your email and password.',
+                   tail: 'New to Spartans? ', link: 'Create account',
+                   submit: 'Login',
+                   hints: ['', ''] },
+          reg:   { title: 'Create your Warwin account',
+                   sub: 'Sign up with your email, choose a username, and set<br>a secure password.',
+                   tail: 'New to Warwin? ', link: 'Login',
+                   submit: 'Create account',
+                   hints: ['Email is required.', 'Minimum 8 characters, include a number and a symbol.'] }
+        };
+        var lgHints = [].slice.call(lg.querySelectorAll('.lg__hint'));
+        var lgMode = 'login';
+        var openLg = function (mode, btn) {
+          var x = LG_TEXT[mode];
+          lgMode = mode;
+          lg.classList.toggle('is-reg', mode === 'reg');
+          lg.querySelector('.lg__title').textContent = x.title;
+          lg.querySelector('.lg__sub').innerHTML = x.sub;
+          var sw = lg.querySelector('.lg__switch');
+          sw.firstChild.nodeValue = x.tail;
+          sw.querySelector('a').textContent = x.link;
+          submitLabel.textContent = x.submit;
+          lgHints.forEach(function (h, i) { h.textContent = x.hints[i]; h.dataset.base = x.hints[i]; });
+          /* Переключение состояний идёт через ту же разметку, поэтому чистим
+             подсветку полей и текст ошибки, иначе они переезжают следом. */
+          reset();
+          opener = btn;
+          lg.hidden = false; document.body.style.overflow = 'hidden';
           var f = lg.querySelector('input'); if (f) f.focus();
+        };
+        /* Нижняя ссылка ведёт в соседнее состояние: из входа в регистрацию,
+           из регистрации во вход. Кнопку-открывашку оставляем прежней —
+           на неё возвращается фокус при закрытии. */
+        lg.querySelector('.lg__switch a').addEventListener('click', function (e) {
+          e.preventDefault(); openLg(lgMode === 'reg' ? 'login' : 'reg', opener);
+        });
+        loginBtn.addEventListener('click', function (e) { e.preventDefault(); openLg('login', loginBtn); });
+        regBtns.forEach(function (b) {
+          b.addEventListener('click', function (e) { e.preventDefault(); openLg('reg', b); });
         });
         lg.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeLogin(); });
         addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lg.hidden) closeLogin(); });
@@ -3589,13 +3802,14 @@ body.is-authed .wallet { display: flex; }
         var pass   = lg.querySelector('.lg__field:nth-child(2) input');
         var alertP = lg.querySelector('.lg__alert');
         var submit = lg.querySelector('.lg__submit');
+        var submitLabel = submit.querySelector('.lg__submit-label');
         var fields = [].slice.call(lg.querySelectorAll('.lg__field'));
         var setBad = function (field, bad, text) {
           field.querySelector('.lg__input').classList.toggle('is-bad', bad);
           var hint = field.querySelector('.lg__hint');
           hint.classList.toggle('is-bad', bad);
           if (text) { if (!hint.dataset.base) hint.dataset.base = hint.textContent; hint.textContent = text; }
-          else if (hint.dataset.base) hint.textContent = hint.dataset.base;
+          else if (hint.dataset.base !== undefined) hint.textContent = hint.dataset.base;
         };
         var say = function (text, ok) {
           alertP.hidden = !text; alertP.textContent = text || '';
@@ -3626,7 +3840,7 @@ body.is-authed .wallet { display: flex; }
           submit.querySelector('.lg__submit-label').textContent = 'Signing in';
           setTimeout(function () {
             lg.querySelector('.lg__modal').classList.remove('is-busy');
-            submit.querySelector('.lg__submit-label').textContent = 'Login';
+            submitLabel.textContent = LG_TEXT[lgMode].submit;
             submit.disabled = false;
             document.body.classList.add('is-authed');
             closeLogin();
@@ -3646,6 +3860,52 @@ body.is-authed .wallet { display: flex; }
           eye.setAttribute('aria-label', show ? 'Скрыть пароль' : 'Показать пароль');
         });
       }
+/* 20:24132 — модалка Deposit/Withdraw по кнопке DEPOSIT в шапке */
+      var dp = document.getElementById('deposit-modal');
+      var depBtn = document.querySelector('.wallet__deposit');
+      if (dp && depBtn) {
+        var closeDep = function () { dp.hidden = true; document.body.style.overflow = ''; depBtn.focus(); };
+        depBtn.addEventListener('click', function (e) {
+          e.preventDefault(); dp.hidden = false; document.body.style.overflow = 'hidden';
+        });
+        dp.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeDep(); });
+        addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dp.hidden) closeDep(); });
+
+        /* Оба ряда вкладок переключаются одинаково: активна ровно одна */
+        [['.dp__seg-btn', '.dp__seg'], ['.dp__method-btn', '.dp__method']].forEach(function (pair) {
+          var group = dp.querySelectorAll(pair[0]);
+          group.forEach(function (b) {
+            b.addEventListener('click', function () {
+              group.forEach(function (o) {
+                var on = o === b;
+                o.classList.toggle('is-active', on);
+                o.setAttribute('aria-selected', on ? 'true' : 'false');
+              });
+            });
+          });
+        });
+
+        var copy = dp.querySelector('.dp__copy');
+        var addr = dp.querySelector('.dp__addr');
+        if (copy && addr) copy.addEventListener('click', function () {
+          var text = addr.textContent.trim();
+          var done = function () {
+            copy.textContent = 'Copied'; copy.classList.add('is-done');
+            setTimeout(function () { copy.textContent = 'Copy Address'; copy.classList.remove('is-done'); }, 1600);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () {});
+          } else {
+            /* Запасной путь для страниц без защищённого контекста */
+            var ta = document.createElement('textarea');
+            ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); done(); } catch (err) {}
+            document.body.removeChild(ta);
+          }
+        });
+      }
+
       document.querySelectorAll('.cas-search').forEach(function (b) {
         b.addEventListener('click', openSearch);
       });
