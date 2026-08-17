@@ -2013,6 +2013,21 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
   border: 1px solid rgba(255, 255, 255, .08); border-radius: 20px;
 }
+/* Появление блоков при смене вкладки: display переключается мгновенно, и
+   opacity по нему не анимируется — поэтому короткий проявляющий кадр. */
+@keyframes dp-in { from { opacity: 0; transform: translateY(4px); } }
+.dp.is-withdraw .dp__addr-field,
+.dp.is-withdraw .dp__amount,
+.dp.is-withdraw .dp__wd-foot,
+.dp:not(.is-withdraw) .dp__qr-row,
+.dp:not(.is-withdraw) .dp__note { animation: dp-in .24s ease both; }
+@media (prefers-reduced-motion: reduce) {
+  .dp.is-withdraw .dp__addr-field,
+  .dp.is-withdraw .dp__amount,
+  .dp.is-withdraw .dp__wd-foot,
+  .dp:not(.is-withdraw) .dp__qr-row,
+  .dp:not(.is-withdraw) .dp__note { animation: none; }
+}
 /* 1180:32177 — Cora Bold 18/28, слева 59, центр строки на 39 */
 .dp__title { position: absolute; left: 59px; top: 39px; transform: translateY(-50%);
              margin: 0; width: 480px;
@@ -4263,6 +4278,30 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       if (dp && depBtn) {
         /* dp-open поднимает шапку над затемнением: при пополнении баланс
            должен остаться на виду. */
+        /* Плавная смена высоты окна: запоминаем текущую, применяем состояние,
+           замеряем новую и доводим одну к другой. Без этого окно прыгает на
+           75px, потому что у вкладок разное содержимое. */
+        var dpModal = dp.querySelector('.dp__modal');
+        var dpCalm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var dpMorph = function (apply) {
+          if (dpCalm) { apply(); return; }
+          var from = dpModal.getBoundingClientRect().height;
+          apply();
+          dpModal.style.height = '';
+          var to = dpModal.getBoundingClientRect().height;
+          if (Math.abs(to - from) < 1) return;
+          dpModal.style.height = from + 'px';
+          void dpModal.offsetHeight;
+          dpModal.style.transition = 'height .3s cubic-bezier(.22,.61,.36,1)';
+          dpModal.style.height = to + 'px';
+          var done = function (e) {
+            if (e && e.propertyName !== 'height') return;
+            dpModal.style.transition = ''; dpModal.style.height = '';
+            dpModal.removeEventListener('transitionend', done);
+          };
+          dpModal.addEventListener('transitionend', done);
+          setTimeout(done, 420);          /* если transitionend не пришёл */
+        };
         var closeDep = function () { dp.hidden = true; document.body.classList.remove('dp-open');
                                     document.body.style.overflow = ''; depBtn.focus(); };
         depBtn.addEventListener('click', function (e) {
@@ -4282,8 +4321,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 o.classList.toggle('is-active', on);
                 o.setAttribute('aria-selected', on ? 'true' : 'false');
               });
-              /* 1180:47817 — на выводе у окна другое содержимое и свои подписи */
-              if (b.dataset.seg) {
+              /* 1180:47817 — на выводе у окна другое содержимое и свои подписи.
+                 Высоты у вкладок разные (570 и 645), поэтому переключаем
+                 внутри dpMorph: он доводит высоту от прежней к новой, иначе
+                 окно скачет и читается как два разных окна. */
+              if (b.dataset.seg) dpMorph(function () {
                 var wd = b.dataset.seg === 'withdraw';
                 dp.classList.toggle('is-withdraw', wd);
                 var labels = dp.querySelectorAll('.dp__body > .dp__row .dp__label');
@@ -4291,7 +4333,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                   labels[0].textContent = wd ? 'Withdraw Currency' : 'Deposit Currency';
                   labels[1].textContent = wd ? 'Choose CoinNetwork' : 'Network';
                 }
-              }
+              });
             });
           });
         });
