@@ -2164,6 +2164,80 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 }
 .dp__copy:hover { background: var(--white-16); }
 .dp__copy.is-done { color: #7ee787; }
+/* ── 1180:47817 «Withdraw» — вторая вкладка того же окна ──
+   Отличается от пополнения: вместо QR и сноски идут фамилия с именем, сумма
+   вывода, быстрые значения и итог с кнопкой. Зазор между блоками окна тут 20,
+   а не 32, и открывается всё в пустом, неактивном состоянии. */
+.dp__row--wd, .dp__amount, .dp__wd-foot { display: none; }
+.dp.is-withdraw .dp__row--wd { display: flex; }
+.dp.is-withdraw .dp__amount { display: flex; }
+.dp.is-withdraw .dp__wd-foot { display: flex; }
+.dp.is-withdraw .dp__qr-row,
+.dp.is-withdraw .dp__note { display: none; }
+.dp.is-withdraw .dp__modal { gap: 20px; }
+
+/* 1180:47861 — поле ввода той же плитой, что селекты */
+.dp__input {
+  box-sizing: border-box; display: flex; align-items: center; gap: 8px;
+  width: 100%; height: 48px; padding: 12px; overflow: hidden;
+  background: #30354f; border: 0; border-radius: 12px; cursor: text;
+}
+.dp__input input {
+  flex: 1 0 0; min-width: 0; border: 0; background: none; outline: none;
+  font-family: 'Work Sans', sans-serif; font-weight: 500;
+  font-size: 13px; line-height: 16px; color: var(--white);
+}
+.dp__input:focus-within { box-shadow: inset 0 0 0 1px var(--primary); }
+/* 1180:47904 — у поля суммы в макете есть кант #21435e */
+.dp__input--amount { border: 1px solid var(--input-border, #21435e); }
+
+/* 1180:47896 — блок суммы: подписи 12, поле, ниже быстрые значения; зазор 12 */
+.dp__amount { flex-direction: column; gap: 12px; width: 100%; }
+.dp__amount-box { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.dp__amount-head { display: flex; align-items: center; justify-content: space-between;
+                   padding: 0 8px; }
+.dp__hint { font-family: 'Work Sans', sans-serif; font-weight: 500;
+            font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+/* 1180:47903 — минимум выделен красным */
+.dp__hint b { font-weight: 500; color: #fb3254; }
+/* 1180:47907 — MAX жёлтым с подчёркиванием */
+.dp__max { flex: none; padding: 0; background: none; border: 0; cursor: pointer;
+           font-family: 'Work Sans', sans-serif; font-weight: 700;
+           font-size: 13px; line-height: 16px; color: var(--brand-yellow, #eaff00);
+           text-decoration: underline; }
+/* 1180:47908 — четыре плитки по 111 с зазором 12 */
+.dp__chips { display: flex; gap: 12px; width: 100%; }
+.dp__chip {
+  /* высота явно: в Figma обводка внутри, в CSS прибавлялась — было 38 вместо 36
+     и весь низ окна съезжал на 2px */
+  flex: 1 0 0; min-width: 0; box-sizing: border-box; height: 36px;
+  display: flex; align-items: center; justify-content: center; padding: 10px 12px;
+  background: #22263c; border: 1px solid #252d56; border-radius: 10px; cursor: pointer;
+  font-family: 'Work Sans', sans-serif; font-weight: 500;
+  font-size: 15px; line-height: 16px; color: var(--white);
+}
+.dp__chip:hover { background: #2a3049; }
+.dp__chip.is-active { border-color: var(--brand-yellow, #eaff00); }
+
+/* 1180:47918 — итог и кнопка, зазор 10 */
+.dp__wd-foot { flex-direction: column; gap: 10px; width: 100%; }
+.dp__sum-row { display: flex; align-items: center; justify-content: space-between;
+               font-family: 'Work Sans', sans-serif; font-weight: 500; }
+.dp__sum-row span { font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+.dp__sum-row b { font-weight: 500; font-size: 14px; line-height: 16px; color: var(--white); }
+.dp__sum-amount { color: var(--brand-yellow, #eaff00) !important; }
+/* 1180:47925 — кнопка 48 радиусом 12, тот же градиент, что у DEPOSIT в шапке */
+.dp__submit {
+  box-sizing: border-box; display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 48px; padding: 16px 12px; border: 0; border-radius: 12px;
+  background: linear-gradient(to bottom, #cdfa50, #a6e22e); color: #00151f; cursor: pointer;
+  font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 14px;
+  line-height: normal; white-space: nowrap;
+}
+.dp__submit:hover:not([disabled]) { filter: brightness(1.06); }
+/* Неактивное состояние: окно открывается пустым, кнопка ждёт данных */
+.dp__submit[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .5);
+                        cursor: default; }
 /* 1180:32169 — сноска: кант #747889, радиус 12, паддинг 12, зазор 8 */
 .dp__note { box-sizing: border-box; width: 100%; height: 56px; display: flex; gap: 8px; padding: 12px;
             border: 1px solid #747889; border-radius: 12px; }
@@ -3755,6 +3829,36 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
         </div>
 
+        <!-- 1180:47856 — фамилия и имя, только на выводе -->
+        <div class="dp__row dp__row--wd" data-node-id="1180:47856">
+          <div class="dp__field">
+            <span class="dp__label dp__label--dim">Last Name*</span>
+            <label class="dp__input"><input type="text" autocomplete="family-name" aria-label="Last Name"></label>
+          </div>
+          <div class="dp__field">
+            <span class="dp__label dp__label--dim">First Name*</span>
+            <label class="dp__input"><input type="text" autocomplete="given-name" aria-label="First Name"></label>
+          </div>
+        </div>
+        <!-- 1180:47896 — сумма вывода и быстрые значения -->
+        <div class="dp__amount" data-node-id="1180:47896">
+          <div class="dp__amount-box" data-node-id="1180:47898">
+            <div class="dp__amount-head" data-node-id="1180:47899">
+              <span class="dp__hint">Withdrawal Amount</span>
+              <span class="dp__hint">Min <b>20USDT</b></span>
+            </div>
+            <label class="dp__input dp__input--amount" data-node-id="1180:47904">
+              <input class="dp__amount-input" type="text" inputmode="decimal" aria-label="Withdrawal Amount">
+              <button class="dp__max" type="button">MAX</button>
+            </label>
+          </div>
+          <div class="dp__chips" data-node-id="1180:47908">
+            <button class="dp__chip" type="button" data-amount="100">100</button>
+            <button class="dp__chip" type="button" data-amount="150">150</button>
+            <button class="dp__chip" type="button" data-amount="200">200</button>
+            <button class="dp__chip" type="button" data-amount="250">250</button>
+          </div>
+        </div>
         <div class="dp__qr-row" data-node-id="1180:32158">
           <!-- 1180:32159 — рамка 140 углами, внутри картинка 114.97 на 12.52 -->
           <div class="dp__qr" data-node-id="1180:32159">
@@ -3767,6 +3871,17 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <button class="dp__copy" type="button" data-node-id="1180:32167">Copy Address</button>
           </div>
         </div>
+      </div>
+
+      <!-- 1180:47917 — итог и кнопка, только на выводе -->
+      <div class="dp__wd-foot" data-node-id="1180:47918">
+        <div class="dp__sum-row" data-node-id="1180:47919">
+          <span>Amount:</span><b class="dp__sum-amount">0.00 USDT</b>
+        </div>
+        <div class="dp__sum-row" data-node-id="1180:47922">
+          <span>Withdrawal Fee</span><b class="dp__sum-fee">0.00 USDT</b>
+        </div>
+        <button class="dp__submit" type="button" disabled data-node-id="1180:47925">Withdraw 0 USDT</button>
       </div>
 
       <!-- 1180:32169 — сноска в рамке #747889 -->
@@ -4152,9 +4267,52 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 o.classList.toggle('is-active', on);
                 o.setAttribute('aria-selected', on ? 'true' : 'false');
               });
+              /* 1180:47817 — на выводе у окна другое содержимое */
+              if (b.dataset.seg) dp.classList.toggle('is-withdraw', b.dataset.seg === 'withdraw');
             });
           });
         });
+
+        /* Вывод: окно открывается пустым, кнопка неактивна. Оживает, когда
+           заполнены фамилия, имя и сумма не меньше минимума из макета (20).
+           Комиссия 1.67% — из чисел самого макета: 1.67 USDT при 100. */
+        var wdMin = 20, wdFeeRate = 0.0167;
+        var amountInput = dp.querySelector('.dp__amount-input');
+        if (amountInput) {
+          var names = [].slice.call(dp.querySelectorAll('.dp__row--wd input'));
+          var chips = [].slice.call(dp.querySelectorAll('.dp__chip'));
+          var sumAmount = dp.querySelector('.dp__sum-amount');
+          var sumFee = dp.querySelector('.dp__sum-fee');
+          var submit = dp.querySelector('.dp__submit');
+          var maxBtn = dp.querySelector('.dp__max');
+          /* В макете весь этот блок считается в USDT независимо от выбранной
+             валюты — минимум, итог, комиссия и подпись кнопки. */
+          var WD_CUR = 'USDT';
+          var wdSync = function () {
+            var v = parseFloat(amountInput.value.replace(',', '.'));
+            if (!isFinite(v) || v < 0) v = 0;
+            sumAmount.textContent = v.toFixed(2) + ' ' + WD_CUR;
+            sumFee.textContent = (v * wdFeeRate).toFixed(2) + ' ' + WD_CUR;
+            submit.textContent = 'Withdraw ' + (v ? v : 0) + ' ' + WD_CUR;
+            submit.disabled = !(v >= wdMin && names.every(function (i) { return i.value.trim(); }));
+            chips.forEach(function (c) {
+              c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
+            });
+          };
+          amountInput.addEventListener('input', wdSync);
+          names.forEach(function (i) { i.addEventListener('input', wdSync); });
+          chips.forEach(function (c) {
+            c.addEventListener('click', function () { amountInput.value = c.dataset.amount; wdSync(); });
+          });
+          /* MAX берёт то, что реально на балансе в шапке */
+          if (maxBtn) maxBtn.addEventListener('click', function () {
+            var bal = document.querySelector('.wallet__balance span');
+            var n = bal ? parseFloat((bal.textContent.match(/[\d.]+/) || ['0'])[0]) : 0;
+            amountInput.value = isFinite(n) ? n : 0;
+            wdSync();
+          });
+          wdSync();
+        }
 
         /* Выбор валюты: список открывается по клику, выбор меняет подпись,
            иконку и монету в сноске. Адрес и QR в макете один, их не трогаем. */
