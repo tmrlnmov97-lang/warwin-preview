@@ -2105,27 +2105,29 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    выбранной, между строками тонкая линия.
    Высота ограничена: окно 570, и панель ниже упёрлась бы в его обрезку. */
 .dp__picker { position: relative; }
-/* Список валют: восемь монет в две колонки по ширине колонки окна — лентой в
-   один столбец он не влезал в окно 570 и обрезался, приходилось скроллить. */
+/* Список валют: один столбец с прокруткой. Высота 240 — пять строк по 48;
+   больше в окно 570 не влезает, ниже панель упирается в его обрезку. */
 .dp__list {
   position: absolute; left: 0; top: calc(100% + 8px); z-index: 6;
-  box-sizing: border-box; width: 480px; max-width: calc(100vw - 72px);
-  display: grid; grid-template-columns: 1fr 1fr;
+  box-sizing: border-box; width: 350px; max-width: calc(100vw - 72px);
+  max-height: 240px; overflow-y: auto; overscroll-behavior: contain;
   /* Цвет тот же, что у самого поля (#30354f): список — его продолжение, и на
      фоне окна #181e3b он читается. Прежний #141a35 почти совпадал с окном и
      панель сливалась в одно тёмное пятно. */
   background: #30354f; border: 1px solid rgba(255, 255, 255, .16); border-radius: 12px;
-  overflow: hidden; box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .85);
+  /* именно overflow-x: сокращённое overflow: hidden стояло ниже и гасило
+     прокрутку по вертикали */
+  overflow-x: hidden; box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .85);
 }
 .dp__list[hidden] { display: none; }
 .dp__opt {
+  /* width: 100% обязателен: у кнопки ширина по содержимому, сетка её раньше
+     растягивала сама, а в один столбец строки съезжались к левому краю. */
   box-sizing: border-box; display: flex; align-items: center; gap: 10px;
-  height: 48px; padding: 0 14px; text-align: left;
+  width: 100%; height: 48px; padding: 0 14px; text-align: left;
   background: none; border: 0; cursor: pointer;
 }
-/* Разделители: линия под всеми, кроме последней пары, и между колонками */
-.dp__opt:not(:nth-last-child(-n+2)) { border-bottom: 1px solid rgba(255, 255, 255, .10); }
-.dp__opt:nth-child(odd) { border-right: 1px solid rgba(255, 255, 255, .10); }
+.dp__opt:not(:last-child) { border-bottom: 1px solid rgba(255, 255, 255, .10); }
 .dp__opt:hover { background: rgba(255, 255, 255, .09); }
 .dp__opt img { display: block; flex: none; width: 28px; height: 28px; }
 .dp__opt span { flex: 1 0 0; min-width: 0;
@@ -2136,12 +2138,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
              border: 2px solid rgba(255, 255, 255, .38); border-radius: 50%; }
 .dp__opt.is-current .dp__radio { border-width: 4px; border-color: #cdfa50; }
 .dp__select[aria-expanded="true"] .dp__chev img { transform: translate(-50%, -50%) rotate(180deg); }
-/* На узком экране колонка одна, зато с прокруткой */
-@media (max-width: 640px) {
-  .dp__list { grid-template-columns: 1fr; max-height: 240px; overflow-y: auto; }
-  .dp__opt:nth-child(odd) { border-right: 0; }
-  .dp__opt:not(:last-child) { border-bottom: 1px solid rgba(255, 255, 255, .10); }
-}
+
 /* 1180:32158 — QR и адрес, между ними 20 */
 .dp__qr-row { display: flex; align-items: center; gap: 20px; }
 /* 1180:32159 — рамка 140, картинка 114.97 со сдвигом 12.52 и радиусом 4.51 */
