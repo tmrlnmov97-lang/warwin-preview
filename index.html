@@ -4290,7 +4290,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           var chips = [].slice.call(dp.querySelectorAll('.dp__chip'));
           var sumAmount = dp.querySelector('.dp__sum-amount');
           var sumFee = dp.querySelector('.dp__sum-fee');
-          var submit = dp.querySelector('.dp__submit');
+          var wdSubmit = dp.querySelector('.dp__submit');
           var maxBtn = dp.querySelector('.dp__max');
           /* В макете весь этот блок считается в USDT независимо от выбранной
              валюты — минимум, итог, комиссия и подпись кнопки. */
@@ -4300,8 +4300,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             if (!isFinite(v) || v < 0) v = 0;
             sumAmount.textContent = v.toFixed(2) + ' ' + WD_CUR;
             sumFee.textContent = (v * wdFeeRate).toFixed(2) + ' ' + WD_CUR;
-            submit.textContent = 'Withdraw ' + (v ? v : 0) + ' ' + WD_CUR;
-            submit.disabled = !(v >= wdMin && names.every(function (i) { return i.value.trim(); }));
+            wdSubmit.textContent = 'Withdraw ' + (v ? v : 0) + ' ' + WD_CUR;
+            wdSubmit.disabled = !(v >= wdMin && names.every(function (i) { return i.value.trim(); }));
             chips.forEach(function (c) {
               c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
             });
@@ -4642,10 +4642,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         htimer = setInterval(function () { hshow((hcur + 1) % hslides.length); }, HERO_AUTO);
       };
       /* Под курсором баннер не уезжает: иначе не успеть прочитать и нажать */
-      var banner = document.querySelector('.hero__banner');
-      if (banner) {
-        banner.addEventListener('mouseenter', hstop);
-        banner.addEventListener('mouseleave', hplay);
+      var heroBanner = document.querySelector('.hero__banner');
+      if (heroBanner) {
+        heroBanner.addEventListener('mouseenter', hstop);
+        heroBanner.addEventListener('mouseleave', hplay);
       }
       /* После своего клика отсчёт начинается заново */
       hprev.addEventListener('click', function () { hshow(hcur - 1); hplay(); });
