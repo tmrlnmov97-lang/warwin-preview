@@ -2168,9 +2168,19 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    Отличается от пополнения: вместо QR и сноски идут фамилия с именем, сумма
    вывода, быстрые значения и итог с кнопкой. Зазор между блоками окна тут 20,
    а не 32, и открывается всё в пустом, неактивном состоянии. */
-.dp__row--wd, .dp__amount, .dp__wd-foot { display: none; }
-.dp.is-withdraw .dp__row--wd { display: flex; }
+.dp__addr-field, .dp__amount, .dp__wd-foot { display: none; }
+.dp.is-withdraw .dp__addr-field { display: flex; }
 .dp.is-withdraw .dp__amount { display: flex; }
+/* 1233:37544 — на выводе ряд валют плотнее: колонки 234 с зазором 12, между
+   подписью и полем 8, а подпись — того же вида, что «Withdrawal Amount». */
+.dp.is-withdraw .dp__body > .dp__row { gap: 12px; }
+.dp.is-withdraw .dp__field { gap: 8px; }
+.dp.is-withdraw .dp__label { padding: 0 8px;
+  font-family: 'Work Sans', sans-serif; font-weight: 500;
+  font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+/* 1233:37579 — адрес вывода на всю ширину */
+.dp__addr-field { flex-direction: column; gap: 8px; width: 100%; }
+.dp__input input::placeholder { color: var(--dp-label); }
 .dp.is-withdraw .dp__wd-foot { display: flex; }
 .dp.is-withdraw .dp__qr-row,
 .dp.is-withdraw .dp__note { display: none; }
@@ -3836,16 +3846,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
         </div>
 
-        <!-- 1180:47856 — фамилия и имя, только на выводе -->
-        <div class="dp__row dp__row--wd" data-node-id="1180:47856">
-          <div class="dp__field">
-            <span class="dp__label dp__label--dim">Last Name*</span>
-            <label class="dp__input"><input type="text" autocomplete="family-name" aria-label="Last Name"></label>
-          </div>
-          <div class="dp__field">
-            <span class="dp__label dp__label--dim">First Name*</span>
-            <label class="dp__input"><input type="text" autocomplete="given-name" aria-label="First Name"></label>
-          </div>
+        <!-- 1233:37579 — адрес вывода, на всю ширину -->
+        <div class="dp__addr-field" data-node-id="1233:37579">
+          <span class="dp__hint">Withdrawal Address</span>
+          <label class="dp__input">
+            <input class="dp__addr-input" type="text" spellcheck="false"
+                   placeholder="Fill in carefully according to the specific currency"
+                   aria-label="Withdrawal Address">
+          </label>
         </div>
         <!-- 1180:47896 — сумма вывода и быстрые значения -->
         <div class="dp__amount" data-node-id="1180:47896">
@@ -3855,7 +3863,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="dp__hint">Min <b>20USDT</b></span>
             </div>
             <label class="dp__input dp__input--amount" data-node-id="1180:47904">
-              <input class="dp__amount-input" type="text" inputmode="decimal" aria-label="Withdrawal Amount">
+              <input class="dp__amount-input" type="text" inputmode="decimal" placeholder="0" aria-label="Withdrawal Amount">
               <button class="dp__max" type="button">MAX</button>
             </label>
           </div>
@@ -4274,8 +4282,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 o.classList.toggle('is-active', on);
                 o.setAttribute('aria-selected', on ? 'true' : 'false');
               });
-              /* 1180:47817 — на выводе у окна другое содержимое */
-              if (b.dataset.seg) dp.classList.toggle('is-withdraw', b.dataset.seg === 'withdraw');
+              /* 1180:47817 — на выводе у окна другое содержимое и свои подписи */
+              if (b.dataset.seg) {
+                var wd = b.dataset.seg === 'withdraw';
+                dp.classList.toggle('is-withdraw', wd);
+                var labels = dp.querySelectorAll('.dp__body > .dp__row .dp__label');
+                if (labels.length === 2) {
+                  labels[0].textContent = wd ? 'Withdraw Currency' : 'Deposit Currency';
+                  labels[1].textContent = wd ? 'Choose CoinNetwork' : 'Network';
+                }
+              }
             });
           });
         });
@@ -4286,7 +4302,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var wdMin = 20, wdFeeRate = 0.0167;
         var amountInput = dp.querySelector('.dp__amount-input');
         if (amountInput) {
-          var names = [].slice.call(dp.querySelectorAll('.dp__row--wd input'));
+          var addrInput = dp.querySelector('.dp__addr-input');
           var chips = [].slice.call(dp.querySelectorAll('.dp__chip'));
           var sumAmount = dp.querySelector('.dp__sum-amount');
           var sumFee = dp.querySelector('.dp__sum-fee');
@@ -4301,13 +4317,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             sumAmount.textContent = v.toFixed(2) + ' ' + WD_CUR;
             sumFee.textContent = (v * wdFeeRate).toFixed(2) + ' ' + WD_CUR;
             wdSubmit.textContent = 'Withdraw ' + (v ? v : 0) + ' ' + WD_CUR;
-            wdSubmit.disabled = !(v >= wdMin && names.every(function (i) { return i.value.trim(); }));
+            wdSubmit.disabled = !(v >= wdMin && addrInput.value.trim());
             chips.forEach(function (c) {
               c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
             });
           };
           amountInput.addEventListener('input', wdSync);
-          names.forEach(function (i) { i.addEventListener('input', wdSync); });
+          addrInput.addEventListener('input', wdSync);
           chips.forEach(function (c) {
             c.addEventListener('click', function () { amountInput.value = c.dataset.amount; wdSync(); });
           });
