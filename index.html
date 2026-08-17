@@ -1981,7 +1981,9 @@ body.is-authed .wallet { display: flex; }
    Окно 600x570: поля 60 по бокам, 32 снизу, зазор между блоками 32.
    Заголовок и крестик стоят абсолютно — в макете они вне колонки 480.
    ═══════════════════════════════════════════════════════════════════ */
-.dp { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center;
+/* Прижимаем окно к верху, а отступ сверху ставит скрипт при открытии: при
+   центрировании окно росло в обе стороны, и на смене вкладки уезжал верх. */
+.dp { position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-start;
       justify-content: center; padding: 24px 16px; box-sizing: border-box; overflow-y: auto; }
 .dp[hidden] { display: none; }
 /* Пополнение — про деньги, поэтому шапка с балансом остаётся читаемой:
@@ -2000,7 +2002,7 @@ body.dp-open .topbar { z-index: 71; }
 /* Кнопка, из которой пришло окно, остаётся подсвеченной */
 body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                                             0 8px 24px -8px rgba(205, 250, 80, .5); }
-.dp__wrap { position: relative; margin: auto; width: 600px; max-width: calc(100vw - 32px);
+.dp__wrap { position: relative; margin: 0 auto; width: 600px; max-width: calc(100vw - 32px);
             animation: lg-rise .26s cubic-bezier(.22, .61, .36, 1) both; }
 .dp__modal {
   position: relative; box-sizing: border-box; display: flex; flex-direction: column;
@@ -4282,6 +4284,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            замеряем новую и доводим одну к другой. Без этого окно прыгает на
            75px, потому что у вкладок разное содержимое. */
         var dpModal = dp.querySelector('.dp__modal');
+        var dpWrap = dp.querySelector('.dp__wrap');
+        /* Ставим окно туда, где оно оказалось бы по центру при открытии, и
+           дальше держим этот верх: рост уходит только вниз. */
+        var dpPin = function () {
+          dpWrap.style.marginTop = '';
+          var avail = dp.clientHeight - 48;                 /* паддинги 24 сверху и снизу */
+          var top = Math.max(0, Math.round((avail - dpModal.offsetHeight) / 2));
+          dpWrap.style.marginTop = top + 'px';
+        };
+        addEventListener('resize', function () { if (!dp.hidden) dpPin(); });
         var dpCalm = matchMedia('(prefers-reduced-motion: reduce)').matches;
         var dpMorph = function (apply) {
           if (dpCalm) { apply(); return; }
@@ -4303,10 +4315,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           setTimeout(done, 420);          /* если transitionend не пришёл */
         };
         var closeDep = function () { dp.hidden = true; document.body.classList.remove('dp-open');
+                                    dpWrap.style.marginTop = '';
                                     document.body.style.overflow = ''; depBtn.focus(); };
         depBtn.addEventListener('click', function (e) {
           e.preventDefault(); dp.hidden = false; document.body.classList.add('dp-open');
           document.body.style.overflow = 'hidden';
+          dpPin();
         });
         dp.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeDep(); });
         addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dp.hidden) closeDep(); });
