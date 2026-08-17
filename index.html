@@ -4213,9 +4213,28 @@ body.is-authed .wallet { display: flex; }
         hprev.classList.toggle('slider-btn--off', hcur === 0);
         hnext.classList.toggle('slider-btn--off', hcur === hslides.length - 1);
       };
-      hprev.addEventListener('click', function () { hshow(hcur - 1); });
-      hnext.addEventListener('click', function () { hshow(hcur + 1); });
+      /* Автосмена каждые 5 с по кругу. Стрелки остаются с упором в края:
+         вручную листаем от первого до последнего, само крутится дальше. */
+      var HERO_AUTO = 5000;
+      var htimer = null;
+      var hcalm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hstop = function () { clearInterval(htimer); htimer = null; };
+      var hplay = function () {
+        if (hcalm || hslides.length < 2) return;
+        hstop();
+        htimer = setInterval(function () { hshow((hcur + 1) % hslides.length); }, HERO_AUTO);
+      };
+      /* Под курсором баннер не уезжает: иначе не успеть прочитать и нажать */
+      var banner = document.querySelector('.hero__banner');
+      if (banner) {
+        banner.addEventListener('mouseenter', hstop);
+        banner.addEventListener('mouseleave', hplay);
+      }
+      /* После своего клика отсчёт начинается заново */
+      hprev.addEventListener('click', function () { hshow(hcur - 1); hplay(); });
+      hnext.addEventListener('click', function () { hshow(hcur + 1); hplay(); });
       hshow(0);
+      hplay();
     }
 
     /* Тень у шапки появляется только когда под ней есть прокрученный контент */
