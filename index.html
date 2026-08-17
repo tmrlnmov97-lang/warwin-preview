@@ -1539,7 +1539,13 @@ body {
   .hslide.is-current { opacity: 1; visibility: visible; }
   /* Стрелки поверх канта (у него z-index 5) в правом нижнем углу, отступы
      те же 32, что у копи-блока. */
-  .hero__nav { position: absolute; right: 32px; bottom: 32px; z-index: 6; }
+  .hero__nav { position: absolute; right: 32px; bottom: 32px; z-index: 6;
+               opacity: 0; pointer-events: none; transition: opacity .18s ease; }
+  /* Стрелки проявляются на наведении на баннер. :has(:focus-visible) — чтобы
+     до них доходила клавиатура; именно -visible, иначе после клика мышью
+     фокус остаётся на кнопке и стрелки не гаснут, когда курсор ушёл. */
+  .hero__banner:hover .hero__nav,
+  .hero__nav:has(:focus-visible) { opacity: 1; pointer-events: auto; }
   /* В рядах у этих кнопок фон --white-10 — там под ними тёмная плита.
      На арте баннера такой фон не читается, поэтому берём верхний стоп
      градиента самого баннера (#031741) с прозрачностью. */
@@ -1947,6 +1953,7 @@ body.is-authed .wallet { display: flex; }
     --wp-bg: #0e1630;          /* фон прелоадера */
     --wp-size: 240px;          /* ширина лого */
     --wp-draw: 750ms;          /* росчерк */
+    --wp-cycle: 3000ms;        /* полный цикл: росчерк, пауза, стирание */
     --wp-crown-delay: 430ms;   /* когда падает корона */
     --wp-exit: 260ms;          /* уход */
   }
@@ -1966,9 +1973,19 @@ body.is-authed .wallet { display: flex; }
     stroke: #fff; fill: none;
     stroke-width: 132; stroke-linecap: round; stroke-linejoin: round;
     stroke-dasharray: 1; stroke-dashoffset: 1;
-    animation: wp-draw var(--wp-draw) cubic-bezier(.65,0,.35,1) forwards;
+    animation: wp-draw var(--wp-cycle) linear infinite;
   }
-  @keyframes wp-draw { to { stroke-dashoffset: 0 } }
+  /* Цикл 3 с: 750 мс росчерк, ~1 с держим, 750 мс стираем, пауза.
+     Стирание — тем же смещением штриха дальше (0 → -1), поэтому лого
+     не пропадает рывком, а «сматывается» с начала. Плавность задана
+     покадрово: у всей анимации linear, ускорение внутри отрезков. */
+  @keyframes wp-draw {
+    0%   { stroke-dashoffset: 1;  animation-timing-function: cubic-bezier(.65,0,.35,1) }
+    25%  { stroke-dashoffset: 0 }
+    58%  { stroke-dashoffset: 0;  animation-timing-function: cubic-bezier(.65,0,.35,1) }
+    83%  { stroke-dashoffset: -1 }
+    100% { stroke-dashoffset: -1 }
+  }
 
   #wp-crown {
     transform-box: view-box; transform-origin: 110px 70px;
@@ -2009,7 +2026,9 @@ body.is-authed .wallet { display: flex; }
 
   var css = getComputedStyle(document.documentElement);
   var ms  = function (n) { return parseInt(css.getPropertyValue(n)) || 0 };
-  var hold = Math.max(ms('--wp-draw'), ms('--wp-crown-delay') + 340);
+  /* Держим ровно один полный цикл, чтобы анимацию было видно целиком.
+     Если страница ещё не загрузилась — цикл повторяется каждые 3 с. */
+  var hold = ms('--wp-cycle');
 
   Promise.all([
     new Promise(function (r) {
