@@ -1984,8 +1984,22 @@ body.is-authed .wallet { display: flex; }
 .dp { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center;
       justify-content: center; padding: 24px 16px; box-sizing: border-box; overflow-y: auto; }
 .dp[hidden] { display: none; }
-.dp__scrim { position: absolute; inset: 0; background: rgba(0, 9, 16, .78);
-             -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+/* Пополнение — про деньги, поэтому шапка с балансом остаётся читаемой:
+   затемнение мягче обычного, а сама шапка поднята над ним. Ниже ещё и
+   лёгкий подсвет от кнопки DEPOSIT, чтобы видно было, откуда пришло окно. */
+.dp__scrim { position: absolute; inset: 0;
+             background:
+               radial-gradient(120% 90% at 50% 0%,
+                               rgba(7, 148, 255, .10) 0%, rgba(0, 9, 16, 0) 55%),
+               rgba(4, 12, 28, .52);
+             -webkit-backdrop-filter: blur(6px) saturate(.9);
+             backdrop-filter: blur(6px) saturate(.9); }
+/* 20 у шапки против 70 у окна — при открытом депозите поднимаем её выше
+   затемнения. Класс ставит скрипт, чтобы у остальных окон осталось как было. */
+body.dp-open .topbar { z-index: 71; }
+/* Кнопка, из которой пришло окно, остаётся подсвеченной */
+body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
+                                            0 8px 24px -8px rgba(205, 250, 80, .5); }
 .dp__wrap { position: relative; margin: auto; width: 600px; max-width: calc(100vw - 32px);
             animation: lg-rise .26s cubic-bezier(.22, .61, .36, 1) both; }
 .dp__modal {
@@ -4038,9 +4052,13 @@ body.is-authed .wallet { display: flex; }
       var dp = document.getElementById('deposit-modal');
       var depBtn = document.querySelector('.wallet__deposit');
       if (dp && depBtn) {
-        var closeDep = function () { dp.hidden = true; document.body.style.overflow = ''; depBtn.focus(); };
+        /* dp-open поднимает шапку над затемнением: при пополнении баланс
+           должен остаться на виду. */
+        var closeDep = function () { dp.hidden = true; document.body.classList.remove('dp-open');
+                                    document.body.style.overflow = ''; depBtn.focus(); };
         depBtn.addEventListener('click', function (e) {
-          e.preventDefault(); dp.hidden = false; document.body.style.overflow = 'hidden';
+          e.preventDefault(); dp.hidden = false; document.body.classList.add('dp-open');
+          document.body.style.overflow = 'hidden';
         });
         dp.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeDep(); });
         addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dp.hidden) closeDep(); });
