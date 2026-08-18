@@ -2292,6 +2292,124 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .dp__qr-info { padding: 0; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   1239:40001 «Profile». В макете это один список из 13 полей подряд;
+   здесь он разложен по смыслу — контакты, проверенные данные, адрес —
+   как на присланном образце, но нашими токенами. Новых цветов нет:
+   плита карточки та же, что у шапки, поля те же, что в модалке депозита.
+   ═══════════════════════════════════════════════════════════════════ */
+.prof__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 32px; line-height: 40px; color: var(--white); }
+.prof__tabs { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* Таблетки по образцу .chip; активная — на акценте */
+.prof__tab { display: flex; align-items: center; padding: 8px 16px; border: 0; cursor: pointer;
+             background: var(--white-10); border-radius: 999px;
+             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+             line-height: 20px; color: var(--white); }
+.prof__tab:hover { background: var(--white-16); }
+.prof__tab.is-active { background: var(--primary); }
+/* Витринный переключатель состояния — не из макета */
+.prof__demo { display: flex; gap: 4px; margin-left: auto; padding: 4px;
+              background: var(--white-04); border-radius: 999px; }
+.prof__demo-btn { padding: 6px 12px; border: 0; background: none; border-radius: 999px;
+                  cursor: pointer; font-family: 'Work Sans', sans-serif; font-weight: 500;
+                  font-size: 13px; line-height: 16px; color: var(--dp-label); }
+.prof__demo-btn.is-active { background: var(--white-10); color: var(--white); }
+
+.prof__who { display: flex; align-items: center; gap: 16px; }
+.prof__ava { display: grid; place-items: center; width: 48px; height: 48px; flex: none;
+             background: var(--surface); border-radius: 50%;
+             font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px;
+             color: var(--white); letter-spacing: .5px; }
+.prof__who-text { display: flex; flex-direction: column; gap: 4px; }
+.prof__who-text b { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 18px;
+                    line-height: 22px; color: var(--white); }
+.prof__who-text span { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 16px;
+                       color: var(--dp-label); }
+.prof__who-text i { font-style: normal; padding: 0 2px; }
+.prof__ok { font-style: normal; color: var(--register); }
+
+/* Плита карточки — та же, что у шапки и модалки */
+.prof__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;
+              padding: 24px; background: var(--chrome); border-radius: 20px;
+              border: 1px solid rgba(255, 255, 255, .08); }
+.prof__card-head { display: flex; flex-direction: column; gap: 6px; }
+.prof__card-head h2 { display: flex; align-items: center; gap: 10px; margin: 0;
+                      font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+                      font-size: 18px; line-height: 24px; color: var(--white); }
+.prof__card-head p { margin: 0; max-width: 720px;
+                     font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+                     color: var(--dp-text); }
+
+.prof__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.prof__cell { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.prof__cell--wide { grid-column: 1 / -1; }
+.prof__label { display: flex; align-items: center; gap: 8px; padding: 0 4px;
+               font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 12px;
+               line-height: 16px; color: var(--dp-label); }
+/* Статусы: зелёный и жёлтый из наших токенов, подложка — они же на 12% */
+.prof__badge { font-style: normal; padding: 3px 8px; border-radius: 999px;
+               font-weight: 600; font-size: 11px; line-height: 14px; }
+.prof__badge--ok   { background: rgba(0, 201, 40, .14); color: var(--register); }
+.prof__badge--warn { background: rgba(234, 255, 0, .14); color: var(--brand-yellow, #eaff00); }
+
+.prof__box { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
+             height: 48px; padding: 12px 14px; background: #30354f; border-radius: 12px; }
+.prof__box input { flex: 1 0 0; min-width: 0; border: 0; background: none; outline: none;
+                   font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px;
+                   line-height: 20px; color: var(--white); }
+.prof__box input::placeholder { color: var(--dp-label); }
+.prof__box:focus-within { box-shadow: inset 0 0 0 1px var(--primary); }
+.prof__value { flex: 1 0 0; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+               white-space: nowrap;
+               font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px;
+               line-height: 20px; color: var(--white); }
+/* Заблокированные после проверки поля: приглушены и с замком */
+.prof__box.is-locked { background: var(--white-04); }
+.prof__box.is-locked .prof__value { color: var(--dp-text); }
+.prof__box.is-locked img { display: block; flex: none; opacity: .5; }
+.prof__link { flex: none; padding: 0; border: 0; background: none; cursor: pointer;
+              font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+              line-height: 20px; color: var(--primary); }
+.prof__link:hover { color: var(--primary-hover); }
+.prof__note { padding: 0 4px; font-family: 'Work Sans', sans-serif; font-size: 12px;
+              line-height: 16px; color: var(--dp-label); }
+.prof__empty { margin: 0; padding: 32px 0;
+               font-family: 'Work Sans', sans-serif; font-size: 14px; color: var(--dp-label); }
+
+/* Полоса сохранения — прилипает к низу окна, пока есть правки */
+.prof__save { position: sticky; bottom: 0; z-index: 5;
+              display: flex; align-items: center; gap: 12px; padding: 16px 20px;
+              background: rgba(24, 30, 59, .92); border-radius: 16px;
+              border: 1px solid rgba(255, 255, 255, .08);
+              -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.prof__save[hidden] { display: none; }
+.prof__save-text { flex: 1 0 0; font-family: 'Work Sans', sans-serif; font-size: 13px;
+                   line-height: 18px; color: var(--brand-yellow, #eaff00); }
+.prof__btn { height: 40px; padding: 0 20px; border: 0; border-radius: 10px; cursor: pointer;
+             font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 14px;
+             color: var(--white); }
+.prof__btn--ghost { background: var(--white-10); }
+.prof__btn--ghost:hover { background: var(--white-16); }
+.prof__btn--primary { background: var(--primary); }
+.prof__btn--primary:hover { background: var(--primary-hover); }
+
+/* Пустой профиль: замков нет, поля ждут заполнения */
+.view--profile.is-new .prof__box.is-locked { background: #30354f; }
+.view--profile.is-new .prof__box.is-locked img { display: none; }
+.view--profile.is-new .prof__box.is-locked .prof__value { color: var(--dp-label); }
+.view--profile.is-new .prof__badge--ok { display: none; }
+.view--profile.is-new .prof__ok { color: var(--brand-yellow, #eaff00); }
+
+@media (max-width: 720px) {
+  .prof__grid { grid-template-columns: 1fr; }
+  .prof__card { padding: 16px; gap: 16px; }
+  .prof__h1 { font-size: 24px; line-height: 32px; }
+  .prof__demo { margin-left: 0; }
+  .prof__save { flex-wrap: wrap; }
+  .prof__save-text { flex: 1 0 100%; }
+}
+
 </style>
 </head>
 <body>
@@ -3092,6 +3210,121 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       </div>
 
       <!-- 1089:9816 «Casino Page» — ряды 252 с зазором 32 -->
+      <!-- 1239:40001 «Profile». В макете это один список из 13 полей; здесь он
+           разложен по смыслу: контакты, проверенные данные и адрес — как на
+           присланном образце, но нашими цветами. -->
+      <div class="view view--profile" id="view-profile" hidden data-node-id="1239:40001">
+        <h1 class="prof__h1">Profile</h1>
+        <div class="prof__tabs" role="tablist">
+          <button class="prof__tab is-active" type="button" role="tab" aria-selected="true" data-tab="general">General</button>
+          <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="verification">Verification</button>
+          <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="security">Security</button>
+          <!-- Витринный переключатель: показать оба состояния профиля.
+               В макете его нет — снимается этим одним блоком. -->
+          <div class="prof__demo">
+            <button class="prof__demo-btn is-active" type="button" data-state="verified">Verified player</button>
+            <button class="prof__demo-btn" type="button" data-state="new">New player</button>
+          </div>
+        </div>
+
+        <div class="prof__panel" id="prof-general" role="tabpanel">
+        <div class="prof__who">
+          <span class="prof__ava">RD</span>
+          <div class="prof__who-text">
+            <b>Ricardo Destaole</b>
+            <span>Player since March 2026 <i>·</i> <em class="prof__ok">Identity verified</em></span>
+          </div>
+        </div>
+
+        <section class="prof__card">
+          <div class="prof__card-head">
+            <h2>Contacts and login</h2>
+            <p>Confirmation codes and withdrawal notices come here.</p>
+          </div>
+          <div class="prof__grid">
+            <div class="prof__cell">
+              <span class="prof__label">E-mail <em class="prof__badge prof__badge--ok">verified</em></span>
+              <div class="prof__box">
+                <span class="prof__value">user@warwin.com</span>
+                <button class="prof__link" type="button">Change</button>
+              </div>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">Phone <em class="prof__badge prof__badge--warn">not verified</em></span>
+              <div class="prof__box">
+                <span class="prof__value">+55 11 992••••38</span>
+                <button class="prof__link" type="button">Verify</button>
+              </div>
+              <span class="prof__note">Needed to restore access and to withdraw via PIX.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="prof__card">
+          <div class="prof__card-head">
+            <h2>Personal data <em class="prof__badge prof__badge--ok">checked</em></h2>
+            <p>They match the document. Locked after verification — write to support if something needs fixing.</p>
+          </div>
+          <div class="prof__grid">
+            <div class="prof__cell">
+              <span class="prof__label">First and last name</span>
+              <div class="prof__box is-locked"><span class="prof__value">Ricardo Destaole</span><img loading="lazy" decoding="async" src="a/89b75ddaa0.svg" alt="locked" width="16" height="16"></div>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">Date of birth</span>
+              <div class="prof__box is-locked"><span class="prof__value">23.12.1990</span><img loading="lazy" decoding="async" src="a/89b75ddaa0.svg" alt="locked" width="16" height="16"></div>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">CPF</span>
+              <div class="prof__box is-locked"><span class="prof__value">106.637.•••-99</span><img loading="lazy" decoding="async" src="a/89b75ddaa0.svg" alt="locked" width="16" height="16"></div>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">Nationality</span>
+              <div class="prof__box is-locked"><span class="prof__value">Brazil</span><img loading="lazy" decoding="async" src="a/89b75ddaa0.svg" alt="locked" width="16" height="16"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="prof__card">
+          <div class="prof__card-head">
+            <h2>Address</h2>
+            <p>Needed only for card withdrawals. Can be filled in later.</p>
+          </div>
+          <div class="prof__grid">
+            <div class="prof__cell">
+              <span class="prof__label">Country</span>
+              <label class="prof__box"><input data-prof-addr type="text" value="Brazil" placeholder="Country" aria-label="Country"></label>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">City</span>
+              <label class="prof__box"><input data-prof-addr type="text" value="Goi&acirc;nia" placeholder="City" aria-label="City"></label>
+            </div>
+            <div class="prof__cell prof__cell--wide">
+              <span class="prof__label">Street and house</span>
+              <label class="prof__box"><input data-prof-addr type="text" value="Setor Bueno / Goi&aacute;s" placeholder="Street and house" aria-label="Street and house"></label>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">Postal code</span>
+              <label class="prof__box"><input data-prof-addr type="text" value="74215020" placeholder="Postal code" aria-label="Postal code"></label>
+            </div>
+          </div>
+        </section>
+
+        <div class="prof__save" hidden>
+          <span class="prof__save-text">Unsaved changes in the address</span>
+          <button class="prof__btn prof__btn--ghost" type="button" data-prof="cancel">Cancel</button>
+          <button class="prof__btn prof__btn--primary" type="button" data-prof="save">Save</button>
+        </div>
+        </div>
+
+        <div class="prof__panel" id="prof-verification" role="tabpanel" hidden>
+          <p class="prof__empty">This section is not designed yet.</p>
+        </div>
+        <div class="prof__panel" id="prof-security" role="tabpanel" hidden>
+          <p class="prof__empty">This section is not designed yet.</p>
+        </div>
+      </div>
+
       <div class="view view--casino" id="view-casino" hidden data-node-id="1089:9816">
         <div class="cas-head">
         <!-- 1104:13484 — поиск в шапке страницы казино -->
@@ -4621,7 +4854,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     var views = { home: document.getElementById('view-home'),
                     casino: document.getElementById('view-casino'),
                     crash: document.getElementById('view-crash'),
-                    sport: document.getElementById('view-sport') };
+                    sport: document.getElementById('view-sport'),
+                    profile: document.getElementById('view-profile') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
@@ -4724,6 +4958,63 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       hnext.addEventListener('click', function () { hshow(hcur + 1); hplay(); });
       hshow(0);
       hplay();
+    }
+
+    /* 1239:40001 — профиль: открывается иконкой в шапке. Имена с приставкой
+       prof: весь скрипт страницы — одна функция, и общий var уже ломал вход. */
+    var profView = document.getElementById('view-profile');
+    var profBtn = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+    if (profView && profBtn) {
+      profBtn.addEventListener('click', function () { showView('profile'); });
+
+      /* Вкладки: собрана только General, две другие пока пустые */
+      var profTabs = [].slice.call(profView.querySelectorAll('.prof__tab'));
+      var profPanels = [].slice.call(profView.querySelectorAll('.prof__panel'));
+      profTabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          profTabs.forEach(function (o) {
+            var on = o === t;
+            o.classList.toggle('is-active', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          profPanels.forEach(function (p) { p.hidden = p.id !== 'prof-' + t.dataset.tab; });
+        });
+      });
+
+      /* Витринный переключатель: заполненный профиль или новичок */
+      var profDemo = [].slice.call(profView.querySelectorAll('.prof__demo-btn'));
+      var profFields = [].slice.call(profView.querySelectorAll('[data-prof-addr]'));
+      var profSave = profView.querySelector('.prof__save');
+      var profBase = profFields.map(function (i) { return i.value; });
+      var profSync = function () {
+        var dirty = profFields.some(function (i, k) { return i.value !== profBase[k]; });
+        profSave.hidden = !dirty;
+      };
+      profDemo.forEach(function (d) {
+        d.addEventListener('click', function () {
+          profDemo.forEach(function (o) { o.classList.toggle('is-active', o === d); });
+          var isNew = d.dataset.state === 'new';
+          profView.classList.toggle('is-new', isNew);
+          /* У новичка адрес пустой, у проверенного — значения из макета */
+          profFields.forEach(function (i, k) { i.value = isNew ? '' : profBase[k]; });
+          profView.querySelectorAll('.prof__value').forEach(function (v) {
+            if (!v.dataset.profBase) v.dataset.profBase = v.textContent;
+            v.textContent = isNew ? '—' : v.dataset.profBase;
+          });
+          profSave.hidden = true;
+        });
+      });
+
+      /* Полоса сохранения поднимается, как только адрес отличается от исходного */
+      profFields.forEach(function (i) { i.addEventListener('input', profSync); });
+      profView.querySelector('[data-prof=cancel]').addEventListener('click', function () {
+        profFields.forEach(function (i, k) { i.value = profBase[k]; });
+        profSave.hidden = true;
+      });
+      profView.querySelector('[data-prof=save]').addEventListener('click', function () {
+        profBase = profFields.map(function (i) { return i.value; });
+        profSave.hidden = true;
+      });
     }
 
     /* Тень у шапки появляется только когда под ней есть прокрученный контент */
