@@ -1698,159 +1698,6 @@ body {
 .lg__modal.is-busy .lg__submit { opacity: .8; }
 @media (prefers-reduced-motion: reduce) { .lg__modal.is-busy .lg__bar::after { animation-duration: 2.4s; } }
 
-/* ═══════════════════════════════════════════════════════════════════
-   20:24132 «Deposit/Withdraw» — модалка пополнения.
-   Значения сняты со скриншота макета, а не из Figma: MCP-плагин упёрся
-   в месячный лимит плана Starter и узел прочитать не дал. Все размеры
-   пересчитаны от известной высоты шапки (74px), цвета подобраны по
-   изображению и подогнаны к токенам лобби. При восстановлении доступа
-   блок нужно сверить с узлом и поправить точечно.
-   ═══════════════════════════════════════════════════════════════════ */
-:root {
-  --dp-bg: #1b2139;         /* подложка модалки */
-  --dp-field: #222a45;      /* селекты, кнопка копирования, пассивный сегмент */
-  --dp-line: #2c3557;       /* канты полей и контейнеров */
-  --dp-label: #8b93a8;      /* подписи и пассивный текст */
-  --dp-text: #c5cde0;       /* текст сноски */
-  --dp-accent: #3a9bf5;     /* активная вкладка Crypto */
-  --dp-lime: #c5f13a;       /* кнопка DEPOSIT в шапке */
-}
-
-/* ── Шапка: залогиненное состояние ── */
-.header-account { display: none; align-items: stretch; height: 40px; flex: none;
-                  background: var(--surface); border-radius: 10px; overflow: hidden; }
-.acct-icon      { display: none; align-items: center; justify-content: center;
-                  width: 40px; height: 40px; padding: 0; background: none; border: 0; cursor: pointer; }
-body.is-authed .header-account { display: flex; }
-body.is-authed .acct-icon      { display: flex; }
-body.is-authed .header-actions .btn { display: none; }
-.acct-icon:hover img { opacity: .75; }
-
-.acct-balance__btn {
-  display: flex; align-items: center; gap: 8px; padding: 0 12px;
-  background: none; border: 0; cursor: pointer; font-family: inherit;
-}
-.acct-balance__coin  { display: block; flex: none; }
-.acct-balance__chev  { display: block; flex: none; }
-.acct-balance__value { font-weight: 700; font-size: 14px; line-height: 20px; color: var(--white); white-space: nowrap; }
-.acct-balance__btn:hover { background: var(--surface-hover); }
-
-.acct-deposit {
-  display: flex; align-items: center; padding: 0 16px; flex: none;
-  background: var(--dp-lime); border: 0; cursor: pointer;
-  font-family: inherit; font-weight: 700; font-size: 13px; line-height: 20px;
-  color: var(--page); white-space: nowrap;
-}
-.acct-deposit:hover  { background: #d0f75a; }
-.acct-deposit:active { background: #b2de2a; }
-
-/* ── Оверлей ── */
-.dp { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
-      padding: 24px 16px; box-sizing: border-box; overflow-y: auto; }
-.dp[hidden] { display: none; }
-.dp__scrim { position: absolute; inset: 0; background: rgba(0, 9, 16, .78);
-             -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-.dp__wrap  { position: relative; width: 700px; max-width: calc(100vw - 32px);
-             animation: lg-rise .26s cubic-bezier(.22, .61, .36, 1) both; }
-@media (prefers-reduced-motion: reduce) { .dp__wrap { animation: none; } }
-
-.dp__modal {
-  display: flex; flex-direction: column; gap: 24px; padding: 24px;
-  background: var(--dp-bg); border-radius: 16px;
-  max-height: calc(100vh - 48px); overflow-y: auto; box-sizing: border-box;
-}
-
-/* Заголовок */
-.dp__head  { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.dp__title { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 20px; line-height: 28px; color: var(--white); }
-.dp__close { display: flex; align-items: center; justify-content: center; flex: none;
-             width: 28px; height: 28px; padding: 0; background: none; border: 0;
-             border-radius: 8px; cursor: pointer; }
-.dp__close img   { display: block; }
-.dp__close:hover { background: var(--white-06); }
-
-/* Сегмент Deposit / Withdraw */
-.dp__seg     { display: flex; gap: 10px; }
-.dp__seg-btn {
-  flex: 1 1 0; min-width: 0; height: 40px; padding: 0 12px;
-  background: var(--dp-field); border: 0; border-radius: 8px; cursor: pointer;
-  font-family: inherit; font-weight: 700; font-size: 16px; line-height: 22px; color: var(--dp-label);
-}
-.dp__seg-btn:hover { background: #293251; }
-.dp__seg-btn.is-active {
-  background: linear-gradient(90deg, #3ea2f8 0%, #1b7fe6 100%); color: var(--white);
-  filter: drop-shadow(0 0 6px rgba(26, 115, 250, .35));
-}
-
-/* Вкладки Crypto / Fiat */
-.dp__method     { display: flex; justify-content: center; gap: 56px; }
-.dp__method-btn {
-  display: flex; align-items: center; gap: 8px; padding: 0 4px 8px;
-  background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer;
-  font-family: inherit; font-weight: 700; font-size: 16px; line-height: 22px; color: var(--dp-label);
-}
-.dp__method-btn img { display: block; flex: none; }
-.dp__method-btn:hover { color: var(--menu-text); }
-.dp__method-btn.is-active { color: var(--dp-accent); border-bottom-color: var(--dp-accent); }
-
-/* Валюта и сеть */
-.dp__row   { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.dp__field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.dp__label { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px; color: var(--dp-label); }
-.dp__select {
-  display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 12px;
-  background: var(--dp-field); border: 1px solid var(--dp-line); border-radius: 8px; cursor: pointer;
-  font-family: inherit;
-}
-.dp__select-coin  { display: block; flex: none; }
-.dp__select-value { flex: 1 0 0; min-width: 0; text-align: left;
-                    font-weight: 700; font-size: 16px; line-height: 22px; color: var(--white); }
-.dp__select-chev  { display: block; flex: none; }
-.dp__select:hover { border-color: #3a4570; }
-
-/* QR и адрес */
-.dp__qr      { display: flex; align-items: center; gap: 24px;
-               padding: 20px; border: 1px solid var(--dp-line); border-radius: 12px; }
-.dp__qr-code { display: flex; flex: none; padding: 12px; background: var(--white); border-radius: 8px; }
-.dp__qr-code img { display: block; width: 136px; height: 136px; }
-.dp__qr-info { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; }
-.dp__addr    { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 22px;
-               color: var(--white); word-break: break-all; }
-.dp__copy    {
-  margin-top: 8px; padding: 10px 16px;
-  background: var(--dp-field); border: 1px solid var(--dp-line); border-radius: 8px; cursor: pointer;
-  font-family: inherit; font-weight: 700; font-size: 14px; line-height: 20px; color: var(--white);
-}
-.dp__copy:hover  { background: #293251; }
-.dp__copy.is-done { border-color: var(--register); color: var(--register); }
-
-/* Сноска */
-.dp__note   { display: flex; align-items: flex-start; gap: 12px;
-              padding: 14px 16px; background: #1b2440; border: 1px solid var(--dp-line); border-radius: 8px; }
-.dp__note img { display: block; flex: none; margin-top: 2px; }
-.dp__note p   { margin: 0; font-family: 'Work Sans', sans-serif;
-                font-size: 14px; line-height: 21px; color: var(--dp-text); }
-
-/* Узкие экраны */
-@media (max-width: 640px) {
-  .dp__modal  { gap: 16px; padding: 16px; }
-  .dp__row    { grid-template-columns: 1fr; gap: 12px; }
-  .dp__qr     { flex-direction: column; align-items: flex-start; }
-  .dp__method { gap: 32px; }
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   Скролл в модалках без видимой полосы. И оверлей, и сама модалка
-   прокручиваются (max-height: 100vh на .lg__modal и .dp__modal), из-за
-   чего на низких окнах у правого края появлялся нативный светлый
-   ползунок. Прокрутка колесом, тачпадом и клавиатурой сохраняется —
-   убран только сам индикатор.
-   ═══════════════════════════════════════════════════════════════════ */
-.lg, .lg__modal,
-.dp, .dp__modal { scrollbar-width: none; -ms-overflow-style: none; }
-.lg::-webkit-scrollbar, .lg__modal::-webkit-scrollbar,
-.dp::-webkit-scrollbar, .dp__modal::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
 </style>
 </head>
@@ -1881,22 +1728,10 @@ body.is-authed .header-actions .btn { display: none; }
         </a>
       </nav>
 
-      <!-- Залогиненное состояние: баланс и депозит. Видно при .is-authed на body -->
-      <div class="header-account">
-        <button class="acct-balance__btn" type="button">
-          <img class="acct-balance__coin" src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMTAiIGZpbGw9IiMyNkExN0IiLz4KPHBhdGggZD0iTTExLjI4IDguODZWNy41OGgyLjkzVjUuNjJINS44djEuOTZoMi45M3YxLjI4Yy0yLjM4LjExLTQuMTcuNTgtNC4xNyAxLjE0IDAgLjU2IDEuNzkgMS4wMyA0LjE3IDEuMTR2My42NmgyLjU1di0zLjY2YzIuMzgtLjExIDQuMTYtLjU4IDQuMTYtMS4xNCAwLS41Ni0xLjc4LTEuMDMtNC4xNi0xLjE0Wm0wIDEuOTR2LS4wMWMtLjA2LjAxLS4zNy4wMy0xLjA3LjAzLS41NiAwLS45NS0uMDItMS4wOS0uMDN2LjAxYy0yLjExLS4wOS0zLjY4LS40Ni0zLjY4LS45IDAtLjQ0IDEuNTctLjgxIDMuNjgtLjl2MS40NGMuMTQuMDEuNTUuMDMgMS4xLjAzLjY3IDAgMS0uMDIgMS4wNi0uMDNWOWMyLjExLjA5IDMuNjguNDYgMy42OC45IDAgLjQ0LTEuNTcuODEtMy42OC45WiIgZmlsbD0iI0ZGRkZGRiIvPgo8L3N2Zz4K" alt="" width="20" height="20">
-          <span class="acct-balance__value">USDT 0.00</span>
-          <img class="acct-balance__chev" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjciIHZpZXdCb3g9IjAgMCAxMiA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iSWNvbiIgZD0iTTEgMUw2IDZMMTEgMSIgc3Ryb2tlPSIjQkJDNkNEIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" width="12" height="7">
-        </button>
-        <button class="acct-deposit" type="button">DEPOSIT</button>
-      </div>
-
       <div class="header-actions">
         <button class="btn-search" aria-label="Поиск"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE4LjYxMDIiIGhlaWdodD0iMTguNzcxOCIgdmlld0JveD0iMCAwIDE4LjYxMDIgMTguNzcxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IlNlYXJjaCBJY29uIj4KPHBhdGggaWQ9Ikljb24iIGQ9Ik0xNy4yMjQzIDE3LjM4NTlMMTEuOTQ0OSAxMi4wNTI2TTEzLjcwNDYgNy42MDgxMkMxMy43MDQ2IDExLjA0NDYgMTAuOTQ3IDEzLjgzMDMgNy41NDUyNyAxMy44MzAzQzQuMTQzNTQgMTMuODMwMyAxLjM4NTkgMTEuMDQ0NiAxLjM4NTkgNy42MDgxMkMxLjM4NTkgNC4xNzE2OCA0LjE0MzU0IDEuMzg1OSA3LjU0NTI3IDEuMzg1OUMxMC45NDcgMS4zODU5IDEzLjcwNDYgNC4xNzE2OCAxMy43MDQ2IDcuNjA4MTJaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNzcxNzkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" alt=""></button>
         <button class="btn btn--ghost">LOGIN</button>
         <button class="btn btn--primary">REGISTER</button>
-        <button class="acct-icon" type="button" aria-label="Профиль"><img src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSI4IiByPSIzLjYiIHN0cm9rZT0iI0JCQzZDRCIgc3Ryb2tlLXdpZHRoPSIxLjgiLz4KPHBhdGggZD0iTTQuOCAxOS42YTcuMiA3LjIgMCAwIDEgMTQuNCAwIiBzdHJva2U9IiNCQkM2Q0QiIHN0cm9rZS13aWR0aD0iMS44IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==" alt="" width="24" height="24"></button>
-        <button class="acct-icon" type="button" aria-label="Уведомления"><img src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYuMiAxMGE1LjggNS44IDAgMCAxIDExLjYgMHYzLjNsMS41IDIuOGEuNy43IDAgMCAxLS42IDEuMDVINS4zYS43LjcgMCAwIDEtLjYtMS4wNWwxLjUtMi44VjEwWiIgc3Ryb2tlPSIjQkJDNkNEIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8cGF0aCBkPSJNOS45IDE3LjE1YTIuMSAyLjEgMCAwIDAgNC4yIDAiIHN0cm9rZT0iI0JCQzZDRCIgc3Ryb2tlLXdpZHRoPSIxLjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" width="24" height="24"></button>
       </div>
     </div>
   </header>
@@ -3124,70 +2959,6 @@ body.is-authed .header-actions .btn { display: none; }
   </div>
 </div>
 
-<!-- ═══════════ 20:24132 — Deposit/Withdraw ═══════════ -->
-<div class="dp" id="deposit-modal" hidden data-node-id="20:24132">
-  <div class="dp__scrim" data-close></div>
-  <div class="dp__wrap" role="dialog" aria-modal="true" aria-labelledby="deposit-title">
-    <div class="dp__modal">
-
-      <div class="dp__head">
-        <h2 class="dp__title" id="deposit-title">Deposit/Withdraw</h2>
-        <button class="dp__close" type="button" aria-label="Закрыть" data-close>
-          <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0wLjQ0NzI4IDAuNDQ3MjhDMC43MzM3NTkgMC4xNjA4ODcgMS4xMjIyNiAwIDEuNTI3MzQgMEMxLjkzMjQyIDAgMi4zMjA5MiAwLjE2MDg4NyAyLjYwNzQgMC40NDcyOEw4LjAwOTIyIDUuODQ5MUwxMy40MTEgMC40NDcyOEMxMy42OTkyIDAuMTY5MDAzIDE0LjA4NTEgMC4wMTUwMjMgMTQuNDg1NiAwLjAxODUwMzdDMTQuODg2MiAwLjAyMTk4NDMgMTUuMjY5MyAwLjE4MjY0NyAxNS41NTI2IDAuNDY1ODg5QzE1LjgzNTggMC43NDkxMyAxNS45OTY1IDEuMTMyMjkgMTUuOTk5OSAxLjUzMjg0QzE2LjAwMzQgMS45MzMzOSAxNS44NDk0IDIuMzE5MjggMTUuNTcxMiAyLjYwNzRMMTAuMTY5MyA4LjAwOTIyTDE1LjU3MTIgMTMuNDExQzE1Ljg0OTQgMTMuNjk5MiAxNi4wMDM0IDE0LjA4NTEgMTUuOTk5OSAxNC40ODU2QzE1Ljk5NjUgMTQuODg2MiAxNS44MzU4IDE1LjI2OTMgMTUuNTUyNiAxNS41NTI2QzE1LjI2OTMgMTUuODM1OCAxNC44ODYyIDE1Ljk5NjUgMTQuNDg1NiAxNS45OTk5QzE0LjA4NTEgMTYuMDAzNCAxMy42OTkyIDE1Ljg0OTQgMTMuNDExIDE1LjU3MTJMOC4wMDkyMiAxMC4xNjkzTDIuNjA3NCAxNS41NzEyQzIuMzE5MjggMTUuODQ5NCAxLjkzMzM5IDE2LjAwMzQgMS41MzI4NCAxNS45OTk5QzEuMTMyMjkgMTUuOTk2NSAwLjc0OTEzIDE1LjgzNTggMC40NjU4ODkgMTUuNTUyNkMwLjE4MjY0NyAxNS4yNjkzIDAuMDIxOTg0MyAxNC44ODYyIDAuMDE4NTAzNyAxNC40ODU2QzAuMDE1MDIzIDE0LjA4NTEgMC4xNjkwMDMgMTMuNjk5MiAwLjQ0NzI4IDEzLjQxMUw1Ljg0OTEgOC4wMDkyMkwwLjQ0NzI4IDIuNjA3NEMwLjE2MDg4NyAyLjMyMDkyIDAgMS45MzI0MiAwIDEuNTI3MzRDMCAxLjEyMjI2IDAuMTYwODg3IDAuNzMzNzU5IDAuNDQ3MjggMC40NDcyOFoiIGZpbGw9IiNCMUIxQjEiLz4KPC9zdmc+Cg==" alt="" width="14" height="14">
-        </button>
-      </div>
-
-      <div class="dp__seg" role="tablist" aria-label="Deposit или Withdraw">
-        <button class="dp__seg-btn is-active" type="button" role="tab" aria-selected="true" data-seg="deposit">Deposit</button>
-        <button class="dp__seg-btn" type="button" role="tab" aria-selected="false" data-seg="withdraw">Withdraw</button>
-      </div>
-
-      <div class="dp__method" role="tablist" aria-label="Crypto или Fiat">
-        <button class="dp__method-btn is-active" type="button" role="tab" aria-selected="true" data-method="crypto">
-          <img src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIuNSA3LjZhNS41IDUuNSAwIDAgMSA5LjMtMy42bDEuNyAxLjYiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMy41IDguNGE1LjUgNS41IDAgMCAxLTkuMyAzLjZMMi41IDEwLjQiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMC44IDUuNmgyLjdWMi45IiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIxLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8cGF0aCBkPSJNNS4yIDEwLjRIMi41djIuNyIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMS40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt="" width="16" height="16"><span>Crypto</span>
-        </button>
-        <button class="dp__method-btn" type="button" role="tab" aria-selected="false" data-method="fiat">
-          <img src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMS40IiB5PSIzLjMiIHdpZHRoPSIxMy4yIiBoZWlnaHQ9IjkuNCIgcng9IjEuOCIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMS40Ii8+CjxwYXRoIGQ9Ik0xLjQgNi42aDEzLjIiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik00LjEgOS45aDIuNiIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMS40IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==" alt="" width="16" height="16"><span>Fiat</span>
-        </button>
-      </div>
-
-      <div class="dp__row">
-        <div class="dp__field">
-          <span class="dp__label">Deposit Currency</span>
-          <button class="dp__select" type="button">
-            <img class="dp__select-coin" src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMTAiIGZpbGw9IiM2MjdFRUEiLz4KPHBhdGggZD0iTTEwLjAwMDIgMy4zMzMyNUw5LjkxNjk5IDMuNjE1NzVWMTEuODE0OUwxMC4wMDAyIDExLjg5NzlMMTMuODA1OCA5LjY1ODI1TDEwLjAwMDIgMy4zMzMyNVoiIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMC42Ii8+CjxwYXRoIGQ9Ik0xMC4wMDAzIDMuMzMzMjVMNi4xOTQ1OCA5LjY1ODI1TDEwLjAwMDMgMTEuODk3OVY3Ljg3OTA5VjMuMzMzMjVaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMC4wMDAyIDEyLjYxNDZMOS45NTMzNyAxMi42NzE0VjE1LjU5MTlMMTAuMDAwMiAxNS43Mjg0TDEzLjgwODEgMTAuMzc2NUwxMC4wMDAyIDEyLjYxNDZaIiBmaWxsPSIjRkZGRkZGIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMTAuMDAwMyAxNS43Mjg0VjEyLjYxNDZMNi4xOTQ1OCAxMC4zNzY1TDEwLjAwMDMgMTUuNzI4NFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTEwIDExLjg5NzlMMTMuODA1NiA5LjY1ODMzTDEwIDcuODc5MTdWMTEuODk3OVoiIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CjxwYXRoIGQ9Ik02LjE5NDU4IDkuNjU4MzNMMTAuMDAwMyAxMS44OTc5VjcuODc5MTdMNi4xOTQ1OCA5LjY1ODMzWiIgZmlsbD0iI0ZGRkZGRiIgZmlsbC1vcGFjaXR5PSIwLjYiLz4KPC9zdmc+Cg==" alt="" width="20" height="20">
-            <span class="dp__select-value">ETH</span>
-            <img class="dp__select-chev" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjciIHZpZXdCb3g9IjAgMCAxMiA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iSWNvbiIgZD0iTTEgMUw2IDZMMTEgMSIgc3Ryb2tlPSIjQkJDNkNEIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" width="12" height="7">
-          </button>
-        </div>
-        <div class="dp__field">
-          <span class="dp__label">Network</span>
-          <button class="dp__select" type="button">
-            <img class="dp__select-coin" src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMTAiIGZpbGw9IiMyQkIwQTgiLz4KPHBhdGggZD0iTTEwLjAwMDIgMy4zMzMyNUw5LjkxNjk5IDMuNjE1NzVWMTEuODE0OUwxMC4wMDAyIDExLjg5NzlMMTMuODA1OCA5LjY1ODI1TDEwLjAwMDIgMy4zMzMyNVoiIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMC42Ii8+CjxwYXRoIGQ9Ik0xMC4wMDAzIDMuMzMzMjVMNi4xOTQ1OCA5LjY1ODI1TDEwLjAwMDMgMTEuODk3OVY3Ljg3OTA5VjMuMzMzMjVaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMC4wMDAyIDEyLjYxNDZMOS45NTMzNyAxMi42NzE0VjE1LjU5MTlMMTAuMDAwMiAxNS43Mjg0TDEzLjgwODEgMTAuMzc2NUwxMC4wMDAyIDEyLjYxNDZaIiBmaWxsPSIjRkZGRkZGIiBmaWxsLW9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMTAuMDAwMyAxNS43Mjg0VjEyLjYxNDZMNi4xOTQ1OCAxMC4zNzY1TDEwLjAwMDMgMTUuNzI4NFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTEwIDExLjg5NzlMMTMuODA1NiA5LjY1ODMzTDEwIDcuODc5MTdWMTEuODk3OVoiIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CjxwYXRoIGQ9Ik02LjE5NDU4IDkuNjU4MzNMMTAuMDAwMyAxMS44OTc5VjcuODc5MTdMNi4xOTQ1OCA5LjY1ODMzWiIgZmlsbD0iI0ZGRkZGRiIgZmlsbC1vcGFjaXR5PSIwLjYiLz4KPC9zdmc+Cg==" alt="" width="20" height="20">
-            <span class="dp__select-value">ERC20</span>
-            <img class="dp__select-chev" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjciIHZpZXdCb3g9IjAgMCAxMiA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBpZD0iSWNvbiIgZD0iTTEgMUw2IDZMMTEgMSIgc3Ryb2tlPSIjQkJDNkNEIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" width="12" height="7">
-          </button>
-        </div>
-      </div>
-
-      <div class="dp__qr">
-        <div class="dp__qr-code"><img src="data:image/webp;base64,UklGRugDAABXRUJQVlA4INwDAADQPACdASoIAQgBPoEwkkglIyGhOP/oAKAQCWlu4MADXG8O/D/sB+gH8P6johOSfBl6Af5b6kv4B+AGBKWA/gH4N/oB/yPPT/APwA/QD+Afv/MF/gH8F/A79AP+/t/+z/5oD8A/gn4QfoBf6Sq/oB/APwA/QD///v73+HVzFx+JMXH4kxcfiSSK/Q106TuqOlcjmUzmgZtI0UYJzCh5MQMdNLqw5N6aZz+48DqYGywut5+TMzGQtwcoxrSeCsDDeiYQPJl4iVeVLuIuIYntNXORlnNsWwhoo2eESA9Gg/uLjfaxGLhx57JPRkjEDrgEYCprXhbDVm+WOBOoLEnru+TUF7gFyxkrQSPT45Z9a9JpFBoq1IUXkEym4uwwGBPP4c00pLEPfE0y2OMIfj5A50azj3zg5v70oI9rLYJ/aREsHDkIwMziPbEv8vx3PH7tQg2qag9Wc4pvou5m5OYtpIwEGxIYIvwiH2ZnJ3y937595pNXFMv98K+uryBKVaAoDnp34ATZsHc82LvAlT6SC8wWlzgMtZ3YGS68WwkUXcWAk65VGeRJrQvJEEd5XjWybtKvcQFJYe1eI8UF2nHi+pLrsMH27QIo+86i8xILF1ad+QsOKjD8q68LrjH2Svqai6SNFMXH4kxcjB0b1x5RqwAA/ql0Ae22cu9cVf7op7jNsmWRX7w5s/UiVWyvc4EoLh9aGMqRcRBXdFOvu+XhvFTKVIXjCLuA4a0KWzWCTCxdtt5MIJNBO6knX1yOEePnyKF6qulnDcLu5iGnmg3RfUcBfV8g12NZiexI0k97GvB6yrqaInBkjBAfFhD3zggo0vkZmrY/FosM37TtmZ5HbIbEayDuIMKtRa2McRnxbKMH7E9tyT0J0FX2BGICzLwTN7QNDpHmpG4tOxWkk0B7JOnOAHpbjPQyRzasRsIfJXZEREU0cPeRaJT7Xu/AsAQ/ij69pKjcps0YvSRiwZuw/8yIDpW/vMIL0BvI5SJMmmpA0AyAcFGeCgpzmd9lmmppJabg696Cyan+qGC2v8F/39P/31676M9S7kG9f//+90chfGl+77SaThXTupD8fXMyiwpdTfsSdVZNj2KQx8ka/ijh/C3Md6kWonj3IStrVTEKcaL1J8qCUTYj7J48sn/9xjyaflf3CEVzlIkyW8AVIuIZqZZiaH/iRXXCxz6Eq+olWjMBeJ9rhGiEzvvDKMKJOxEslFwGSK82n37tnRj8sAQ/ij67H/7WeErcFg5d6ISv0ZV0N7YcZ57mY8NMmSh/o+Z6k0xKg3ulorfdzpU1XU+eP1B6L0L+LRAAAAAA" alt="QR-код адреса пополнения" width="136" height="136"></div>
-        <div class="dp__qr-info">
-          <span class="dp__label">Contract Address</span>
-          <p class="dp__addr">0x42ffe639f7a4aa85294S830e2c82</p>
-          <button class="dp__copy" type="button">Copy Address</button>
-        </div>
-      </div>
-
-      <div class="dp__note">
-        <img src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjgiIGZpbGw9IiNGNUE1MjQiLz4KPHBhdGggZD0iTTggNC4ydjQuNCIgc3Ryb2tlPSIjMUIxMzAwIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxjaXJjbGUgY3g9IjgiIGN5PSIxMS4yIiByPSIxIiBmaWxsPSIjMUIxMzAwIi8+Cjwvc3ZnPgo=" alt="" width="16" height="16">
-        <p>Send only ETH to this deposit address. Transfers below 0.0003 ETH will not be credited.</p>
-      </div>
-
-    </div>
-  </div>
-</div>
-
 <div class="srch" id="search-modal" hidden>
   <div class="srch__backdrop" data-close></div>
   <div class="srch__modal" role="dialog" aria-modal="true" aria-labelledby="search-title">
@@ -3485,52 +3256,6 @@ body.is-authed .header-actions .btn { display: none; }
           i.type = show ? 'text' : 'password';
           i.setAttribute('data-pw', '');
           eye.setAttribute('aria-label', show ? 'Скрыть пароль' : 'Показать пароль');
-        });
-      }
-
-      /* 20:24132 — модалка Deposit/Withdraw по кнопке DEPOSIT в шапке */
-      var dp = document.getElementById('deposit-modal');
-      var depBtn = document.querySelector('.acct-deposit');
-      if (dp && depBtn) {
-        var closeDep = function () { dp.hidden = true; document.body.style.overflow = ''; depBtn.focus(); };
-        depBtn.addEventListener('click', function (e) {
-          e.preventDefault(); dp.hidden = false; document.body.style.overflow = 'hidden';
-        });
-        dp.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeDep(); });
-        addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dp.hidden) closeDep(); });
-
-        /* Оба ряда вкладок переключаются одинаково: активна ровно одна */
-        [['.dp__seg-btn', '.dp__seg'], ['.dp__method-btn', '.dp__method']].forEach(function (pair) {
-          var group = dp.querySelectorAll(pair[0]);
-          group.forEach(function (b) {
-            b.addEventListener('click', function () {
-              group.forEach(function (o) {
-                var on = o === b;
-                o.classList.toggle('is-active', on);
-                o.setAttribute('aria-selected', on ? 'true' : 'false');
-              });
-            });
-          });
-        });
-
-        var copy = dp.querySelector('.dp__copy');
-        var addr = dp.querySelector('.dp__addr');
-        if (copy && addr) copy.addEventListener('click', function () {
-          var text = addr.textContent.trim();
-          var done = function () {
-            copy.textContent = 'Copied'; copy.classList.add('is-done');
-            setTimeout(function () { copy.textContent = 'Copy Address'; copy.classList.remove('is-done'); }, 1600);
-          };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(done, function () {});
-          } else {
-            /* Запасной путь для страниц без защищённого контекста */
-            var ta = document.createElement('textarea');
-            ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
-            document.body.appendChild(ta); ta.select();
-            try { document.execCommand('copy'); done(); } catch (err) {}
-            document.body.removeChild(ta);
-          }
         });
       }
 
