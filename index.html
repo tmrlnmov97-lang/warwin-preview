@@ -2410,6 +2410,85 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .prof__save-text { flex: 1 0 100%; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   1226:35555 «My Wallet» — поп-ап по иконке профиля в шапке.
+   Окно 664x315: слева сводка 340, справа меню 276, поля 16.
+   Висит под иконкой, поэтому позиционируется от правого края шапки.
+   ═══════════════════════════════════════════════════════════════════ */
+.pm { position: fixed; inset: 0; z-index: 72; }
+.pm[hidden] { display: none; }
+.pm__scrim { position: absolute; inset: 0; }
+.pm__pop {
+  position: absolute; right: 20px; top: 78px; box-sizing: border-box;
+  display: flex; gap: 16px; width: 664px; max-width: calc(100vw - 32px); padding: 16px;
+  background: #181e3b; border: 0; border-radius: 20px;
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, .8);
+  animation: pm-in .18s cubic-bezier(.22, .61, .36, 1) both;
+}
+/* Кант слоем поверх: обычный border забирал 2px, и меню становилось 274
+   вместо макетных 276 — в Figma обводка рисуется внутрь. */
+.pm__pop::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+                  border: 1px solid #2f354f; border-radius: 20px; }
+@keyframes pm-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .pm__pop { animation: none; } }
+
+/* 1226:35559 — сводка: своя плита темнее окна */
+.pm__sum { position: relative; box-sizing: border-box; width: 340px; flex: none;
+           display: flex; flex-direction: column; gap: 16px; padding: 12px 16px;
+           background: #0e132a; border: 0; border-radius: 12px; }
+/* кант слоем: внутри Figma он не занимает место, а border забирал по 1px */
+.pm__sum::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+                  border: 1px solid #0f173c; border-radius: 12px; }
+.pm__title { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 18px; line-height: 29px; color: var(--white); }
+.pm__cap { font-family: 'Work Sans', sans-serif; font-weight: 500;
+           font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+.pm__balance { display: flex; flex-direction: column; gap: 16px; }
+/* 1226:35563 — строка валюты 56 высотой, кант #2f354f */
+.pm__coin { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
+            height: 56px; padding: 12px; border: 1px solid #2f354f; border-radius: 12px; }
+.pm__coin-left { display: flex; align-items: center; gap: 8px; }
+.pm__coin-left img { display: block; }
+.pm__coin-left b { font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+                   font-size: 16px; line-height: 20px; color: var(--white); }
+.pm__coin-right { display: flex; flex-direction: column; align-items: flex-end; }
+.pm__coin-right b { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                    font-size: 14px; line-height: 17px; color: var(--white); }
+.pm__coin-right i { font-style: normal; font-family: 'Instrument Sans', sans-serif;
+                    font-size: 12px; line-height: 15px; color: var(--modal-text-1, #bbc6cd); }
+/* 1226:35571 — две колонки поровну */
+.pm__stats { display: flex; }
+.pm__stat { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.pm__stat b { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+              font-size: 16px; line-height: 20px; color: var(--white); }
+/* 1226:35580 — сноска на подложке окна */
+.pm__note { box-sizing: border-box; display: flex; gap: 8px; height: 54px; padding: 12px;
+            background: #181e3b; border: 1px solid #2f354f; border-radius: 12px; }
+.pm__note img { display: block; flex: none; }
+.pm__note p { margin: 0; flex: 1 0 0; font-family: 'Instrument Sans', sans-serif;
+              font-size: 12px; line-height: 15px; color: var(--white); }
+
+/* 1226:35583 — меню: пункты 40, между ними линия 10% белого */
+.pm__menu { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column;
+            justify-content: space-between; padding: 12px 16px; }
+.pm__item { box-sizing: border-box; display: flex; align-items: center; gap: 8px;
+            height: 40px; padding: 8px; width: 100%;
+            background: none; border: 0; border-radius: 12px; cursor: pointer; text-align: left; }
+.pm__item + .pm__item { border-top: 1px solid rgba(255, 255, 255, .1); border-radius: 0; }
+.pm__item:hover { background: var(--white-06); }
+.pm__ico { display: block; flex: none; }
+.pm__item span { flex: 1 0 0; min-width: 0;
+                 font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+                 font-size: 14px; line-height: 18px; color: #bbc6cd; }
+.pm__item:hover span { color: var(--white); }
+.pm__chev { display: block; flex: none; opacity: .7; }
+
+@media (max-width: 720px) {
+  .pm__pop { right: 12px; left: 12px; width: auto; flex-direction: column; }
+  .pm__sum { width: auto; }
+  .pm__menu { padding: 0; }
+}
+
 </style>
 </head>
 <body>
@@ -4001,6 +4080,62 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   </div>
 </div>
 
+<!-- 1226:35555 «My Wallet» — поп-ап по иконке профиля: слева сводка по счёту,
+     справа меню. Окно 664x315, поля 16, кант #2f354f, радиус 20. -->
+<div class="pm" id="profile-menu" hidden data-node-id="1226:35555">
+  <div class="pm__scrim" data-close></div>
+  <div class="pm__pop" role="dialog" aria-modal="true" aria-label="Account">
+    <!-- 1226:35559 — сводка -->
+    <div class="pm__sum" data-node-id="1226:35559">
+      <h2 class="pm__title">Account Summary</h2>
+      <div class="pm__balance">
+        <span class="pm__cap">Balance (USDT)</span>
+        <div class="pm__coin" data-node-id="1226:35563">
+          <span class="pm__coin-left">
+            <img loading="lazy" decoding="async" src="a/eafab62439.svg" alt="" width="28" height="28">
+            <b>USDT</b>
+          </span>
+          <span class="pm__coin-right">
+            <b>0.00USDT</b>
+            <i>$0.00</i>
+          </span>
+        </div>
+      </div>
+      <div class="pm__stats" data-node-id="1226:35571">
+        <div class="pm__stat"><span class="pm__cap">Bonus</span><b>-</b></div>
+        <div class="pm__stat"><span class="pm__cap">Withdrawable</span><b>0.00</b></div>
+      </div>
+      <div class="pm__note" data-node-id="1226:35580">
+        <img loading="lazy" decoding="async" src="a/1d015c4521.svg" alt="" width="18" height="18">
+        <p>To deposit or withdraw funds, please visit the Wallet section.</p>
+      </div>
+    </div>
+    <!-- 1226:35583 — меню, пункты 40 высотой с разделителями -->
+    <nav class="pm__menu" data-node-id="1226:35583">
+      <button class="pm__item" type="button" data-go="profile">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/5899700828.svg" alt="" width="18" height="20"><span>Profile</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+      </button>
+      <button class="pm__item" type="button" data-go="wallet">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/62a19a7a9a.svg" alt="" width="20" height="16"><span>Wallet</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+      </button>
+      <button class="pm__item" type="button" data-go="history">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>Game History</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+      </button>
+      <button class="pm__item" type="button" data-go="responsible">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/35a86a7526.svg" alt="" width="15" height="20"><span>Responsible Gaming</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+      </button>
+      <button class="pm__item" type="button" data-go="logout">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/5dec4c5566.svg" alt="" width="20" height="17"><span>Log out</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+      </button>
+    </nav>
+  </div>
+</div>
+
 <!-- 1180:32120 «My Wallet» — 600x570, поля 60 по бокам и 32 снизу, зазор 32 -->
 <div class="dp" id="deposit-modal" hidden data-node-id="1180:32120">
   <div class="dp__scrim" data-close></div>
@@ -4964,8 +5099,34 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
        prof: весь скрипт страницы — одна функция, и общий var уже ломал вход. */
     var profView = document.getElementById('view-profile');
     var profBtn = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+    /* 1226:35555 — по иконке профиля открывается поп-ап, а страница профиля
+       теперь открывается из него пунктом Profile. */
+    var pmPop = document.getElementById('profile-menu');
+    if (profBtn && pmPop) {
+      var pmClose = function () { pmPop.hidden = true; profBtn.setAttribute('aria-expanded', 'false'); };
+      profBtn.setAttribute('aria-haspopup', 'dialog');
+      profBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = pmPop.hidden;
+        pmPop.hidden = !open;
+        profBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      pmPop.addEventListener('click', function (e) {
+        if (e.target.closest('[data-close]')) pmClose();
+      });
+      addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pmPop.hidden) pmClose(); });
+      pmPop.querySelectorAll('.pm__item').forEach(function (it) {
+        it.addEventListener('click', function () {
+          var go = it.dataset.go;
+          pmClose();
+          if (go === 'profile') showView('profile');
+          else if (go === 'wallet') { var d = document.querySelector('.wallet__deposit'); if (d) d.click(); }
+          else if (go === 'logout') { document.body.classList.remove('is-authed'); showView('home'); }
+        });
+      });
+    }
+
     if (profView && profBtn) {
-      profBtn.addEventListener('click', function () { showView('profile'); });
 
       /* Вкладки: собрана только General, две другие пока пустые */
       var profTabs = [].slice.call(profView.querySelectorAll('.prof__tab'));
