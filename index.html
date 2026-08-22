@@ -1954,6 +1954,8 @@ body {
 .authed__btn img { display: block; }
 .authed__btn--bell i { position: absolute; left: 24.5px; top: 11px;
                        width: 5px; height: 5px; border-radius: 50%; background: #ff4d4f; }
+/* точка непрочитанного гаснет, когда список открыли */
+.authed__btn--bell.is-read i { display: none; }
 body.is-authed .header-actions .btn { display: none; }
 body.is-authed .authed { display: flex; }
 
@@ -2432,11 +2434,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    Окно 664x315: слева сводка 340, справа меню 276, поля 16.
    Висит под иконкой, поэтому позиционируется от правого края шапки.
    ═══════════════════════════════════════════════════════════════════ */
-.pm { position: fixed; inset: 0; z-index: 72; }
+.pm { position: fixed; inset: 0; z-index: 72; pointer-events: none; }
+.pm__pop { pointer-events: auto; }
 .pm[hidden] { display: none; }
 /* Едва заметная подложка: поп-ап того же тона, что страница (контраст 1.12:1),
    и без неё сливается. Затемняем фон вокруг, но так, чтобы страница читалась. */
-.pm__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .38); }
+.pm__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .38);
+             pointer-events: none; }
 .pm__pop {
   /* шапка 74, зазор 16 — раньше стояло 78, окно почти касалось шапки */
   position: absolute; right: 20px; top: 90px; box-sizing: border-box;
@@ -2666,6 +2670,71 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 @media (max-width: 720px) {
   .sec__table { table-layout: auto; min-width: 720px; }
   .sec__pager { flex-wrap: wrap; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   1226:31701 «Notifications» — поп-ап по колокольчику. Окно 426,
+   шапка с полем 20, список с полем 16 и зазором 16, карточка 394x96.
+   Отделение от страницы такое же, как у поп-апа профиля.
+   ═══════════════════════════════════════════════════════════════════ */
+.nt { position: fixed; inset: 0; z-index: 72; pointer-events: none; }
+.nt__pop { pointer-events: auto; }
+.nt[hidden] { display: none; }
+/* затемнение не ловит клики: с ним по соседней иконке в шапке нельзя
+   было попасть — первый клик уходил в него и просто закрывал окно */
+.nt__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .38);
+             pointer-events: none; }
+.nt__pop {
+  position: absolute; right: 20px; top: 90px; box-sizing: border-box;
+  display: flex; flex-direction: column; width: 426px; max-width: calc(100vw - 32px);
+  background: #181e3b; border: 0; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 32px 80px -24px rgba(0, 0, 0, .9), 0 8px 24px -10px rgba(0, 0, 0, .7);
+  animation: pm-in .18s cubic-bezier(.22, .61, .36, 1) both;
+}
+/* кант слоем: в Figma обводка внутри, border забирал бы ширину у списка */
+.nt__pop::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+                  border: 1px solid rgba(255, 255, 255, .14); border-radius: 20px; }
+@media (prefers-reduced-motion: reduce) { .nt__pop { animation: none; } }
+
+.nt__head { display: flex; flex-direction: column; gap: 16px; padding: 20px; }
+.nt__head-row { display: flex; align-items: center; gap: 12px; }
+.nt__h2 { margin: 0; flex: 1 0 0; font-family: 'Cora', 'Instrument Sans', sans-serif;
+          font-weight: 700; font-size: 20px; line-height: 30px; color: var(--white); }
+.nt__close { box-sizing: border-box; display: flex; align-items: center; justify-content: center;
+             width: 40px; height: 40px; flex: none; padding: 8px; background: none; cursor: pointer;
+             border: .786px solid rgba(255, 255, 255, .1); border-radius: 12px; }
+.nt__close img { display: block; }
+.nt__close:hover { background: var(--white-06); }
+/* 1226:31708 — две вкладки поровну, зазор 12 */
+.nt__tabs { display: flex; gap: 12px; }
+.nt__tab { flex: 1 0 0; height: 36px; border: 0; border-radius: 999px; cursor: pointer;
+           background: var(--white-06);
+           font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+           line-height: 20px; color: var(--white); }
+.nt__tab:hover { background: var(--white-10); }
+.nt__tab.is-active { background: var(--primary); }
+
+/* 1226:31711 — список: поле 16, между карточками 16 */
+.nt__list { display: flex; flex-direction: column; gap: 16px; padding: 16px;
+            max-height: 352px; box-sizing: border-box;
+            overflow-y: auto; overscroll-behavior: contain; }
+.nt__list[hidden] { display: none; }
+.nt__item { box-sizing: border-box; display: flex; flex-direction: column; gap: 4px;
+            min-height: 96px; padding: 16px; text-align: left; cursor: pointer;
+            background: #2f354f; border: 0; border-radius: 18px; }
+.nt__item:hover { background: #363d5c; }
+.nt__ago { margin-bottom: 4px; font-family: 'Work Sans', sans-serif;
+           font-size: 12px; line-height: 16px; color: var(--dp-label); }
+.nt__title { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 600;
+             font-size: 16px; line-height: 19px; color: var(--white); }
+.nt__text { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 17px;
+            color: var(--modal-text-1, #bbc6cd); }
+.nt__empty { margin: 0; padding: 32px 0; text-align: center;
+             font-family: 'Work Sans', sans-serif; font-size: 14px; color: var(--dp-label); }
+
+@media (max-width: 720px) {
+  .nt__pop { right: 12px; left: 12px; width: auto; }
+  .nt__list { max-height: 60vh; }
 }
 
 </style>
@@ -4454,6 +4523,46 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
 <!-- 1226:35555 «My Wallet» — поп-ап по иконке профиля: слева сводка по счёту,
      справа меню. Окно 664x315, поля 16, кант #2f354f, радиус 20. -->
+<!-- 1226:31701 «Notifications» — поп-ап по колокольчику: заголовок,
+     две вкладки и список событий. Окно 426, карточка 394x96, радиус 18. -->
+<div class="nt" id="notif-menu" hidden data-node-id="1226:31701">
+  <div class="nt__scrim" data-close></div>
+  <div class="nt__pop" role="dialog" aria-modal="true" aria-label="Notifications">
+    <div class="nt__head" data-node-id="1226:31702">
+      <div class="nt__head-row">
+        <h2 class="nt__h2">Notifications</h2>
+        <button class="nt__close" type="button" aria-label="Закрыть" data-close>
+          <img loading="lazy" decoding="async" src="a/2f90aff24b.svg" alt="" width="14" height="14">
+        </button>
+      </div>
+      <div class="nt__tabs" role="tablist" data-node-id="1226:31708">
+        <button class="nt__tab is-active" type="button" role="tab" aria-selected="true" data-nt="promo">Promotions</button>
+        <button class="nt__tab" type="button" role="tab" aria-selected="false" data-nt="activity">Activities</button>
+      </div>
+    </div>
+    <div class="nt__list" id="nt-promo" role="tabpanel" data-node-id="1226:31711">
+          <button class="nt__item" type="button">
+            <span class="nt__ago">10 days ago</span>
+            <b class="nt__title">Daily reward processed</b>
+            <span class="nt__text">No funds available to receive</span>
+          </button>
+          <button class="nt__item" type="button">
+            <span class="nt__ago">10 days ago</span>
+            <b class="nt__title">Daily reward processed</b>
+            <span class="nt__text">No funds available to receive</span>
+          </button>
+          <button class="nt__item" type="button">
+            <span class="nt__ago">10 days ago</span>
+            <b class="nt__title">Daily reward processed</b>
+            <span class="nt__text">No funds available to receive</span>
+          </button>
+    </div>
+    <div class="nt__list" id="nt-activity" role="tabpanel" hidden>
+      <p class="nt__empty">Nothing here yet.</p>
+    </div>
+  </div>
+</div>
+
 <div class="pm" id="profile-menu" hidden data-node-id="1226:35555">
   <div class="pm__scrim" data-close></div>
   <div class="pm__pop" role="dialog" aria-modal="true" aria-label="Account">
@@ -5471,6 +5580,52 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
        prof: весь скрипт страницы — одна функция, и общий var уже ломал вход. */
     var profView = document.getElementById('view-profile');
     var profBtn = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+    /* 1226:31701 — поп-ап уведомлений по колокольчику. Выравниваем так же,
+       как поп-ап профиля: правый край по колонке контента. */
+    var ntPop = document.getElementById('notif-menu');
+    var ntBtn = document.querySelector('.authed__btn--bell');
+    if (ntPop && ntBtn) {
+      var ntAlign = function () {
+        var col = document.querySelector('.header-desktop');
+        var pop = ntPop.querySelector('.nt__pop');
+        if (!col || !pop) return;
+        if (innerWidth <= 720) { pop.style.right = ''; return; }
+        pop.style.right = '20px';
+        var diff = pop.getBoundingClientRect().right - col.getBoundingClientRect().right;
+        pop.style.right = Math.max(12, 20 + diff) + 'px';
+      };
+      var ntClose = function () { ntPop.hidden = true; ntBtn.setAttribute('aria-expanded', 'false'); };
+      ntBtn.setAttribute('aria-haspopup', 'dialog');
+      addEventListener('resize', function () { if (!ntPop.hidden) ntAlign(); });
+      ntBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = ntPop.hidden;
+        ntPop.hidden = !open;
+        ntBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) { ntAlign(); ntBtn.classList.add('is-read');
+                    var other = document.getElementById('profile-menu');
+                    if (other) other.hidden = true; }
+      });
+      ntPop.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) ntClose(); });
+      addEventListener('click', function (e) {
+        if (!ntPop.hidden && !e.target.closest('.nt__pop')) ntClose();
+      });
+      addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ntPop.hidden) ntClose(); });
+      var ntTabs = [].slice.call(ntPop.querySelectorAll('.nt__tab'));
+      ntTabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          ntTabs.forEach(function (o) {
+            var on = o === t;
+            o.classList.toggle('is-active', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          ntPop.querySelectorAll('.nt__list').forEach(function (l) {
+            l.hidden = l.id !== 'nt-' + t.dataset.nt;
+          });
+        });
+      });
+    }
+
     /* 1226:35555 — по иконке профиля открывается поп-ап, а страница профиля
        теперь открывается из него пунктом Profile. */
     var pmPop = document.getElementById('profile-menu');
@@ -5497,10 +5652,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var open = pmPop.hidden;
         pmPop.hidden = !open;
         profBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) pmAlign();
+        if (open) { pmAlign();
+                    var otherNt = document.getElementById('notif-menu');
+                    if (otherNt) otherNt.hidden = true; }
       });
       pmPop.addEventListener('click', function (e) {
         if (e.target.closest('[data-close]')) pmClose();
+      });
+      addEventListener('click', function (e) {
+        if (!pmPop.hidden && !e.target.closest('.pm__pop')) pmClose();
       });
       addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pmPop.hidden) pmClose(); });
       pmPop.querySelectorAll('.pm__item').forEach(function (it) {
