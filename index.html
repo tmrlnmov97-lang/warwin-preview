@@ -2540,15 +2540,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           font-size: 20px; line-height: 26px; color: var(--white); }
 .vf__intro p { margin: 0; max-width: 640px; font-family: 'Work Sans', sans-serif;
                font-size: 13px; line-height: 18px; color: var(--dp-label); }
-.vf__steps { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.vf__steps > span { font-family: 'Work Sans', sans-serif; font-weight: 500;
-                    font-size: 11px; line-height: 16px; letter-spacing: .05em;
-                    text-transform: uppercase; color: var(--dp-label); }
+/* Было «REQUIRED STEPS» + полоса на 50% + «1 of 2» — три обрывка, и полоса
+   врала: не загружено ничего. Стало одной фразой, полоса считает по факту. */
+.vf__steps { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.vf__steps-text { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+                  color: var(--dp-label); white-space: nowrap; }
+.vf__steps-text b { font-weight: 700; color: var(--white); }
 .vf__track { display: block; width: 140px; height: 6px; border-radius: 999px;
              background: var(--white-10); overflow: hidden; }
-.vf__track i { display: block; height: 100%; background: var(--register); border-radius: 999px; }
-.vf__count { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 13px; line-height: 16px; color: var(--white); }
+.vf__track i { display: block; width: 0; height: 100%; background: var(--register);
+               border-radius: 999px; transition: width .3s ease; }
 
 .vf__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 /* карточка — та же плита, что на General */
@@ -2558,11 +2559,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             box-shadow: 0 8px 24px -16px rgba(0, 0, 0, .8); }
 .vf__head { display: flex; align-items: center; gap: 12px; }
 .vf__tile { display: grid; place-items: center; width: 40px; height: 40px; flex: none;
-            border-radius: 12px; }
+            border-radius: 12px; background: var(--white-06); }
 .vf__tile img { display: block; }
-.vf__tile--ok   { background: rgba(0, 201, 40, .12); }
-.vf__tile--warn { background: rgba(234, 255, 0, .12); }
-.vf__tile--soft { background: var(--white-06); }
+/* Плитки одинаковые у всех документов: статус несёт значок справа,
+   а не цвет иконки — иначе в ряду четыре разных акцента. */
 .vf__title { flex: 1 0 0; min-width: 0; margin: 0;
              font-family: 'Work Sans', sans-serif; font-weight: 700;
              font-size: 16px; line-height: 22px; color: var(--white); }
@@ -3521,15 +3521,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <p>Needed once before your first withdrawal. The check takes up to 15 minutes — you can play and deposit right now.</p>
             </div>
             <div class="vf__steps">
-              <span>Required steps</span>
-              <span class="vf__track"><i style="width:50%%"></i></span>
-              <b class="vf__count">1 of 2</b>
+              <span class="vf__steps-text"><b class="vf__done">0</b> of <b>2</b> required documents uploaded</span>
+              <span class="vf__track"><i></i></span>
             </div>
           </div>
           <div class="vf__grid">
-            <section class="vf__card" data-doc="front">
+            <section class="vf__card" data-doc="front" data-required>
               <div class="vf__head">
-                <span class="vf__tile vf__tile--ok"><img loading="lazy" decoding="async" src="a/4f8ff11129.svg" alt="" width="20" height="20"></span>
+                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/4f8ff11129.svg" alt="" width="20" height="20"></span>
                 <h3 class="vf__title">Proof of identity (front)</h3>
                 <em class="prof__badge prof__badge--warn">Required</em>
               </div>
@@ -3546,9 +3545,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <button class="vf__replace" type="button">Replace</button>
               </div>
             </section>
-            <section class="vf__card" data-doc="back">
+            <section class="vf__card" data-doc="back" data-required>
               <div class="vf__head">
-                <span class="vf__tile vf__tile--warn"><img loading="lazy" decoding="async" src="a/68da4afb63.svg" alt="" width="20" height="20"></span>
+                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/68da4afb63.svg" alt="" width="20" height="20"></span>
                 <h3 class="vf__title">Proof of identity (back)</h3>
                 <em class="prof__badge prof__badge--warn">Required</em>
               </div>
@@ -3567,7 +3566,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             </section>
             <section class="vf__card" data-doc="address">
               <div class="vf__head">
-                <span class="vf__tile vf__tile--soft"><img loading="lazy" decoding="async" src="a/8014eb7df6.svg" alt="" width="20" height="20"></span>
+                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/8014eb7df6.svg" alt="" width="20" height="20"></span>
                 <h3 class="vf__title">Proof of address</h3>
                 <em class="prof__badge prof__badge--soft">Not needed yet</em>
               </div>
@@ -3586,7 +3585,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             </section>
             <section class="vf__card" data-doc="funds">
               <div class="vf__head">
-                <span class="vf__tile vf__tile--soft"><img loading="lazy" decoding="async" src="a/217c9cbb02.svg" alt="" width="20" height="20"></span>
+                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/217c9cbb02.svg" alt="" width="20" height="20"></span>
                 <h3 class="vf__title">Source of funds</h3>
                 <em class="prof__badge prof__badge--soft">Not needed yet</em>
               </div>
@@ -5367,6 +5366,19 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       /* Верификация: выбранный файл показываем в карточке, значок переходит
          в «In review». Replace возвращает зону загрузки. */
+      /* Счётчик обязательных документов: считаем по факту загрузки, полоса
+         тянется следом. Раньше стояла статичная половина, хотя не загружено
+         ничего — и было непонятно, о чём она. */
+      var vfDone = profView.querySelector('.vf__done');
+      var vfBar = profView.querySelector('.vf__track i');
+      var vfSync = function () {
+        var req = profView.querySelectorAll('.vf__card[data-required]');
+        var done = 0;
+        req.forEach(function (c) { if (!c.querySelector('.vf__file').hidden) done++; });
+        if (vfDone) vfDone.textContent = done;
+        if (vfBar) vfBar.style.width = req.length ? (done / req.length * 100) + '%' : '0';
+      };
+
       profView.querySelectorAll('.vf__card').forEach(function (card) {
         var input = card.querySelector('input[type=file]');
         var drop = card.querySelector('.vf__drop');
@@ -5382,6 +5394,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           drop.hidden = true;
           badge.textContent = 'In review';
           badge.className = 'prof__badge prof__badge--ok';
+          vfSync();
         });
         card.querySelector('.vf__replace').addEventListener('click', function () {
           input.value = '';
@@ -5389,8 +5402,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           drop.hidden = false;
           badge.textContent = badgeBase.text;
           badge.className = badgeBase.cls;
+          vfSync();
         });
       });
+
+      vfSync();
 
       /* Витринный переключатель: заполненный профиль или новичок */
       var profDemo = [].slice.call(profView.querySelectorAll('.prof__demo-btn'));
