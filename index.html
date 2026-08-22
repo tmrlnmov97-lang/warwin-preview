@@ -2743,6 +2743,28 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* у события дата и текст идут плотнее, чем блок над ними */
 .nt__item--act .nt__when { margin-top: -4px; }
 .nt__item--act .nt__body { margin-top: -4px; }
+/* Удаление: крестик проявляется на карточке под курсором. У события в том же
+   углу стоит точка непрочитанного, поэтому она на это время уходит —
+   иначе два кружка налезали бы друг на друга. */
+.nt__item { position: relative; }
+.nt__del { position: absolute; right: 10px; top: 10px; z-index: 2;
+           display: grid; place-items: center; width: 24px; height: 24px;
+           padding: 0; border: 0; border-radius: 8px; cursor: pointer;
+           background: rgba(255, 255, 255, .1); color: var(--modal-text-1, #bbc6cd);
+           font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 1;
+           opacity: 0; transition: opacity .15s ease, background .15s ease, color .15s ease; }
+.nt__item:hover .nt__del,
+.nt__del:focus-visible { opacity: 1; }
+.nt__del:hover { background: rgba(229, 72, 77, .18); color: #e5484d; }
+.nt__item:hover .nt__dot { opacity: 0; transition: opacity .15s ease; }
+/* Clear all — тихая кнопка в шапке, на месте убранного крестика */
+.nt__clear { flex: none; height: 32px; padding: 0 12px; border: 0; border-radius: 999px;
+             background: var(--white-06); cursor: pointer;
+             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px;
+             line-height: 18px; color: var(--modal-text-1, #bbc6cd); }
+.nt__clear:hover { background: var(--white-10); color: var(--white); }
+.nt__clear[hidden] { display: none; }
+.nt__empty[hidden] { display: none; }
 .nt__empty { margin: 0; padding: 32px 0; text-align: center;
              font-family: 'Work Sans', sans-serif; font-size: 14px; color: var(--dp-label); }
 
@@ -4545,6 +4567,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <div class="nt__head" data-node-id="1226:31702">
       <div class="nt__head-row">
         <h2 class="nt__h2">Notifications</h2>
+        <button class="nt__clear" type="button">Clear all</button>
       </div>
       <div class="nt__tabs" role="tablist" data-node-id="1226:31708">
         <button class="nt__tab is-active" type="button" role="tab" aria-selected="true" data-nt="promo">Promotions</button>
@@ -4552,40 +4575,47 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       </div>
     </div>
     <div class="nt__list" id="nt-promo" role="tabpanel" data-node-id="1226:31711">
-          <button class="nt__item" type="button">
-            <span class="nt__ago">10 days ago</span>
+      <p class="nt__empty" hidden>No notifications yet.</p>
+          <div class="nt__item">
+            <button class="nt__del" type="button" aria-label="Удалить уведомление">&times;</button>
+        <span class="nt__ago">10 days ago</span>
             <b class="nt__title">Daily reward processed</b>
             <span class="nt__text">No funds available to receive</span>
-          </button>
-          <button class="nt__item" type="button">
-            <span class="nt__ago">10 days ago</span>
+          </div>
+          <div class="nt__item">
+            <button class="nt__del" type="button" aria-label="Удалить уведомление">&times;</button>
+        <span class="nt__ago">10 days ago</span>
             <b class="nt__title">Daily reward processed</b>
             <span class="nt__text">No funds available to receive</span>
-          </button>
-          <button class="nt__item" type="button">
-            <span class="nt__ago">10 days ago</span>
+          </div>
+          <div class="nt__item">
+            <button class="nt__del" type="button" aria-label="Удалить уведомление">&times;</button>
+        <span class="nt__ago">10 days ago</span>
             <b class="nt__title">Daily reward processed</b>
             <span class="nt__text">No funds available to receive</span>
-          </button>
+          </div>
     </div>
     <!-- 1226:33629 — вкладка Activities: тип события, дата, текст и точка
          непрочитанного. Карточка 394x114. -->
     <div class="nt__list" id="nt-activity" role="tabpanel" hidden>
-      <button class="nt__item nt__item--act" type="button">
+      <p class="nt__empty" hidden>No activity yet.</p>
+      <div class="nt__item nt__item--act">
+        <button class="nt__del" type="button" aria-label="Удалить уведомление">&times;</button>
         <span class="nt__row">
           <b class="nt__kind">DEPOSIT</b>
           <i class="nt__dot" aria-label="Не прочитано"></i>
         </span>
         <span class="nt__when">15 Sept 2025, 22:27</span>
         <span class="nt__body">Your deposit of 1000 USD has failed, please try to deposit again or contact customer support ($5448.39)</span>
-      </button>
-      <button class="nt__item nt__item--act" type="button">
+      </div>
+      <div class="nt__item nt__item--act">
+        <button class="nt__del" type="button" aria-label="Удалить уведомление">&times;</button>
         <span class="nt__row">
           <b class="nt__kind">DEPOSIT</b>
         </span>
         <span class="nt__when">15 Sept 2025, 22:27</span>
         <span class="nt__body">Your deposit of 1000 USD has failed, please try to deposit again or contact customer support ($5448.39)</span>
-      </button>
+      </div>
     </div>
   </div>
 </div>
@@ -5635,9 +5665,43 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       });
       ntPop.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) ntClose(); });
       addEventListener('click', function (e) {
-        if (!ntPop.hidden && !e.target.closest('.nt__pop')) ntClose();
+        if (ntPop.hidden) return;
+        /* Удалённую карточку из DOM уже вынули, и closest вернёт null —
+           без этой проверки удаление закрывало всё окно. */
+        if (!e.target.isConnected) return;
+        if (!e.target.closest('.nt__pop')) ntClose();
       });
       addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ntPop.hidden) ntClose(); });
+      /* Удаление: по одному крестиком и всё разом кнопкой в шапке.
+         Пустой список показывает свою строку, «Clear all» прячется,
+         когда удалять уже нечего. */
+      var ntLists = [].slice.call(ntPop.querySelectorAll('.nt__list'));
+      var ntClear = ntPop.querySelector('.nt__clear');
+      var ntActive = function () {
+        return ntLists.filter(function (l) { return !l.hidden; })[0] || ntLists[0];
+      };
+      var ntRefresh = function () {
+        ntLists.forEach(function (l) {
+          var empty = !l.querySelector('.nt__item');
+          var line = l.querySelector('.nt__empty');
+          if (line) line.hidden = !empty;
+        });
+        var cur = ntActive();
+        ntClear.hidden = !cur.querySelector('.nt__item');
+      };
+      ntPop.addEventListener('click', function (e) {
+        var del = e.target.closest('.nt__del');
+        if (!del) return;
+        var card = del.closest('.nt__item');
+        card.parentNode.removeChild(card);
+        ntRefresh();
+      });
+      ntClear.addEventListener('click', function () {
+        ntActive().querySelectorAll('.nt__item').forEach(function (c) { c.parentNode.removeChild(c); });
+        ntRefresh();
+      });
+      ntRefresh();
+
       var ntTabs = [].slice.call(ntPop.querySelectorAll('.nt__tab'));
       ntTabs.forEach(function (t) {
         t.addEventListener('click', function () {
@@ -5649,6 +5713,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           ntPop.querySelectorAll('.nt__list').forEach(function (l) {
             l.hidden = l.id !== 'nt-' + t.dataset.nt;
           });
+          ntRefresh();
         });
       });
     }
@@ -5687,7 +5752,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         if (e.target.closest('[data-close]')) pmClose();
       });
       addEventListener('click', function (e) {
-        if (!pmPop.hidden && !e.target.closest('.pm__pop')) pmClose();
+        if (pmPop.hidden || !e.target.isConnected) return;
+        if (!e.target.closest('.pm__pop')) pmClose();
       });
       addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pmPop.hidden) pmClose(); });
       pmPop.querySelectorAll('.pm__item').forEach(function (it) {
