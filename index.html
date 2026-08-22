@@ -2270,7 +2270,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            font-family: 'Work Sans', sans-serif; font-weight: 700;
            font-size: 13px; line-height: 16px; color: var(--brand-yellow, #eaff00);
            text-decoration: underline; }
-/* 1180:47908 — четыре плитки по 111 с зазором 12 */
+/* 1180:38832 — три плитки долей с зазором 12 */
 .dp__chips { display: flex; gap: 12px; width: 100%; }
 .dp__chip {
   /* высота явно: в Figma обводка внутри, в CSS прибавлялась — было 38 вместо 36
@@ -2282,7 +2282,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   font-size: 15px; line-height: 16px; color: var(--white);
 }
 .dp__chip:hover { background: #2a3049; }
-.dp__chip.is-active { border-color: var(--brand-yellow, #eaff00); }
+/* 1180:38835 — выбранная доля залита синим, кант остаётся общим */
+.dp__chip.is-active { background: var(--primary, #0794ff); border-color: #252d56; }
+.dp__chip.is-active:hover { background: var(--primary-hover, #0a84e0); }
 
 /* 1180:47918 — итог и кнопка, зазор 10 */
 .dp__wd-foot { flex-direction: column; gap: 10px; width: 100%; }
@@ -4996,11 +4998,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <button class="dp__max" type="button">MAX</button>
             </label>
           </div>
-          <div class="dp__chips" data-node-id="1180:47908">
-            <button class="dp__chip" type="button" data-amount="100">100</button>
-            <button class="dp__chip" type="button" data-amount="150">150</button>
-            <button class="dp__chip" type="button" data-amount="200">200</button>
-            <button class="dp__chip" type="button" data-amount="250">250</button>
+          <!-- 1180:38832 — три доли от баланса вместо прежних сумм -->
+          <div class="dp__chips" data-node-id="1180:38832">
+            <button class="dp__chip" type="button" data-part="25">25%</button>
+            <button class="dp__chip" type="button" data-part="50">50%</button>
+            <button class="dp__chip" type="button" data-part="75">75%</button>
           </div>
         </div>
         <div class="dp__qr-row" data-node-id="1180:32158">
@@ -5479,6 +5481,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           /* В макете весь этот блок считается в USDT независимо от выбранной
              валюты — минимум, итог, комиссия и подпись кнопки. */
           var WD_CUR = 'USDT';
+          /* Баланс берём из шапки: и MAX, и доли считаются от него */
+          var wdBalance = function () {
+            var bal = document.querySelector('.wallet__balance span');
+            var n = bal ? parseFloat((bal.textContent.match(/[\d.]+/) || ['0'])[0]) : 0;
+            return isFinite(n) && n > 0 ? n : 0;
+          };
+          var wdPart = function (c) {
+            return Math.round(wdBalance() * parseFloat(c.dataset.part) / 100 * 100) / 100;
+          };
           var wdSync = function () {
             var v = parseFloat(amountInput.value.replace(',', '.'));
             if (!isFinite(v) || v < 0) v = 0;
@@ -5486,20 +5497,20 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             sumFee.textContent = (v * wdFeeRate).toFixed(2) + ' ' + WD_CUR;
             wdSubmit.textContent = 'Withdraw ' + (v ? v : 0) + ' ' + WD_CUR;
             wdSubmit.disabled = !(v >= wdMin && addrInput.value.trim());
+            /* 1180:38835 — выбранная доля подсвечивается; при нулевом балансе
+               все доли дают 0, и подсвечивать нечего */
             chips.forEach(function (c) {
-              c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
+              c.classList.toggle('is-active', v > 0 && wdPart(c) === v);
             });
           };
           amountInput.addEventListener('input', wdSync);
           addrInput.addEventListener('input', wdSync);
           chips.forEach(function (c) {
-            c.addEventListener('click', function () { amountInput.value = c.dataset.amount; wdSync(); });
+            c.addEventListener('click', function () { amountInput.value = wdPart(c); wdSync(); });
           });
           /* MAX берёт то, что реально на балансе в шапке */
           if (maxBtn) maxBtn.addEventListener('click', function () {
-            var bal = document.querySelector('.wallet__balance span');
-            var n = bal ? parseFloat((bal.textContent.match(/[\d.]+/) || ['0'])[0]) : 0;
-            amountInput.value = isFinite(n) ? n : 0;
+            amountInput.value = wdBalance();
             wdSync();
           });
           wdSync();
