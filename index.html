@@ -850,10 +850,12 @@ body {
      Закреплена сверху, а не приклеена: fixed не участвует в прокрутке
      документа и не едет вместе с ним. Место под неё держит .page. */
   .topbar { position: fixed; left: 0; right: 0; top: 0; height: 62px; gap: 0; padding: 0 16px; }
-  .topbar__brand { gap: 0; flex: none; width: 106px; }
+  .topbar__brand { gap: 0; flex: none; width: 120px; }
   /* 903:41863 — логотип 106x40 на x=16. Базовый отступ 20 слева сдвигал
-     картинку на 36 и сжимал её до 86 — на мобильной он не нужен. */
-  .topbar__logo-wrap { width: 106px; height: 40px; padding-left: 0; }
+     картинку на 36 и сжимал её до 86 — на мобильной он не нужен.
+     Ширину подняли со 106 до 120: в макете знак терялся рядом с кнопками.
+     Высота 43 — по пропорции 156:55, иначе contain обрежет по высоте. */
+  .topbar__logo-wrap { width: 120px; height: 43px; padding-left: 0; }
   .topbar__logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
   .btn-search { display: none; }
   /* В мобильной шапке только логотип и две кнопки — вкладок Casino/Sports нет */
