@@ -2298,6 +2298,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    как на присланном образце, но нашими токенами. Новых цветов нет:
    плита карточки та же, что у шапки, поля те же, что в модалке депозита.
    ═══════════════════════════════════════════════════════════════════ */
+/* Закон внутреннего и внешнего: 32 между карточками > 24 поле карточки >
+   20 внутри карточки > 16 сетка полей > 8 подпись к полю > 4 в заголовке.
+   Было 24 = 24 и 20 = 20 — карточки слипались, уровни не различались. */
+.view--profile { gap: 24px; }
+.prof__head { display: flex; flex-direction: column; gap: 16px; }
+.prof__panel { display: flex; flex-direction: column; gap: 32px; }
+/* display перебивает атрибут hidden — гасим адресно, иначе пустые
+   панели Verification и Security видны под карточками */
+.prof__panel[hidden] { display: none; }
 .prof__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
             font-size: 32px; line-height: 40px; color: var(--white); }
 .prof__tabs { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -2309,7 +2318,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .prof__tab:hover { background: var(--white-16); }
 .prof__tab.is-active { background: var(--primary); }
 /* Витринный переключатель состояния — не из макета */
-.prof__demo { display: flex; gap: 4px; margin-left: auto; padding: 4px;
+.prof__who { display: flex; align-items: center; gap: 16px; }
+.prof__demo { display: flex; gap: 4px; margin-left: auto; flex: none; padding: 4px;
               background: var(--white-04); border-radius: 999px; }
 .prof__demo-btn { padding: 6px 12px; border: 0; background: none; border-radius: 999px;
                   cursor: pointer; font-family: 'Work Sans', sans-serif; font-weight: 500;
@@ -2330,10 +2340,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .prof__ok { font-style: normal; color: var(--register); }
 
 /* Плита карточки — та же, что у шапки и модалки */
+/* Карточка на фоне страницы даёт контраст всего 1.12:1, поэтому границу
+   держит кант посветлее и мягкая тень — иначе три карточки читаются
+   одной серой лентой. */
 .prof__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;
               padding: 24px; background: var(--chrome); border-radius: 20px;
-              border: 1px solid rgba(255, 255, 255, .08); }
-.prof__card-head { display: flex; flex-direction: column; gap: 6px; }
+              border: 1px solid rgba(255, 255, 255, .12);
+              box-shadow: 0 8px 24px -16px rgba(0, 0, 0, .8); }
+.prof__card-head { display: flex; flex-direction: column; gap: 4px; }
 .prof__card-head h2 { display: flex; align-items: center; gap: 10px; margin: 0;
                       font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
                       font-size: 18px; line-height: 24px; color: var(--white); }
@@ -2341,7 +2355,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                      font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
                      color: var(--dp-text); }
 
-.prof__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.prof__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px;
+              align-items: start; }
 .prof__cell { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .prof__cell--wide { grid-column: 1 / -1; }
 .prof__label { display: flex; align-items: center; gap: 8px; padding: 0 4px;
@@ -3316,17 +3331,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            разложен по смыслу: контакты, проверенные данные и адрес — как на
            присланном образце, но нашими цветами. -->
       <div class="view view--profile" id="view-profile" hidden data-node-id="1239:40001">
+        <div class="prof__head">
         <h1 class="prof__h1">Profile</h1>
         <div class="prof__tabs" role="tablist">
           <button class="prof__tab is-active" type="button" role="tab" aria-selected="true" data-tab="general">General</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="verification">Verification</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="security">Security</button>
-          <!-- Витринный переключатель: показать оба состояния профиля.
-               В макете его нет — снимается этим одним блоком. -->
-          <div class="prof__demo">
-            <button class="prof__demo-btn is-active" type="button" data-state="verified">Verified player</button>
-            <button class="prof__demo-btn" type="button" data-state="new">New player</button>
-          </div>
+        </div>
         </div>
 
         <div class="prof__panel" id="prof-general" role="tabpanel">
@@ -3335,6 +3346,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <div class="prof__who-text">
             <b>Ricardo Destaole</b>
             <span>Player since March 2026 <i>·</i> <em class="prof__ok">Identity verified</em></span>
+          </div>
+          <!-- Витринный переключатель: показать оба состояния профиля.
+               В макете его нет — снимается этим одним блоком. -->
+          <div class="prof__demo">
+            <button class="prof__demo-btn is-active" type="button" data-state="verified">Verified player</button>
+            <button class="prof__demo-btn" type="button" data-state="new">New player</button>
           </div>
         </div>
 
@@ -3401,7 +3418,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="prof__label">City</span>
               <label class="prof__box"><input data-prof-addr type="text" value="Goi&acirc;nia" placeholder="City" aria-label="City"></label>
             </div>
-            <div class="prof__cell prof__cell--wide">
+            <div class="prof__cell">
               <span class="prof__label">Street and house</span>
               <label class="prof__box"><input data-prof-addr type="text" value="Setor Bueno / Goi&aacute;s" placeholder="Street and house" aria-label="Street and house"></label>
             </div>
