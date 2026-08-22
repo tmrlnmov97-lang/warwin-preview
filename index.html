@@ -2309,6 +2309,59 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* Неактивное состояние: окно открывается пустым, кнопка ждёт данных */
 .dp__submit[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .5);
                         cursor: default; }
+/* ── Фиатный вывод (варфрейм) — вторая пара вкладок: Withdraw + Fiat.
+   Крипто-блоки на это время уходят, вместо них баланс, сумма в USD,
+   выбор получателя и итог. Цвета и плитки те же, что у крипты. ── */
+.dp__fiat { display: none; flex-direction: column; gap: 20px; width: 100%; }
+.dp.is-withdraw.is-fiat .dp__fiat { display: flex; }
+.dp.is-withdraw.is-fiat .dp__body > .dp__row,
+.dp.is-withdraw.is-fiat .dp__addr-field,
+.dp.is-withdraw.is-fiat .dp__amount,
+.dp.is-withdraw.is-fiat .dp__wd-foot { display: none; }
+
+/* Баланс отдельной плитой: это справка, поэтому кант, а не заливка */
+.dp__cash { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
+            width: 100%; height: 56px; padding: 0 16px;
+            border: 1px solid #252d56; border-radius: 12px;
+            font-family: 'Work Sans', sans-serif; }
+.dp__cash span { font-weight: 500; font-size: 13px; color: var(--modal-text-1, #bbc6cd); }
+.dp__cash-value { font-weight: 700; font-size: 18px; line-height: 24px; color: var(--white); }
+
+/* Сумма — главное поле окна, поэтому крупнее остальных плит */
+.dp__fiat-field { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.dp__input--fiat { height: 56px; padding: 12px 16px; gap: 10px;
+                   border: 1px solid var(--input-border, #21435e); }
+.dp__fiat-sign { flex: none; font-family: 'Work Sans', sans-serif; font-weight: 700;
+                 font-size: 20px; line-height: 24px; color: var(--dp-label); }
+.dp__input--fiat input { font-weight: 700; font-size: 20px; line-height: 24px; }
+.dp__fiat-code { flex: none; font-family: 'Work Sans', sans-serif; font-weight: 500;
+                 font-size: 13px; color: var(--modal-text-1, #bbc6cd); }
+
+/* Получатель: строка-переключатель, выбранная обводится синим */
+.dp__dest { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.dp__dest-row { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
+                width: 100%; padding: 12px; text-align: left; cursor: pointer;
+                background: #22263c; border: 1px solid #252d56; border-radius: 12px; }
+.dp__dest-row:hover { background: #2a3049; }
+.dp__dest-row.is-current { border-color: var(--primary, #0794ff); }
+.dp__dest-ico { flex: none; display: flex; align-items: center; justify-content: center;
+                width: 40px; height: 40px; border-radius: 10px; background: var(--white-06); }
+.dp__dest-ico img { display: block; }
+.dp__dest-text { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 2px;
+                 font-family: 'Work Sans', sans-serif; }
+.dp__dest-text b { font-weight: 700; font-size: 14px; line-height: 20px; color: var(--white); }
+.dp__dest-text span { font-weight: 500; font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+.dp__dest-row .dp__radio { flex: none; }
+.dp__dest-row.is-current .dp__radio { border-width: 6px; border-color: var(--primary, #0794ff); }
+
+/* Итог: комиссия и срок в одной рамке, между строками волосок */
+.dp__fiat-sum { box-sizing: border-box; display: flex; flex-direction: column; width: 100%;
+                padding: 4px 16px; border: 1px solid #252d56; border-radius: 12px; }
+.dp__fiat-sum .dp__sum-row { height: 44px; }
+.dp__fiat-sum .dp__sum-row + .dp__sum-row { border-top: 1px solid rgba(255, 255, 255, .06); }
+.dp__fiat-sum b { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                  font-size: 14px; line-height: 16px; color: var(--white); }
+
 /* 1180:32169 — сноска: кант #747889, радиус 12, паддинг 12, зазор 8 */
 .dp__note { box-sizing: border-box; width: 100%; height: 56px; display: flex; gap: 8px; padding: 12px;
             border: 1px solid #747889; border-radius: 12px; }
@@ -5009,6 +5062,45 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <button class="dp__chip" type="button" data-part="75">75%</button>
           </div>
         </div>
+        <!-- Фиатный вывод по варфрейму: баланс, сумма, куда отправить,
+             итог и кнопка. Показывается только на паре Withdraw + Fiat. -->
+        <div class="dp__fiat">
+          <div class="dp__cash">
+            <span>Cash balance</span><b class="dp__cash-value">$0.00</b>
+          </div>
+          <div class="dp__fiat-field">
+            <span class="dp__hint">Withdraw amount</span>
+            <label class="dp__input dp__input--fiat">
+              <span class="dp__fiat-sign">$</span>
+              <input class="dp__fiat-input" type="text" inputmode="decimal" placeholder="0"
+                     aria-label="Withdraw amount">
+              <span class="dp__fiat-code">USD</span>
+            </label>
+          </div>
+          <div class="dp__dest" role="radiogroup" aria-label="Send to">
+            <span class="dp__hint">Send to</span>
+            <button class="dp__dest-row is-current" type="button" role="radio" aria-checked="true" data-dest="card">
+              <span class="dp__dest-ico"><img loading="lazy" decoding="async" src="a/64aeb080c4.svg" alt="" width="24" height="24"></span>
+              <span class="dp__dest-text">
+                <b>Visa / Mastercard</b><span>Card ending 4821</span>
+              </span>
+              <i class="dp__radio" aria-hidden="true"></i>
+            </button>
+            <button class="dp__dest-row" type="button" role="radio" aria-checked="false" data-dest="bank">
+              <span class="dp__dest-ico"><img loading="lazy" decoding="async" src="a/c22f96a525.svg" alt="" width="24" height="24"></span>
+              <span class="dp__dest-text">
+                <b>Bank transfer</b><span>ACH · 1–3 business days</span>
+              </span>
+              <i class="dp__radio" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="dp__fiat-sum">
+            <div class="dp__sum-row"><span>Processing fee</span><b class="dp__fiat-fee">$0.00</b></div>
+            <div class="dp__sum-row"><span>Arrives</span><b>1–3 business days</b></div>
+          </div>
+          <button class="dp__submit dp__fiat-submit" type="button" disabled>Request withdrawal</button>
+        </div>
+
         <div class="dp__qr-row" data-node-id="1180:32158">
           <!-- 1180:32159 — рамка 140 углами, внутри картинка 114.97 на 12.52 -->
           <div class="dp__qr" data-node-id="1180:32159">
@@ -5457,6 +5549,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                  Высоты у вкладок разные (570 и 645), поэтому переключаем
                  внутри dpMorph: он доводит высоту от прежней к новой, иначе
                  окно скачет и читается как два разных окна. */
+              /* Fiat на выводе показывает своё содержимое — высота другая,
+                 поэтому тоже через dpMorph, чтобы окно не прыгало */
+              if (b.dataset.method) dpMorph(function () {
+                dp.classList.toggle('is-fiat', b.dataset.method === 'fiat');
+              });
               if (b.dataset.seg) dpMorph(function () {
                 var wd = b.dataset.seg === 'withdraw';
                 dp.classList.toggle('is-withdraw', wd);
@@ -5480,7 +5577,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           var chips = [].slice.call(dp.querySelectorAll('.dp__chip'));
           var sumAmount = dp.querySelector('.dp__sum-amount');
           var sumFee = dp.querySelector('.dp__sum-fee');
-          var wdSubmit = dp.querySelector('.dp__submit');
+          /* Именно кнопка крипто-вывода: у фиата свой .dp__submit, и по
+             общему селектору сюда попадала она — крипта переписывала ей текст */
+          var wdSubmit = dp.querySelector('.dp__wd-foot .dp__submit');
           var maxBtn = dp.querySelector('.dp__max');
           /* В макете весь этот блок считается в USDT независимо от выбранной
              валюты — минимум, итог, комиссия и подпись кнопки. */
@@ -5518,6 +5617,38 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             wdSync();
           });
           wdSync();
+        }
+
+        /* Фиатный вывод: баланс тот же, что в шапке, сумма в USD, получатель
+           выбирается строкой. Кнопка ждёт суммы, как и на крипте. */
+        var fiInput = dp.querySelector('.dp__fiat-input');
+        if (fiInput) {
+          var fiCash = dp.querySelector('.dp__cash-value');
+          var fiSubmit = dp.querySelector('.dp__fiat-submit');
+          var fiRows = [].slice.call(dp.querySelectorAll('.dp__dest-row'));
+          var fiMoney = function (n) {
+            return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          };
+          var fiSync = function () {
+            var bal = document.querySelector('.wallet__balance span');
+            var have = bal ? parseFloat((bal.textContent.match(/[\d.]+/) || ['0'])[0]) : 0;
+            if (!isFinite(have) || have < 0) have = 0;
+            fiCash.textContent = fiMoney(have);
+            var v = parseFloat(fiInput.value.replace(',', '.'));
+            if (!isFinite(v) || v < 0) v = 0;
+            fiSubmit.disabled = !(v > 0 && v <= have);
+          };
+          fiInput.addEventListener('input', fiSync);
+          fiRows.forEach(function (r) {
+            r.addEventListener('click', function () {
+              fiRows.forEach(function (o) {
+                var on = o === r;
+                o.classList.toggle('is-current', on);
+                o.setAttribute('aria-checked', on ? 'true' : 'false');
+              });
+            });
+          });
+          fiSync();
         }
 
         /* Выбор валюты: список открывается по клику, выбор меняет подпись,
