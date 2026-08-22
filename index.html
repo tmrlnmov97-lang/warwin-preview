@@ -2806,28 +2806,65 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
              background: none; border: 1px solid rgba(255, 255, 255, .12); border-radius: 12px; }
 .br__close img { display: block; }
 /* вкладки — те же таблетки, что в поп-апе уведомлений */
-.br__segs { display: flex; gap: 12px; }
-.br__seg { flex: 1 0 0; height: 44px; border: 0; border-radius: 999px; cursor: pointer;
-           background: var(--white-06);
-           font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px;
-           color: var(--white); }
-.br__seg.is-active { background: var(--primary); }
+/* крупные кнопки: открывают страницы целиком */
+.br__big { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.br__big-btn { box-sizing: border-box; display: flex; flex-direction: column; align-items: center;
+               justify-content: center; gap: 8px; height: 92px; padding: 12px;
+               border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; cursor: pointer;
+               background: var(--chrome); }
+.br__big-btn:active { transform: scale(.985); }
+.br__big-btn b { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px;
+                 line-height: 20px; color: var(--white); }
+.br__big-btn img, .br__big-btn .ico { width: 28px; height: 28px; display: block; }
+.br__big-btn .ico--casino { background: var(--white);
+  -webkit-mask: url(a/b1a95c845c.svg) center / contain no-repeat;
+          mask: url(a/b1a95c845c.svg) center / contain no-repeat; }
+/* подложки берём у тех же карточек, что в баннере героя */
+.br__big-btn--casino { background-image: linear-gradient(135deg, rgba(0, 201, 40, .16), rgba(0, 201, 40, 0) 62%); }
+.br__big-btn--sport  { background-image: linear-gradient(135deg, rgba(255, 138, 0, .18), rgba(255, 138, 0, 0) 62%); }
 
-.br__list { display: flex; flex-direction: column; gap: 4px; }
-.br__list[hidden] { display: none; }
-.br__item { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 52px;
-            padding: 0 12px; text-align: left; cursor: pointer;
-            background: none; border: 0; border-radius: 12px;
-            font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 16px;
-            line-height: 22px; color: var(--white); }
-.br__item:hover, .br__item:active { background: var(--white-06); }
-.br__item img { display: block; flex: none; opacity: .75; }
-.br__item.is-active { background: var(--white-10); }
-.br__line { height: 1px; margin: 8px 0; background: rgba(255, 255, 255, .1); }
-.br__cap { padding: 4px 12px;
-           font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 12px;
-           line-height: 16px; letter-spacing: .05em; text-transform: uppercase;
-           color: var(--dp-label); }
+/* список — как в боковом меню на десктопе */
+.br__nav, .br__foot { display: flex; flex-direction: column; gap: 2px; }
+.br__foot { margin-top: auto; padding-top: 8px; }
+.br__row { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 52px;
+           padding: 0 12px; text-align: left; cursor: pointer;
+           background: none; border: 0; border-radius: 12px;
+           font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 16px;
+           line-height: 22px; color: var(--white); }
+.br__row:hover, .br__row:active { background: var(--white-06); }
+/* Иконки разделов собраны масками и слоями — им нужен явный размер,
+   как в боковом меню (.side-item .ico). Без него Casino, English и
+   Live Support оставались пустыми. */
+/* шеврон исключён: он 12x7, а общее правило тянуло его до 24 */
+.br__row .ico, .br__row > img:not(.br__chev) { width: 24px; height: 24px; display: block;
+                                flex: none; object-fit: contain; opacity: .85; }
+.br__row .ico--casino { background: var(--muted);
+  -webkit-mask: url(a/b1a95c845c.svg) center / contain no-repeat;
+          mask: url(a/b1a95c845c.svg) center / contain no-repeat; }
+.br__row--accent .ico--mask { background: var(--support-ico);
+  -webkit-mask: url(a/60fc882413.svg) center / contain no-repeat;
+          mask: url(a/60fc882413.svg) center / contain no-repeat; }
+.br__row .ico--flag { position: relative; opacity: 1; }
+.br__row .ico--flag img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.br__row .ico--flag img:nth-child(2) { inset: auto; left: 50%; top: 50%;
+  width: 96.555%; height: 96.555%; transform: translate(-50%, -50%); }
+.br__row-label { flex: 1 0 0; min-width: 0; }
+.br__chev { width: 12px; height: 7px; flex: none; opacity: .5;
+            object-fit: contain; transition: transform .18s ease; }
+.br__chev--right { width: 7px; height: 12px; }
+.br__row[aria-expanded="true"] .br__chev { transform: rotate(180deg); }
+.br__row--accent { background: var(--white-06); font-weight: 700; }
+/* подпункты раскрываются под своим разделом */
+.br__subs { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 6px 12px; }
+.br__subs[hidden] { display: none; }
+.br__sub { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px;
+           padding: 0 12px; text-align: left; cursor: pointer;
+           background: none; border: 0; border-radius: 10px;
+           font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 15px;
+           line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+.br__sub:hover, .br__sub:active { background: var(--white-06); color: var(--white); }
+.br__sub img { flex: none; opacity: .7; }
+
 
 </style>
 </head>
@@ -4530,8 +4567,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   </main>
 </div>
 
-<!-- Мобильное меню Browse: поиск, две вкладки и разделы. Открывается
-     пунктом Browse в нижней панели, поверх контента и под самой панелью. -->
+<!-- Мобильное меню Browse. Сверху две крупные кнопки на страницы Casino и
+     Sports, ниже — тот же список, что в боковом меню на десктопе. -->
 <div class="br" id="browse-menu" hidden>
   <div class="br__sheet" role="dialog" aria-modal="true" aria-label="Browse">
     <div class="br__top">
@@ -4543,56 +4580,69 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <img loading="lazy" decoding="async" src="a/2f90aff24b.svg" alt="" width="14" height="14">
       </button>
     </div>
-    <div class="br__segs" role="tablist">
-      <button class="br__seg is-active" type="button" role="tab" aria-selected="true" data-br="casino">Casino</button>
-      <button class="br__seg" type="button" role="tab" aria-selected="false" data-br="sports">Sports</button>
+
+    <!-- крупные кнопки: открывают страницы целиком -->
+    <div class="br__big">
+      <button class="br__big-btn br__big-btn--casino" type="button" data-open="casino">
+        <span class="ico ico--casino" aria-hidden="true"></span>
+        <b>Casino</b>
+      </button>
+      <button class="br__big-btn br__big-btn--sport" type="button" data-open="sport">
+        <img loading="lazy" decoding="async" src="a/401e94f115.svg" alt="" width="28" height="28">
+        <b>Sports</b>
+      </button>
     </div>
 
-    <div class="br__list" id="br-casino" role="tabpanel">
-        <button class="br__item" type="button" data-go="lobby">
-          <img loading="lazy" decoding="async" src="a/60e8a2f99e.svg" alt="" width="20" height="20"><span>Lobby</span>
-        </button>
-        <button class="br__item" type="button" data-go="crash games">
-          <img loading="lazy" decoding="async" src="a/21ad8ec927.svg" alt="" width="20" height="20"><span>Crash Games</span>
-        </button>
+    <nav class="br__nav">
+      <button class="br__row" type="button" data-toggle="br-casino" aria-expanded="false">
+        <span class="ico ico--casino" aria-hidden="true"></span>
+        <span class="br__row-label">Casino</span>
+        <img loading="lazy" decoding="async" class="br__chev" src="a/346630b640.svg" alt="" width="12" height="12">
+      </button>
+      <div class="br__subs" id="br-casino" hidden>
+          <button class="br__sub" type="button" data-go="lobby"><img loading="lazy" decoding="async" src="a/60e8a2f99e.svg" alt="" width="20" height="20"><span>Lobby</span></button>
+          <button class="br__sub" type="button" data-go="crash games"><img loading="lazy" decoding="async" src="a/21ad8ec927.svg" alt="" width="20" height="20"><span>Crash Games</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/c46f4569fb.svg" alt="" width="20" height="20"><span>New Slots</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/d4505ffade.svg" alt="" width="20" height="20"><span>Popular Slots</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/86c1a44d79.svg" alt="" width="20" height="20"><span>High RTP</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/c1845085c1.svg" alt="" width="20" height="20"><span>Table Games</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/39eacc80c9.svg" alt="" width="20" height="20"><span>Video Poker</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/c0ba02d44b.svg" alt="" width="20" height="20"><span>Live Casino</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/6476cc4cce.svg" alt="" width="20" height="20"><span>Game Shows</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/46d277f6b4.svg" alt="" width="20" height="20"><span>Providers</span></button>
+      </div>
       <div class="br__line"></div>
-      <span class="br__cap">Games</span>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/c46f4569fb.svg" alt="" width="20" height="20"><span>New Slots</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/d4505ffade.svg" alt="" width="20" height="20"><span>Popular Slots</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/86c1a44d79.svg" alt="" width="20" height="20"><span>High RTP</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/c1845085c1.svg" alt="" width="20" height="20"><span>Table Games</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/39eacc80c9.svg" alt="" width="20" height="20"><span>Video Poker</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/c0ba02d44b.svg" alt="" width="20" height="20"><span>Live Casino</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/6476cc4cce.svg" alt="" width="20" height="20"><span>Game Shows</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/46d277f6b4.svg" alt="" width="20" height="20"><span>Providers</span>
-        </button>
-    </div>
+      <button class="br__row" type="button" data-toggle="br-sport" aria-expanded="false">
+        <img loading="lazy" decoding="async" class="ico" src="a/401e94f115.svg" alt="" width="20" height="20">
+        <span class="br__row-label">Sports</span>
+        <img loading="lazy" decoding="async" class="br__chev" src="a/346630b640.svg" alt="" width="12" height="12">
+      </button>
+      <div class="br__subs" id="br-sport" hidden>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/0eec65d4be.svg" alt="" width="20" height="20"><span>Upcoming</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="a/eed79b599e.svg" alt="" width="20" height="20"><span>Outrights</span></button>
+      </div>
+      <div class="br__line"></div>
+      <button class="br__row" type="button">
+        <img loading="lazy" decoding="async" class="ico" src="a/404593e9ee.svg" alt="" width="20" height="20">
+        <span class="br__row-label">Live</span>
+      </button>
+      <div class="br__line"></div>
+      <button class="br__row" type="button">
+        <img loading="lazy" decoding="async" class="ico" src="a/6b1e44858b.svg" alt="" width="20" height="20">
+        <span class="br__row-label">Promotions</span>
+      </button>
+    </nav>
 
-    <div class="br__list" id="br-sports" role="tabpanel" hidden>
-        <button class="br__item" type="button" data-go="sport">
-          <img loading="lazy" decoding="async" src="a/e1428dbf9e.svg" alt="" width="20" height="20"><span>Sport</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/0eec65d4be.svg" alt="" width="20" height="20"><span>Upcoming</span>
-        </button>
-        <button class="br__item" type="button">
-          <img loading="lazy" decoding="async" src="a/eed79b599e.svg" alt="" width="20" height="20"><span>Outrights</span>
-        </button>
+    <div class="br__foot">
+      <button class="br__row" type="button">
+        <span class="ico ico--flag" aria-hidden="true"><img loading="lazy" decoding="async" src="a/2cfe6eab94.svg" alt=""><img loading="lazy" decoding="async" src="a/ccb494ee27.svg" alt=""><img loading="lazy" decoding="async" src="a/3c4c1bbfde.svg" alt=""></span>
+        <span class="br__row-label">English</span>
+        <img loading="lazy" decoding="async" class="br__chev br__chev--right" src="a/78eeca1f55.svg" alt="" width="12" height="12">
+      </button>
+      <button class="br__row br__row--accent" type="button">
+        <span class="ico ico--mask"></span>
+        <span class="br__row-label">Live Support</span>
+      </button>
     </div>
   </div>
 </div>
@@ -6043,28 +6093,27 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         if (e.target.closest('[data-close]')) brClose();
       });
       addEventListener('keydown', function (e) { if (e.key === 'Escape' && !brMenu.hidden) brClose(); });
-      /* вкладки Casino / Sports */
-      var brSegs = [].slice.call(brMenu.querySelectorAll('.br__seg'));
-      brSegs.forEach(function (t) {
-        t.addEventListener('click', function () {
-          brSegs.forEach(function (o) {
-            var on = o === t;
-            o.classList.toggle('is-active', on);
-            o.setAttribute('aria-selected', on ? 'true' : 'false');
-          });
-          brMenu.querySelectorAll('.br__list').forEach(function (l) {
-            l.hidden = l.id !== 'br-' + t.dataset.br;
-          });
+      /* крупные кнопки открывают страницы целиком */
+      brMenu.querySelectorAll('[data-open]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          brClose();
+          showView(btn.dataset.open);
         });
       });
-      /* разделы, для которых у нас есть страница, открывают её */
-      brMenu.querySelectorAll('.br__item').forEach(function (it) {
+      /* разделы со стрелкой раскрывают свой список */
+      brMenu.querySelectorAll('[data-toggle]').forEach(function (row) {
+        row.addEventListener('click', function () {
+          var list = document.getElementById(row.dataset.toggle);
+          var open = list.hidden;
+          list.hidden = !open;
+          row.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      });
+      /* подпункты, для которых есть страница, ведут на неё */
+      brMenu.querySelectorAll('.br__sub[data-go]').forEach(function (it) {
         it.addEventListener('click', function () {
-          var go = it.dataset.go;
-          brMenu.querySelectorAll('.br__item').forEach(function (o) { o.classList.toggle('is-active', o === it); });
-          if (!go) return;
           brClose();
-          showView(go === 'sport' ? 'sport' : (chipView[go] || 'casino'));
+          showView(chipView[it.dataset.go] || 'casino');
         });
       });
       /* поле поиска открывает наше окно поиска */
