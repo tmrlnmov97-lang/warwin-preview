@@ -1100,7 +1100,10 @@ body {
   }
   .bnav__home img { display: block; width: 38px; height: 32px; }
   /* 903:39414 — подпись на left 184 от кадра 402, то есть по центру */
-  .bnav__home-label { position: absolute; left: 0; right: 0; top: 70px; text-align: center; }
+  /* Подпись растянута во всю ширину панели и перехватывала нажатия: по
+     Browse и Search было не попасть. Кликов она принимать не должна. */
+  .bnav__home-label { position: absolute; left: 0; right: 0; top: 70px; text-align: center;
+                      pointer-events: none; }
 
   .bnav__item:active { opacity: .7; }
   .bnav__home:active { transform: translateX(-50%) scale(.94); }
@@ -2772,6 +2775,59 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .nt__pop { right: 12px; left: 12px; width: auto; }
   .nt__list { max-height: 60vh; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Мобильное меню Browse. Лист во весь экран под шапкой и над нижней
+   панелью: поиск, две вкладки и разделы — те же, что в боковом меню
+   на десктопе. На широком экране не показывается вовсе.
+   ═══════════════════════════════════════════════════════════════════ */
+.br { position: fixed; inset: 0; z-index: 65; display: none; }
+.br__sheet {
+  position: absolute; left: 0; right: 0; top: 74px; bottom: 107px;
+  box-sizing: border-box; display: flex; flex-direction: column; gap: 16px;
+  padding: 16px 16px 8px; background: var(--page);
+  overflow-y: auto; overscroll-behavior: contain;
+  animation: br-in .2s cubic-bezier(.22, .61, .36, 1) both;
+}
+@keyframes br-in { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .br__sheet { animation: none; } }
+/* только на мобильной — на десктопе есть боковое меню */
+@media (max-width: 1023px) { .br:not([hidden]) { display: block; } }
+
+.br__top { display: flex; align-items: center; gap: 12px; }
+.br__search { flex: 1 0 0; box-sizing: border-box; display: flex; align-items: center; gap: 10px;
+              height: 48px; padding: 0 14px; cursor: pointer;
+              background: var(--chrome); border: 1px solid rgba(255, 255, 255, .12);
+              border-radius: 12px;
+              font-family: 'Work Sans', sans-serif; font-size: 15px; color: var(--dp-label); }
+.br__search img { display: block; opacity: .7; }
+.br__close { box-sizing: border-box; display: grid; place-items: center;
+             width: 44px; height: 44px; flex: none; padding: 0; cursor: pointer;
+             background: none; border: 1px solid rgba(255, 255, 255, .12); border-radius: 12px; }
+.br__close img { display: block; }
+/* вкладки — те же таблетки, что в поп-апе уведомлений */
+.br__segs { display: flex; gap: 12px; }
+.br__seg { flex: 1 0 0; height: 44px; border: 0; border-radius: 999px; cursor: pointer;
+           background: var(--white-06);
+           font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px;
+           color: var(--white); }
+.br__seg.is-active { background: var(--primary); }
+
+.br__list { display: flex; flex-direction: column; gap: 4px; }
+.br__list[hidden] { display: none; }
+.br__item { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 52px;
+            padding: 0 12px; text-align: left; cursor: pointer;
+            background: none; border: 0; border-radius: 12px;
+            font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 16px;
+            line-height: 22px; color: var(--white); }
+.br__item:hover, .br__item:active { background: var(--white-06); }
+.br__item img { display: block; flex: none; opacity: .75; }
+.br__item.is-active { background: var(--white-10); }
+.br__line { height: 1px; margin: 8px 0; background: rgba(255, 255, 255, .1); }
+.br__cap { padding: 4px 12px;
+           font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 12px;
+           line-height: 16px; letter-spacing: .05em; text-transform: uppercase;
+           color: var(--dp-label); }
 
 </style>
 </head>
@@ -4474,6 +4530,73 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   </main>
 </div>
 
+<!-- Мобильное меню Browse: поиск, две вкладки и разделы. Открывается
+     пунктом Browse в нижней панели, поверх контента и под самой панелью. -->
+<div class="br" id="browse-menu" hidden>
+  <div class="br__sheet" role="dialog" aria-modal="true" aria-label="Browse">
+    <div class="br__top">
+      <button class="br__search" type="button">
+        <img loading="lazy" decoding="async" src="a/25f570e1f7.svg" alt="" width="18" height="18">
+        <span>Search WarWin</span>
+      </button>
+      <button class="br__close" type="button" aria-label="Закрыть" data-close>
+        <img loading="lazy" decoding="async" src="a/2f90aff24b.svg" alt="" width="14" height="14">
+      </button>
+    </div>
+    <div class="br__segs" role="tablist">
+      <button class="br__seg is-active" type="button" role="tab" aria-selected="true" data-br="casino">Casino</button>
+      <button class="br__seg" type="button" role="tab" aria-selected="false" data-br="sports">Sports</button>
+    </div>
+
+    <div class="br__list" id="br-casino" role="tabpanel">
+        <button class="br__item" type="button" data-go="lobby">
+          <img loading="lazy" decoding="async" src="a/60e8a2f99e.svg" alt="" width="20" height="20"><span>Lobby</span>
+        </button>
+        <button class="br__item" type="button" data-go="crash games">
+          <img loading="lazy" decoding="async" src="a/21ad8ec927.svg" alt="" width="20" height="20"><span>Crash Games</span>
+        </button>
+      <div class="br__line"></div>
+      <span class="br__cap">Games</span>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/c46f4569fb.svg" alt="" width="20" height="20"><span>New Slots</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/d4505ffade.svg" alt="" width="20" height="20"><span>Popular Slots</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/86c1a44d79.svg" alt="" width="20" height="20"><span>High RTP</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/c1845085c1.svg" alt="" width="20" height="20"><span>Table Games</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/39eacc80c9.svg" alt="" width="20" height="20"><span>Video Poker</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/c0ba02d44b.svg" alt="" width="20" height="20"><span>Live Casino</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/6476cc4cce.svg" alt="" width="20" height="20"><span>Game Shows</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/46d277f6b4.svg" alt="" width="20" height="20"><span>Providers</span>
+        </button>
+    </div>
+
+    <div class="br__list" id="br-sports" role="tabpanel" hidden>
+        <button class="br__item" type="button" data-go="sport">
+          <img loading="lazy" decoding="async" src="a/e1428dbf9e.svg" alt="" width="20" height="20"><span>Sport</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/0eec65d4be.svg" alt="" width="20" height="20"><span>Upcoming</span>
+        </button>
+        <button class="br__item" type="button">
+          <img loading="lazy" decoding="async" src="a/eed79b599e.svg" alt="" width="20" height="20"><span>Outrights</span>
+        </button>
+    </div>
+  </div>
+</div>
+
 <!-- 903:39389 «BNB-06» — нижняя панель, кадр 402x107. Только на мобильной. -->
 <nav class="bnav" data-node-id="903:39389" aria-label="Основная навигация">
   <!-- 903:39390 «Union» — плашка и выступ одним контуром, без стыка -->
@@ -5902,6 +6025,53 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       profView.querySelector('[data-prof=save]').addEventListener('click', function () {
         profBase = profFields.map(function (i) { return i.value; });
         profSave.hidden = true;
+      });
+    }
+
+    /* Мобильное меню Browse: открывается первым пунктом нижней панели. */
+    var brMenu = document.getElementById('browse-menu');
+    var brBtn = document.querySelector('.bnav__item');
+    if (brMenu && brBtn) {
+      var brClose = function () { brMenu.hidden = true; document.body.style.overflow = ''; };
+      brBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var open = brMenu.hidden;
+        brMenu.hidden = !open;
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+      brMenu.addEventListener('click', function (e) {
+        if (e.target.closest('[data-close]')) brClose();
+      });
+      addEventListener('keydown', function (e) { if (e.key === 'Escape' && !brMenu.hidden) brClose(); });
+      /* вкладки Casino / Sports */
+      var brSegs = [].slice.call(brMenu.querySelectorAll('.br__seg'));
+      brSegs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          brSegs.forEach(function (o) {
+            var on = o === t;
+            o.classList.toggle('is-active', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          brMenu.querySelectorAll('.br__list').forEach(function (l) {
+            l.hidden = l.id !== 'br-' + t.dataset.br;
+          });
+        });
+      });
+      /* разделы, для которых у нас есть страница, открывают её */
+      brMenu.querySelectorAll('.br__item').forEach(function (it) {
+        it.addEventListener('click', function () {
+          var go = it.dataset.go;
+          brMenu.querySelectorAll('.br__item').forEach(function (o) { o.classList.toggle('is-active', o === it); });
+          if (!go) return;
+          brClose();
+          showView(go === 'sport' ? 'sport' : (chipView[go] || 'casino'));
+        });
+      });
+      /* поле поиска открывает наше окно поиска */
+      brMenu.querySelector('.br__search').addEventListener('click', function () {
+        brClose();
+        var sb = document.querySelector('.btn-search') || document.querySelector('.cas-search');
+        if (sb) sb.click();
       });
     }
 
