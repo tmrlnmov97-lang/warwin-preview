@@ -2529,6 +2529,80 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .pm__menu { padding: 0; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   Вкладка Verification. Данные — четыре документа; вид свой: те же
+   карточки и та же лесенка отступов, что на General
+   (32 между карточками > 24 поле > 16 внутри > 8 подпись).
+   ═══════════════════════════════════════════════════════════════════ */
+.vf__head-row { display: flex; align-items: flex-end; gap: 24px; }
+.vf__intro { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.vf__h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+          font-size: 20px; line-height: 26px; color: var(--white); }
+.vf__intro p { margin: 0; max-width: 640px; font-family: 'Work Sans', sans-serif;
+               font-size: 13px; line-height: 18px; color: var(--dp-label); }
+.vf__steps { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.vf__steps > span { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                    font-size: 11px; line-height: 16px; letter-spacing: .05em;
+                    text-transform: uppercase; color: var(--dp-label); }
+.vf__track { display: block; width: 140px; height: 6px; border-radius: 999px;
+             background: var(--white-10); overflow: hidden; }
+.vf__track i { display: block; height: 100%; background: var(--register); border-radius: 999px; }
+.vf__count { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 13px; line-height: 16px; color: var(--white); }
+
+.vf__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* карточка — та же плита, что на General */
+.vf__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 16px;
+            padding: 24px; background: var(--chrome); border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            box-shadow: 0 8px 24px -16px rgba(0, 0, 0, .8); }
+.vf__head { display: flex; align-items: center; gap: 12px; }
+.vf__tile { display: grid; place-items: center; width: 40px; height: 40px; flex: none;
+            border-radius: 12px; }
+.vf__tile img { display: block; }
+.vf__tile--ok   { background: rgba(0, 201, 40, .12); }
+.vf__tile--warn { background: rgba(234, 255, 0, .12); }
+.vf__tile--soft { background: var(--white-06); }
+.vf__title { flex: 1 0 0; min-width: 0; margin: 0;
+             font-family: 'Work Sans', sans-serif; font-weight: 700;
+             font-size: 16px; line-height: 22px; color: var(--white); }
+.vf__desc { margin: 0; font-family: 'Work Sans', sans-serif;
+            font-size: 13px; line-height: 18px; color: var(--dp-label); }
+/* зона загрузки: пунктир, при наведении оживает */
+.vf__drop { display: flex; flex-direction: column; align-items: center; gap: 6px;
+            padding: 24px 16px; border-radius: 12px; cursor: pointer;
+            background: rgba(255, 255, 255, .02);
+            border: 1px dashed var(--dp-line); transition: border-color .15s ease, background .15s ease; }
+.vf__drop[hidden] { display: none; }
+.vf__drop:hover { background: rgba(255, 255, 255, .05); border-color: var(--primary); }
+.vf__drop img { display: block; opacity: .8; }
+.vf__drop b { font-family: 'Work Sans', sans-serif; font-weight: 600;
+              font-size: 14px; line-height: 20px; color: var(--white); }
+.vf__drop span { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+                 color: var(--dp-label); }
+/* выбранный файл */
+.vf__file { display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+            background: var(--white-04); border: 1px solid var(--white-06); border-radius: 12px; }
+.vf__file[hidden] { display: none; }
+.vf__file img { display: block; flex: none; }
+.vf__file-name { flex: 1 0 0; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+                 white-space: nowrap; font-family: 'Work Sans', sans-serif; font-weight: 500;
+                 font-size: 13px; line-height: 18px; color: var(--white); }
+.vf__replace { flex: none; padding: 0; background: none; border: 0; cursor: pointer;
+               font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 13px; line-height: 18px; color: var(--primary); }
+.vf__foot { margin: 0; padding: 0 4px; font-family: 'Work Sans', sans-serif;
+            font-size: 12px; line-height: 16px; color: var(--dp-label); }
+/* приглушённый значок для необязательных документов */
+.prof__badge--soft { background: var(--white-06); color: var(--dp-label); }
+
+@media (max-width: 720px) {
+  .vf__grid { grid-template-columns: 1fr; gap: 16px; }
+  .vf__card { padding: 16px; gap: 12px; }
+  .vf__head-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .vf__steps { align-items: flex-start; }
+}
+
 </style>
 </head>
 <body>
@@ -3438,8 +3512,99 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         </div>
         </div>
 
+        <!-- Верификация: четыре документа. Вид наш — те же карточки и та же
+             лесенка отступов, что на General. -->
         <div class="prof__panel" id="prof-verification" role="tabpanel" hidden>
-          <p class="prof__empty">This section is not designed yet.</p>
+          <div class="vf__head-row">
+            <div class="vf__intro">
+              <h2 class="vf__h2">Verification</h2>
+              <p>Needed once before your first withdrawal. The check takes up to 15 minutes — you can play and deposit right now.</p>
+            </div>
+            <div class="vf__steps">
+              <span>Required steps</span>
+              <span class="vf__track"><i style="width:50%%"></i></span>
+              <b class="vf__count">1 of 2</b>
+            </div>
+          </div>
+          <div class="vf__grid">
+            <section class="vf__card" data-doc="front">
+              <div class="vf__head">
+                <span class="vf__tile vf__tile--ok"><img loading="lazy" decoding="async" src="a/4f8ff11129.svg" alt="" width="20" height="20"></span>
+                <h3 class="vf__title">Proof of identity (front)</h3>
+                <em class="prof__badge prof__badge--warn">Required</em>
+              </div>
+              <p class="vf__desc">Passport, ID card or driver’s licence — the side with your photo.</p>
+              <label class="vf__drop">
+                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
+                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
+                <b>Upload ID front</b>
+                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
+              </label>
+              <div class="vf__file" hidden>
+                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
+                <span class="vf__file-name"></span>
+                <button class="vf__replace" type="button">Replace</button>
+              </div>
+            </section>
+            <section class="vf__card" data-doc="back">
+              <div class="vf__head">
+                <span class="vf__tile vf__tile--warn"><img loading="lazy" decoding="async" src="a/68da4afb63.svg" alt="" width="20" height="20"></span>
+                <h3 class="vf__title">Proof of identity (back)</h3>
+                <em class="prof__badge prof__badge--warn">Required</em>
+              </div>
+              <p class="vf__desc">The reverse side of the same document.</p>
+              <label class="vf__drop">
+                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
+                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
+                <b>Upload ID back</b>
+                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
+              </label>
+              <div class="vf__file" hidden>
+                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
+                <span class="vf__file-name"></span>
+                <button class="vf__replace" type="button">Replace</button>
+              </div>
+            </section>
+            <section class="vf__card" data-doc="address">
+              <div class="vf__head">
+                <span class="vf__tile vf__tile--soft"><img loading="lazy" decoding="async" src="a/8014eb7df6.svg" alt="" width="20" height="20"></span>
+                <h3 class="vf__title">Proof of address</h3>
+                <em class="prof__badge prof__badge--soft">Not needed yet</em>
+              </div>
+              <p class="vf__desc">A utility bill or a bank statement no older than 3 months.</p>
+              <label class="vf__drop">
+                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
+                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
+                <b>Upload image</b>
+                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
+              </label>
+              <div class="vf__file" hidden>
+                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
+                <span class="vf__file-name"></span>
+                <button class="vf__replace" type="button">Replace</button>
+              </div>
+            </section>
+            <section class="vf__card" data-doc="funds">
+              <div class="vf__head">
+                <span class="vf__tile vf__tile--soft"><img loading="lazy" decoding="async" src="a/217c9cbb02.svg" alt="" width="20" height="20"></span>
+                <h3 class="vf__title">Source of funds</h3>
+                <em class="prof__badge prof__badge--soft">Not needed yet</em>
+              </div>
+              <p class="vf__desc">We ask separately if needed — you will get an e-mail.</p>
+              <label class="vf__drop">
+                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
+                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
+                <b>Upload image</b>
+                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
+              </label>
+              <div class="vf__file" hidden>
+                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
+                <span class="vf__file-name"></span>
+                <button class="vf__replace" type="button">Replace</button>
+              </div>
+            </section>
+          </div>
+          <p class="vf__foot">Documents are encrypted and visible only to the review team.</p>
         </div>
         <div class="prof__panel" id="prof-security" role="tabpanel" hidden>
           <p class="prof__empty">This section is not designed yet.</p>
@@ -5197,6 +5362,33 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             o.setAttribute('aria-selected', on ? 'true' : 'false');
           });
           profPanels.forEach(function (p) { p.hidden = p.id !== 'prof-' + t.dataset.tab; });
+        });
+      });
+
+      /* Верификация: выбранный файл показываем в карточке, значок переходит
+         в «In review». Replace возвращает зону загрузки. */
+      profView.querySelectorAll('.vf__card').forEach(function (card) {
+        var input = card.querySelector('input[type=file]');
+        var drop = card.querySelector('.vf__drop');
+        var file = card.querySelector('.vf__file');
+        var name = card.querySelector('.vf__file-name');
+        var badge = card.querySelector('.prof__badge');
+        var badgeBase = { text: badge.textContent, cls: badge.className };
+        input.addEventListener('change', function () {
+          var f = input.files && input.files[0];
+          if (!f) return;
+          name.textContent = f.name + '  ·  ' + (f.size / 1048576).toFixed(1) + ' MB';
+          file.hidden = false;
+          drop.hidden = true;
+          badge.textContent = 'In review';
+          badge.className = 'prof__badge prof__badge--ok';
+        });
+        card.querySelector('.vf__replace').addEventListener('click', function () {
+          input.value = '';
+          file.hidden = true;
+          drop.hidden = false;
+          badge.textContent = badgeBase.text;
+          badge.className = badgeBase.cls;
         });
       });
 
