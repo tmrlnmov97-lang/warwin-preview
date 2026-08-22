@@ -2603,6 +2603,71 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .vf__steps { align-items: flex-start; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   Вкладка Security: смена пароля и журнал входов. Та же лесенка
+   отступов, что на General и Verification.
+   ═══════════════════════════════════════════════════════════════════ */
+.sec__pass { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px 20px; }
+/* кнопка глаза внутри поля — та же, что в окне входа */
+.sec__eye { flex: none; display: flex; padding: 0; border: 0; background: none; cursor: pointer; }
+.sec__eye img { display: block; opacity: .6; }
+.sec__eye:hover img { opacity: 1; }
+.sec__pass-foot { display: flex; align-items: center; gap: 16px; }
+.sec__hint { margin: 0; flex: 1 0 0; min-width: 0;
+             font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+             color: var(--dp-label); }
+.sec__hint.is-bad { color: #e5484d; }
+.sec__hint.is-ok  { color: var(--register); }
+.prof__btn[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .45); cursor: default; }
+
+/* журнал входов */
+.sec__table-wrap { overflow-x: auto; }
+.sec__table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.sec__table th {
+  padding: 0 12px 10px; text-align: left; white-space: nowrap;
+  font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 11px; line-height: 16px;
+  letter-spacing: .05em; text-transform: uppercase; color: var(--dp-label);
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+.sec__table td {
+  padding: 14px 12px; vertical-align: middle;
+  font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px; color: var(--white);
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.sec__table tr:last-child td { border-bottom: 0; }
+.sec__table tbody tr:hover td { background: rgba(255, 255, 255, .03); }
+.sec__table th:first-child, .sec__table td:first-child { padding-left: 4px; }
+.sec__table th:last-child,  .sec__table td:last-child  { padding-right: 4px; text-align: right; }
+/* строка агента длинная — держим в одну строку, полностью видно по наведению */
+.sec__ua { width: 38%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+           color: var(--dp-label); }
+.sec__ip { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sec__ip i { font-style: normal; margin-left: 6px; padding: 1px 6px; border-radius: 999px;
+             background: var(--white-06); font-size: 11px; color: var(--dp-label); }
+.sec__date { white-space: nowrap; color: var(--dp-label); font-variant-numeric: tabular-nums; }
+.sec__st { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+           border-radius: 999px; font-weight: 600; font-size: 12px; line-height: 16px; }
+.sec__st::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.sec__st--active { background: rgba(0, 201, 40, .14); color: var(--register); }
+.sec__st--off    { background: var(--white-06); color: var(--dp-label); }
+
+/* листалка */
+.sec__pager { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.sec__page { min-width: 36px; height: 36px; padding: 0 10px; border: 0; border-radius: 10px;
+             background: var(--white-06); cursor: pointer;
+             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px;
+             color: var(--white); }
+.sec__page:hover { background: var(--white-10); }
+.sec__page.is-active { background: var(--primary); }
+.sec__page[disabled] { opacity: .4; cursor: default; }
+.sec__gap { padding: 0 2px; color: var(--dp-label); }
+
+@media (max-width: 900px) { .sec__pass { grid-template-columns: 1fr; } }
+@media (max-width: 720px) {
+  .sec__table { table-layout: auto; min-width: 720px; }
+  .sec__pager { flex-wrap: wrap; }
+}
+
 </style>
 </head>
 <body>
@@ -3605,8 +3670,109 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
           <p class="vf__foot">Documents are encrypted and visible only to the review team.</p>
         </div>
+        <!-- Security: смена пароля и журнал входов. Вид наш — те же карточки
+             и та же лесенка отступов, что на General и Verification. -->
         <div class="prof__panel" id="prof-security" role="tabpanel" hidden>
-          <p class="prof__empty">This section is not designed yet.</p>
+          <section class="prof__card">
+            <div class="prof__card-head">
+              <h2>Password</h2>
+              <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
+            </div>
+            <div class="sec__pass">
+              <div class="prof__cell">
+                <span class="prof__label">Current password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="current-password" aria-label="Current password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+              <div class="prof__cell">
+                <span class="prof__label">New password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="new-password" aria-label="New password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+              <div class="prof__cell">
+                <span class="prof__label">Repeat new password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="new-password" aria-label="Repeat new password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+            </div>
+            <div class="sec__pass-foot">
+              <p class="sec__hint"></p>
+              <button class="prof__btn prof__btn--primary sec__submit" type="button" disabled>Change password</button>
+            </div>
+          </section>
+
+          <section class="prof__card">
+            <div class="prof__card-head">
+              <h2>Sessions</h2>
+              <p>Where your account was opened. If you see a device you do not recognise — change the password.</p>
+            </div>
+            <div class="sec__table-wrap">
+              <table class="sec__table">
+                <thead>
+                  <tr><th>Device</th><th>IP</th><th>System</th><th>Browser</th><th>Status</th><th>Date</th></tr>
+                </thead>
+                <tbody>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Opera 122.0.4.5</td>
+                <td><em class="sec__st sec__st--active">Active</em></td>
+                <td class="sec__date">22.04.2025, 22:40</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">69.67.148.93 <i>MX</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Opera 122.0.4.5</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">22.04.2025, 21:12</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">149.50.216.82 <i>TR</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Chrome 138.0.0.0</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">21.04.2025, 09:05</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">149.50.216.82 <i>SE</i></td>
+                <td>macOS 14.4</td>
+                <td>Safari 17.4</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">19.04.2025, 18:31</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Opera 122.0.4.5</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">17.04.2025, 12:47</td>
+              </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="sec__pager">
+              <button class="sec__page sec__page--nav" type="button" aria-label="Назад" disabled>&lsaquo;</button>
+              <button class="sec__page is-active" type="button">1</button>
+              <button class="sec__page" type="button">2</button>
+              <button class="sec__page" type="button">3</button>
+              <span class="sec__gap">…</span>
+              <button class="sec__page" type="button">12</button>
+              <button class="sec__page" type="button">13</button>
+              <button class="sec__page" type="button">14</button>
+              <button class="sec__page sec__page--nav" type="button" aria-label="Вперёд">&rsaquo;</button>
+            </div>
+          </section>
         </div>
       </div>
 
@@ -5366,6 +5532,48 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       /* Верификация: выбранный файл показываем в карточке, значок переходит
          в «In review». Replace возвращает зону загрузки. */
+      /* Security: показ пароля, проверка совпадения и листалка журнала. */
+      var secPanel = document.getElementById('prof-security');
+      if (secPanel) {
+        secPanel.querySelectorAll('.sec__eye').forEach(function (eye) {
+          eye.addEventListener('click', function (e) {
+            e.preventDefault();
+            var i = eye.parentElement.querySelector('input');
+            var show = i.type === 'password';
+            i.type = show ? 'text' : 'password';
+            eye.setAttribute('aria-label', show ? 'Скрыть пароль' : 'Показать пароль');
+          });
+        });
+        var secInputs = [].slice.call(secPanel.querySelectorAll('.sec__pass input'));
+        var secHint = secPanel.querySelector('.sec__hint');
+        var secBtn = secPanel.querySelector('.sec__submit');
+        var secCheck = function () {
+          var cur = secInputs[0].value, a = secInputs[1].value, b = secInputs[2].value;
+          var msg = '', cls = '', ok = false;
+          if (!cur || !a || !b) msg = '';
+          else if (a.length < 8) { msg = 'Minimum 8 characters.'; cls = 'is-bad'; }
+          else if (a !== b) { msg = 'The new passwords do not match.'; cls = 'is-bad'; }
+          else if (a === cur) { msg = 'The new password repeats the current one.'; cls = 'is-bad'; }
+          else { msg = 'Looks good.'; cls = 'is-ok'; ok = true; }
+          secHint.textContent = msg;
+          secHint.className = 'sec__hint ' + cls;
+          secBtn.disabled = !ok;
+        };
+        secInputs.forEach(function (i) { i.addEventListener('input', secCheck); });
+        secBtn.addEventListener('click', function () {
+          secInputs.forEach(function (i) { i.value = ''; i.type = 'password'; });
+          secHint.textContent = 'Password changed.';
+          secHint.className = 'sec__hint is-ok';
+          secBtn.disabled = true;
+        });
+        var secPages = [].slice.call(secPanel.querySelectorAll('.sec__page:not(.sec__page--nav)'));
+        secPages.forEach(function (b) {
+          b.addEventListener('click', function () {
+            secPages.forEach(function (o) { o.classList.toggle('is-active', o === b); });
+          });
+        });
+      }
+
       /* Счётчик обязательных документов: считаем по факту загрузки, полоса
          тянется следом. Раньше стояла статичная половина, хотя не загружено
          ничего — и было непонятно, о чём она. */
