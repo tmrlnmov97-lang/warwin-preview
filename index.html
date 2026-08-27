@@ -1566,6 +1566,8 @@ body {
 /* Баннеры после входа (904:1821) существуют только в десктопном макете,
    поэтому базово они выключены и включаются внутри брейкпоинта. */
 .hero__bg--authed, .hero__copy--authed, .hero__nav { display: none; }
+/* 920:31062 — у баннера после входа свой мобильный макет, на десктопе его нет */
+.hero__bg--mob-authed, .hero__copy--mob-authed { display: none; }
 @media (min-width: 1024px) {
   .banner { display: none; }
   .hero {
@@ -1596,8 +1598,9 @@ body {
   .hero__bg { position: absolute; right: 0; top: 0; height: 100%; width: auto;
               display: block; max-width: none; pointer-events: none; }
   /* У мобильной подложки тот же класс hero__bg, и правило выше включало её
-     обратно на десктопе — она ложилась поверх и обрезала арт справа. */
-  .hero__bg--mob { display: none; }
+     обратно на десктопе — она ложилась поверх и обрезала арт справа.
+     То же и с баннером входа: у него мобильный макет, на десктопе своя карусель. */
+  .hero__bg--mob, .hero__bg--mob-authed { display: none; }
   /* Кант отдельным слоем поверх картинки. outline и border рисуются под
      содержимым, а фон непрозрачный и закрывал их — кант пропадал справа. */
   .hero__banner::after {
@@ -1624,6 +1627,8 @@ body {
   .hslide.is-current { opacity: 1; visibility: visible; }
   .hero__copy { position: absolute; left: 32px; top: 32px; width: 376px;
                 display: flex; flex-direction: column; gap: 32px; }
+  /* Правило выше по весу равно базовому и включало бы мобильный блок входа */
+  .hero__copy--mob-authed { display: none; }
   /* 1187:15585 — 360, 1187:15586 — 372, цвет #dcdcdc вместо акцентного */
   .hero .hero__copy--authed .hero__title { width: 360px; }
   .hero .hero__copy--authed .hero__sub { width: 372px; color: #dcdcdc; }
@@ -1960,8 +1965,46 @@ body {
   .hero__copy { position: absolute; left: 20px; top: 25px; width: 212px;
                 display: flex; flex-direction: column; gap: 32px; }
   /* Правило выше по весу равно базовому и включало бы копи-блок входа:
-     в мобильном макете этого баннера нет, гасим адресно. */
+     десктопные слайды на мобильной не показываем, у неё свой баннер. */
   .hero__copy--authed { display: none; }
+  /* Тем же правилом .hero__copy включался бы и блок входа — гостю он не нужен */
+  .hero__copy--mob-authed { display: none; }
+
+  /* ── 920:31062 — баннер главной после входа. Карточка 370x199: чип на
+     (20,22), заголовок на 48, подпись на 104, кнопка 100x30 на 147. ── */
+  body.is-authed .hero__banner { height: 199px; }
+  body.is-authed .hero__bg--mob { display: none; }
+  body.is-authed .hero__bg--mob-authed {
+    display: block; position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  /* Гостевой текст с REGISTER после входа не нужен */
+  body.is-authed .hero__copy--guest { display: none; }
+  body.is-authed .hero__copy--mob-authed {
+    display: flex; position: absolute; left: 20px; top: 22px; width: 200px;
+    flex-direction: column; align-items: flex-start; gap: 8px;
+  }
+  /* 920:31050 — чип 54x18, белый на 10% */
+  .hero__chip { display: inline-flex; align-items: center; box-sizing: border-box;
+                height: 18px; padding: 0 12px; border-radius: 12px;
+                background: var(--white-10); font-family: 'Work Sans', sans-serif;
+                font-weight: 400; font-size: 12px; line-height: 16px; color: var(--white); }
+  .hero__copy--mob-authed .hero__text { gap: 8px; }
+  /* 920:31053 — 24/24 в колонке 158, две строки */
+  .hero__copy--mob-authed .hero__title { width: 158px; margin: 0;
+                                         font-weight: 700; font-size: 24px; line-height: 24px; }
+  /* 920:31054 — 14 в колонке 160, светло-серый */
+  .hero__copy--mob-authed .hero__sub { width: 160px; margin: 0;
+                                       font-family: 'Instrument Sans', sans-serif; font-weight: 500;
+                                       font-size: 14px; line-height: 16px; color: #eaeaea; }
+  /* 920:31055 — кнопка 100x30, синяя, подпись 12. Отступ 3, а не 8: Figma
+     меряет текст по капительной высоте, её блок подписи на 5px ниже нашего,
+     и без поправки кнопка уезжала с 147 на 152. */
+  .hero__copy--mob-authed .hero__cta { margin-top: 3px; width: 100px; height: 30px;
+                                       padding: 0; border-radius: 10px;
+                                       background: var(--primary); font-size: 12px; }
+  .hero__copy--mob-authed .hero__cta:hover  { background: var(--primary-hover, #279fff); }
+  .hero__copy--mob-authed .hero__cta:active { background: var(--primary-active, #0680dd); }
   .hero__text { gap: 16px; }
   .hero__title { width: 196px; font-size: 24px; line-height: 24px; margin: -3px 0; }
   .hero__sub   { width: 160px; font-size: 16px; line-height: 20px; }
@@ -3282,6 +3325,18 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <!-- 1118:12299 — фон баннера выгружен из Figma одним куском -->
         <img class="hero__bg hero__bg--guest" src="a/da81e07337.webp" alt="">
         <img class="hero__bg hero__bg--mob" src="a/82ed8cf07a.webp" alt="" data-node-id="903:41876">
+        <!-- 920:31062 — баннер главной после входа на мобильной. Арт выгружен
+             одним куском (карточка 370x199 без текста), поверх лежат чип,
+             заголовок, подпись и кнопка. -->
+        <img class="hero__bg hero__bg--mob-authed" src="a/e8baa7a321.webp" alt="" data-node-id="920:30948">
+        <div class="hero__copy hero__copy--mob-authed" data-node-id="920:31048">
+          <span class="hero__chip" data-node-id="920:31050">Slots</span>
+          <div class="hero__text">
+            <h1 class="hero__title" data-node-id="920:31053">FREE SPINS GIVEAWAY</h1>
+            <p class="hero__sub" data-node-id="920:31054">20 FREE SPINS ON FIRE IN GET OF OLYMPUS</p>
+          </div>
+          <button class="hero__cta hero__cta--join" type="button" data-node-id="920:31055">Join now</button>
+        </div>
         <!-- Баннеры после входа. Новый баннер — ещё один .hslide такого же
              вида; стрелки сами включатся, как только слайдов станет больше
              одного. Классы --authed внутри слайда обязательны: по ним
