@@ -2132,6 +2132,143 @@ body.is-authed .wallet { display: flex; }
 .wallet__deposit:hover { filter: brightness(1.06); }
 
 /* ═══════════════════════════════════════════════════════════════════
+   1358:18986 «History» — вкладки Casino / Sportsbook / Bonus, фильтры,
+   таблица ставок и страницы. Колонки: игра тянется, три правых по 160/200/200.
+   ═══════════════════════════════════════════════════════════════════ */
+.view--history { display: flex; flex-direction: column; gap: 20px; }
+.view--history[hidden] { display: none; }
+.hist__head { display: flex; flex-direction: column; gap: 16px; }
+.hist__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 32px; line-height: 40px; color: var(--white); }
+.hist__tabs { display: flex; gap: 8px; }
+.hist__tab { display: flex; align-items: center; height: 36px; padding: 0 16px; cursor: pointer;
+             border: 0; border-radius: 999px; background: var(--white-10); color: var(--white);
+             font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 16px; }
+.hist__tab:hover { background: var(--white-16); }
+.hist__tab.is-active { background: #00c1ff; color: #000; }
+
+.hist__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;
+              width: 100%; padding: 24px; border-radius: 20px;
+              background: #181e3b; border: 1px solid rgba(255, 255, 255, .08); }
+.hist__card[hidden] { display: none; }
+
+.hist__filters { display: flex; gap: 12px; }
+.hist__filter { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.hist__filter > span { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                       font-size: 12px; line-height: 16px; color: var(--dp-label); }
+.hist__select { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
+                width: 100%; height: 48px; padding: 0 14px; cursor: pointer;
+                background: #30354f; border: 0; border-radius: 12px; color: var(--white);
+                font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px; }
+.hist__select img { display: block; opacity: .7; }
+.hist__select:hover { background: #363c59; }
+
+.hist__table { display: flex; flex-direction: column; }
+/* Одна сетка на шапку и строки — иначе колонки разъезжаются */
+.hist__row { display: grid; grid-template-columns: 1fr 160px 200px 200px; align-items: center;
+             gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+.hist__row:last-child { border-bottom: 0; }
+.hist__row--head { padding: 0 0 12px;
+                   font-family: 'Work Sans', sans-serif; font-weight: 500;
+                   font-size: 12px; line-height: 16px; color: var(--dp-label); }
+/* Ячейки шапки набраны теми же классами, что и данные — гасим их стиль */
+.hist__row--head .hist__bet,
+.hist__row--head .hist__win,
+.hist__row--head .hist__date { font-weight: 500; font-size: 12px; line-height: 16px;
+                               color: var(--dp-label); }
+.hist__bet, .hist__win, .hist__date { text-align: right; font-family: 'Work Sans', sans-serif; }
+.hist__game { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.hist__ico { display: block; flex: none; width: 48px; height: 48px; border-radius: 12px; object-fit: cover; }
+.hist__game-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hist__game-text b { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                     font-size: 14px; line-height: 20px; color: var(--white); }
+/* Дата в строке игры нужна только на мобильной, в таблице у неё своя колонка */
+.hist__game-text span { display: none; }
+.hist__bet  { font-weight: 500; font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+.hist__win  { font-weight: 600; font-size: 14px; line-height: 20px; color: var(--white); }
+.hist__win--up   { color: #7ee787; }
+.hist__win--down { color: #e5484d; }
+.hist__date { font-weight: 400; font-size: 14px; line-height: 20px; color: var(--dp-label); }
+
+/* Ставки спортсбука: событий может быть несколько, у ставки один итог */
+.hist__row--bet { align-items: center; padding: 16px 0; }
+.hist__picks { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.hist__pick { display: flex; flex-direction: column; gap: 4px; }
+.hist__pick b { font-family: 'Work Sans', sans-serif; font-weight: 600;
+                font-size: 14px; line-height: 20px; color: var(--white); }
+.hist__pick i { font-style: normal; font-family: 'Work Sans', sans-serif;
+                font-size: 13px; line-height: 18px; color: var(--dp-label); }
+.hist__combo { align-self: flex-start; padding: 3px 8px; border-radius: 6px;
+               background: var(--white-10); font-family: 'Work Sans', sans-serif; font-weight: 500;
+               font-size: 11px; line-height: 14px; color: var(--modal-text-1, #bbc6cd); }
+.hist__row--bet .hist__game { flex-direction: column; align-items: flex-start; gap: 12px; }
+/* Итог ставки одной ячейкой: слово о статусе и сумма выплаты */
+.hist__result { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.hist__status { text-align: right; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                font-size: 14px; line-height: 20px; }
+.hist__status--win  { color: #7ee787; }
+.hist__status--lose { color: #e5484d; }
+.hist__status--wait { color: #fabf2e; }
+.hist__result i { font-style: normal; }
+/* У выигранной ставки в колонке стоит сумма — слово «Won» дублировало бы её */
+.hist__result--won .hist__status { display: none; }
+
+.hist__pager { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.hist__page { box-sizing: border-box; display: flex; align-items: center; justify-content: center;
+              min-width: 40px; height: 40px; padding: 0 8px; cursor: pointer;
+              background: var(--white-06); border: 1px solid rgba(255, 255, 255, .08);
+              border-radius: 10px; color: var(--white);
+              font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px; }
+.hist__page:hover { background: var(--white-10); }
+.hist__page.is-current { background: var(--primary); border-color: var(--primary); font-weight: 600; }
+.hist__page--nav img { display: block; width: 8px; height: 12.4px; opacity: .8; }
+.hist__page--next img { transform: rotate(180deg); }
+.hist__gap { padding: 0 4px; color: var(--dp-label); font-family: 'Work Sans', sans-serif; font-size: 14px; }
+
+.hist__empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 48px 0;
+               font-family: 'Work Sans', sans-serif; text-align: center; }
+.hist__empty b { font-weight: 600; font-size: 16px; line-height: 22px; color: var(--white); }
+.hist__empty span { font-size: 13px; line-height: 18px; color: var(--dp-label); }
+
+@media (max-width: 767px) {
+  /* Колонок нет: ставка — строка в два яруса, суммы прижаты вправо */
+  .view--history { gap: 16px; }
+  .hist__h1 { font-size: 24px; line-height: 32px; }
+  .hist__tabs { margin: 0 calc(-1 * var(--edge, 16px)); padding: 0 var(--edge, 16px);
+                overflow-x: auto; scrollbar-width: none; }
+  .hist__tabs::-webkit-scrollbar { display: none; }
+  .hist__tab { flex: none; height: 34px; padding: 0 14px; font-size: 14px; }
+  .hist__card { padding: 16px; gap: 16px; }
+  .hist__filters { flex-wrap: wrap; }
+  .hist__filter { flex: 1 1 calc(50% - 6px); }
+  .hist__filter:last-child { flex: 1 1 100%; }
+  .hist__row { grid-template-columns: 1fr auto; gap: 4px 12px; padding: 14px 0; }
+  .hist__row--head { display: none; }
+  .hist__ico { width: 44px; height: 44px; }
+  .hist__game-text b { font-weight: 600; font-size: 15px; }
+  .hist__game-text span { display: block; font-family: 'Work Sans', sans-serif;
+                          font-size: 12px; line-height: 16px; color: var(--dp-label); }
+  /* Итог важнее ставки — ставим его первой строкой, ставку под ним */
+  .hist__game { grid-row: 1 / span 2; grid-column: 1; }
+  .hist__win { grid-row: 1; grid-column: 2; font-size: 15px; }
+  .hist__bet { grid-row: 2; grid-column: 2; font-size: 13px; line-height: 18px; }
+  .hist__bet::before { content: 'Bet '; }
+  .hist__date { display: none; }
+  /* Спортсбук: сверху статус, снизу ставка */
+  .hist__row--bet { grid-template-columns: 1fr auto; row-gap: 10px; }
+  .hist__row--bet .hist__game { grid-row: 2; grid-column: 1 / -1; }
+  .hist__row--bet .hist__result { grid-row: 1; grid-column: 2; }
+  .hist__row--bet .hist__bet { grid-row: 3; grid-column: 1; text-align: left; }
+  /* на узком экране в углу стоят и слово, и сумма — колонок для них нет */
+  .hist__result--won .hist__status { display: block; }
+  .hist__pick b { font-size: 15px; }
+  /* Экспресс на 402 разворачивался на восемь строк — оставляем первое
+     событие, остальные считает плашка «Combo · N selections» */
+  .hist__picks .hist__pick:not(:first-child) { display: none; }
+  .hist__page--wide:nth-of-type(n+3) { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    1180:32120 «My Wallet» — модалка Deposit/Withdraw по кнопке DEPOSIT.
    Окно 600x570: поля 60 по бокам, 32 снизу, зазор между блоками 32.
    Заголовок и крестик стоят абсолютно — в макете они вне колонки 480.
@@ -4212,6 +4349,184 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         </div>
       </div>
 
+      <!-- 1358:18986 «History» — вкладки Casino / Sportsbook / Bonus,
+           фильтры, таблица ставок и постраничная навигация. -->
+      <div class="view view--history" id="view-history" hidden data-node-id="1358:18986">
+        <div class="hist__head">
+          <h1 class="hist__h1">History</h1>
+          <div class="hist__tabs" role="tablist">
+            <button class="hist__tab is-active" type="button" role="tab" aria-selected="true" data-hist="casino">Casino</button>
+            <button class="hist__tab" type="button" role="tab" aria-selected="false" data-hist="sportsbook">Sportsbook</button>
+            <button class="hist__tab" type="button" role="tab" aria-selected="false" data-hist="bonus">Bonus</button>
+          </div>
+        </div>
+
+        <div class="hist__card" id="hist-casino" role="tabpanel">
+        <div class="hist__filters">
+          <label class="hist__filter"><span>Game</span>
+            <button class="hist__select" type="button">All<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+          <label class="hist__filter"><span>Result</span>
+            <button class="hist__select" type="button">All<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+          <label class="hist__filter"><span>Period</span>
+            <button class="hist__select" type="button">This month<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+        </div>
+          <div class="hist__table">
+            <div class="hist__row hist__row--head">
+              <span>Game</span><span class="hist__bet">Bet sum</span>
+              <span class="hist__win">Win</span><span class="hist__date">Date</span>
+            </div>
+          <div class="hist__row">
+            <div class="hist__game">
+              <img loading="lazy" decoding="async" class="hist__ico" src="a/7ed0e58ef5.webp" alt="" width="48" height="48">
+              <div class="hist__game-text"><b>Baccarat</b><span>22.04.2025, 22:40</span></div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__win hist__win--up">+1,500.00 USDT</span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row">
+            <div class="hist__game">
+              <img loading="lazy" decoding="async" class="hist__ico" src="a/52acb922e7.webp" alt="" width="48" height="48">
+              <div class="hist__game-text"><b>Space Man</b><span>22.04.2025, 22:40</span></div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__win hist__win--down">-240.00 USDT</span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row">
+            <div class="hist__game">
+              <img loading="lazy" decoding="async" class="hist__ico" src="a/f992e5d1ce.webp" alt="" width="48" height="48">
+              <div class="hist__game-text"><b>Aviator</b><span>22.04.2025, 22:40</span></div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__win hist__win--up">+5,000.00 USDT</span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row">
+            <div class="hist__game">
+              <img loading="lazy" decoding="async" class="hist__ico" src="a/43ab6869d1.webp" alt="" width="48" height="48">
+              <div class="hist__game-text"><b>Sweet Bonanza</b><span>22.04.2025, 22:40</span></div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__win hist__win--up">+1,500.00 USDT</span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row">
+            <div class="hist__game">
+              <img loading="lazy" decoding="async" class="hist__ico" src="a/52acb922e7.webp" alt="" width="48" height="48">
+              <div class="hist__game-text"><b>Space Man</b><span>22.04.2025, 22:40</span></div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__win hist__win--up">+200.00 USDT</span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          </div>
+        <div class="hist__pager">
+          <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+          <button class="hist__page is-current" type="button">1</button>
+          <button class="hist__page" type="button">2</button>
+          <button class="hist__page" type="button">3</button>
+          <span class="hist__gap">…</span>
+          <button class="hist__page hist__page--wide" type="button">12</button>
+          <button class="hist__page hist__page--wide" type="button">13</button>
+          <button class="hist__page hist__page--wide" type="button">14</button>
+          <button class="hist__page hist__page--nav hist__page--next" type="button" aria-label="Вперёд"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+        </div>
+        </div>
+
+        <div class="hist__card" id="hist-sportsbook" role="tabpanel" hidden>
+        <div class="hist__filters">
+          <label class="hist__filter"><span>Game</span>
+            <button class="hist__select" type="button">All<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+          <label class="hist__filter"><span>Result</span>
+            <button class="hist__select" type="button">All<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+          <label class="hist__filter"><span>Period</span>
+            <button class="hist__select" type="button">This month<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+        </div>
+          <div class="hist__table">
+            <div class="hist__row hist__row--head">
+              <span>Game</span><span class="hist__bet">Stake</span>
+              <span class="hist__win">Status</span><span class="hist__date">Date</span>
+            </div>
+          <div class="hist__row hist__row--bet">
+            <div class="hist__game">
+              <div class="hist__picks">
+              <span class="hist__pick"><b>Barcelona vs Real Madrid</b><i>Full Time 1 &amp; Over 2.5</i></span>
+              </div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__result"><b class="hist__status hist__status--wait">Pending</b></span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row hist__row--bet">
+            <div class="hist__game">
+              <span class="hist__combo">Combo · 4 selections</span>
+              <div class="hist__picks">
+              <span class="hist__pick"><b>Manchester United vs Liverpool</b><i>Full Time 2 &amp; Over 2.5</i></span>
+              <span class="hist__pick"><b>Bayern Munich vs Borussia Dortmund</b><i>Both Teams to Score</i></span>
+              <span class="hist__pick"><b>Inter Milan vs AC Milan</b><i>Full Time 1</i></span>
+              <span class="hist__pick"><b>Real Madrid vs Atletico Madrid</b><i>Over 3.5 Goals</i></span>
+              </div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__result"><b class="hist__status hist__status--lose">Lose</b></span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row hist__row--bet">
+            <div class="hist__game">
+              <div class="hist__picks">
+              <span class="hist__pick"><b>Chelsea vs Arsenal</b><i>Full Time 2</i></span>
+              </div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__result hist__result--won"><b class="hist__status hist__status--win">Won</b><i class="hist__win hist__win--up">+2,500.00 USDT</i></span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row hist__row--bet">
+            <div class="hist__game">
+              <span class="hist__combo">Combo · 2 selections</span>
+              <div class="hist__picks">
+              <span class="hist__pick"><b>Paris Saint-Germain vs Marseille</b><i>Full Time 1 &amp; Over 2.5</i></span>
+              <span class="hist__pick"><b>Chelsea vs Tottenham</b><i>Both Teams to Score</i></span>
+              </div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__result hist__result--won"><b class="hist__status hist__status--win">Won</b><i class="hist__win hist__win--up">+4,000.00 USDT</i></span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          <div class="hist__row hist__row--bet">
+            <div class="hist__game">
+              <div class="hist__picks">
+              <span class="hist__pick"><b>Barcelona vs Real Madrid</b><i>Full Time 1 &amp; Over 2.5</i></span>
+              </div>
+            </div>
+            <span class="hist__bet">500 USDT</span>
+            <span class="hist__result hist__result--won"><b class="hist__status hist__status--win">Won</b><i class="hist__win hist__win--up">+1,000.00 USDT</i></span>
+            <span class="hist__date">22.04.2025, 22:40</span>
+          </div>
+          </div>
+        <div class="hist__pager">
+          <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+          <button class="hist__page is-current" type="button">1</button>
+          <button class="hist__page" type="button">2</button>
+          <button class="hist__page" type="button">3</button>
+          <span class="hist__gap">…</span>
+          <button class="hist__page hist__page--wide" type="button">12</button>
+          <button class="hist__page hist__page--wide" type="button">13</button>
+          <button class="hist__page hist__page--wide" type="button">14</button>
+          <button class="hist__page hist__page--nav hist__page--next" type="button" aria-label="Вперёд"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+        </div>
+        </div>
+
+        <!-- Макета для бонусов нет: пока пустое состояние, а не выдуманные строки -->
+        <div class="hist__card" id="hist-bonus" role="tabpanel" hidden>
+          <div class="hist__empty">
+            <b>No bonus history yet</b>
+            <span>Granted and used bonuses will appear here.</span>
+          </div>
+        </div>
+      </div>
+
       <div class="view view--casino" id="view-casino" hidden data-node-id="1089:9816">
         <div class="cas-head">
         <!-- 1104:13484 — поиск в шапке страницы казино -->
@@ -6075,7 +6390,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     casino: document.getElementById('view-casino'),
                     crash: document.getElementById('view-crash'),
                     sport: document.getElementById('view-sport'),
-                    profile: document.getElementById('view-profile') };
+                    profile: document.getElementById('view-profile'),
+                    history: document.getElementById('view-history') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
@@ -6308,8 +6624,31 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           var go = it.dataset.go;
           pmClose();
           if (go === 'profile') showView('profile');
+          else if (go === 'history') showView('history');
           else if (go === 'wallet') { var d = document.querySelector('.wallet__deposit'); if (d) d.click(); }
           else if (go === 'logout') { document.body.classList.remove('is-authed'); showView('home'); }
+        });
+      });
+    }
+
+    /* 1358:18986 — вкладки истории: активна ровно одна, панели переключаются */
+    var histView = document.getElementById('view-history');
+    if (histView) {
+      var histTabs = [].slice.call(histView.querySelectorAll('.hist__tab'));
+      var histPanels = { casino: document.getElementById('hist-casino'),
+                         sportsbook: document.getElementById('hist-sportsbook'),
+                         bonus: document.getElementById('hist-bonus') };
+      histTabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          var key = t.dataset.hist;
+          histTabs.forEach(function (o) {
+            var on = o === t;
+            o.classList.toggle('is-active', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          Object.keys(histPanels).forEach(function (k) {
+            if (histPanels[k]) histPanels[k].hidden = k !== key;
+          });
         });
       });
     }
