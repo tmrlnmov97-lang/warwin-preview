@@ -5769,9 +5769,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         b.addEventListener('click', openSearch);
       });
       /* На мобильной кнопки поиска в шапке нет — окно открывает пункт
-         Search в нижней панели, иначе до поиска там не добраться */
-      var bnavSearch = document.querySelector('.bnav__item img[src$="nav-search.svg"]');
-      if (bnavSearch) bnavSearch.closest('.bnav__item').addEventListener('click', function (e) {
+         Search в нижней панели, иначе до поиска там не добраться.
+         Ищем по подписи, а не по имени файла иконки: сборка переименовывает
+         ассеты в хэши, и селектор по src на превью не находил ничего. */
+      var bnavSearch = [].slice.call(document.querySelectorAll('.bnav__item'))
+        .filter(function (a) { return /search/i.test(a.textContent); })[0];
+      if (bnavSearch) bnavSearch.addEventListener('click', function (e) {
         e.preventDefault();
         openSearch();
       });
