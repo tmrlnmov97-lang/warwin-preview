@@ -2158,12 +2158,26 @@ body.is-authed .wallet { display: flex; }
 .hist__filter { flex: 0 0 220px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .hist__filter > span { font-family: 'Work Sans', sans-serif; font-weight: 500;
                        font-size: 12px; line-height: 16px; color: var(--dp-label); }
+.hist__picker { position: relative; }
 .hist__select { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
                 width: 100%; height: 48px; padding: 0 14px; cursor: pointer;
                 background: #30354f; border: 0; border-radius: 12px; color: var(--white);
                 font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px; }
-.hist__select img { display: block; opacity: .7; }
+.hist__select img { display: block; opacity: .7; transition: transform .15s ease; }
 .hist__select:hover { background: #363c59; }
+.hist__select[aria-expanded="true"] img { transform: rotate(180deg); }
+/* Список значений — как у выпадающих в поиске: панель на 6, пункты 36 */
+.hist__menu { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 5;
+              margin: 0; padding: 6px; list-style: none;
+              background: var(--menu); border: 1px solid var(--white-10); border-radius: 10px;
+              box-shadow: 0 12px 28px -8px rgba(0, 0, 0, .6); }
+.hist__menu[hidden] { display: none; }
+.hist__menu button { display: flex; align-items: center; width: 100%; height: 36px; padding: 0 10px;
+                     border: 0; border-radius: 6px; background: none; cursor: pointer; text-align: left;
+                     font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px;
+                     color: var(--modal-text-1, #bbc6cd); }
+.hist__menu button:hover { background: var(--white-06); color: var(--white); }
+.hist__menu button[aria-selected="true"] { background: var(--white-10); color: var(--white); }
 
 .hist__table { display: flex; flex-direction: column; }
 /* Одна сетка на шапку и строки — иначе колонки разъезжаются */
@@ -4364,10 +4378,33 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
         <div class="hist__card" id="hist-casino" role="tabpanel">
         <div class="hist__filters">
-          <label class="hist__filter"><span>Result</span>
-            <button class="hist__select" type="button">All<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
-          <label class="hist__filter"><span>Period</span>
-            <button class="hist__select" type="button">This month<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+          <div class="hist__filter">
+            <span>Result</span>
+            <div class="hist__picker" data-filter="result">
+              <button class="hist__select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span class="hist__value">All</span><img loading="lazy" decoding="async" src="a/e139209072.svg" alt="">
+              </button>
+              <ul class="hist__menu" role="listbox" hidden>
+                <li><button type="button" role="option" data-val="all" aria-selected="true">All</button></li>
+                <li><button type="button" role="option" data-val="won" aria-selected="false">Won</button></li>
+                <li><button type="button" role="option" data-val="lose" aria-selected="false">Lost</button></li>
+                <li><button type="button" role="option" data-val="pending" aria-selected="false">Pending</button></li>
+              </ul>
+            </div>
+          </div>
+          <div class="hist__filter">
+            <span>Period</span>
+            <div class="hist__picker" data-filter="period">
+              <button class="hist__select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span class="hist__value">This month</span><img loading="lazy" decoding="async" src="a/e139209072.svg" alt="">
+              </button>
+              <ul class="hist__menu" role="listbox" hidden>
+                <li><button type="button" role="option" data-val="today" aria-selected="false">Today</button></li>
+                <li><button type="button" role="option" data-val="week" aria-selected="false">This week</button></li>
+                <li><button type="button" role="option" data-val="month" aria-selected="true">This month</button></li>
+              </ul>
+            </div>
+          </div>
         </div>
           <div class="hist__table">
             <div class="hist__row hist__row--head">
@@ -4435,10 +4472,33 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
         <div class="hist__card" id="hist-sportsbook" role="tabpanel" hidden>
         <div class="hist__filters">
-          <label class="hist__filter"><span>Result</span>
-            <button class="hist__select" type="button">All<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
-          <label class="hist__filter"><span>Period</span>
-            <button class="hist__select" type="button">This month<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button></label>
+          <div class="hist__filter">
+            <span>Result</span>
+            <div class="hist__picker" data-filter="result">
+              <button class="hist__select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span class="hist__value">All</span><img loading="lazy" decoding="async" src="a/e139209072.svg" alt="">
+              </button>
+              <ul class="hist__menu" role="listbox" hidden>
+                <li><button type="button" role="option" data-val="all" aria-selected="true">All</button></li>
+                <li><button type="button" role="option" data-val="won" aria-selected="false">Won</button></li>
+                <li><button type="button" role="option" data-val="lose" aria-selected="false">Lost</button></li>
+                <li><button type="button" role="option" data-val="pending" aria-selected="false">Pending</button></li>
+              </ul>
+            </div>
+          </div>
+          <div class="hist__filter">
+            <span>Period</span>
+            <div class="hist__picker" data-filter="period">
+              <button class="hist__select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span class="hist__value">This month</span><img loading="lazy" decoding="async" src="a/e139209072.svg" alt="">
+              </button>
+              <ul class="hist__menu" role="listbox" hidden>
+                <li><button type="button" role="option" data-val="today" aria-selected="false">Today</button></li>
+                <li><button type="button" role="option" data-val="week" aria-selected="false">This week</button></li>
+                <li><button type="button" role="option" data-val="month" aria-selected="true">This month</button></li>
+              </ul>
+            </div>
+          </div>
         </div>
           <div class="hist__table">
             <div class="hist__row hist__row--head">
@@ -6635,6 +6695,50 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       var histPanels = { casino: document.getElementById('hist-casino'),
                          sportsbook: document.getElementById('hist-sportsbook'),
                          bonus: document.getElementById('hist-bonus') };
+      /* Фильтры: список открывается по клику, выбор меняет подпись.
+         Result реально отбирает строки — у них уже есть классы исхода.
+         Period только запоминает выбор: в демо-данных все ставки одной даты. */
+      var hfClose = function (except) {
+        histView.querySelectorAll('.hist__picker').forEach(function (pk) {
+          if (pk === except) return;
+          pk.querySelector('.hist__menu').hidden = true;
+          pk.querySelector('.hist__select').setAttribute('aria-expanded', 'false');
+        });
+      };
+      var hfApply = function (panel, val) {
+        panel.querySelectorAll('.hist__row:not(.hist__row--head)').forEach(function (row) {
+          var kind = row.querySelector('.hist__status--win, .hist__win--up') ? 'won'
+                   : row.querySelector('.hist__status--lose, .hist__win--down') ? 'lose'
+                   : row.querySelector('.hist__status--wait') ? 'pending' : 'won';
+          row.hidden = !(val === 'all' || val === kind);
+        });
+      };
+      histView.querySelectorAll('.hist__picker').forEach(function (pk) {
+        var btn = pk.querySelector('.hist__select');
+        var menu = pk.querySelector('.hist__menu');
+        var val = pk.querySelector('.hist__value');
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = menu.hidden;
+          hfClose(pk);
+          menu.hidden = !open;
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        menu.querySelectorAll('button').forEach(function (opt) {
+          opt.addEventListener('click', function () {
+            menu.querySelectorAll('button').forEach(function (o) {
+              o.setAttribute('aria-selected', o === opt ? 'true' : 'false');
+            });
+            val.textContent = opt.textContent;
+            menu.hidden = true;
+            btn.setAttribute('aria-expanded', 'false');
+            if (pk.dataset.filter === 'result') hfApply(pk.closest('.hist__card'), opt.dataset.val);
+          });
+        });
+      });
+      addEventListener('click', function (e) { if (!e.target.closest('.hist__picker')) hfClose(null); });
+      addEventListener('keydown', function (e) { if (e.key === 'Escape') hfClose(null); });
+
       histTabs.forEach(function (t) {
         t.addEventListener('click', function () {
           var key = t.dataset.hist;
