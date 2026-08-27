@@ -2135,8 +2135,16 @@ body.is-authed .wallet { display: flex; }
    1358:18986 «History» — вкладки Casino / Sportsbook / Bonus, фильтры,
    таблица ставок и страницы. Колонки: игра тянется, три правых по 160/200/200.
    ═══════════════════════════════════════════════════════════════════ */
-.view--history { display: flex; flex-direction: column; gap: 20px; }
+/* Страница тянется до низа экрана: пять строк занимали половину кадра,
+   и под карточкой оставалась пустая полоса. 106 — отступ сверху до неё
+   (шапка 74 плюс поля контента), 24 — воздух снизу. */
+.view--history { display: flex; flex-direction: column; gap: 20px;
+                 min-height: calc(100vh - 130px); }
 .view--history[hidden] { display: none; }
+/* Карточка забирает остаток, а таблица внутри — остаток карточки,
+   поэтому страницы всегда прижаты к нижней кромке. */
+.view--history .hist__card { flex: 1 1 auto; }
+.view--history .hist__table { flex: 1 1 auto; }
 .hist__head { display: flex; flex-direction: column; gap: 16px; }
 .hist__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
             font-size: 32px; line-height: 40px; color: var(--white); }
@@ -2248,7 +2256,8 @@ body.is-authed .wallet { display: flex; }
 
 @media (max-width: 767px) {
   /* Колонок нет: ставка — строка в два яруса, суммы прижаты вправо */
-  .view--history { gap: 16px; }
+  /* На мобильной шапка 62 (после входа 122) и нижняя панель 107 */
+  .view--history { gap: 16px; min-height: calc(100vh - 260px); }
   .hist__h1 { font-size: 24px; line-height: 32px; }
   .hist__tabs { margin: 0 calc(-1 * var(--edge, 16px)); padding: 0 var(--edge, 16px);
                 overflow-x: auto; scrollbar-width: none; }
