@@ -2249,7 +2249,12 @@ body.is-authed .wallet { display: flex; }
 .hist__page--next img { transform: rotate(180deg); }
 .hist__gap { padding: 0 4px; color: var(--dp-label); font-family: 'Work Sans', sans-serif; font-size: 14px; }
 
-.hist__empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 48px 0;
+/* Ловушка: у таблицы и страниц свой display, атрибут hidden его не перебьёт */
+.hist__table[hidden], .hist__pager[hidden], .hist__empty[hidden] { display: none; }
+/* Карточка тянется на весь экран, поэтому пустое состояние занимает
+   освободившееся место и стоит по центру, а не липнет к фильтрам */
+.hist__empty { flex: 1 1 auto; display: flex; flex-direction: column;
+               align-items: center; justify-content: center; gap: 6px; padding: 48px 0;
                font-family: 'Work Sans', sans-serif; text-align: center; }
 .hist__empty b { font-weight: 600; font-size: 16px; line-height: 22px; color: var(--white); }
 .hist__empty span { font-size: 13px; line-height: 18px; color: var(--dp-label); }
@@ -4466,6 +4471,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <span class="hist__date">22.04.2025, 22:40</span>
           </div>
           </div>
+          <div class="hist__empty" hidden>
+            <b>Nothing here yet</b>
+            <span>No bets match the selected filters.</span>
+          </div>
         <div class="hist__pager">
           <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
           <button class="hist__page is-current" type="button">1</button>
@@ -4570,6 +4579,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <span class="hist__result hist__result--won"><b class="hist__status hist__status--win">Won</b><i class="hist__win hist__win--up">+1,000.00 USDT</i></span>
             <span class="hist__date">22.04.2025, 22:40</span>
           </div>
+          </div>
+          <div class="hist__empty" hidden>
+            <b>Nothing here yet</b>
+            <span>No bets match the selected filters.</span>
           </div>
         <div class="hist__pager">
           <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
@@ -6714,13 +6727,34 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           pk.querySelector('.hist__select').setAttribute('aria-expanded', 'false');
         });
       };
-      var hfApply = function (panel, val) {
+      /* Что выбрано сейчас в обоих списках вкладки */
+      var hfState = function (panel) {
+        var pick = function (name) {
+          var b = panel.querySelector('[data-filter="' + name + '"] .hist__menu button[aria-selected="true"]');
+          return b ? b.dataset.val : null;
+        };
+        return { result: pick('result') || 'all', period: pick('period') || 'month' };
+      };
+      /* Отбор строк. Ставки в демо-данных от 22.04.2025, поэтому «Today»
+         не находит ничего — на этот случай показываем пустой экран, а не
+         обрезанную таблицу с одной шапкой. */
+      var hfApply = function (panel) {
+        var st = hfState(panel);
+        var shown = 0;
         panel.querySelectorAll('.hist__row:not(.hist__row--head)').forEach(function (row) {
           var kind = row.querySelector('.hist__status--win, .hist__win--up') ? 'won'
                    : row.querySelector('.hist__status--lose, .hist__win--down') ? 'lose'
                    : row.querySelector('.hist__status--wait') ? 'pending' : 'won';
-          row.hidden = !(val === 'all' || val === kind);
+          var ok = (st.result === 'all' || st.result === kind) && st.period !== 'today';
+          row.hidden = !ok;
+          if (ok) shown++;
         });
+        var table = panel.querySelector('.hist__table');
+        var pager = panel.querySelector('.hist__pager');
+        var empty = panel.querySelector('.hist__empty');
+        if (table) table.hidden = shown === 0;
+        if (pager) pager.hidden = shown === 0;
+        if (empty) empty.hidden = shown !== 0;
       };
       histView.querySelectorAll('.hist__picker').forEach(function (pk) {
         var btn = pk.querySelector('.hist__select');
@@ -6741,7 +6775,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             val.textContent = opt.textContent;
             menu.hidden = true;
             btn.setAttribute('aria-expanded', 'false');
-            if (pk.dataset.filter === 'result') hfApply(pk.closest('.hist__card'), opt.dataset.val);
+            hfApply(pk.closest('.hist__card'));
           });
         });
       });
