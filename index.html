@@ -861,9 +861,24 @@ body {
   /* В мобильной шапке только логотип и две кнопки — вкладок Casino/Sports нет */
   .cat-buttons, .topbar__sep { display: none; }
   .header-actions { gap: 12px; margin-left: auto; }
-  /* Мобильной шапки после входа в макете нет, а кошелёк 225 в полосу 264
-     рядом с профилем и колокольчиком не влезает — там его не показываем. */
-  body.is-authed .header-desktop .wallet { display: none; }
+  /* ── 925:2284 — шапка после входа: под верхней полосой идёт кошелёк ──
+     Кадр 402x122: сверху 62 (логотип, профиль, колокольчик), снизу 60 —
+     полоса 370x44 с отступами 4 сверху и 12 снизу.
+     Кошелёк лежит внутри .header-desktop, на этом держится десктопная
+     раскладка в три группы, поэтому в разметке его не двигаем: на
+     мобильной он становится абсолютным внутри закреплённой шапки. */
+  body.is-authed .topbar { height: 122px; align-items: flex-start; }
+  body.is-authed .topbar__brand,
+  body.is-authed .header-desktop { height: 62px; }
+  body.is-authed .header-desktop .wallet {
+    display: flex; position: absolute; left: 16px; right: 16px; top: 66px;
+    width: auto; height: 44px; border-radius: 8px;
+  }
+  /* 925:2533 — баланс тянется, 925:2538 — кнопка 86 */
+  body.is-authed .wallet__balance { flex: 1 0 0; min-width: 0; height: 44px; }
+  body.is-authed .wallet__deposit { flex: none; width: 86px; height: 44px; }
+  /* место под шапку держит .page — после входа она выше на полосу кошелька */
+  body.is-authed .page { padding-top: 122px; }
   .btn { height: 40px; border-radius: 10px; font-size: 13px; }
   .btn--ghost  { width: 61px; background: var(--field); }
   .btn--primary { width: 83px; }
@@ -1933,6 +1948,9 @@ body {
 @media (max-width: 1023px) {
   .banner { display: none; }
   .hero { display: flex; flex-direction: column; gap: 12px; height: auto; }
+  /* Парное правило под [hidden]: без него showView проставлял атрибут, а
+     баннер главной оставался висеть над страницей казино */
+  .hero[hidden] { display: none; }
   .hero__banner { position: relative; height: 210px; flex: none; overflow: hidden;
                   border-radius: 24px; border: 0; background: none; }
   .hero__banner::after { display: none; }
@@ -2093,6 +2111,11 @@ body.is-authed .wallet { display: flex; }
 /* 20 у шапки против 70 у окна — при открытом депозите поднимаем её выше
    затемнения. Класс ставит скрипт, чтобы у остальных окон осталось как было. */
 body.dp-open .topbar { z-index: 71; }
+/* На мобильной окно занимает почти весь экран, и поднятая шапка накрывала его
+   верх: кнопки кошелька перехватывали нажатия по крестику и вкладкам.
+   Правило стоит здесь, а не в мобильном блоке выше: при равной силе
+   побеждает то, что записано позже. */
+@media (max-width: 767px) { body.dp-open .topbar { z-index: 20; } }
 /* Кнопка, из которой пришло окно, остаётся подсвеченной */
 body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                                             0 8px 24px -8px rgba(205, 250, 80, .5); }
@@ -2924,6 +2947,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .nt__list { max-height: 60vh; }
 }
 
+/* 925:2284 — после входа мобильная шапка стала 122 вместо 62: поп-апы стояли
+   на 90 и наполовину прятались за полосой кошелька. Ставим их под неё.
+   Правило записано после базовых top: 90px — при равной силе побеждает оно. */
+@media (max-width: 767px) {
+  body.is-authed .pm__pop,
+  body.is-authed .nt__pop { top: 130px; }
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    Мобильное меню Browse. Лист во весь экран под шапкой и над нижней
    панелью: поиск, две вкладки и разделы — те же, что в боковом меню
@@ -3010,20 +3041,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .br__sub:hover, .br__sub:active { background: var(--white-06); color: var(--white); }
 .br__sub img { flex: none; opacity: .7; }
 
-
-
-/* До 1023 у .hero задан display: flex, а парного правила под [hidden] нет —
-   оно есть только в десктопном блоке. Из-за этого showView проставлял
-   атрибут, но баннер главной оставался висеть над страницей казино. */
-@media (max-width: 1023px) { .hero[hidden] { display: none; } }
-
-/* Ловушка №6: контейнер #browse-menu растянут на весь экран, а видимый лист
-   заканчивается на 745 — ровно там, где начинается нижняя панель. Прозрачная
-   полоса поверх панели перехватывала нажатия, и кнопки не работали. У соседних
-   #profile-menu и #notif-menu это уже вылечено тем же способом.
+/* Контейнер #browse-menu растянут на весь экран, а видимый лист заканчивается
+   там, где начинается нижняя панель. Прозрачная полоса поверх панели
+   перехватывала нажатия, и кнопки не работали — так же лечили .pm и .nt.
    Второе правило обязательно: pointer-events наследуется. */
 #browse-menu { pointer-events: none; }
 #browse-menu .br__sheet { pointer-events: auto; }
+
+
 </style>
 </head>
 <body>
