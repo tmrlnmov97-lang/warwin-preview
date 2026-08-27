@@ -1794,9 +1794,13 @@ body {
   .lg__modal { height: 100%; max-height: none; gap: 0; padding: 0;
                border-radius: 0; overflow: hidden; }
   .lg__bar { border-radius: 0; }
-  /* 973:19639 — шапка 402x64. Заголовок 28 и подпись 2x18 занимают ровно
-     эти 64, поэтому вертикальных полей тут нет — иначе текст обрежется. */
-  .lg__head { flex: none; height: 64px; box-sizing: border-box; padding: 0 16px; align-items: center; }
+  /* 973:19639 — шапка 402x64 с полями 12/16. В макете над ней ещё полоса
+     статуса телефона, в браузере её нет — без верхнего поля заголовок
+     упирался в кромку экрана. Высота растёт под текст: в регистрации
+     подпись в две строки, при жёстких 64 её обрезало. */
+  .lg__head { flex: none; min-height: 64px; box-sizing: border-box;
+              padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top));
+              align-items: center; }
   .lg__title { font-size: 18px; line-height: 28px; }
   /* 973:19640 — блок полей забирает остаток высоты и прокручивается сам,
      чтобы шапка и кнопка оставались на местах на низких экранах */
