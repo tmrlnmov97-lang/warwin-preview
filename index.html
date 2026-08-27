@@ -3016,6 +3016,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    оно есть только в десктопном блоке. Из-за этого showView проставлял
    атрибут, но баннер главной оставался висеть над страницей казино. */
 @media (max-width: 1023px) { .hero[hidden] { display: none; } }
+
+/* Ловушка №6: контейнер #browse-menu растянут на весь экран, а видимый лист
+   заканчивается на 745 — ровно там, где начинается нижняя панель. Прозрачная
+   полоса поверх панели перехватывала нажатия, и кнопки не работали. У соседних
+   #profile-menu и #notif-menu это уже вылечено тем же способом.
+   Второе правило обязательно: pointer-events наследуется. */
+#browse-menu { pointer-events: none; }
+#browse-menu .br__sheet { pointer-events: auto; }
 </style>
 </head>
 <body>
@@ -5797,14 +5805,42 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         e.preventDefault();
         openSearch();
       });
-      /* Пункт Casino в нижней панели. Как и Search выше, ищем по подписи:
-         сборка переименовывает ассеты в хэши, селектор по иконке не сработает. */
-      var bnavCasino = [].slice.call(document.querySelectorAll('.bnav__item'))
-        .filter(function (a) { return /casino/i.test(a.textContent); })[0];
+      /* Пункты нижней панели. Ищем по подписи, как Search выше: сборка
+         переименовывает ассеты в хэши, селектор по иконке не сработает. */
+      var bnavItem = function (re) {
+        return [].slice.call(document.querySelectorAll('.bnav__item'))
+          .filter(function (a) { return re.test(a.textContent); })[0];
+      };
+      /* Лист Browse раскрыт поверх страницы. Клик по панели теперь до неё
+         доходит (см. pointer-events в стилях), но лист остался бы висеть —
+         закрываем его так же, как это делает brClose. */
+      var bnavCloseSheet = function () {
+        var m = document.getElementById('browse-menu');
+        if (m && !m.hidden) { m.hidden = true; document.body.style.overflow = ''; }
+      };
+      var bnavCasino = bnavItem(/casino/i);
       if (bnavCasino) bnavCasino.addEventListener('click', function (e) {
         e.preventDefault();
+        bnavCloseSheet();
         showView('casino');
       });
+      var bnavSport = bnavItem(/sport/i);
+      if (bnavSport) bnavSport.addEventListener('click', function (e) {
+        e.preventDefault();
+        bnavCloseSheet();
+        showView('sport');
+      });
+      var bnavHome = document.querySelector('.bnav__home');
+      if (bnavHome) bnavHome.addEventListener('click', function (e) {
+        e.preventDefault();
+        bnavCloseSheet();
+        showView('home');
+      });
+      /* На Search свой обработчик уже есть — сюда добавляем только закрытие
+         листа. На Browse не вешаем: у него свой переключатель, и второе
+         закрытие не дало бы ему открыться. */
+      var bnavSearchItem = bnavItem(/search/i);
+      if (bnavSearchItem) bnavSearchItem.addEventListener('click', bnavCloseSheet);
       srch.addEventListener('click', function (e) {
         if (e.target.closest('[data-close]')) closeSearch();
       });
