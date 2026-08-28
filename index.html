@@ -2403,6 +2403,28 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* 1180:32132 — у активного подчёркивание #00c1ff, подпись со свечением */
 .dp__method-btn.is-active { color: #00c1ff; border-bottom-color: #00c1ff;
                             text-shadow: 0 0 20px rgba(0, 193, 255, .7); }
+/* Цвет иконок зашит в сами файлы: у крипты синий градиент, у фиата серый
+   штрих, поэтому они не откликались на выбор вкладки. Рисуем их маской —
+   форма из файла, цвет из состояния кнопки. Размеры те же, что у картинок,
+   и лежат на псевдоэлементе: глиф крипты 41 больше слота 20 и обрезался бы. */
+.dp__method-btn .dp__ico img { display: none; }
+.dp__method-btn .dp__ico::after {
+  content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  background-color: var(--white);
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+}
+.dp__method-btn[data-method="crypto"] .dp__ico::after {
+  width: 41px; height: 41px;
+  -webkit-mask-image: url(a/796916f40e.svg); mask-image: url(a/796916f40e.svg);
+  -webkit-mask-size: 41px 41px; mask-size: 41px 41px;
+}
+.dp__method-btn[data-method="fiat"] .dp__ico::after {
+  width: 17.667px; height: 12.667px;
+  -webkit-mask-image: url(a/05a2318baf.svg); mask-image: url(a/05a2318baf.svg);
+  -webkit-mask-size: contain; mask-size: contain;
+}
+.dp__method-btn.is-active .dp__ico::after { background-color: #00c1ff; }
 /* 1180:32139 — поля и QR, между ними 20 */
 .dp__body { width: 100%; display: flex; flex-direction: column; gap: 20px; }
 .dp__row { display: flex; gap: 20px; }
