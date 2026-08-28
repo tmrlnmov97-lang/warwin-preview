@@ -2599,6 +2599,20 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* Неактивное состояние: окно открывается пустым, кнопка ждёт данных */
 .dp__submit[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .5);
                         cursor: default; }
+/* ── 1180:34805 — депозит фиатом. Крипто-блоки на это время уходят,
+   вместо них валюта со способом оплаты, имя, сумма и кнопка. ── */
+.dp__fd { display: none; flex-direction: column; gap: 20px; width: 100%; }
+.dp:not(.is-withdraw).is-fiat .dp__fd { display: flex; }
+.dp:not(.is-withdraw).is-fiat .dp__body > .dp__row,
+.dp:not(.is-withdraw).is-fiat .dp__qr-row,
+.dp:not(.is-withdraw).is-fiat .dp__note { display: none; }
+.dp__fd .dp__row { display: flex; gap: 12px; width: 100%; }
+.dp__fd .dp__field { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.dp__fd-amount { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.dp__fd-foot { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+/* У способа оплаты иконки нет — подпись начинается от края поля */
+.dp__fd .dp__select-value { flex: 1 0 0; min-width: 0; }
+
 /* ── Фиатный вывод (варфрейм) — вторая пара вкладок: Withdraw + Fiat.
    Крипто-блоки на это время уходят, вместо них баланс, сумма в USD,
    выбор получателя и итог. Цвета и плитки те же, что у крипты. ── */
@@ -5646,6 +5660,67 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <button class="dp__submit dp__fiat-submit" type="button" disabled>Request withdrawal</button>
         </div>
 
+        <!-- 1180:34805 — депозит фиатом: валюта и способ, имя, сумма
+             с быстрыми значениями и кнопка оплаты. -->
+        <div class="dp__fd">
+          <div class="dp__row">
+            <div class="dp__field">
+              <span class="dp__label dp__label--dim">Deposit Currency</span>
+              <button class="dp__select" type="button">
+                <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
+                <span class="dp__select-value">RBL</span>
+                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+              </button>
+            </div>
+            <div class="dp__field">
+              <span class="dp__label dp__label--dim">Network</span>
+              <button class="dp__select" type="button">
+                <span class="dp__select-value">Payphone</span>
+                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="dp__row">
+            <div class="dp__field">
+              <span class="dp__hint">Last Name*</span>
+              <label class="dp__input">
+                <input class="dp__fd-last" type="text" placeholder="Rodrigez" aria-label="Last name">
+              </label>
+            </div>
+            <div class="dp__field">
+              <span class="dp__hint">First Name*</span>
+              <label class="dp__input">
+                <input class="dp__fd-first" type="text" placeholder="Gabriel" aria-label="First name">
+              </label>
+            </div>
+          </div>
+
+          <div class="dp__fd-amount">
+            <div class="dp__amount-box">
+              <div class="dp__amount-head">
+                <span class="dp__hint">Fiat Amount (50 - 100,000 MXN)</span>
+                <span class="dp__hint">Min <b>20USDT</b></span>
+              </div>
+              <label class="dp__input dp__input--amount">
+                <input class="dp__fd-input" type="text" inputmode="decimal" placeholder="0" aria-label="Fiat amount">
+                <button class="dp__max dp__fd-max" type="button">MAX</button>
+              </label>
+            </div>
+            <div class="dp__chips">
+              <button class="dp__chip" type="button" data-amount="100">$100</button>
+              <button class="dp__chip" type="button" data-amount="500">$500</button>
+              <button class="dp__chip" type="button" data-amount="1000">$1000</button>
+            </div>
+          </div>
+
+          <div class="dp__fd-foot">
+            <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fd-sum">0.00 USDT</b></div>
+            <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fd-fee">0.00 USDT</b></div>
+            <button class="dp__submit dp__fd-submit" type="button" disabled>Deposit via Payphone</button>
+          </div>
+        </div>
+
         <div class="dp__qr-row" data-node-id="1180:32158">
           <!-- 1180:32159 — рамка 140 углами, внутри картинка 114.97 на 12.52 -->
           <div class="dp__qr" data-node-id="1180:32159">
@@ -6164,6 +6239,35 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             wdSync();
           });
           wdSync();
+        }
+
+        /* Фиатный депозит: сумма с быстрыми значениями, комиссия та же 1.67%,
+           кнопка ждёт сумму от минимума — как на выводе. */
+        var fdInput = dp.querySelector('.dp__fd-input');
+        if (fdInput) {
+          var fdSum = dp.querySelector('.dp__fd-sum');
+          var fdFee = dp.querySelector('.dp__fd-fee');
+          var fdSubmit = dp.querySelector('.dp__fd-submit');
+          var fdChips = [].slice.call(dp.querySelectorAll('.dp__fd-amount .dp__chip'));
+          var fdMax = dp.querySelector('.dp__fd-max');
+          var FD_MIN = 20, FD_CAP = 100000;
+          var fdSync = function () {
+            var v = parseFloat(fdInput.value.replace(',', '.'));
+            if (!isFinite(v) || v < 0) v = 0;
+            fdSum.textContent = v.toFixed(2) + ' USDT';
+            fdFee.textContent = (v * wdFeeRate).toFixed(2) + ' USDT';
+            fdSubmit.disabled = !(v >= FD_MIN);
+            fdChips.forEach(function (c) {
+              c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
+            });
+          };
+          fdInput.addEventListener('input', fdSync);
+          fdChips.forEach(function (c) {
+            c.addEventListener('click', function () { fdInput.value = c.dataset.amount; fdSync(); });
+          });
+          /* MAX — верх допустимого диапазона из подписи над полем */
+          if (fdMax) fdMax.addEventListener('click', function () { fdInput.value = FD_CAP; fdSync(); });
+          fdSync();
         }
 
         /* Фиатный вывод: баланс тот же, что в шапке, сумма в USD, получатель
