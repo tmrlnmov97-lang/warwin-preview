@@ -2439,6 +2439,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* 1180:32154 — монета сети с маленьким значком в правом нижнем углу */
 .dp__select-net { position: relative; display: block; width: 24px; height: 24px; flex: none; }
 .dp__select-net img { position: absolute; left: 0; top: 0; display: block; }
+/* Бейдж прячем атрибутом, а у него свой display — нужна парная строка */
+.dp__select-badge[hidden] { display: none; }
 .dp__select-badge { left: auto !important; top: auto !important; right: -1px; bottom: -1px; }
 .dp__select-value { flex: 1 0 0; min-width: 0; text-align: left;
                     font-family: 'Work Sans', sans-serif; font-weight: 500;
@@ -6142,7 +6144,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             sumAmount.textContent = v.toFixed(2) + ' ' + WD_CUR;
             sumFee.textContent = (v * wdFeeRate).toFixed(2) + ' ' + WD_CUR;
             wdSubmit.textContent = 'Withdraw ' + (v ? v : 0) + ' ' + WD_CUR;
-            wdSubmit.disabled = !(v >= wdMin && addrInput.value.trim());
+            /* Кнопка ждёт только сумму: адрес в прототипе можно не вводить,
+               а до минимума 20 она остаётся выключенной. */
+            wdSubmit.disabled = !(v >= wdMin);
             /* 1180:38835 — выбранная доля подсвечивается; при нулевом балансе
                все доли дают 0, и подсвечивать нечего */
             chips.forEach(function (c) {
@@ -6202,6 +6206,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           var pickList = pick.querySelector('.dp__list');
           var pickIcon = pick.querySelector('.dp__select-coin');
           var pickText = pick.querySelector('.dp__select-value');
+          var netValue = dp.querySelector('.dp__field:last-child .dp__select-value');
+          var netIcon = dp.querySelector('.dp__select-net img:not(.dp__select-badge)');
+          var netBadge = dp.querySelector('.dp__select-badge');
+          var NETWORKS = { ETH: 'ERC20', DAI: 'ERC20', BNB: 'BEP20', TRX: 'TRC20',
+                           BTC: 'Bitcoin', LTC: 'Litecoin', SOL: 'Solana', ADA: 'Cardano' };
+          var setNetwork = function (coin, src) {
+            if (netValue) netValue.textContent = NETWORKS[coin] || coin;
+            if (netIcon && src) netIcon.src = src;
+            if (netBadge) netBadge.hidden = true;
+          };
           var noteP = dp.querySelector('.dp__note p');
           var noteTpl = noteP ? noteP.textContent.replace(/ETH/g, '%s') : '';
           var closeList = function () {
@@ -6231,11 +6245,21 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               var oi = o.querySelector('img');
               pickIcon.src = oi.currentSrc || oi.src;
               pickText.textContent = coin;
+              /* Сеть у каждой монеты своя: раньше при любой валюте рядом
+                 оставался ERC20 с чужой иконкой. */
+              setNetwork(coin, oi.currentSrc || oi.src);
               if (noteP) noteP.textContent = noteTpl.replace(/%s/g, coin);
               closeList();
               pickBtn.focus();
             });
           });
+          /* На старте сеть тоже берём у выбранной монеты, иначе рядом с ETH
+             висел зелёный Tether из разметки */
+          var startOpt = pickList.querySelector('.dp__opt.is-current');
+          if (startOpt) {
+            var si = startOpt.querySelector('img');
+            setNetwork(startOpt.dataset.coin, si.currentSrc || si.src);
+          }
           /* Клик мимо списка и Escape закрывают список, а не всё окно */
           dp.addEventListener('click', function (e) {
             if (!pickList.hidden && !pick.contains(e.target)) closeList();
