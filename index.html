@@ -2167,6 +2167,65 @@ body.is-authed .wallet { display: flex; }
 .promo__meta span { font-size: 13px; line-height: 18px; color: var(--dp-label); }
 .promo__meta b { font-weight: 600; font-size: 14px; line-height: 20px; color: var(--white); }
 
+/* Карточка — ссылка на акцию: приподнимается и подсвечивает кант */
+.promo__card { cursor: pointer; transition: transform .2s cubic-bezier(.4,0,.2,1),
+               border-color .2s ease, box-shadow .2s ease; }
+.promo__card:hover { transform: translateY(-6px); border-color: rgba(255, 255, 255, .22);
+                     box-shadow: 0 18px 34px -18px rgba(0, 0, 0, .9); }
+.promo__card:active { transform: translateY(-2px); }
+.promo__card:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.promo__card:hover .promo__art { transform: scale(1.04); }
+.promo__art { transition: transform .3s cubic-bezier(.4,0,.2,1); }
+@media (prefers-reduced-motion: reduce) {
+  .promo__card, .promo__art { transition: none; }
+  .promo__card:hover { transform: none; }
+  .promo__card:hover .promo__art { transform: none; }
+}
+
+/* ── Страница одной акции ── */
+.view--promo-one { display: flex; flex-direction: column; gap: 0; max-width: 860px; }
+.view--promo-one[hidden] { display: none; }
+.pone__top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.pone__back { display: flex; align-items: center; justify-content: center; width: 48px; height: 44px;
+              border: 0; border-radius: 12px; background: var(--white-10); cursor: pointer; }
+.pone__back:hover { background: var(--white-16); }
+.pone__back img { display: block; width: 8px; height: 12.4px; }
+.pone__crumb { display: flex; align-items: center; height: 44px; padding: 0 20px; border-radius: 12px;
+               background: var(--white-06); font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 15px; color: var(--white); }
+.pone__art { display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 16px; }
+.pone__when { margin-top: 20px; font-family: 'Work Sans', sans-serif; font-size: 13px;
+              line-height: 18px; color: var(--dp-label); }
+.pone__h1 { margin: 12px 0 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 28px; line-height: 36px; color: var(--white); }
+.pone__lead { display: flex; flex-direction: column; gap: 14px; margin-top: 16px;
+              font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 24px;
+              color: var(--modal-text-1, #bbc6cd); }
+.pone__sub { margin: 28px 0 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 20px; line-height: 28px; color: var(--white); }
+.pone__rules { margin: 14px 0 0; padding: 0; list-style: none;
+               display: flex; flex-direction: column; gap: 10px; }
+.pone__rules li { position: relative; padding-left: 18px; font-family: 'Work Sans', sans-serif;
+                  font-size: 14px; line-height: 22px; color: var(--modal-text-1, #bbc6cd); }
+.pone__rules li::before { content: ''; position: absolute; left: 0; top: 9px; width: 5px; height: 5px;
+                          border-radius: 50%; background: var(--dp-label); }
+.pone__cta { align-self: flex-start; margin-top: 28px; box-sizing: border-box; display: flex;
+             align-items: center; justify-content: center; height: 48px; padding: 0 28px;
+             border: 0; border-radius: 12px; cursor: pointer;
+             background: linear-gradient(to bottom, #cdfa50, #a6e22e); color: #00151f;
+             font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 15px; }
+.pone__cta:hover { box-shadow: 0 0 0 3px rgba(205, 250, 80, .22); }
+.pone__cta.is-done { background: var(--white-10); color: var(--white); cursor: default; box-shadow: none; }
+
+@media (max-width: 767px) {
+  .pone__art { height: 200px; }
+  .pone__h1 { font-size: 22px; line-height: 30px; }
+  .pone__sub { font-size: 18px; line-height: 24px; }
+  .pone__lead { font-size: 14px; line-height: 22px; }
+  .pone__cta { align-self: stretch; }
+  .pone__crumb { font-size: 14px; padding: 0 14px; }
+}
+
 .promo__empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 60px 0;
                 font-family: 'Work Sans', sans-serif; text-align: center; }
 .promo__empty[hidden] { display: none; }
@@ -4724,7 +4783,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
         </div>
         <div class="promo__grid">
-          <article class="promo__card" data-cat="casino">
+          <article class="promo__card" data-key="welcome" tabindex="0" role="button" data-cat="casino">
             <img loading="lazy" decoding="async" class="promo__art" src="a/626b4d6d2e.webp" alt="">
             <div class="promo__body">
               <div class="promo__head">
@@ -4737,7 +4796,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               </div>
             </div>
           </article>
-          <article class="promo__card" data-cat="casino">
+          <article class="promo__card" data-key="zeus" tabindex="0" role="button" data-cat="casino">
             <img loading="lazy" decoding="async" class="promo__art" src="a/03924d6e72.webp" alt="">
             <div class="promo__body">
               <div class="promo__head">
@@ -4750,7 +4809,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               </div>
             </div>
           </article>
-          <article class="promo__card" data-cat="deposit">
+          <article class="promo__card" data-key="deposit" tabindex="0" role="button" data-cat="deposit">
             <img loading="lazy" decoding="async" class="promo__art" src="a/025bad859f.webp" alt="">
             <div class="promo__body">
               <div class="promo__head">
@@ -4763,7 +4822,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               </div>
             </div>
           </article>
-          <article class="promo__card" data-cat="deposit">
+          <article class="promo__card" data-key="unlock" tabindex="0" role="button" data-cat="deposit">
             <img loading="lazy" decoding="async" class="promo__art" src="a/0635c77f60.webp" alt="">
             <div class="promo__body">
               <div class="promo__head">
@@ -4776,7 +4835,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               </div>
             </div>
           </article>
-          <article class="promo__card" data-cat="cashback">
+          <article class="promo__card" data-key="cash" tabindex="0" role="button" data-cat="cashback">
             <img loading="lazy" decoding="async" class="promo__art" src="a/87dce3340a.webp" alt="">
             <div class="promo__body">
               <div class="promo__head">
@@ -4789,7 +4848,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               </div>
             </div>
           </article>
-          <article class="promo__card" data-cat="referral">
+          <article class="promo__card" data-key="invite" tabindex="0" role="button" data-cat="referral">
             <img loading="lazy" decoding="async" class="promo__art" src="a/aeca538fef.webp" alt="">
             <div class="promo__body">
               <div class="promo__head">
@@ -4807,6 +4866,23 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <b>No promotions here yet</b>
           <span>Pick another category — new offers show up every week.</span>
         </div>
+      </div>
+
+      <!-- Страница одной акции: шапка с возвратом, арт, правила и кнопка -->
+      <div class="view view--promo-one" id="view-promo-one" hidden>
+        <div class="pone__top">
+          <button class="pone__back" type="button" aria-label="Назад">
+            <img loading="lazy" decoding="async" src="a/8196602e48.svg" alt="">
+          </button>
+          <span class="pone__crumb"></span>
+        </div>
+        <img loading="lazy" decoding="async" class="pone__art" src="a/626b4d6d2e.webp" alt="">
+        <span class="pone__when"></span>
+        <h1 class="pone__h1"></h1>
+        <div class="pone__lead"></div>
+        <h2 class="pone__sub">How it works</h2>
+        <ul class="pone__rules"></ul>
+        <button class="pone__cta" type="button">Activate bonus</button>
       </div>
 
       <!-- 1358:18986 «History» — вкладки Casino / Sportsbook / Bonus,
@@ -7055,7 +7131,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     sport: document.getElementById('view-sport'),
                     profile: document.getElementById('view-profile'),
                     history: document.getElementById('view-history'),
-                    promo: document.getElementById('view-promo') };
+                    promo: document.getElementById('view-promo'),
+                    promoOne: document.getElementById('view-promo-one') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
@@ -7627,11 +7704,94 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           showView('promo');
         });
       });
+      /* ── Карточка открывает страницу акции ── */
+      var PROMO = {
+        welcome: { when: 'Active for registration',
+          lead: ['100 Free Spins for new players — issued right after registration, no deposit needed.'],
+          rules: ['Issued after successful registration.', 'Free Spins amount: 100.',
+                  'Validity: 3 days from issue time.', 'Winnings are credited to bonus balance.'] },
+        zeus: { when: 'Every Friday · UTC',
+          lead: ['Every Friday, Gates of Olympus pays back: play paid spins and collect Free Spins on top.'],
+          rules: ['Active every Friday from 00:00 to 23:59 UTC.', 'Qualifying game: Gates of Olympus.',
+                  'Play 50 paid spins of exactly 1.00 AZN each.', 'Reward: 20 Free Spins at minimum bet level.',
+                  'Winnings from the reward are credited to bonus balance.',
+                  'Reward Free Spins expire when the Friday UTC window ends.',
+                  'One reward grant per player per Friday.'] },
+        deposit: { when: 'First deposit only',
+          lead: ['Double your first deposit — the bonus lands on your bonus balance right after the payment.'],
+          rules: ['Applies only to the first successful deposit.', 'Bonus rate: 100% of deposit amount.',
+                  'Maximum bonus amount: 150 AZN.', 'Bonus is credited to bonus balance.'] },
+        unlock: { when: 'From 2nd deposit',
+          lead: ['From the second deposit onwards, part of your bonus balance becomes real money.'],
+          rules: ['Starts from the second successful deposit.',
+                  '5% of each deposit can be moved from bonus balance to main balance.',
+                  'If bonus balance is lower than 5%, only available bonus amount is used.',
+                  'If bonus balance is 0, no extra amount is credited.'] },
+        cash: { when: 'Every Monday · UTC',
+          lead: ['Every Monday we count last week and return a tenth of what your deposits lost.'],
+          rules: ['Settlement is calculated every Monday for the previous completed UTC week.',
+                  'Cashback rate: 10%.', 'Cashback is credited to the real balance.',
+                  'The cashback basis is limited to the deposit-funded part of the weekly net loss.',
+                  'Example: deposit 100 AZN, win 300 AZN, then lose everything — cashback is 10 AZN, not 40 AZN.'] },
+        invite: { when: 'Up to 5 friends',
+          lead: ['Bring friends in and earn from their play for a month.'],
+          rules: ['Each player can invite up to 5 friends.',
+                  "The campaign is active for 30 days from the friend's registration date.",
+                  'Settlement is calculated every 10 days.', "Reward rate: 5% of the friend's net loss.",
+                  'Maximum reward: 50 AZN per invited friend.'] }
+      };
+      var pone = document.getElementById('view-promo-one');
+      if (pone) {
+        var poneOpen = function (card) {
+          var key = card.dataset.key;
+          var data = PROMO[key];
+          if (!data) return;
+          var title = card.querySelector('h2').textContent;
+          pone.querySelector('.pone__crumb').textContent = title;
+          pone.querySelector('.pone__h1').textContent = title;
+          pone.querySelector('.pone__art').src = card.querySelector('.promo__art').getAttribute('src');
+          pone.querySelector('.pone__when').textContent = data.when;
+          var lead = pone.querySelector('.pone__lead');
+          lead.innerHTML = '';
+          data.lead.forEach(function (t) {
+            var p = document.createElement('p');
+            p.style.margin = '0';
+            p.textContent = t;
+            lead.appendChild(p);
+          });
+          var ul = pone.querySelector('.pone__rules');
+          ul.innerHTML = '';
+          data.rules.forEach(function (t) {
+            var li = document.createElement('li');
+            li.textContent = t;
+            ul.appendChild(li);
+          });
+          var cta = pone.querySelector('.pone__cta');
+          cta.textContent = 'Activate bonus';
+          cta.classList.remove('is-done');
+          cta.disabled = false;
+          showView('promoOne');
+        };
+        pone.querySelector('.pone__back').addEventListener('click', function () { showView('promo'); });
+        /* Кнопка отвечает на нажатие: акция становится активированной */
+        pone.querySelector('.pone__cta').addEventListener('click', function () {
+          this.textContent = 'Bonus activated';
+          this.classList.add('is-done');
+          this.disabled = true;
+        });
+      }
+
       var promoView = document.getElementById('view-promo');
       if (promoView) {
         var promoChips = [].slice.call(promoView.querySelectorAll('.promo__chip'));
         var promoCards = [].slice.call(promoView.querySelectorAll('.promo__card'));
         var promoEmpty = promoView.querySelector('.promo__empty');
+        promoCards.forEach(function (card) {
+          card.addEventListener('click', function () { poneOpen(card); });
+          card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); poneOpen(card); }
+          });
+        });
         promoChips.forEach(function (c) {
           c.addEventListener('click', function () {
             promoChips.forEach(function (o) { o.classList.toggle('is-active', o === c); });
