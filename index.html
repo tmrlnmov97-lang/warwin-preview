@@ -7404,7 +7404,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           var selects = [].slice.call(row.querySelectorAll('.rg__select'));
 
           set.addEventListener('click', function () {
-            var period = selects[0] ? selects[0].textContent.trim() : '';
+            /* Подпись селекта до выбора — подсказка, а не значение:
+               иначе лимит подписывался «Period limit». */
+            var picked = function (el) {
+              return el && el.classList.contains('is-picked') ? el.textContent.trim() : '';
+            };
+            var period = picked(selects[0]);
             if (title === 'Cooling off' || title === 'Self exclusion') {
               var what = title === 'Cooling off' ? period : (input && input.value.trim());
               if (!what || what === 'None') return;
@@ -7420,7 +7425,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               rgFill(card, (period || 'Minute') + ' limit', String(v), '100',
                      Math.max(2, Math.min(100, v)));
             } else {
-              var cur = selects[1] ? selects[1].textContent.trim() : 'USDT';
+              var cur = picked(selects[1]) || 'USDT';
               /* Полоса от миллиона почти невидима — держим минимум в 2% */
               var pct = Math.max(2, Math.min(100, v / 1000000 * 100));
               rgFill(card, (period || 'Weekly') + ' limit', v.toFixed(2) + ' ' + cur,
