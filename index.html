@@ -540,6 +540,30 @@ body {
 
 /* ─────────────── Футер ─────────────── */
 .footer { position: relative; width: 100%; }
+/* ── Навигация футера: шесть колонок разделов над юридическим блоком ── */
+.fnav { display: grid; grid-template-columns: repeat(6, 1fr); gap: 32px 24px; width: 100%;
+        padding-bottom: 32px; margin-bottom: 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, .08); text-align: left; }
+.fnav__col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.fnav__col > b { font-family: 'Work Sans', sans-serif; font-weight: 700;
+                 font-size: 15px; line-height: 20px; color: var(--white); }
+.fnav__col ul { margin: 0; padding: 0; list-style: none;
+                display: flex; flex-direction: column; gap: 12px; }
+.fnav__link { padding: 0; border: 0; background: none; cursor: pointer; text-align: left;
+              font-family: 'Work Sans', sans-serif; font-weight: 400;
+              font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd);
+              transition: color .15s ease; }
+.fnav__link:hover { color: var(--white); }
+.fnav__link:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
+
+@media (max-width: 1023px) { .fnav { grid-template-columns: repeat(3, 1fr); gap: 28px 20px; } }
+@media (max-width: 767px) {
+  .fnav { grid-template-columns: repeat(2, 1fr); gap: 24px 16px;
+          padding-bottom: 24px; margin-bottom: 24px; }
+  .fnav__col > b { font-size: 14px; }
+  .fnav__link { font-size: 13px; line-height: 18px; }
+}
+
 .footer__legal {
   margin: 0 20px; width: auto;
   font-weight: 400; font-size: 10px; line-height: 15px; text-align: center; color: var(--muted);
@@ -4327,22 +4351,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
         </section>
 
-        <footer class="footer" data-node-id="851:3651">
-          <!-- 891:22532 — виден только на мобильной ширине -->
-          <div class="footer__top" data-node-id="891:22532">
-            <img loading="lazy" decoding="async" class="footer__logo" src="a/cfa22cccd3.svg" alt="Warwin" width="234" height="73">
-            <p class="footer__join" data-node-id="891:22540">Join our Community!</p>
-            <div class="footer__socials" data-node-id="891:22541">
-              <a class="fsoc" href="#" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
-            </div>
-          </div>
-          <p class="footer__legal">Owned and operated by WarWin Group International Ltd (Registration No. 000054736), with registered address at San Victor Street, Orange Walk Town, Belize. <br>WarWin Group International Ltd is currently in the process of obtaining an Anjouan Gaming License and is preparing its operational framework in accordance with the regulatory standards of the Anjouan Gaming Authority.</p>
-          <div class="footer__partners" data-node-id="851:4032"><img loading="lazy" decoding="async" src="a/ee07665fa8.webp" alt="Responsible gaming, 18+, Gambling Therapy, BeGambleAware"></div>
-          <p class="footer__copy">©2026 Warwin. All Rights Reserved.</p>
-        </footer>
       </div>
     </div>
       </div>
@@ -5533,22 +5541,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <article class="game game--flat"><img loading="lazy" decoding="async" class="layer" src="a/d979ab18cf.webp" alt="12 BELLS"><div class="game__info"><div class="game__name">12 BELLS</div><p class="game__provider">VOLTENT</p></div><span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span></article>
           </div>
         </section>
-        <footer class="footer" data-node-id="1089:10397">
-          <!-- 891:22532 — виден только на мобильной ширине -->
-          <div class="footer__top" data-node-id="891:22532">
-            <img loading="lazy" decoding="async" class="footer__logo" src="a/cfa22cccd3.svg" alt="Warwin" width="234" height="73">
-            <p class="footer__join" data-node-id="891:22540">Join our Community!</p>
-            <div class="footer__socials" data-node-id="891:22541">
-              <a class="fsoc" href="#" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
-            </div>
-          </div>
-          <p class="footer__legal">Owned and operated by WarWin Group International Ltd (Registration No. 000054736), with registered address at San Victor Street, Orange Walk Town, Belize. <br>WarWin Group International Ltd is currently in the process of obtaining an Anjouan Gaming License and is preparing its operational framework in accordance with the regulatory standards of the Anjouan Gaming Authority.</p>
-          <div class="footer__partners" data-node-id="851:4032"><img loading="lazy" decoding="async" src="a/ee07665fa8.webp" alt="Responsible gaming, 18+, Gambling Therapy, BeGambleAware"></div>
-          <p class="footer__copy">©2026 Warwin. All Rights Reserved.</p>
-        </footer>
       </div>
 
 
@@ -5641,22 +5633,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <article class="game game--flat" style="--i:55"><img loading="lazy" decoding="async" class="layer" src="a/32088cb519.webp" alt=""><span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span></article>
           </div>
         </section>
-        <footer class="footer" data-node-id="1105:52024">
-          <!-- 891:22532 — виден только на мобильной ширине -->
-          <div class="footer__top" data-node-id="891:22532">
-            <img loading="lazy" decoding="async" class="footer__logo" src="a/cfa22cccd3.svg" alt="Warwin" width="234" height="73">
-            <p class="footer__join" data-node-id="891:22540">Join our Community!</p>
-            <div class="footer__socials" data-node-id="891:22541">
-              <a class="fsoc" href="#" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
-            </div>
-          </div>
-          <p class="footer__legal">Owned and operated by WarWin Group International Ltd (Registration No. 000054736), with registered address at San Victor Street, Orange Walk Town, Belize. <br>WarWin Group International Ltd is currently in the process of obtaining an Anjouan Gaming License and is preparing its operational framework in accordance with the regulatory standards of the Anjouan Gaming Authority.</p>
-          <div class="footer__partners" data-node-id="851:4032"><img loading="lazy" decoding="async" src="a/ee07665fa8.webp" alt="Responsible gaming, 18+, Gambling Therapy, BeGambleAware"></div>
-          <p class="footer__copy">©2026 Warwin. All Rights Reserved.</p>
-        </footer>
       </div>
 
       <!-- 974:8942 «Sport page Login» — фильтры, блок лиги, свёрнутые лиги -->
@@ -5709,6 +5685,98 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         </section>
         <button class="spmore" type="button" data-node-id="974:11954">Show more<img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt="" width="18" height="18"></button>
       </div>
+        <footer class="footer" data-node-id="851:3651">
+          <!-- Навигация футера: разделы сайта одним списком -->
+          <nav class="fnav">
+            <div class="fnav__col">
+              <b>Casino</b>
+              <ul>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">Lobby</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:crash">Crash Games</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">New Slots</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">Popular Slots</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">High RTP</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">Table Games</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">Video Poker</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">Live Casino</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">Game Shows</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:casino">Providers</button></li>
+              </ul>
+            </div>
+            <div class="fnav__col">
+              <b>Sports</b>
+              <ul>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">Soccer</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">Tennis</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">Basketball</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">Baseball</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">Cricket</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">American Football</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">Golf</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:sport">Badminton</button></li>
+              </ul>
+            </div>
+            <div class="fnav__col">
+              <b>Account</b>
+              <ul>
+              <li><button class="fnav__link" type="button" data-fgo="view:profile">Profile</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="view:history">Game History</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="tab:verification">Verification</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="tab:security">Security</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="tab:responsible">Responsible Gaming</button></li>
+              </ul>
+            </div>
+            <div class="fnav__col">
+              <b>Payments</b>
+              <ul>
+              <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-crypto">Deposit</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="wallet:withdraw-crypto">Withdraw</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-crypto">Crypto</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-fiat">Fiat</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-crypto">Supported currencies</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="wallet:withdraw-crypto">Fees and limits</button></li>
+              </ul>
+            </div>
+            <div class="fnav__col">
+              <b>Promotions</b>
+              <ul>
+              <li><button class="fnav__link" type="button" data-fgo="view:promo">All promotions</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="promo:welcome">Welcome Free Spins</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="promo:zeus">Zeus Friday</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="promo:deposit">First Deposit Bonus</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="promo:cash">Weekly Loss Cashback</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="promo:invite">Invite a Friend</button></li>
+              </ul>
+            </div>
+            <div class="fnav__col">
+              <b>Help</b>
+              <ul>
+              <li><button class="fnav__link" type="button">Support</button></li>
+              <li><button class="fnav__link" type="button">Fairness</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="tab:responsible">Responsible Gambling</button></li>
+              <li><button class="fnav__link" type="button" data-fgo="tab:responsible">Self-exclusion</button></li>
+              <li><button class="fnav__link" type="button">Terms of Service</button></li>
+              <li><button class="fnav__link" type="button">Privacy Policy</button></li>
+              <li><button class="fnav__link" type="button">AML Policy</button></li>
+              </ul>
+            </div>
+          </nav>
+          <!-- 891:22532 — виден только на мобильной ширине -->
+          <div class="footer__top" data-node-id="891:22532">
+            <img loading="lazy" decoding="async" class="footer__logo" src="a/cfa22cccd3.svg" alt="Warwin" width="234" height="73">
+            <p class="footer__join" data-node-id="891:22540">Join our Community!</p>
+            <div class="footer__socials" data-node-id="891:22541">
+              <a class="fsoc" href="#" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
+              <a class="fsoc" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
+              <a class="fsoc" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
+              <a class="fsoc" href="#" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
+            </div>
+          </div>
+          <p class="footer__legal">Owned and operated by WarWin Group International Ltd (Registration No. 000054736), with registered address at San Victor Street, Orange Walk Town, Belize. <br>WarWin Group International Ltd is currently in the process of obtaining an Anjouan Gaming License and is preparing its operational framework in accordance with the regulatory standards of the Anjouan Gaming Authority.</p>
+          <div class="footer__partners" data-node-id="851:4032"><img loading="lazy" decoding="async" src="a/ee07665fa8.webp" alt="Responsible gaming, 18+, Gambling Therapy, BeGambleAware"></div>
+          <p class="footer__copy">©2026 Warwin. All Rights Reserved.</p>
+        </footer>
+
     </div><!-- /content-body -->
 
   </main>
@@ -7806,6 +7874,36 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           });
         });
       }
+
+      /* ── Ссылки футера ведут туда же, куда меню сайта ── */
+      document.addEventListener('click', function (e) {
+        var link = e.target.closest('.fnav__link[data-fgo]');
+        if (!link) return;
+        var go = link.dataset.fgo.split(':');
+        var kind = go[0], what = go[1];
+        if (kind === 'view') { showView(what); return; }
+        if (kind === 'tab') {
+          showView('profile');
+          var t = document.querySelector('.prof__tab[data-tab="' + what + '"]');
+          if (t) t.click();
+          return;
+        }
+        if (kind === 'promo') {
+          showView('promo');
+          var card = document.querySelector('.promo__card[data-key="' + what + '"]');
+          if (card) card.click();
+          return;
+        }
+        if (kind === 'wallet') {
+          var parts = what.split('-');
+          var d = document.querySelector('.wallet__deposit');
+          if (d) d.click();
+          var seg = document.querySelector('.dp__seg-btn[data-seg="' + parts[0] + '"]');
+          if (seg && !seg.classList.contains('is-active')) seg.click();
+          var m = document.querySelector('.dp__method-btn[data-method="' + parts[1] + '"]');
+          if (m && !m.classList.contains('is-active')) m.click();
+        }
+      });
 
       /* ── «View All» в шапках рядов ведёт в казино ── */
       document.querySelectorAll('.view-all').forEach(function (a) {
