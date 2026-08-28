@@ -2151,6 +2151,8 @@ body.is-authed .wallet { display: flex; }
 .rg__clear { padding: 0 2px; border: 0; background: none; cursor: pointer; line-height: 1;
              font-size: 16px; color: var(--dp-label); }
 .rg__clear:hover { color: var(--white); }
+.rg__limit[hidden] { display: none; }
+.rg__limit-val i { font-style: normal; }
 .rg__track { display: block; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .08); }
 .rg__track i { display: block; height: 100%; border-radius: 2px; background: var(--primary); }
 
@@ -2722,6 +2724,22 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp.is-withdraw.is-fiat .dp__amount,
 .dp.is-withdraw.is-fiat .dp__wd-foot { display: none; }
 
+
+/* ── Общий выпадающий список для селектов по сайту ── */
+.pick { position: relative; }
+.pick__menu { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 20;
+              margin: 0; padding: 6px; list-style: none; min-width: 148px;
+              background: var(--menu); border: 1px solid var(--white-10); border-radius: 10px;
+              box-shadow: 0 12px 28px -8px rgba(0, 0, 0, .6); }
+.pick__menu[hidden] { display: none; }
+.pick__menu button { display: flex; align-items: center; width: 100%; height: 36px; padding: 0 10px;
+                     border: 0; border-radius: 6px; background: none; cursor: pointer; text-align: left;
+                     font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px;
+                     color: var(--modal-text-1, #bbc6cd); }
+.pick__menu button:hover { background: var(--white-06); color: var(--white); }
+.pick__menu button[aria-selected="true"] { background: var(--white-10); color: var(--white); }
+/* Выбранное значение перестаёт быть подсказкой */
+.rg__select.is-picked { color: var(--white); }
 
 /* ── Витрина состояний: панель для просмотра, не часть макета ── */
 .states { position: fixed; left: 16px; bottom: 16px; z-index: 90; box-sizing: border-box;
@@ -4535,8 +4553,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="rg__track"><i style="width:8%"></i></span>
             </div>
             <div class="rg__row">
-              <button class="rg__select" type="button">Period<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
-              <button class="rg__select rg__select--cur" type="button">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select" type="button" data-opts="Daily|Weekly|Monthly">Period<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select rg__select--cur" type="button" data-opts="USDT|USD|EUR|AZN">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
               <label class="rg__input"><input type="text" inputmode="decimal" placeholder="0.00" aria-label="Limit amount"></label>
               <button class="rg__set" type="button">Set</button>
             </div>
@@ -4556,8 +4574,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="rg__track"><i style="width:8%"></i></span>
             </div>
             <div class="rg__row">
-              <button class="rg__select" type="button">Period<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
-              <button class="rg__select rg__select--cur" type="button">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select" type="button" data-opts="Daily|Weekly|Monthly">Period<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select rg__select--cur" type="button" data-opts="USDT|USD|EUR|AZN">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
               <label class="rg__input"><input type="text" inputmode="decimal" placeholder="0.00" aria-label="Limit amount"></label>
               <button class="rg__set" type="button">Set</button>
             </div>
@@ -4579,8 +4597,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="rg__track"><i style="width:8%"></i></span>
             </div>
             <div class="rg__row">
-              <button class="rg__select" type="button">Period<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
-              <button class="rg__select rg__select--cur" type="button">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select" type="button" data-opts="Daily|Weekly|Monthly">Period<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select rg__select--cur" type="button" data-opts="USDT|USD|EUR|AZN">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
               <label class="rg__input"><input type="text" inputmode="decimal" placeholder="0.00" aria-label="Limit amount"></label>
               <button class="rg__set" type="button">Set</button>
             </div>
@@ -4600,7 +4618,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="rg__track"><i style="width:42%"></i></span>
             </div>
             <div class="rg__row rg__row--session">
-              <button class="rg__select" type="button">Minute<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select" type="button" data-opts="15 minutes|30 minutes|60 minutes|120 minutes">Minute<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
               <label class="rg__input"><input type="text" placeholder="Enter" aria-label="Minutes"></label>
               <button class="rg__set" type="button">Set</button>
             </div>
@@ -4613,7 +4631,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <p>Feel the need to stay away from the casino for some time? You can set a cooling-off limit for a certain period of time. The restriction takes effect instantly. You won't be able to make deposits and play during the specified period, also you will be excluded from all advertising offers. After the set period expires, you'll receive a notification email saying your account is active again.</p>
             </div>
             <div class="rg__row rg__row--wide">
-              <button class="rg__select" type="button">None<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              <button class="rg__select" type="button" data-opts="None|24 hours|7 days|30 days|90 days">None<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
               <button class="rg__set" type="button">Set</button>
             </div>
           </section>
@@ -5875,14 +5893,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="dp__label dp__label--dim">Deposit Currency</span>
               <button class="dp__select" type="button">
                 <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
-                <span class="dp__select-value">RBL</span>
+                <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
                 <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
               </button>
             </div>
             <div class="dp__field">
               <span class="dp__label dp__label--dim">Network</span>
               <button class="dp__select" type="button">
-                <span class="dp__select-value">Payphone</span>
+                <span class="dp__select-value" data-opts="Payphone|Card|Bank transfer">Payphone</span>
                 <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
               </button>
             </div>
@@ -5938,14 +5956,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="dp__label dp__label--dim">Deposit Currency</span>
               <button class="dp__select" type="button">
                 <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
-                <span class="dp__select-value">RBL</span>
+                <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
                 <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
               </button>
             </div>
             <div class="dp__field">
               <span class="dp__label dp__label--dim">Network</span>
               <button class="dp__select" type="button">
-                <span class="dp__select-value">Payphone</span>
+                <span class="dp__select-value" data-opts="Payphone|Card|Bank transfer">Payphone</span>
                 <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
               </button>
             </div>
@@ -7349,6 +7367,181 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         profSave.hidden = true;
       });
     }
+
+    /* ═══ Кнопки, которые раньше ничего не делали ═══ */
+    (function () {
+      /* ── Responsible Gambling: Set ставит лимит, крестик снимает ── */
+      var rgPanel = document.getElementById('prof-responsible');
+      if (rgPanel) {
+        var rgNum = function (t) {
+          var n = parseFloat(String(t).replace(/[^\d.]/g, ''));
+          return isFinite(n) ? n : 0;
+        };
+        var rgFill = function (card, label, value, max, pct) {
+          var lim = card.querySelector('.rg__limit');
+          if (!lim) {
+            lim = document.createElement('div');
+            lim.className = 'rg__limit';
+            lim.innerHTML = '<div class="rg__limit-head"><span></span>' +
+              '<span class="rg__limit-val"><b></b> <i></i>' +
+              '<button class="rg__clear" type="button" aria-label="Снять лимит">\u00D7</button></span></div>' +
+              '<span class="rg__track"><i></i></span>';
+            card.insertBefore(lim, card.querySelector('.rg__row'));
+          }
+          lim.hidden = false;
+          lim.querySelector('.rg__limit-head > span').textContent = label;
+          lim.querySelector('.rg__limit-val b').textContent = value;
+          var rest = lim.querySelector('.rg__limit-val i');
+          if (rest) rest.textContent = max ? '/ ' + max : '';
+          lim.querySelector('.rg__track i').style.width = pct + '%';
+        };
+
+        rgPanel.querySelectorAll('.rg__card').forEach(function (card) {
+          var title = card.querySelector('h2').textContent.trim();
+          var row = card.querySelector('.rg__row');
+          var set = card.querySelector('.rg__set');
+          var input = card.querySelector('input');
+          var selects = [].slice.call(row.querySelectorAll('.rg__select'));
+
+          set.addEventListener('click', function () {
+            var period = selects[0] ? selects[0].textContent.trim() : '';
+            if (title === 'Cooling off' || title === 'Self exclusion') {
+              var what = title === 'Cooling off' ? period : (input && input.value.trim());
+              if (!what || what === 'None') return;
+              var text = title === 'Cooling off'
+                ? 'Cooling-off is set for ' + what
+                : 'Self-exclusion is set for ' + what + ' days';
+              rgFill(card, text, '', '', 100);
+              return;
+            }
+            var v = rgNum(input && input.value);
+            if (!v) return;
+            if (title === 'Session limit') {
+              rgFill(card, (period || 'Minute') + ' limit', String(v), '100',
+                     Math.max(2, Math.min(100, v)));
+            } else {
+              var cur = selects[1] ? selects[1].textContent.trim() : 'USDT';
+              /* Полоса от миллиона почти невидима — держим минимум в 2% */
+              var pct = Math.max(2, Math.min(100, v / 1000000 * 100));
+              rgFill(card, (period || 'Weekly') + ' limit', v.toFixed(2) + ' ' + cur,
+                     '1,000,000 ' + cur, pct);
+            }
+            if (input) input.value = '';
+          });
+        });
+
+        /* Крестик снимает лимит — карточка возвращается к пустой форме */
+        rgPanel.addEventListener('click', function (e) {
+          var x = e.target.closest('.rg__clear');
+          if (!x) return;
+          var lim = x.closest('.rg__limit');
+          if (lim) lim.hidden = true;
+        });
+      }
+
+      /* ── История: страницы переключаются ── */
+      document.querySelectorAll('.hist__pager').forEach(function (pager) {
+        var pages = [].slice.call(pager.querySelectorAll('.hist__page:not(.hist__page--nav)'));
+        var go = function (btn) {
+          pages.forEach(function (b) { b.classList.toggle('is-current', b === btn); });
+        };
+        pages.forEach(function (b) { b.addEventListener('click', function () { go(b); }); });
+        var nav = pager.querySelectorAll('.hist__page--nav');
+        var step = function (dir) {
+          var i = pages.findIndex(function (b) { return b.classList.contains('is-current'); });
+          var next = pages[Math.max(0, Math.min(pages.length - 1, i + dir))];
+          if (next) go(next);
+        };
+        if (nav[0]) nav[0].addEventListener('click', function () { step(-1); });
+        if (nav[1]) nav[1].addEventListener('click', function () { step(1); });
+      });
+
+      /* ── «View All» в шапках рядов ведёт в казино ── */
+      document.querySelectorAll('.view-all').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          var sec = a.closest('.section');
+          var name = sec ? (sec.querySelector('h2') || {}).textContent : '';
+          showView(/sport|match/i.test(name || '') ? 'sport' : 'casino');
+        });
+      });
+    })();
+
+    /* ═══ Выпадающие списки ═══
+       Селекты по сайту были нарисованными: значение подписано в разметке,
+       выбрать нечего. Один общий механизм: у кнопки перечислены значения
+       в data-opts, список собирается из них, выбор меняет подпись. */
+    (function () {
+      var open = null;
+      var close = function () {
+        if (!open) return;
+        open.menu.hidden = true;
+        open.host.setAttribute('aria-expanded', 'false');
+        open = null;
+      };
+
+      var build = function (host) {
+        var opts = host.dataset.opts.split('|');
+        /* Кнопка может быть и самим селектом, и подписью внутри него */
+        var btn = host.tagName === 'BUTTON' ? host : host.closest('button');
+        var box = btn.parentNode;
+        box.classList.add('pick');
+        var menu = document.createElement('ul');
+        menu.className = 'pick__menu';
+        menu.setAttribute('role', 'listbox');
+        menu.hidden = true;
+        opts.forEach(function (o, i) {
+          var li = document.createElement('li');
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('role', 'option');
+          b.textContent = o;
+          b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+          li.appendChild(b);
+          menu.appendChild(li);
+        });
+        box.appendChild(menu);
+        btn.setAttribute('aria-haspopup', 'listbox');
+        btn.setAttribute('aria-expanded', 'false');
+
+        /* Куда писать выбранное: в подпись, если она есть, иначе в кнопку */
+        var label = host !== btn ? host : null;
+        var setValue = function (text) {
+          if (label) { label.textContent = text; return; }
+          var node = [].slice.call(btn.childNodes).filter(function (n) {
+            return n.nodeType === 3 && n.textContent.trim();
+          })[0];
+          if (node) node.textContent = text; else btn.textContent = text;
+        };
+
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var wasOpen = open && open.menu === menu;
+          close();
+          if (wasOpen) return;
+          menu.hidden = false;
+          btn.setAttribute('aria-expanded', 'true');
+          open = { menu: menu, host: btn };
+        });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('button');
+          if (!b) return;
+          e.stopPropagation();
+          menu.querySelectorAll('button').forEach(function (o) {
+            o.setAttribute('aria-selected', o === b ? 'true' : 'false');
+          });
+          setValue(b.textContent);
+          btn.classList.add('is-picked');
+          close();
+          btn.dispatchEvent(new CustomEvent('pick', { detail: b.textContent, bubbles: true }));
+        });
+      };
+
+      document.querySelectorAll('[data-opts]').forEach(build);
+      addEventListener('click', close);
+      addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
 
     /* ═══ Витрина состояний ═══
        Экраны кошелька и истории живут не только в «пустом» и «заполненном»
