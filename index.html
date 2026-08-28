@@ -2237,6 +2237,22 @@ body.is-authed .wallet { display: flex; }
 /* У выигранной ставки в колонке стоит сумма — слово «Won» дублировало бы её */
 .hist__result--won .hist__status { display: none; }
 
+/* Загрузка: пять полос вместо строк, чтобы не прыгала высота карточки */
+.hist__skel { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; }
+.hist__skel[hidden] { display: none; }
+.hist__skel span { display: block; height: 48px; border-radius: 12px;
+                   background: linear-gradient(90deg, rgba(255,255,255,.04) 0%,
+                               rgba(255,255,255,.09) 50%, rgba(255,255,255,.04) 100%);
+                   background-size: 200% 100%; animation: hist-shine 1.2s linear infinite; }
+@keyframes hist-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .hist__skel span { animation: none; } }
+/* Кнопка «попробовать снова» в состоянии ошибки */
+.hist__empty button { margin-top: 12px; padding: 10px 18px; border: 1px solid rgba(255,255,255,.12);
+                      border-radius: 10px; background: none; cursor: pointer; color: var(--white);
+                      font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px; }
+.hist__empty button:hover { background: var(--white-06); }
+.hist__empty button[hidden] { display: none; }
+
 .hist__pager { display: flex; align-items: center; justify-content: center; gap: 8px; }
 .hist__page { box-sizing: border-box; display: flex; align-items: center; justify-content: center;
               min-width: 40px; height: 40px; padding: 0 8px; cursor: pointer;
@@ -2648,6 +2664,72 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp.is-withdraw.is-fiat .dp__amount,
 .dp.is-withdraw.is-fiat .dp__wd-foot { display: none; }
 
+
+/* ── Витрина состояний: панель для просмотра, не часть макета ── */
+.states { position: fixed; left: 16px; bottom: 16px; z-index: 90; box-sizing: border-box;
+          display: flex; flex-direction: column; gap: 10px; width: 268px; max-height: calc(100vh - 32px);
+          padding: 14px; overflow-y: auto;
+          background: #141a33; border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px;
+          box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .8);
+          font-family: 'Work Sans', sans-serif; }
+.states[hidden] { display: none; }
+.states__head { display: flex; align-items: center; justify-content: space-between; }
+.states__head b { font-weight: 700; font-size: 14px; color: var(--white); }
+.states__x { padding: 0 4px; border: 0; background: none; cursor: pointer;
+             font-size: 18px; line-height: 1; color: var(--dp-label); }
+.states__group { display: flex; flex-direction: column; gap: 4px; }
+.states__group > span { font-weight: 500; font-size: 11px; line-height: 14px; color: var(--dp-label);
+                        text-transform: uppercase; letter-spacing: .04em; }
+.states__item { text-align: left; padding: 7px 10px; border: 0; border-radius: 8px; cursor: pointer;
+                background: rgba(255, 255, 255, .06); color: var(--modal-text-1, #bbc6cd);
+                font-family: inherit; font-weight: 500; font-size: 12.5px; line-height: 16px; }
+.states__item:hover { background: rgba(255, 255, 255, .12); color: var(--white); }
+.states__item.is-current { background: var(--primary); color: var(--white); }
+.states__reset { padding: 8px; border: 1px solid rgba(255, 255, 255, .12); border-radius: 8px;
+                 background: none; cursor: pointer; color: var(--white);
+                 font-family: inherit; font-weight: 600; font-size: 12.5px; }
+.states__reset:hover { background: rgba(255, 255, 255, .08); }
+@media (max-width: 767px) {
+  .states { left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 60vh; }
+}
+
+/* ── Состояния окна кошелька ──
+   Подсказка об ошибке под полем суммы и экран состояния вместо формы:
+   блокировки счёта, отправка, успех и отказ. ── */
+.dp__error { margin: 0; padding: 0 8px; font-family: 'Work Sans', sans-serif; font-weight: 500;
+             font-size: 12px; line-height: 16px; color: #fb3254; }
+.dp__error[hidden] { display: none; }
+.dp__error--warn { color: #fabf2e; }
+
+.dp__state { display: none; flex-direction: column; align-items: center; text-align: center;
+             gap: 10px; width: 100%; padding: 32px 24px 8px; }
+.dp.is-state .dp__state { display: flex; }
+/* Форма на это время уходит целиком — вместе с вкладками способа */
+.dp.is-state .dp__body,
+.dp.is-state .dp__wd-foot,
+.dp.is-state .dp__note,
+.dp.is-state .dp__methods { display: none; }
+.dp__state-ico { display: flex; align-items: center; justify-content: center;
+                 width: 56px; height: 56px; margin-bottom: 6px; border-radius: 50%;
+                 background: var(--white-06); font-size: 24px; line-height: 1; }
+.dp__state--ok .dp__state-ico   { background: rgba(126, 231, 135, .14); }
+.dp__state--wait .dp__state-ico { background: rgba(250, 191, 46, .14); }
+.dp__state--bad .dp__state-ico  { background: rgba(229, 72, 77, .14); }
+.dp__state-title { font-family: 'Work Sans', sans-serif; font-weight: 700;
+                   font-size: 18px; line-height: 24px; color: var(--white); }
+.dp__state-text { margin: 0; max-width: 380px; font-family: 'Work Sans', sans-serif;
+                  font-size: 13px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+.dp__state-cta { margin-top: 10px; box-sizing: border-box; display: flex; align-items: center;
+                 justify-content: center; height: 44px; padding: 0 24px; border: 0; border-radius: 12px;
+                 background: linear-gradient(to bottom, #cdfa50, #a6e22e); color: #00151f; cursor: pointer;
+                 font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 14px; }
+.dp__state-cta[hidden] { display: none; }
+.dp__state-back { margin-top: 2px; padding: 8px 12px; border: 0; background: none; cursor: pointer;
+                  font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 13px;
+                  color: var(--dp-label); text-decoration: underline; }
+.dp__state-back:hover { color: var(--white); }
+/* Кнопка в работе: подпись меняет скрипт, здесь только вид */
+.dp__submit.is-busy { opacity: .8; cursor: default; }
 
 /* 1180:32169 — сноска: кант #747889, радиус 12, паддинг 12, зазор 8 */
 .dp__note { box-sizing: border-box; width: 100%; height: 56px; display: flex; gap: 8px; padding: 12px;
@@ -4470,9 +4552,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <span class="hist__date">22.04.2025, 22:40</span>
           </div>
           </div>
+          <div class="hist__skel" hidden aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
           <div class="hist__empty" hidden>
             <b>Nothing here yet</b>
             <span>No bets match the selected filters.</span>
+            <button type="button" hidden>Try again</button>
           </div>
         <div class="hist__pager">
           <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
@@ -4579,9 +4665,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <span class="hist__date">22.04.2025, 22:40</span>
           </div>
           </div>
+          <div class="hist__skel" hidden aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
           <div class="hist__empty" hidden>
             <b>Nothing here yet</b>
             <span>No bets match the selected filters.</span>
+            <button type="button" hidden>Try again</button>
           </div>
         <div class="hist__pager">
           <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
@@ -5598,6 +5688,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             </label>
           </div>
           <!-- 1180:38832 — три доли от баланса вместо прежних сумм -->
+          <p class="dp__error dp__error--crypto" hidden></p>
           <div class="dp__chips" data-node-id="1180:38832">
             <button class="dp__chip" type="button" data-part="25">25%</button>
             <button class="dp__chip" type="button" data-part="50">50%</button>
@@ -5651,6 +5742,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <button class="dp__max dp__fw-max" type="button">MAX</button>
               </label>
             </div>
+            <p class="dp__error dp__error--fd" hidden></p>
             <div class="dp__chips">
               <button class="dp__chip" type="button" data-amount="100">100</button>
               <button class="dp__chip" type="button" data-amount="150">150</button>
@@ -5713,6 +5805,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <button class="dp__max dp__fd-max" type="button">MAX</button>
               </label>
             </div>
+            <p class="dp__error dp__error--fw" hidden></p>
             <div class="dp__chips">
               <button class="dp__chip" type="button" data-amount="100">$100</button>
               <button class="dp__chip" type="button" data-amount="500">$500</button>
@@ -5756,6 +5849,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <div class="dp__note" data-node-id="1180:32169">
         <span class="dp__ico"><img loading="lazy" decoding="async" class="dp__ico--warn" src="a/c83fe98c9e.svg" alt=""></span>
         <p>Send only ETH to this deposit address. Transfers below 0.0003 ETH will not be credited.</p>
+      </div>
+
+      <!-- Экран состояния: блокировки, отправка, успех и ошибка показываются
+           вместо формы. Заполняет скрипт, поэтому текст здесь пустой. -->
+      <div class="dp__state" hidden>
+        <span class="dp__state-ico" aria-hidden="true"></span>
+        <b class="dp__state-title"></b>
+        <p class="dp__state-text"></p>
+        <button class="dp__state-cta" type="button" hidden></button>
+        <button class="dp__state-back" type="button">Back to wallet</button>
       </div>
 
       <!-- 1180:32173 и 1180:32174 — уголки 45.31 по нижним углам -->
@@ -6201,8 +6304,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         if (amountInput) {
           var addrInput = dp.querySelector('.dp__addr-input');
           var chips = [].slice.call(dp.querySelectorAll('.dp__chip'));
-          var sumAmount = dp.querySelector('.dp__sum-amount');
-          var sumFee = dp.querySelector('.dp__sum-fee');
+          /* Именно строки крипто-вывода: у фиатных блоков те же классы,
+             и общий селектор брал первый в документе — итог уходил не туда. */
+          var sumAmount = dp.querySelector('.dp__wd-foot .dp__sum-amount');
+          var sumFee = dp.querySelector('.dp__wd-foot .dp__sum-fee');
           /* Именно кнопка крипто-вывода: у фиата свой .dp__submit, и по
              общему селектору сюда попадала она — крипта переписывала ей текст */
           var wdSubmit = dp.querySelector('.dp__wd-foot .dp__submit');
@@ -7067,6 +7172,210 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         profSave.hidden = true;
       });
     }
+
+    /* ═══ Витрина состояний ═══
+       Экраны кошелька и истории живут не только в «пустом» и «заполненном»
+       виде. Чтобы их можно было посмотреть, не подделывая данные руками,
+       рядом лежит панель со списком: пункт включает состояние целиком.
+       Открывается по адресу ?states или сочетанием Shift+S. */
+    (function () {
+      var dpEl = document.getElementById('deposit-modal');
+      if (!dpEl) return;
+
+      var stClear = function () {
+        dpEl.classList.remove('is-state');
+        dpEl.querySelectorAll('.dp__error').forEach(function (e) { e.hidden = true; e.textContent = ''; });
+        dpEl.querySelectorAll('.dp__input').forEach(function (e) { e.classList.remove('is-bad'); });
+        dpEl.querySelectorAll('.dp__submit').forEach(function (b) { b.classList.remove('is-busy'); });
+        var st = dpEl.querySelector('.dp__state');
+        st.className = 'dp__state';
+      };
+
+      /* Открыть окно на нужной паре вкладок */
+      var stOpen = function (seg, method) {
+        if (dpEl.hidden) {
+          var d = document.querySelector('.wallet__deposit');
+          if (d) d.click();
+        }
+        var segBtn = dpEl.querySelector('[data-seg="' + seg + '"]');
+        if (segBtn && !segBtn.classList.contains('is-active')) segBtn.click();
+        var mBtn = dpEl.querySelector('[data-method="' + method + '"]');
+        if (mBtn && !mBtn.classList.contains('is-active')) mBtn.click();
+      };
+
+      /* Подсказка под полем суммы */
+      var stError = function (kind, text, warn) {
+        var e = dpEl.querySelector('.dp__error--' + kind);
+        if (!e) return;
+        e.textContent = text;
+        e.hidden = false;
+        e.classList.toggle('dp__error--warn', !!warn);
+      };
+
+      /* Экран вместо формы */
+      var stScreen = function (tone, ico, title, text, cta) {
+        var st = dpEl.querySelector('.dp__state');
+        st.className = 'dp__state dp__state--' + tone;
+        st.querySelector('.dp__state-ico').textContent = ico;
+        st.querySelector('.dp__state-title').textContent = title;
+        st.querySelector('.dp__state-text').textContent = text;
+        var c = st.querySelector('.dp__state-cta');
+        c.hidden = !cta;
+        if (cta) c.textContent = cta;
+        dpEl.classList.add('is-state');
+      };
+
+      var fill = function (sel, value) {
+        var i = dpEl.querySelector(sel);
+        if (!i) return;
+        i.value = value;
+        i.dispatchEvent(new Event('input'));
+      };
+
+      var STATES = [
+        ['Кошелёк · ввод', [
+          ['Сумма ниже минимума', function () { stOpen('withdraw', 'crypto'); fill('.dp__amount-input', '10');
+            stError('crypto', 'Minimum withdrawal is 20 USDT.'); }],
+          ['Сумма больше баланса', function () { stOpen('withdraw', 'crypto'); fill('.dp__amount-input', '900');
+            stError('crypto', 'Not enough balance. Available: 0.00 USDT.'); }],
+          ['Адрес не заполнен', function () { stOpen('withdraw', 'crypto'); fill('.dp__amount-input', '50');
+            dpEl.querySelector('.dp__addr-field .dp__input').classList.add('is-bad');
+            stError('crypto', 'Enter the wallet address.'); }],
+          ['Адрес из другой сети', function () { stOpen('withdraw', 'crypto'); fill('.dp__amount-input', '50');
+            var a = dpEl.querySelector('.dp__addr-input'); a.value = 'bc1qxy2kgdygjrsqtzq2n0yrf249';
+            stError('crypto', 'This address looks like Bitcoin, but ERC20 is selected.', true); }],
+          ['Имя не заполнено (фиат)', function () { stOpen('withdraw', 'fiat'); fill('.dp__fw-input', '100');
+            dpEl.querySelectorAll('.dp__fw .dp__input')[0].classList.add('is-bad');
+            stError('fw', 'Last name is required.'); }]
+        ]],
+        ['Кошелёк · отправка', [
+          ['Кнопка в работе', function () { stOpen('withdraw', 'crypto'); fill('.dp__amount-input', '50');
+            var b = dpEl.querySelector('.dp__wd-foot .dp__submit');
+            b.classList.add('is-busy'); b.disabled = true; b.textContent = 'Processing…'; }],
+          ['Заявка принята', function () { stOpen('withdraw', 'crypto');
+            stScreen('wait', '\u23F3', 'Withdrawal requested',
+              'We are reviewing your request. Usually it takes up to 30 minutes, and you will get an email when the payout is sent.',
+              'Track in history'); }],
+          ['Выплата отправлена', function () { stOpen('withdraw', 'crypto');
+            stScreen('ok', '\u2713', 'Withdrawal sent',
+              '50.00 USDT sent to 0x42fFe63917a4aa65294563De2c82. Transaction 0x9f3c…41ab.',
+              'Track in history'); }],
+          ['Отказ платёжной системы', function () { stOpen('deposit', 'fiat');
+            stScreen('bad', '\u2715', 'Payment declined',
+              'The provider declined the payment. Nothing was charged — try another method or a smaller amount.',
+              'Try again'); }],
+          ['Депозит зачислен', function () { stOpen('deposit', 'crypto');
+            stScreen('ok', '\u2713', 'Deposit credited',
+              '100.00 USDT is already on your balance. Bonus, if any, is credited to the bonus balance.',
+              'Start playing'); }],
+          ['Ждём перевод', function () { stOpen('deposit', 'crypto');
+            stScreen('wait', '\u23F3', 'Waiting for your transfer',
+              'The address stays valid for 30 minutes. Funds appear after the first network confirmation.', ''); }]
+        ]],
+        ['Кошелёк · счёт закрыт', [
+          ['Нужна верификация', function () { stOpen('withdraw', 'crypto');
+            stScreen('wait', '\u26A0', 'Verify your identity first',
+              'Withdrawals open after identity verification. It usually takes a few minutes.',
+              'Go to verification'); }],
+          ['Достигнут лимит депозита', function () { stOpen('deposit', 'crypto');
+            stScreen('wait', '\u26A0', 'Weekly deposit limit reached',
+              'You set a weekly deposit limit of 450.00 USDT. The limit resets on Monday, 00:00 UTC.',
+              'Responsible gambling'); }],
+          ['Активна пауза Cooling off', function () { stOpen('deposit', 'crypto');
+            stScreen('wait', '\u26A0', 'Cooling-off is active',
+              'Deposits and play are paused until 03.09.2026. Withdrawals stay available.', ''); }],
+          ['Бонус не отыгран', function () { stOpen('withdraw', 'crypto'); fill('.dp__amount-input', '50');
+            stError('crypto', 'Only 0.00 USDT is withdrawable: 100.00 USDT is locked by an active bonus.', true); }],
+          ['Нечего выводить', function () { stOpen('withdraw', 'crypto');
+            stScreen('wait', '\u2205', 'Nothing to withdraw yet',
+              'Your balance is 0.00 USDT. Make a deposit and play — winnings will be available here.',
+              'Deposit'); }],
+          ['Способ на техработах', function () { stOpen('deposit', 'fiat');
+            stScreen('wait', '\u26A0', 'Payphone is temporarily unavailable',
+              'The provider is under maintenance. Try crypto or come back in an hour.', ''); }]
+        ]]
+      ];
+
+      /* Состояния истории: карточка та же, меняется её содержимое */
+      var histPanel = function () {
+        var v = document.getElementById('view-history');
+        if (!v) return null;
+        if (v.hidden) {
+          var b = document.querySelector('.pm__item[data-go="history"]');
+          if (b) { var u = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+                   if (u) u.click(); b.click(); }
+        }
+        return v.querySelector('.hist__card:not([hidden])');
+      };
+      var histShow = function (what, title, text, cta) {
+        var c = histPanel();
+        if (!c) return;
+        var skel = c.querySelector('.hist__skel');
+        var table = c.querySelector('.hist__table');
+        var pager = c.querySelector('.hist__pager');
+        var empty = c.querySelector('.hist__empty');
+        skel.hidden = what !== 'load';
+        table.hidden = what !== 'rows';
+        pager.hidden = what !== 'rows';
+        empty.hidden = what !== 'text';
+        if (what === 'text') {
+          empty.querySelector('b').textContent = title;
+          empty.querySelector('span').textContent = text;
+          empty.querySelector('button').hidden = !cta;
+        }
+      };
+      STATES.push(['История', [
+        ['Загрузка', function () { histShow('load'); }],
+        ['Ставок ещё не было', function () { histShow('text', 'No bets yet',
+          'Your casino bets will show up here right after the first spin.'); }],
+        ['Ошибка загрузки', function () { histShow('text', 'Could not load history',
+          'Check the connection and try again — your bets are safe.', true); }],
+        ['Обычный список', function () { histShow('rows'); }]
+      ]]);
+
+      /* ── панель ── */
+      var panel = document.createElement('aside');
+      panel.className = 'states';
+      panel.hidden = true;
+      var html = '<div class="states__head"><b>Состояния</b>' +
+                 '<button class="states__x" type="button" aria-label="Закрыть">\u00D7</button></div>';
+      STATES.forEach(function (group, gi) {
+        html += '<div class="states__group"><span>' + group[0] + '</span>';
+        group[1].forEach(function (item, ii) {
+          html += '<button class="states__item" type="button" data-g="' + gi + '" data-i="' + ii + '">' +
+                  item[0] + '</button>';
+        });
+        html += '</div>';
+      });
+      html += '<button class="states__reset" type="button">Сбросить</button>';
+      panel.innerHTML = html;
+      document.body.appendChild(panel);
+
+      panel.addEventListener('click', function (e) {
+        var it = e.target.closest('.states__item');
+        if (it) {
+          stClear();
+          STATES[+it.dataset.g][1][+it.dataset.i][1]();
+          panel.querySelectorAll('.states__item').forEach(function (b) {
+            b.classList.toggle('is-current', b === it);
+          });
+          return;
+        }
+        if (e.target.closest('.states__reset')) {
+          stClear();
+          panel.querySelectorAll('.states__item').forEach(function (b) { b.classList.remove('is-current'); });
+        }
+        if (e.target.closest('.states__x')) panel.hidden = true;
+      });
+
+      dpEl.querySelector('.dp__state-back').addEventListener('click', stClear);
+
+      var stToggle = function () { panel.hidden = !panel.hidden; };
+      if (/states/.test(location.search)) panel.hidden = false;
+      addEventListener('keydown', function (e) {
+        if (e.shiftKey && (e.key === 'S' || e.key === 'Ы')) stToggle();
+      });
+    })();
 
     /* Мобильное меню Browse: открывается первым пунктом нижней панели. */
     var brMenu = document.getElementById('browse-menu');
