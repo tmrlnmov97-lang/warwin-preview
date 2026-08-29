@@ -1883,7 +1883,12 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* Смена страницы: короткое проявление вместо мгновенной подмены.
    Анимация запускается сама, когда с блока снимают hidden. */
 @keyframes view-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.view, .hero { animation: view-in .3s cubic-bezier(.22, .61, .36, 1) both; }
+/* backwards, а не both: при forwards элемент навсегда остаётся «анимируемым
+   по transform», даже когда в последнем кадре transform: none. Такой элемент
+   становится точкой отсчёта для fixed внутри, и закреплённая панель
+   рекомендаций прилипала к колонке вместо экрана. Последний кадр совпадает
+   с обычным состоянием, поэтому на глаз ничего не меняется. */
+.view, .hero { animation: view-in .3s cubic-bezier(.22, .61, .36, 1) backwards; }
 @media (prefers-reduced-motion: reduce) { .view, .hero { animation: none; } .hslide { transition: none; } }
 
 /* ───────────────────────────────────────────────────────────────────
@@ -2492,6 +2497,30 @@ body.is-authed .wallet { display: flex; }
                    flex: none; border-radius: 8px; font-size: 20px; line-height: 1; color: var(--muted); }
 .gv__aside-close:hover { background: var(--white-10); color: var(--white); }
 .gv__rec { display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+/* В игре колонка рекомендаций становится закреплённой панелью во всю высоту
+   экрана: её заголовок встаёт в один ряд с шапкой сайта, а вход с регистрацией
+   ужимаются под ширину кадра. Панель выше шапки по слою (20), поэтому просто
+   накрывает её правый край — фон у обеих один, шов держит только полоска. */
+@media (min-width: 1280px) {
+  body.in-game .gv { grid-template-columns: minmax(0, 1fr); }
+  body.in-game .gv__aside {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 21;
+    width: 360px; max-height: none; padding: 0; gap: 0;
+    border-radius: 0; border-left: 1px solid var(--white-06);
+  }
+  body.in-game .gv__aside-head {
+    height: 74px; flex: none; padding: 0 16px;
+    border-bottom: 1px solid var(--white-06);
+  }
+  body.in-game .gv__rec { flex: 1 1 auto; padding: 14px; }
+  /* Колонка контента и правая группа шапки заканчиваются у панели.
+     335 = 360 панели + 16 зазора − 41 правое поле шапки. */
+  body.in-game .content { right: 376px; }
+  body.in-game .header-desktop { margin-right: 335px; }
+  /* Панель закрыли — оба края возвращаются к правому полю */
+  body.in-game.rec-off .content { right: 40px; }
+  body.in-game.rec-off .header-desktop { margin-right: 0; }
+}
 @media (min-width: 1280px) {
   /* 74 шапка + 32 воздуха; список забирает остаток и скроллится внутри */
   .gv__aside { position: sticky; top: 106px; max-height: calc(var(--vh, 100vh) - 138px); }
@@ -8636,6 +8665,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
          крестик её закрывает, кнопка в панели закрывает и открывает. */
       var gvSolo = function (on) {
         gvGrid.classList.toggle('is-solo', on);
+        /* В игре панель закреплена во всю высоту, и её ширину отыгрывают
+           колонка контента и правая группа шапки — это правила на теле. */
+        document.body.classList.toggle('rec-off', on);
         gvWide.setAttribute('aria-pressed', String(on));
         /* Кадр меняет ширину — обложка пересчитывается под новый размер */
         gvSizeCover();
