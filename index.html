@@ -202,18 +202,6 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   flex: 1 1 auto; min-width: 0; height: 74px; padding-block: var(--gap-lg);
 }
-.cat-buttons { display: flex; align-items: center; gap: var(--gap-md); }
-.cat-tab {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px; background: var(--surface); border-radius: 12px;
-}
-.cat-tab__icon { position: relative; width: 18px; height: 18px; overflow: hidden; flex: none; }
-.cat-tab__icon img { position: absolute; display: block; max-width: none; }
-.cat-tab__label {
-  font-family: 'Work Sans', sans-serif; font-weight: 700;
-  font-size: 12px; line-height: 24px; color: var(--white); white-space: nowrap;
-}
-
 .header-actions { display: flex; align-items: center; gap: var(--gap-md); }
 .btn-search {
   display: flex; align-items: center; justify-content: center;
@@ -725,21 +713,12 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 @media (min-width: 1024px) {
   .sidebar { display: flex; }
   .burger { display: flex; }
-  /* Пара CASINO/SPORTS стоит между бургером и знаком. Её коробка растянута
-     до левого края колонки контента, поэтому знак встаёт ровно по сетке —
-     на одну линию с заголовками секций. Если пара окажется шире растяжки
-     (узкий экран со свёрнутой панелью), знак просто отодвинется: min-width
-     не сжимает содержимое, наложения не будет.
-     64 = 16 поля + 40 бургера + 4 зазора + 4 зазора до знака. */
+  /* Вкладок CASINO/SPORTS в шапке нет — разделы открываются из бокового
+     меню. Освободившееся место занимает знак: он встаёт на левый край
+     колонки контента, на одну линию с заголовками секций под ним.
+     60 — где знак лежит без сдвига: 16 поля + 40 бургера + 4 зазора. */
   .topbar__brand { width: auto; }
-  .topbar .cat-buttons { flex: none; min-width: calc(var(--col-x, 296px) - 64px); }
-  /* На странице игры пары нет — как у Stake; знак там держит сетку сам */
-  body.in-game .topbar .cat-buttons { display: none; }
-  /* Знак прижат к паре: за левый край колонки его выводит растянутая
-     коробка пары, отдельный отступ тут только удвоил бы сдвиг.
-     На странице игры пары нет, там сдвиг задаём сами. */
-  .topbar__logo-wrap { margin-left: 0; }
-  body.in-game .topbar__logo-wrap { margin-left: calc(var(--col-x, 296px) - 60px); }
+  .topbar__logo-wrap { margin-left: calc(var(--col-x, 296px) - 60px); }
   /* Кошелёк остаётся между знаком и кнопками, вход с регистрацией — у края */
   .header-desktop { justify-content: flex-end; }
   .wallet { margin-inline: auto; }
@@ -763,7 +742,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
    ============================================================ */
 
 .btn, .btn-search, .burger, .banner__cta, .bonus__cta,
-.chip, .cat-tab, .view-all, .slider-btn, .social,
+.chip, .view-all, .slider-btn, .social,
 .side-item, .sub-item, .side-support,
 .game, .lc, .provider {
   transition: background-color .12s ease, filter .12s ease,
@@ -784,8 +763,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .banner__cta:active { background: var(--register-active); transform: translateY(1px); }
 
 /* --- Вторичные кнопки на плотной подложке --- */
-.btn--ghost:hover, .btn-search:hover, .cat-tab:hover { background: var(--surface-hover); }
-.btn--ghost:active, .btn-search:active, .cat-tab:active {
+.btn--ghost:hover, .btn-search:hover { background: var(--surface-hover); }
+.btn--ghost:active, .btn-search:active {
   background: var(--surface-active); transform: translateY(1px);
 }
 
@@ -869,7 +848,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* --- Фокус с клавиатуры. В макете не задан, но без него интерфейс
        недоступен с клавиатуры — добавлен осознанно. --- */
 .btn:focus-visible, .btn-search:focus-visible, .burger:focus-visible, .banner__cta:focus-visible,
-.bonus__cta:focus-visible, .chip:focus-visible, .cat-tab:focus-visible,
+.bonus__cta:focus-visible, .chip:focus-visible,
 .view-all:focus-visible, .slider-btn:focus-visible, .social:focus-visible,
 .sub-item:focus-visible, .game:focus-visible, .lc:focus-visible, .provider:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -1008,8 +987,6 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .topbar__logo-wrap { width: 120px; height: 43px; padding-left: 0; }
   .topbar__logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
   .btn-search { display: none; }
-  /* В мобильной шапке только логотип и две кнопки — вкладок Casino/Sports нет */
-  .cat-buttons, .topbar__sep { display: none; }
   .header-actions { gap: 12px; margin-left: auto; }
   /* ── 925:2284 — шапка после входа: под верхней полосой идёт кошелёк ──
      Кадр 402x122: сверху 62 (логотип, профиль, колокольчик), снизу 60 —
@@ -1643,8 +1620,6 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .view--casino .section:nth-child(4) { animation-delay: .14s; }
 .view--casino .section:nth-child(n+5) { animation-delay: .19s; }
 .banner[hidden] { display: none; }
-.cat-tab.is-active { background: var(--tab-active); }
-.cat-tab.is-active .cat-tab__label { color: var(--white); }
 
 @keyframes cas-card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   to   { opacity: 1; transform: translateY(0); }
@@ -4002,22 +3977,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <!-- Сворачивает сайдбар в колонку иконок и обратно -->
       <button class="burger" type="button" aria-label="Свернуть меню"
               aria-expanded="true" aria-controls="sidebar"></button>
-      <!-- Казино и спорт сразу за бургером: слева от знака место всё равно
-           пустовало. Коробка растянута до левого края колонки, поэтому знак
-           встаёт по сетке, а когда пара шире — просто отодвигает его. -->
-      <nav class="cat-buttons">
-        <a class="cat-tab" href="#">
-          <span class="cat-tab__icon">
-            <img src="a/dd57cc1252.svg" alt="" style="inset:0 0 16.3% 46.46%">
-            <img src="a/1904eb85cf.svg" alt="" style="inset:14.22% 31.26% 0 0">
-          </span>
-          <span class="cat-tab__label">CASINO</span>
-        </a>
-        <a class="cat-tab" href="#">
-          <span class="cat-tab__icon"><img src="a/ca02f2e00c.svg" alt="" style="inset:0 0.03% 0 0.02%"></span>
-          <span class="cat-tab__label">SPORTS</span>
-        </a>
-      </nav>
       <div class="topbar__logo-wrap" data-node-id="860:6113">
         <img class="logo" src="a/0d526d6016.svg" alt="WarWin">
       </div>
@@ -7708,9 +7667,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     game: document.getElementById('view-game') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
-    var tabs = document.querySelectorAll('.cat-tab');
-    /* Кнопка CASINO в шапке открывает лобби; чипы внутри лобби и страницы
-       Crash Games переключают между этими двумя страницами. */
+    /* Чипы внутри лобби и страницы Crash Games переключают эти две страницы */
     var chipView = { 'lobby': 'casino', 'crash games': 'crash' };
     /* Что было с панелью до входа в игру — чтобы вернуть на выходе */
     var gameRailWas = false;
@@ -7727,11 +7684,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       else fit();
       if (banner) banner.hidden = key !== 'home';
       if (hero) hero.hidden = key !== 'home';
-      tabs.forEach(function (t) {
-        var name = (t.textContent || '').trim().toLowerCase();
-        t.classList.toggle('is-active',
-          name === 'casino' ? (key === 'casino' || key === 'crash') : key === 'sport');
-      });
       /* Подсветка того, где мы находимся: чипы и пункты бокового меню */
       document.querySelectorAll('.chip, .sub-item').forEach(function (el) {
         el.classList.toggle('is-active',
@@ -7739,12 +7691,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       });
       scrollTo({ top: 0, behavior: 'smooth' });
     };
-    tabs.forEach(function (t) {
-      var label = (t.textContent || '').trim().toLowerCase();
-      var target = label === 'casino' ? 'casino' : (label === 'sports' ? 'sport' : null);
-      if (!target) return;
-      t.addEventListener('click', function (e) { e.preventDefault(); showView(target); });
-    });
     /* Фильтры видов спорта: активный — один */
     document.querySelectorAll('.spchip').forEach(function (c) {
       c.addEventListener('click', function () {
@@ -7788,10 +7734,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     if (brand) {
       brand.style.cursor = 'pointer';
       brand.addEventListener('click', function (e) {
-        /* Бургер и пара CASINO/SPORTS лежат внутри блока со знаком, и их
-           нажатия всплывали сюда: раздел открывался и тут же подменялся
-           главной, а панель сворачивалась заодно. */
-        if (e.target.closest('.burger, .cat-buttons')) return;
+        /* Бургер лежит внутри блока со знаком, и его нажатие всплывало сюда:
+           панель сворачивалась и тут же уводила на главную. */
+        if (e.target.closest('.burger')) return;
         showView('home');
       });
     }
