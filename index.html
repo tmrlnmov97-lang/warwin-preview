@@ -84,6 +84,14 @@
   /* Кривая появления карточки. У bc.game здесь перелёт до 1.15 с возвратом —
      он и читался рывком. Оставлено чистое затухание без отскока. */
 
+  /* Значки панели под кадром игры. Лежат прямо в стилях: сборка переименовывает
+     файлы из assets в хэши, а data-URI трогать не нужно, и лишних четырёх
+     запросов за 200-байтными svg тоже не будет. */
+  --ico-full: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3H3v6M15 21h6v-6M21 9V3h-6M3 15v6h6'/%3E%3C/svg%3E");
+  --ico-wide: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.5' y='5.5' width='19' height='13' rx='2.5'/%3E%3C/svg%3E");
+  --ico-fav: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20.3 4.6 13a4.6 4.6 0 1 1 6.5-6.5l.9.9.9-.9A4.6 4.6 0 1 1 19.4 13Z'/%3E%3C/svg%3E");
+  --ico-share: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-8.5 8.5M18 14v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10'/%3E%3C/svg%3E");
+
   /* Типографика */
   --label: 12px;
   --caption: 14px;
@@ -1093,6 +1101,10 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
      а не выставлен по центру инлайновыми размерами. Общее правило выше
      сдвигало и ужимало его — обложка съезжала в угол. */
   .game--flat > img.layer { transform: none !important; }
+  /* Слои, привязанные к низу плитки, стоят на translateX и своей высотой
+     наружу не выходят. Общее правило добавляло им подъём на половину высоты
+     и выталкивало из карточки — у «Mighty Wild Panther» пантера пропадала. */
+  .game > img.layer[style*="bottom:"] { transform: translateX(-50%) scale(.739) !important; }
   .lc > img.layer, .lc > .clip { transform: translate(-50%, -50%) scale(.735) !important; }
   .game { width: 114px; height: 151px; border-radius: 10px; }
   .game__info { width: 116px; padding: 14px 6px 6px; }
@@ -2364,6 +2376,170 @@ body.is-authed .wallet { display: flex; }
   .pone__lead { font-size: 14px; line-height: 22px; }
   .pone__cta { align-self: stretch; }
   .pone__crumb { font-size: 14px; padding: 0 14px; }
+}
+
+/* ─────────────── Страница игры ───────────────
+   Кадр слева, колонка рекомендаций справа. Панель закрывается крестиком —
+   тогда кадр забирает её ширину; в «широком режиме» из панели инструментов
+   происходит то же самое. */
+.view--game { gap: 16px; }
+.gv__top { display: flex; align-items: center; gap: 12px; }
+.gv__back { display: flex; align-items: center; justify-content: center; width: 48px; height: 44px;
+            flex: none; background: var(--white-10); border-radius: 12px; }
+.gv__back:hover { background: var(--white-16); }
+.gv__back img { display: block; width: 8px; height: 12.4px; }
+.gv__crumb { display: flex; align-items: center; height: 44px; padding: 0 20px; border-radius: 12px;
+             background: var(--white-10); font-family: 'Work Sans', sans-serif; font-weight: 600;
+             font-size: 15px; color: var(--white); }
+
+.gv { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
+.gv.is-solo { grid-template-columns: minmax(0, 1fr); }
+.gv.is-solo .gv__aside { display: none; }
+.gv__main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+.gv__frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+             background: var(--card-bg); border: 1px solid var(--hero-border); border-radius: 16px;
+             /* обложку укрупняем по ширине самого кадра, а не экрана: в широком
+                режиме колонка рекомендаций уходит и кадр становится больше */
+             container-type: inline-size; }
+/* Подложка — та же обложка, размытая и притушенная: кадр не выглядит пустым,
+   а цвет всегда совпадает с игрой. */
+.gv__bg { position: absolute; inset: -40px; background-size: cover; background-position: center;
+          filter: blur(36px) saturate(1.15) brightness(.3); }
+.gv__stage { position: absolute; inset: 0; display: flex; flex-direction: column;
+             align-items: center; justify-content: center; gap: 16px; padding: 20px; }
+/* Обложка — клон карточки: коробка держит размер после увеличения,
+   иначе увеличенная карточка налезала бы на кнопки. */
+/* Размер коробки задают стили, а масштаб клона в неё подбирает скрипт замером:
+   на мобильной сама карточка мельче, и постоянный коэффициент оставлял бы
+   поля по краям. */
+.gv__cover {
+  /* Кадр 16:9, поэтому его высота — это 56.25% ширины. Вычитаем поля сцены
+     (40), два зазора (32), подпись режима (18) и кнопки (44) — остаток и есть
+     место под обложку. Без этого на 1280 кнопки уезжали за нижний край. */
+  --h: min(347px, max(120px, calc(56.25cqw - 134px)));
+  position: relative; flex: none;
+  height: var(--h); width: calc(var(--h) * .7559); /* 154.2 / 204 */
+}
+.gv__cover .card-veil { display: none; }
+.gv__mode-note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 13px; color: var(--dp-text); }
+.gv__launch { display: flex; gap: 10px; }
+.gv__go { display: flex; align-items: center; justify-content: center; height: 44px; padding: 0 28px;
+          border-radius: 10px; font-weight: 700; font-size: 15px; color: var(--white); }
+.gv__go--real { background: var(--primary); }
+.gv__go--real:hover { background: var(--primary-hover); }
+.gv__go--demo { background: var(--white-10); }
+.gv__go--demo:hover { background: var(--white-16); }
+.gv__go.is-on { box-shadow: 0 0 0 2px var(--white-16) inset; }
+
+/* Панель под кадром: слева инструменты, по центру знак, справа режим */
+.gv__bar { display: flex; align-items: center; gap: 12px;
+           padding: 10px 14px; background: var(--chrome); border-radius: 12px; }
+.gv__tools { display: flex; align-items: center; gap: 4px; }
+.gv__tool { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px;
+            flex: none; border-radius: 9px; }
+.gv__tool::before { content: ''; width: 18px; height: 18px; background: var(--muted); }
+.gv__tool:hover { background: var(--surface); }
+.gv__tool:hover::before { background: var(--white); }
+.gv__tool[aria-pressed="true"] { background: var(--surface); }
+.gv__tool[aria-pressed="true"]::before { background: var(--primary); }
+.gv__tool.is-copied::before { background: var(--tab-active); }
+/* Глифы нарисованы масками, чтобы цвет вёл CSS, а не сам файл */
+.gv__tool--full::before {
+  -webkit-mask: var(--ico-full) center / contain no-repeat; mask: var(--ico-full) center / contain no-repeat; }
+.gv__tool--wide::before {
+  -webkit-mask: var(--ico-wide) center / contain no-repeat; mask: var(--ico-wide) center / contain no-repeat; }
+.gv__tool--fav::before {
+  -webkit-mask: var(--ico-fav) center / contain no-repeat; mask: var(--ico-fav) center / contain no-repeat; }
+.gv__tool--share::before {
+  -webkit-mask: var(--ico-share) center / contain no-repeat; mask: var(--ico-share) center / contain no-repeat; }
+.gv__curwrap { display: block; flex: none; }
+.gv__cur { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px;
+           background: var(--dp-field); border-radius: 9px;
+           font-weight: 600; font-size: 13px; color: var(--white); }
+.gv__cur img { display: block; opacity: .7; }
+.gv__cur:hover { background: #363c59; }
+.gv__mark { width: 74px; height: 26px; margin-inline: auto; object-fit: contain; opacity: .55; }
+.gv__modes { display: flex; gap: 4px; padding: 3px; background: var(--dp-field); border-radius: 10px; }
+.gv__mode { display: flex; align-items: center; justify-content: center; height: 30px; padding: 0 16px;
+            border-radius: 8px; font-weight: 700; font-size: 13px; color: var(--dp-label); }
+.gv__mode:hover { color: var(--white); }
+.gv__mode.is-active { background: var(--surface); color: var(--white); }
+
+/* Строка провайдера. Счётчика подписчиков у нас нет, поэтому вместо него —
+   переход к остальным играм студии. */
+.gv__prov { display: flex; align-items: center; gap: 14px;
+            padding: 14px 16px; background: var(--chrome); border-radius: 12px; }
+/* Знаки в ряду провайдеров разного размера; вписываем их масштабом из скрипта,
+   а лишнее по краям прячем — оно всё равно за пределами плитки. */
+.gv__prov-logo { display: flex; align-items: center; justify-content: center;
+                 width: 112px; height: 48px; flex: none; overflow: hidden;
+                 background: var(--white-04); border-radius: 10px; }
+.gv__prov-logo img { display: block; max-width: 90px; max-height: 30px; object-fit: contain; }
+.gv__prov-logo span { font-weight: 700; font-size: 11px; letter-spacing: .04em; color: var(--muted);
+                      text-align: center; text-transform: uppercase; padding: 0 6px; }
+.gv__prov-name { flex: 1 1 auto; min-width: 0; font-family: 'Work Sans', sans-serif;
+                 font-weight: 600; font-size: 16px; color: var(--white); }
+.gv__prov-all { display: flex; align-items: center; height: 40px; padding: 0 18px; flex: none;
+                background: var(--white-10); border-radius: 10px;
+                font-weight: 700; font-size: 14px; color: var(--white); }
+.gv__prov-all:hover { background: var(--white-16); }
+
+/* Колонка рекомендаций. Держится у верха и прокручивается сама: список
+   длиннее кадра, и без этого он тянул страницу вниз пустым полем справа. */
+.gv__aside { display: flex; flex-direction: column; gap: 8px; min-height: 0;
+             padding: 14px; background: var(--chrome); border-radius: 16px; }
+.gv__aside-head { display: flex; align-items: center; gap: 8px; padding: 2px 4px 8px; }
+.gv__aside-head h2 { flex: 1 1 auto; margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif;
+                     font-weight: 700; font-size: 16px; line-height: 20px; color: var(--white); }
+.gv__aside-close { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+                   flex: none; border-radius: 8px; font-size: 20px; line-height: 1; color: var(--muted); }
+.gv__aside-close:hover { background: var(--white-10); color: var(--white); }
+.gv__rec { display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+@media (min-width: 1280px) {
+  /* 74 шапка + 32 воздуха; список забирает остаток и скроллится внутри */
+  .gv__aside { position: sticky; top: 106px; max-height: calc(100vh - 138px); }
+  .gv__rec { overflow-y: auto; overscroll-behavior: contain;
+             scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.18) transparent; }
+  .gv__rec::-webkit-scrollbar { width: 6px; }
+  .gv__rec::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 3px; }
+  .gv__rec::-webkit-scrollbar-track { background: transparent; }
+}
+.gvrec { display: flex; align-items: center; gap: 12px; padding: 6px; border-radius: 10px;
+         cursor: pointer; text-align: left; }
+.gvrec:hover { background: var(--white-06); }
+.gvrec__art { position: relative; width: 68px; height: 90px; flex: none;
+              overflow: hidden; border-radius: 8px; background: var(--card-bg); }
+/* В миниатюре нужна только картинка: название стоит рядом обычным текстом */
+.gvrec__art .game__info, .gvrec__art .lc__info, .gvrec__art .card-veil { display: none; }
+.gvrec__txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.gvrec__name { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px; color: var(--white);
+               overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gvrec__prov { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--dp-label); }
+
+/* До 1280 колонка рекомендаций уходит под кадр: рядом ему остаётся 332px
+   на 1024 — кадр становится меньше миниатюры игры. */
+@media (max-width: 1279px) {
+  .gv { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 767px) {
+  /* Кадр перестаёт быть 16:9: в такую полосу обложка с кнопками не влезает.
+     Высоту задаёт содержимое, поэтому сцена здесь в обычном потоке. */
+  .gv__frame { aspect-ratio: auto; }
+  /* relative, а не static: подложка кадра позиционирована и без этого
+     перекрывала бы подпись режима и кнопки. */
+  .gv__stage { position: relative; inset: auto; padding: 24px 16px; }
+  .gv__cover { width: 154.2px; height: 204px; }
+  .gv__bar { flex-wrap: wrap; row-gap: 10px; }
+  /* Первой строкой инструменты во всю ширину, второй — валюта и режим */
+  .gv__tools { flex: 1 0 100%; justify-content: space-between; }
+  /* Знак между группами на узком экране только мешает переносу */
+  .gv__mark { display: none; }
+  .gv__modes { margin-left: auto; }
+  .gv__crumb { font-size: 14px; padding: 0 14px; }
+  .gv__prov { flex-wrap: wrap; }
+  .gv__prov-name { flex: 1 1 auto; }
+  .gv__prov-all { width: 100%; justify-content: center; }
 }
 
 .promo__empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 60px 0;
@@ -5036,6 +5212,69 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <button class="pone__cta" type="button">Activate bonus</button>
       </div>
 
+      <!-- Страница игры: открывается нажатием на любую карточку.
+           Клиента провайдера у нас нет, поэтому кадр — экран запуска:
+           размытая подложка из обложки, сама обложка по центру и выбор
+           режима. Обложка не рисуется заново, а клонируется из карточки:
+           у слоёв там выверенные по макету координаты. -->
+      <div class="view view--game" id="view-game" hidden>
+        <div class="gv__top">
+          <button class="gv__back" type="button" aria-label="Назад">
+            <img loading="lazy" decoding="async" src="a/8196602e48.svg" alt="">
+          </button>
+          <span class="gv__crumb"></span>
+        </div>
+
+        <div class="gv">
+          <div class="gv__main">
+            <div class="gv__frame">
+              <div class="gv__bg"></div>
+              <div class="gv__stage">
+                <div class="gv__cover"></div>
+                <p class="gv__mode-note"></p>
+                <div class="gv__launch">
+                  <button class="gv__go gv__go--real" type="button">Play</button>
+                  <button class="gv__go gv__go--demo" type="button">Demo</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="gv__bar">
+              <div class="gv__tools">
+                <button class="gv__tool gv__tool--full" type="button" aria-label="На весь экран"></button>
+                <button class="gv__tool gv__tool--wide" type="button" aria-label="Широкий режим" aria-pressed="false"></button>
+                <button class="gv__tool gv__tool--fav" type="button" aria-label="В избранное" aria-pressed="false"></button>
+                <button class="gv__tool gv__tool--share" type="button" aria-label="Скопировать ссылку"></button>
+              </div>
+              <!-- Общий механизм селектов вешает список на родителя кнопки,
+                   поэтому у неё своя обёртка, а не вся панель. -->
+              <span class="gv__curwrap">
+                <button class="gv__cur" type="button" data-opts="USDT|USD|EUR|AZN">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
+              </span>
+              <img loading="lazy" decoding="async" class="gv__mark" src="a/0d526d6016.svg" alt="WarWin">
+              <div class="gv__modes" role="tablist" aria-label="Режим игры">
+                <button class="gv__mode" type="button" role="tab" aria-selected="false">Demo</button>
+                <button class="gv__mode is-active" type="button" role="tab" aria-selected="true">Play</button>
+              </div>
+            </div>
+
+            <div class="gv__prov">
+              <span class="gv__prov-logo"></span>
+              <span class="gv__prov-name"></span>
+              <button class="gv__prov-all" type="button">All games</button>
+            </div>
+          </div>
+
+          <aside class="gv__aside">
+            <div class="gv__aside-head">
+              <h2>Recommended games</h2>
+              <button class="gv__aside-close" type="button" aria-label="Закрыть">&#215;</button>
+            </div>
+            <div class="gv__rec"></div>
+          </aside>
+        </div>
+      </div>
+
       <!-- 1358:18986 «History» — вкладки Casino / Sportsbook / Bonus,
            фильтры, таблица ставок и постраничная навигация. -->
       <div class="view view--history" id="view-history" hidden data-node-id="1358:18986">
@@ -7408,7 +7647,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     profile: document.getElementById('view-profile'),
                     history: document.getElementById('view-history'),
                     promo: document.getElementById('view-promo'),
-                    promoOne: document.getElementById('view-promo-one') };
+                    promoOne: document.getElementById('view-promo-one'),
+                    game: document.getElementById('view-game') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
@@ -7469,7 +7709,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     var brand = document.querySelector('.topbar__brand');
     if (brand) {
       brand.style.cursor = 'pointer';
-      brand.addEventListener('click', function () { showView('home'); });
+      brand.addEventListener('click', function (e) {
+        /* Бургер лежит внутри блока со знаком, и его нажатие всплывало сюда:
+           панель сворачивалась и тут же уводила на главную. */
+        if (e.target.closest('.burger')) return;
+        showView('home');
+      });
     }
 
     /* Карусель баннеров после входа. Стрелки — тот же компонент 904:1982,
@@ -8170,6 +8415,233 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           var sec = a.closest('.section');
           var name = sec ? (sec.querySelector('h2') || {}).textContent : '';
           showView(/sport|match/i.test(name || '') ? 'sport' : 'casino');
+        });
+      });
+    })();
+
+    /* ═══ Страница игры ═══
+       Открывается нажатием на любую карточку. Обложку и миниатюры не рисуем
+       заново, а клонируем сами карточки: у слоёв внутри выверенные по макету
+       координаты, повторить их разметкой значило бы держать вторую копию. */
+    (function () {
+      var gv = document.getElementById('view-game');
+      if (!gv) return;
+      var gvGrid = gv.querySelector('.gv');
+      var gvCover = gv.querySelector('.gv__cover');
+      var gvBg = gv.querySelector('.gv__bg');
+      var gvRec = gv.querySelector('.gv__rec');
+      var gvNote = gv.querySelector('.gv__mode-note');
+      var gvCur = gv.querySelector('.gv__cur');
+      var gvWide = gv.querySelector('.gv__tool--wide');
+      var gvFrom = 'home';
+
+      /* Названия в карточках переносятся через <br>. textContent склеил бы
+         строки без пробела («Gates ofOlympus»), поэтому разбираем разметку. */
+      var gvText = function (el) {
+        if (!el) return '';
+        return el.innerHTML.replace(/<br\s*\/?>/gi, ' ')
+                           .replace(/<[^>]*>/g, '')
+                           .replace(/\s+/g, ' ').trim();
+      };
+      var gvName = function (card) { return gvText(card.querySelector('.game__name, .lc__name')); };
+      var gvProv = function (card) { return gvText(card.querySelector('.game__provider, .lc__provider')); };
+
+      /* Клон вписываем в коробку замером, а не постоянным коэффициентом:
+         на мобильной сама карточка мельче (154 против 114), и один и тот же
+         масштаб оставлял бы поля по краям. */
+      var gvFit = function (box) {
+        var card = box.firstElementChild;
+        if (!card) return;
+        card.style.transform = 'none';
+        var cw = card.offsetWidth, ch = card.offsetHeight;
+        if (!cw || !ch) return;
+        var r = box.getBoundingClientRect();
+        var k = Math.min(r.width / cw, r.height / ch);
+        card.style.transformOrigin = 'top left';
+        card.style.transform = 'scale(' + k.toFixed(4) + ')';
+      };
+      var gvFitAll = function () {
+        gvFit(gvCover);
+        gv.querySelectorAll('.gvrec__art').forEach(gvFit);
+      };
+      addEventListener('resize', function () { if (!gv.hidden) gvFitAll(); });
+
+      /* Логотипы студий берём из ряда провайдеров на главной, а не из путей
+         в скрипте: сборка переименовывает файлы в хэши и правит только
+         разметку и стили, поэтому имя файла в коде после сборки не найдётся. */
+      var GV_LOGO = {};
+      document.querySelectorAll('.providers-rail .provider').forEach(function (p) {
+        var img = p.querySelector('img[alt]');
+        if (!img || !img.getAttribute('alt')) return;
+        var key = img.getAttribute('alt').trim().toUpperCase();
+        if (!GV_LOGO[key]) GV_LOGO[key] = p.firstElementChild;
+      });
+
+      var gvSetLogo = function (provider) {
+        var slot = gv.querySelector('.gv__prov-logo');
+        slot.innerHTML = '';
+        var src = GV_LOGO[provider];
+        if (!src) {
+          /* Своего знака у студии в файле нет — ставим название */
+          var s = document.createElement('span');
+          s.textContent = provider;
+          slot.appendChild(s);
+          return;
+        }
+        var box = document.createElement('span');
+        box.style.display = 'block';
+        box.appendChild(src.cloneNode(true));
+        slot.appendChild(box);
+        /* Знаки в ряду разного размера — вписываем замером, а не на глаз */
+        var r = box.getBoundingClientRect();
+        if (r.width && r.height) {
+          var k = Math.min(90 / r.width, 30 / r.height, 1);
+          box.style.transform = 'scale(' + k.toFixed(3) + ')';
+        }
+      };
+
+      /* Режим один на кадр и на панель: обе пары кнопок показывают его же */
+      var gvReal = true;
+      var gvMode = function (real) {
+        gvReal = real;
+        gv.querySelectorAll('.gv__mode').forEach(function (m) {
+          var on = (m.textContent.trim() === 'Play') === real;
+          m.classList.toggle('is-active', on);
+          m.setAttribute('aria-selected', String(on));
+        });
+        gv.querySelector('.gv__go--real').classList.toggle('is-on', real);
+        gv.querySelector('.gv__go--demo').classList.toggle('is-on', !real);
+        gvNote.textContent = real
+          ? 'Real money · ' + (gvCur.textContent || '').trim()
+          : 'Demo · play money';
+      };
+
+      var gvOpen = function (card, from) {
+        if (from) gvFrom = from;
+        var name = gvName(card);
+        var prov = gvProv(card);
+        gv.querySelector('.gv__crumb').textContent = name;
+        gv.querySelector('.gv__prov-name').textContent = prov;
+        gvSetLogo(prov);
+
+        var clone = card.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.classList.remove('is-active');
+        gvCover.innerHTML = '';
+        gvCover.appendChild(clone);
+
+        /* Подложка — первый слой обложки. Берём разрешённый браузером адрес
+           из свойства src, поэтому хэшированные имена в сборке не мешают. */
+        var art = card.querySelector('img.layer');
+        gvBg.style.backgroundImage = art ? 'url("' + art.src + '")' : 'none';
+
+        /* Рекомендации: другие карточки со страницы, по одной на название */
+        var seen = {};
+        seen[name] = true;
+        var pool = [];
+        document.querySelectorAll('.game, .lc').forEach(function (c) {
+          if (gv.contains(c) || pool.length >= 8) return;
+          var n = gvName(c);
+          if (!n || seen[n]) return;
+          seen[n] = true;
+          pool.push(c);
+        });
+        gvRec.innerHTML = '';
+        pool.forEach(function (c) {
+          var row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'gvrec';
+          var art = document.createElement('span');
+          art.className = 'gvrec__art';
+          art.appendChild(c.cloneNode(true));
+          var txt = document.createElement('span');
+          txt.className = 'gvrec__txt';
+          txt.innerHTML = '<span class="gvrec__name"></span><span class="gvrec__prov"></span>';
+          txt.querySelector('.gvrec__name').textContent = gvName(c);
+          txt.querySelector('.gvrec__prov').textContent = gvProv(c);
+          row.appendChild(art);
+          row.appendChild(txt);
+          row.addEventListener('click', function () { gvOpen(c); });
+          gvRec.appendChild(row);
+        });
+
+        gvMode(true);
+        showView('game');
+        /* Вписываем после показа: у скрытой страницы размеров нет */
+        gvFitAll();
+      };
+
+      gv.querySelector('.gv__back').addEventListener('click', function () { showView(gvFrom); });
+      gv.querySelector('.gv__go--real').addEventListener('click', function () { gvMode(true); });
+      gv.querySelector('.gv__go--demo').addEventListener('click', function () { gvMode(false); });
+      gv.querySelectorAll('.gv__mode').forEach(function (m) {
+        m.addEventListener('click', function () { gvMode(m.textContent.trim() === 'Play'); });
+      });
+      /* Валюту выбирают общим механизмом селектов — подпись режима следом */
+      gvCur.addEventListener('pick', function () { gvMode(gvReal); });
+
+      /* Колонка рекомендаций и «широкий режим» — одно состояние на двоих:
+         крестик её закрывает, кнопка в панели закрывает и открывает. */
+      var gvSolo = function (on) {
+        gvGrid.classList.toggle('is-solo', on);
+        gvWide.setAttribute('aria-pressed', String(on));
+        /* Кадр меняет ширину — обложка пересчитывается под новую коробку */
+        gvFit(gvCover);
+      };
+      gv.querySelector('.gv__aside-close').addEventListener('click', function () { gvSolo(true); });
+      gvWide.addEventListener('click', function () {
+        gvSolo(gvWide.getAttribute('aria-pressed') !== 'true');
+      });
+
+      var gvFav = gv.querySelector('.gv__tool--fav');
+      gvFav.addEventListener('click', function () {
+        var on = gvFav.getAttribute('aria-pressed') !== 'true';
+        gvFav.setAttribute('aria-pressed', String(on));
+        gvFav.setAttribute('aria-label', on ? 'Убрать из избранного' : 'В избранное');
+      });
+
+      var gvFull = gv.querySelector('.gv__tool--full');
+      gvFull.addEventListener('click', function () {
+        var frame = gv.querySelector('.gv__frame');
+        if (document.fullscreenElement) document.exitFullscreen();
+        else if (frame.requestFullscreen) frame.requestFullscreen();
+      });
+
+      var gvShare = gv.querySelector('.gv__tool--share');
+      gvShare.addEventListener('click', function () {
+        var done = function () {
+          gvShare.classList.add('is-copied');
+          setTimeout(function () { gvShare.classList.remove('is-copied'); }, 1200);
+        };
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(done, done);
+        else done();
+      });
+
+      gv.querySelector('.gv__prov-all').addEventListener('click', function () { showView('casino'); });
+
+      /* Сами карточки. Внутри страницы игры их не трогаем: там клоны. */
+      var gvWhere = function (card) {
+        var view = card.closest('.view');
+        if (!view) return 'home';
+        var id = (view.id || '').replace('view-', '');
+        return id === 'crash' ? 'crash' : (id === 'casino' ? 'casino' : 'home');
+      };
+      document.querySelectorAll('.game, .lc').forEach(function (card) {
+        if (gv.contains(card)) return;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        var go = function () {
+          /* Из поиска сперва закрываем окно, иначе страница откроется под ним */
+          var modal = card.closest('.srch');
+          if (modal && !modal.hidden) {
+            var close = modal.querySelector('[data-close]');
+            if (close) close.click();
+          }
+          gvOpen(card, gvWhere(card));
+        };
+        card.addEventListener('click', go);
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
         });
       });
     })();
