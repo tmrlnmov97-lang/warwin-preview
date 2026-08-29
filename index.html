@@ -264,6 +264,9 @@ body {
    низ подтягивался прямо под неё. Когда контента больше высоты — запас
    обнуляется сам, и блок честно уезжает вниз под прокрутку. */
 .sidebar__bottom { display: flex; flex-direction: column; gap: 4px; width: 100%; flex: none; margin-top: auto; }
+/* Линия над языком и поддержкой — по варфрейму */
+.sidebar__rule { height: 1px; flex: none; margin: 4px 16px 8px; background: var(--white-10); }
+body.nav-rail .sidebar__rule { margin: 4px 6px 8px; }
 
 /* Раскрыто — прижатие снимается: список едет вместе с нижней группой,
    до языка и поддержки надо доскроллить. */
@@ -4016,7 +4019,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <!-- 860:5898 — две группы, между ними зазор 230 -->
       <div class="sidebar__inner" data-node-id="860:5898">
 
-        <!-- 860:5900 — навигация -->
+        <!-- 860:5900 — навигация. Порядок и состав по варфрейму заказчика -->
         <nav class="sidebar__nav" data-node-id="860:5900">
 
           <div class="side-item" data-node-id="860:5902">
@@ -4024,54 +4027,75 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <span class="side-item__label">Casino</span>
             <img class="chev" src="a/346630b640.svg" alt="">
           </div>
-
           <div class="subcat is-collapsed" data-node-id="860:5903">
-            <div class="subcat__list" data-node-id="860:5904">
+            <div class="subcat__list">
               <a class="sub-item" href="#"><img src="a/60e8a2f99e.svg" alt=""><span>Lobby</span></a>
-              <a class="sub-item" href="#"><img src="a/21ad8ec927.svg" alt=""><span>Crash Games</span></a>
-              <a class="sub-item" href="#"><img src="a/c46f4569fb.svg" alt=""><span>New Slots</span></a>
-              <a class="sub-item" href="#"><img src="a/d4505ffade.svg" alt=""><span>Popular Slots</span></a>
-              <a class="sub-item" href="#"><img src="a/86c1a44d79.svg" alt=""><span>High RTP</span></a>
+              <a class="sub-item" href="#"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bbc6cd' stroke-width='1.8'%3E%3Crect x='3' y='3' width='7.5' height='7.5' rx='2'/%3E%3Crect x='13.5' y='3' width='7.5' height='7.5' rx='2'/%3E%3Crect x='3' y='13.5' width='7.5' height='7.5' rx='2'/%3E%3Crect x='13.5' y='13.5' width='7.5' height='7.5' rx='2'/%3E%3C/svg%3E" alt=""><span>All Games</span></a>
+              <a class="sub-item" href="#"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bbc6cd' stroke-width='1.7' stroke-linejoin='round'%3E%3Cpath d='M12 2.5c3.2 3.4 6.5 6 6.5 10.4A6.5 6.5 0 0 1 5.5 12.9c0-2 .9-3.6 2.1-5 .2 1.3.9 2.2 1.9 2.6.5-3.4 1-5.9 2.5-8Z'/%3E%3C/svg%3E" alt=""><span>Popular Games</span></a>
+              <a class="sub-item" href="#"><img src="a/d4505ffade.svg" alt=""><span>Slots</span></a>
               <a class="sub-item" href="#"><img src="a/c1845085c1.svg" alt=""><span>Table Games</span></a>
-              <a class="sub-item" href="#"><img src="a/39eacc80c9.svg" alt=""><span>Video Poker</span></a>
-              <a class="sub-item" href="#"><img src="a/c0ba02d44b.svg" alt=""><span>Live Casino</span></a>
-              <a class="sub-item" href="#"><img src="a/6476cc4cce.svg" alt=""><span>Game Shows</span></a>
+              <a class="sub-item" href="#"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bbc6cd' stroke-width='1.7' stroke-linecap='round'%3E%3Cellipse cx='12' cy='6' rx='7.5' ry='3'/%3E%3Cpath d='M4.5 6v5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6'/%3E%3Cpath d='M4.5 11v5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-5'/%3E%3C/svg%3E" alt=""><span>Jackpots</span></a>
+              <a class="sub-item" href="#"><img src="a/c46f4569fb.svg" alt=""><span>New Games</span></a>
               <a class="sub-item" href="#"><img src="a/46d277f6b4.svg" alt=""><span>Providers</span></a>
             </div>
           </div>
 
-          <div class="sidebar__divider" data-node-id="860:5979"></div>
-          <div class="side-item" data-node-id="894:29019">
-            <img class="ico" src="a/401e94f115.svg" alt="">
-            <span class="side-item__label">Sports</span>
+          <div class="side-item">
+            <img class="ico" src="a/c0ba02d44b.svg" alt="">
+            <span class="side-item__label">Live Casino</span>
             <img class="chev" src="a/346630b640.svg" alt="">
           </div>
+          <div class="subcat is-collapsed">
+            <div class="subcat__list">
+              <a class="sub-item" href="#"><img src="a/6476cc4cce.svg" alt=""><span>Game Shows</span></a>
+              <a class="sub-item" href="#"><img src="a/c1845085c1.svg" alt=""><span>Blackjack</span></a>
+              <a class="sub-item" href="#"><img src="a/404593e9ee.svg" alt=""><span>Roulette</span></a>
+              <a class="sub-item" href="#"><img src="a/39eacc80c9.svg" alt=""><span>Baccarat</span></a>
+            </div>
+          </div>
 
-          <!-- 1029:29221 — подраздел спорта, раскрывается по клику -->
+          <div class="side-item">
+            <img class="ico" src="a/21ad8ec927.svg" alt="">
+            <span class="side-item__label">Fast Games</span>
+            <img class="chev" src="a/346630b640.svg" alt="">
+          </div>
+          <div class="subcat is-collapsed">
+            <div class="subcat__list">
+              <a class="sub-item" href="#"><img src="a/21ad8ec927.svg" alt=""><span>Crash Games</span></a>
+              <a class="sub-item" href="#"><img src="a/86c1a44d79.svg" alt=""><span>Aviator</span></a>
+              <a class="sub-item" href="#"><img src="a/60e8a2f99e.svg" alt=""><span>Spaceman</span></a>
+            </div>
+          </div>
+
+          <div class="side-item" data-node-id="894:29019">
+            <img class="ico" src="a/401e94f115.svg" alt="">
+            <span class="side-item__label">Sport</span>
+            <img class="chev" src="a/346630b640.svg" alt="">
+          </div>
           <div class="subcat is-collapsed" data-node-id="1029:29221">
-            <div class="subcat__list" data-node-id="1029:29223">
+            <div class="subcat__list">
               <a class="sub-item" href="#"><img src="a/0eec65d4be.svg" alt=""><span>Upcoming</span></a>
               <a class="sub-item" href="#"><img src="a/eed79b599e.svg" alt=""><span>Outrights</span></a>
             </div>
           </div>
 
-          <div class="sidebar__divider" data-node-id="895:29049"></div>
-          <div class="side-item" data-node-id="895:29037">
-            <img class="ico" src="a/404593e9ee.svg" alt="">
-            <span class="side-item__label">Live</span>
-          </div>
-
-          <div class="sidebar__divider" data-node-id="860:5987"></div>
           <div class="side-item" data-node-id="895:29050">
             <img class="ico" src="a/6b1e44858b.svg" alt="">
             <span class="side-item__label">Promotions</span>
           </div>
-
-          <div class="sidebar__divider" data-node-id="860:5983"></div>
+          <div class="side-item">
+            <img class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bbc6cd' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8.5' width='18' height='12.5' rx='1.8'/%3E%3Cpath d='M2 8.5h20v4H2z'/%3E%3Cpath d='M12 8.5V21'/%3E%3Cpath d='M12 8.5S10.6 3 8 3a2.5 2.5 0 0 0 0 5.5Z'/%3E%3Cpath d='M12 8.5S13.4 3 16 3a2.5 2.5 0 0 1 0 5.5Z'/%3E%3C/svg%3E" alt="">
+            <span class="side-item__label">Bonuses</span>
+          </div>
+          <div class="side-item">
+            <img class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bbc6cd' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7.5 6.5 12 12 4.5 17.5 12 21 7.5v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5Z'/%3E%3C/svg%3E" alt="">
+            <span class="side-item__label">VIP Club</span>
+          </div>
         </nav>
 
         <!-- 925:22128 — язык и поддержка, прижаты к низу -->
         <div class="sidebar__bottom" data-node-id="925:22128">
+          <div class="sidebar__rule"></div>
           <div class="side-item side-item--inline" data-node-id="860:5999">
             <span class="ico ico--flag" aria-hidden="true"><img src="a/2cfe6eab94.svg" alt=""><img src="a/ccb494ee27.svg" alt=""><img src="a/3c4c1bbfde.svg" alt=""></span>
             <span class="side-item__label">English</span>
@@ -7709,12 +7733,23 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     /* Вкладок CASINO/SPORTS в шапке больше нет, поэтому боковое меню —
        единственный вход в разделы: заголовок и раскрывает список, и
        открывает саму страницу. */
-    var sideView = { 'casino': 'casino', 'sports': 'sport' };
+    var sideView = { 'casino': 'casino', 'sport': 'sport', 'fast games': 'crash' };
     document.querySelectorAll('.side-item').forEach(function (it) {
       var label = it.querySelector('.side-item__label');
       var target = sideView[((label && label.textContent) || '').trim().toLowerCase()];
       if (!target) return;
       it.addEventListener('click', function () { showView(target); });
+    });
+    /* Своей страницы у бонусов нет, но есть вкладка Bonus в истории ставок —
+       пункт меню ведёт туда. У VIP Club страницы пока нет вовсе. */
+    document.querySelectorAll('.side-item').forEach(function (it) {
+      var label = it.querySelector('.side-item__label');
+      if (((label && label.textContent) || '').trim().toLowerCase() !== 'bonuses') return;
+      it.addEventListener('click', function () {
+        showView('history');
+        var tab = document.querySelector('.hist__tab[data-hist="bonus"]');
+        if (tab) tab.click();
+      });
     });
     /* Пункты бокового меню открывают те же страницы, что и чипы */
     document.querySelectorAll('.sub-item').forEach(function (it) {
