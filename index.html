@@ -176,6 +176,10 @@ body {
   display: none; align-items: center; justify-content: center;
   width: 40px; height: 40px; flex: none; border-radius: 10px;
   color: var(--muted);
+  /* Опускаем на 5px из общей оси шапки. Коробка знака 156×55 включает корону,
+     поэтому по центру строки встаёт весь знак, а глаз равняет бургер по слову:
+     «Warwin» занимает 23–60, его середина 41.5, а середина строки — 36.5. */
+  position: relative; top: 5px;
 }
 .burger::before {
   content: ''; width: 18px; height: 2px; border-radius: 1px;
