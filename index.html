@@ -163,23 +163,26 @@ body {
 }
 /* 860:6106 — слот 235px, внутри 860:6113: только логотип, отступ 20 слева,
    выравнивание по нижнему краю. Кнопки меню в актуальном макете нет. */
-.topbar__brand { display: flex; align-items: center; gap: 12px; width: 235px; flex: none; padding-left: 12px; }
+/* Зазор всего 4: у кнопки 40×40 под глифом в 18 уже лежит по 11px воздуха
+   с каждой стороны, при большем бургер отрывался от знака. Четырёх хватает,
+   чтобы подложка на наведении не упиралась в корону. */
+.topbar__brand { display: flex; align-items: center; gap: 4px; width: 235px; flex: none; padding-left: 16px; }
 .topbar__logo-wrap { display: flex; align-items: flex-end; }
-/* Бургер сворачивает сайдбар в рейку из иконок. Иконка из макета
-   (heroicons menu-alt-2) нарисована серой — берём её маской, чтобы цветом
-   управлял CSS и на наведении глиф светлел вместе с подложкой. */
+/* Бургер сворачивает сайдбар в рейку из иконок. Три одинаковые полосы рисуем
+   стилем, а не берём иконку из макета: там лежит heroicons menu-alt-2 с
+   укороченной нижней полосой — рядом с крупным знаком она читалась косой. */
 /* Ниже 1024 сайдбара нет, сворачивать нечего — кнопка появляется на lg */
 .burger {
   display: none; align-items: center; justify-content: center;
   width: 40px; height: 40px; flex: none; border-radius: 10px;
+  color: var(--muted);
 }
 .burger::before {
-  content: ''; width: 24px; height: 24px; background: var(--muted);
-  -webkit-mask: url(a/7aae139d08.svg) center / contain no-repeat;
-  mask: url(a/7aae139d08.svg) center / contain no-repeat;
+  content: ''; width: 18px; height: 2px; border-radius: 1px;
+  background: currentColor;
+  box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
 }
-.burger:hover { background: var(--surface); }
-.burger:hover::before { background: var(--white); }
+.burger:hover { background: var(--surface); color: var(--white); }
 .burger:active { background: var(--surface-active); }
 .logo { width: 156px; height: 55px; display: block; }
 
@@ -737,13 +740,16 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
    наведение — светлее на 12%, нажатие — темнее на 12% и сдвиг на 1px.
    ============================================================ */
 
-.btn, .btn-search, .banner__cta, .bonus__cta,
+.btn, .btn-search, .burger, .banner__cta, .bonus__cta,
 .chip, .cat-tab, .view-all, .slider-btn, .social,
 .side-item, .sub-item, .side-support,
 .game, .lc, .provider {
   transition: background-color .12s ease, filter .12s ease,
               transform .08s ease, box-shadow .12s ease;
 }
+/* Полосы бургера нарисованы currentColor, поэтому светлеют вместе с подложкой.
+   Правило стоит после общего — иначе оно затирало бы переход цвета. */
+.burger { transition: background-color .12s ease, color .12s ease; }
 
 /* --- Основное действие --- */
 .bonus__cta:hover { background: var(--primary-hover); }
