@@ -2392,9 +2392,13 @@ body.is-authed .wallet { display: flex; }
    в 1200 и центрирование тут только съедали бы место под кадр. */
 @media (min-width: 1024px) {
   body.in-game .content {
-    left: calc(var(--nav-w) + 16px); right: 40px;
+    left: calc(var(--nav-w) + 32px); right: 40px;
     max-width: none; margin-inline: 0;
   }
+  /* Знак встаёт на левый край колонки, а бургер остаётся над рейкой.
+     60 — где логотип лежит обычно: 16 поля + 40 кнопки + 4 зазора. */
+  body.in-game .topbar__brand { width: auto; }
+  body.in-game .topbar__logo-wrap { margin-left: calc(var(--nav-w) - 28px); }
 }
 
 .gv { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
@@ -2514,9 +2518,9 @@ body.is-authed .wallet { display: flex; }
   }
   body.in-game .gv__rec { flex: 1 1 auto; padding: 14px; }
   /* Колонка контента и правая группа шапки заканчиваются у панели.
-     335 = 360 панели + 16 зазора − 41 правое поле шапки. */
-  body.in-game .content { right: 376px; }
-  body.in-game .header-desktop { margin-right: 335px; }
+     351 = 360 панели + 32 зазора − 41 правое поле шапки. */
+  body.in-game .content { right: 392px; }
+  body.in-game .header-desktop { margin-right: 351px; }
   /* Панель закрыли — оба края возвращаются к правому полю */
   body.in-game.rec-off .content { right: 40px; }
   body.in-game.rec-off .header-desktop { margin-right: 0; }
