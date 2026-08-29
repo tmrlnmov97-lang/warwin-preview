@@ -314,9 +314,11 @@ body.nav-rail .sidebar__rule { margin: 8px 8px 12px; }
 }
 /* Поддержка выделена подложкой — 860:6001, отступ 6px с каждой стороны,
    фон #212743, иконка #F5E2E2, подпись белая. Синий был моей отсебятиной. */
+/* Скругление 14 = 20 у карточки минус 6 отступа: тогда углы строки идут
+   концентрично углам карточки. С прежними 8 они выглядели мельче, чем надо. */
 .side-item--accent {
   width: calc(100% - 12px); margin-inline: 6px;
-  background: var(--support-bg); border-radius: 8px;
+  background: var(--support-bg); border-radius: 14px;
 }
 .side-item--accent .side-item__label { color: var(--white); }
 .side-item--accent .ico--mask {
