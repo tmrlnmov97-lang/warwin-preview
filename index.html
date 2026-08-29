@@ -288,20 +288,6 @@ body {
 .sidebar.is-expanded .sidebar__inner::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 3px; }
 .sidebar.is-expanded .sidebar__inner::-webkit-scrollbar-track { background: transparent; }
 
-/* Казино и спорт — отдельная пара над меню, как у Stake. Разметка та же, что
-   раньше стояла в шапке, поэтому обработчики и подсветка активного раздела
-   работают без изменений. */
-.sidebar .cat-buttons { display: flex; gap: 6px; flex: none; padding: 0 8px 8px; }
-.sidebar .cat-tab { flex: 1 1 0; min-width: 0; justify-content: center;
-                    height: 40px; padding: 0; border-radius: 10px; }
-.sidebar__split { height: 1px; flex: none; margin: 0 8px 8px; background: var(--white-10); }
-/* В рейке пара встаёт столбиком, подписи уходят — как в свёрнутом меню Stake */
-body.nav-rail .sidebar .cat-buttons { flex-direction: column; gap: 4px; padding: 0 6px 8px; }
-/* flex:1 в колонке тянет по высоте, а ширина схлопывалась до иконки */
-body.nav-rail .sidebar .cat-tab { flex: none; width: 100%; height: 44px; }
-body.nav-rail .cat-tab__label { display: none; }
-body.nav-rail .sidebar__split { margin: 0 6px 8px; }
-
 .side-item {
   position: relative; display: flex; align-items: center; gap: 12px;
   width: 100%; height: 44px; flex: none; padding: 0 16px;
@@ -739,12 +725,21 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 @media (min-width: 1024px) {
   .sidebar { display: flex; }
   .burger { display: flex; }
-  /* Вкладок CASINO/SPORTS в шапке нет — они переехали в боковое меню.
-     Освободившееся место занимает знак: он встаёт на левый край колонки
-     контента, как и заголовки секций под ним. */
+  /* Пара CASINO/SPORTS стоит между бургером и знаком. Её коробка растянута
+     до левого края колонки контента, поэтому знак встаёт ровно по сетке —
+     на одну линию с заголовками секций. Если пара окажется шире растяжки
+     (узкий экран со свёрнутой панелью), знак просто отодвинется: min-width
+     не сжимает содержимое, наложения не будет.
+     64 = 16 поля + 40 бургера + 4 зазора + 4 зазора до знака. */
   .topbar__brand { width: auto; }
-  /* 60 — где знак лежит без сдвига: 16 поля + 40 кнопки + 4 зазора */
-  .topbar__logo-wrap { margin-left: calc(var(--col-x, 296px) - 60px); }
+  .topbar .cat-buttons { flex: none; min-width: calc(var(--col-x, 296px) - 64px); }
+  /* На странице игры пары нет — как у Stake; знак там держит сетку сам */
+  body.in-game .topbar .cat-buttons { display: none; }
+  /* Знак прижат к паре: за левый край колонки его выводит растянутая
+     коробка пары, отдельный отступ тут только удвоил бы сдвиг.
+     На странице игры пары нет, там сдвиг задаём сами. */
+  .topbar__logo-wrap { margin-left: 0; }
+  body.in-game .topbar__logo-wrap { margin-left: calc(var(--col-x, 296px) - 60px); }
   /* Кошелёк остаётся между знаком и кнопками, вход с регистрацией — у края */
   .header-desktop { justify-content: flex-end; }
   .wallet { margin-inline: auto; }
@@ -4007,6 +4002,22 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <!-- Сворачивает сайдбар в колонку иконок и обратно -->
       <button class="burger" type="button" aria-label="Свернуть меню"
               aria-expanded="true" aria-controls="sidebar"></button>
+      <!-- Казино и спорт сразу за бургером: слева от знака место всё равно
+           пустовало. Коробка растянута до левого края колонки, поэтому знак
+           встаёт по сетке, а когда пара шире — просто отодвигает его. -->
+      <nav class="cat-buttons">
+        <a class="cat-tab" href="#">
+          <span class="cat-tab__icon">
+            <img src="a/dd57cc1252.svg" alt="" style="inset:0 0 16.3% 46.46%">
+            <img src="a/1904eb85cf.svg" alt="" style="inset:14.22% 31.26% 0 0">
+          </span>
+          <span class="cat-tab__label">CASINO</span>
+        </a>
+        <a class="cat-tab" href="#">
+          <span class="cat-tab__icon"><img src="a/ca02f2e00c.svg" alt="" style="inset:0 0.03% 0 0.02%"></span>
+          <span class="cat-tab__label">SPORTS</span>
+        </a>
+      </nav>
       <div class="topbar__logo-wrap" data-node-id="860:6113">
         <img class="logo" src="a/0d526d6016.svg" alt="WarWin">
       </div>
@@ -4045,22 +4056,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <div class="sidebar__menu" data-node-id="860:5897">
       <!-- 860:5898 — две группы, между ними зазор 230 -->
       <div class="sidebar__inner" data-node-id="860:5898">
-
-        <!-- Казино и спорт отдельной парой над меню, как у Stake -->
-        <nav class="cat-buttons">
-          <a class="cat-tab" href="#">
-            <span class="cat-tab__icon">
-              <img src="a/dd57cc1252.svg" alt="" style="inset:0 0 16.3% 46.46%">
-              <img src="a/1904eb85cf.svg" alt="" style="inset:14.22% 31.26% 0 0">
-            </span>
-            <span class="cat-tab__label">CASINO</span>
-          </a>
-          <a class="cat-tab" href="#">
-            <span class="cat-tab__icon"><img src="a/ca02f2e00c.svg" alt="" style="inset:0 0.03% 0 0.02%"></span>
-            <span class="cat-tab__label">SPORTS</span>
-          </a>
-        </nav>
-        <div class="sidebar__split"></div>
 
         <!-- 860:5900 — навигация -->
         <nav class="sidebar__nav" data-node-id="860:5900">
@@ -7793,9 +7788,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     if (brand) {
       brand.style.cursor = 'pointer';
       brand.addEventListener('click', function (e) {
-        /* Бургер лежит внутри блока со знаком, и его нажатие всплывало сюда:
-           панель сворачивалась и тут же уводила на главную. */
-        if (e.target.closest('.burger')) return;
+        /* Бургер и пара CASINO/SPORTS лежат внутри блока со знаком, и их
+           нажатия всплывали сюда: раздел открывался и тут же подменялся
+           главной, а панель сворачивалась заодно. */
+        if (e.target.closest('.burger, .cat-buttons')) return;
         showView('home');
       });
     }
