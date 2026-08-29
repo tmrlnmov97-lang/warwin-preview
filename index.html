@@ -181,15 +181,18 @@ body {
    круга заходит на панель, половина в зазор до контента. Стрелки смотрят
    в ту сторону, куда панель уедет. */
 .nav-toggle {
-  position: absolute; right: -16px; top: 34px; z-index: 3;
+  /* Круг садится ровно на правый край карточки меню, а не на край самой
+     панели: у той ещё 12px поля, и кнопка висела в воздухе рядом с углом.
+     right = поле панели − половина круга. */
+  position: absolute; right: calc(var(--pad, 12px) - 18px); top: 56px; z-index: 3;
   display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: 50%;
+  width: 36px; height: 36px; border-radius: 50%;
   background: var(--surface); border: 1px solid var(--white-10);
   box-shadow: 0 4px 12px -4px rgba(0, 0, 0, .6);
   color: var(--muted);
 }
 .nav-toggle::before {
-  content: ''; width: 16px; height: 16px; background: currentColor;
+  content: ''; width: 17px; height: 17px; background: currentColor;
   -webkit-mask: var(--ico-chevrons) center / contain no-repeat;
   mask: var(--ico-chevrons) center / contain no-repeat;
 }
@@ -198,6 +201,11 @@ body.nav-rail .nav-toggle::before { transform: scaleX(-1); }
 .nav-toggle:hover { background: var(--surface-hover); color: var(--white); }
 .nav-toggle:active { background: var(--surface-active); }
 .logo { width: 156px; height: 55px; display: block; }
+/* 1444:20223 — короткий знак 69x55. Лежит в разметке рядом с полной надписью,
+   показываем ровно один из двух: при свёрнутой панели узкий, иначе полный. */
+.logo--mark { display: none; width: 69px; height: 55px; }
+body.nav-rail .logo--full { display: none; }
+body.nav-rail .logo--mark { display: block; }
 
 .header-desktop {
   display: flex; align-items: center; justify-content: space-between;
@@ -723,12 +731,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* lg — с этой ширины появляется сайдбар и включается раскладка макета */
 @media (min-width: 1024px) {
   .sidebar { display: flex; }
-  /* Вкладок CASINO/SPORTS в шапке нет — разделы открываются из бокового
-     меню. Освободившееся место занимает знак: он встаёт на левый край
-     колонки контента, на одну линию с заголовками секций под ним.
-     16 — где знак лежит без сдвига: это левое поле блока со знаком. */
+  /* Знак стоит у левого края шапки; слот сжимается по содержимому */
   .topbar__brand { width: auto; }
-  .topbar__logo-wrap { margin-left: calc(var(--col-x, 296px) - 16px); }
   /* Кошелёк остаётся между знаком и кнопками, вход с регистрацией — у края */
   .header-desktop { justify-content: flex-end; }
   .wallet { margin-inline: auto; }
@@ -3984,8 +3988,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   <!-- ═══════════ Шапка ═══════════ -->
   <header class="topbar" data-node-id="860:5725">
     <div class="topbar__brand" data-node-id="860:6106">
+      <!-- 1444:20223 — короткий знак: при свёрнутой панели вместо надписи -->
       <div class="topbar__logo-wrap" data-node-id="860:6113">
-        <img class="logo" src="a/0d526d6016.svg" alt="WarWin">
+        <img class="logo logo--full" src="a/0d526d6016.svg" alt="WarWin">
+        <img class="logo logo--mark" src="a/24c140befa.svg" alt="WarWin">
       </div>
     </div>
 
@@ -6974,7 +6980,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       /* На странице игры колонка идёт во всю ширину без потолка в 1200,
          поэтому подвигать шапку не под что — поля обнуляются. */
       if (document.body.classList.contains('in-game')) {
-        page.style.setProperty('--col-x', (nav + 32) + 'px');
         page.style.setProperty('--gutter', '0px');
         page.style.setProperty('--gutter-r', '0px');
         return;
@@ -6982,9 +6987,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       var free = w / zoom - nav - NAV_GAP - COL_EDGE;
       var extra = Math.max(0, (free - COL_MAX) / 2);
       var left = nav + NAV_GAP + extra;
-      /* Левый край колонки. По нему в шапке равняется знак: --gutter для этого
-         не годится, он отсчитан от развёрнутой панели, а не от текущей. */
-      page.style.setProperty('--col-x', left + 'px');
       page.style.setProperty('--gutter', Math.max(0, left - (NAV_FULL + NAV_GAP)) + 'px');
       /* Правый край шапки равняется по правому краю колонки — отдельной
          величиной. Раньше справа стоял тот же отступ, что и слева: пока
