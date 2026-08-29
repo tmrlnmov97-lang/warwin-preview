@@ -61,7 +61,6 @@
   --tab-active: #1bc904;
   --chip-mobile: #272b40;
   --side-accent-hover: #283052;
-  --side-card: #1f2648;             /* карточка меню — светлее шапки */
   --footer-card: #1c1528;
   --icon-glow: #1e385c;
   --social-hover-border: #3d5390;
@@ -227,13 +226,13 @@ body.nav-rail .nav-toggle::before { transform: scaleX(-1); }
 /* ─────────────── Сайдбар ───────────────
    Панель идёт от самого верха и сливается с шапкой: фон общий, разделяет их
    только вертикальная линия справа — как у 1win. Поэтому она лежит выше
-   шапки по слою и накрывает её левую часть. Содержимое начинается сразу
-   сверху, а не под шапкой: иначе левый верхний угол пустует. */
+   шапки по слою и накрывает её левую часть. Верхнее поле 90 = 74 шапки
+   плюс воздух, чтобы первый пункт встал на одну линию с контентом. */
 .sidebar {
   position: fixed; left: 0; top: 0; bottom: 0;
   display: none; flex-direction: column;
   width: var(--nav-w);
-  padding: 12px;
+  padding: 90px 0 12px;
   transition: width .24s cubic-bezier(.4, 0, .2, 1);
   background: var(--chrome);
   border-right: 1px solid var(--white-06);
@@ -242,12 +241,10 @@ body.nav-rail .nav-toggle::before { transform: scaleX(-1); }
      кнопка сворачивания наполовину выходит за её правый край. */
   overflow: visible;
 }
-/* Меню — карточка на панели. Фон у неё свой, светлее шапки: так видно,
-   где кончается шапка и начинается меню (у Stake так же). */
+/* Карточки нет: меню лежит прямо на панели, фон и скругления сняты */
 .sidebar__menu {
   display: flex; flex-direction: column; align-items: stretch;
   width: 100%; flex: 1 1 auto; min-height: 0;
-  background: var(--side-card); border-radius: 20px; overflow: hidden;
 }
 /* 860:5898. В макете между группами зазор 230px и нижняя группа прижата к низу.
    По решению заказчика язык и поддержка подняты к навигации — расхождение осознанное. */
