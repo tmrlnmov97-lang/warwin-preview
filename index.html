@@ -181,9 +181,10 @@ body {
    круга заходит на панель, половина в зазор до контента. Стрелки смотрят
    в ту сторону, куда панель уедет. */
 .nav-toggle {
-  /* Круг сидит на линии между панелью и контентом, на уровне низа шапки:
-     там стык двух зон, и он не спорит с шевронами пунктов. */
-  position: absolute; right: -15.5px; top: 59px; z-index: 3;
+  /* Круг садится ровно на правый край карточки меню, а не на край самой
+     панели: у той ещё 12px поля, и кнопка висела в воздухе рядом с углом.
+     right = поле панели − половина круга. */
+  position: absolute; right: calc(var(--pad, 12px) - 15px); top: 61px; z-index: 3;
   display: flex; align-items: center; justify-content: center;
   width: 30px; height: 30px; border-radius: 50%;
   background: var(--surface); border: 1px solid var(--white-10);
@@ -223,28 +224,25 @@ body.nav-rail .nav-toggle::before { transform: scaleX(-1); }
 .btn--ghost { background: var(--surface); }
 .btn--primary { background: var(--primary); }
 
-/* ─────────────── Сайдбар ───────────────
-   Панель идёт от самого верха и сливается с шапкой: фон общий, разделяет их
-   только вертикальная линия справа — как у 1win. Поэтому она лежит выше
-   шапки по слою и накрывает её левую часть. Верхнее поле 90 = 74 шапки
-   плюс воздух, чтобы первый пункт встал на одну линию с контентом. */
+/* ─────────────── Сайдбар · 252×1254, y=76 ─────────────── */
 .sidebar {
-  position: fixed; left: 0; top: 0; bottom: 0;
+  position: fixed; left: 0; top: 78px; bottom: 0;
   display: none; flex-direction: column;
   width: var(--nav-w);
-  padding: 90px 0 12px;
+  padding: 12px;
   transition: width .24s cubic-bezier(.4, 0, .2, 1);
-  background: var(--chrome);
-  border-right: 1px solid var(--white-06);
-  z-index: 21;
-  /* Скролл живёт внутри ленты, а сама панель ничего не обрезает:
+  background: transparent;
+  z-index: 2;
+  /* Скролл живёт внутри карточки, а сама панель ничего не обрезает:
      кнопка сворачивания наполовину выходит за её правый край. */
   overflow: visible;
 }
-/* Карточки нет: меню лежит прямо на панели, фон и скругления сняты */
+/* Меню — карточка на фоне страницы. Тянется на всю высоту панели,
+   а не обрезается по содержимому. */
 .sidebar__menu {
   display: flex; flex-direction: column; align-items: stretch;
-  width: 100%; flex: 1 1 auto; min-height: 0;
+  width: 100%; flex: 1 1 auto; min-height: 0; background: var(--chrome);
+  border-radius: 20px; overflow: hidden;
 }
 /* 860:5898. В макете между группами зазор 230px и нижняя группа прижата к низу.
    По решению заказчика язык и поддержка подняты к навигации — расхождение осознанное. */
@@ -728,10 +726,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* lg — с этой ширины появляется сайдбар и включается раскладка макета */
 @media (min-width: 1024px) {
   .sidebar { display: flex; }
-  /* Знак стоит над баннером — по левому краю колонки контента.
-     16 — левое поле блока со знаком. */
+  /* Знак стоит у левого края шапки; слот сжимается по содержимому */
   .topbar__brand { width: auto; }
-  .topbar__logo-wrap { margin-left: calc(var(--col-x, 296px) - 16px); }
   /* Кошелёк остаётся между знаком и кнопками, вход с регистрацией — у края */
   .header-desktop { justify-content: flex-end; }
   .wallet { margin-inline: auto; }
@@ -7003,7 +6999,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       /* На странице игры колонка идёт во всю ширину без потолка в 1200,
          поэтому подвигать шапку не под что — поля обнуляются. */
       if (document.body.classList.contains('in-game')) {
-        page.style.setProperty('--col-x', (nav + 32) + 'px');
         page.style.setProperty('--gutter', '0px');
         page.style.setProperty('--gutter-r', '0px');
         return;
@@ -7011,8 +7006,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       var free = w / zoom - nav - NAV_GAP - COL_EDGE;
       var extra = Math.max(0, (free - COL_MAX) / 2);
       var left = nav + NAV_GAP + extra;
-      /* Левый край колонки контента. По нему в шапке равняется знак */
-      page.style.setProperty('--col-x', left + 'px');
       page.style.setProperty('--gutter', Math.max(0, left - (NAV_FULL + NAV_GAP)) + 'px');
       /* Правый край шапки равняется по правому краю колонки — отдельной
          величиной. Раньше справа стоял тот же отступ, что и слева: пока
