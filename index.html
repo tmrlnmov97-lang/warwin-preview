@@ -206,6 +206,20 @@ body.nav-rail .nav-toggle::before { transform: scaleX(-1); }
   display: flex; align-items: center; justify-content: space-between;
   flex: 1 1 auto; min-width: 0; height: 74px; padding-block: var(--gap-lg);
 }
+.cat-buttons { display: flex; align-items: center; gap: var(--gap-md); }
+.cat-tab {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; background: var(--surface); border-radius: 12px;
+}
+.cat-tab__icon { position: relative; width: 18px; height: 18px; overflow: hidden; flex: none; }
+.cat-tab__icon img { position: absolute; display: block; max-width: none; }
+.cat-tab__label {
+  font-family: 'Work Sans', sans-serif; font-weight: 700;
+  font-size: 12px; line-height: 24px; color: var(--white); white-space: nowrap;
+}
+.cat-tab.is-active { background: var(--tab-active); }
+.cat-tab.is-active .cat-tab__label { color: var(--white); }
+
 .header-actions { display: flex; align-items: center; gap: var(--gap-md); }
 .btn-search {
   display: flex; align-items: center; justify-content: center;
@@ -726,11 +740,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* lg — с этой ширины появляется сайдбар и включается раскладка макета */
 @media (min-width: 1024px) {
   .sidebar { display: flex; }
-  /* Знак стоит у левого края шапки; слот сжимается по содержимому */
-  .topbar__brand { width: auto; }
-  /* Кошелёк остаётся между знаком и кнопками, вход с регистрацией — у края */
-  .header-desktop { justify-content: flex-end; }
-  .wallet { margin-inline: auto; }
+  /* Слот знака держит ширину макета: за ним начинаются CASINO и SPORTS */
+  .topbar__brand { width: 235px; }
   /* 296 = 252 панели + 44 зазора. Считаем от --nav-w, чтобы при сворачивании
      колонка сама подъезжала влево без второго набора правил. */
   .content { --edge: 40px; left: calc(var(--nav-w) + 44px);
@@ -751,7 +762,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
    ============================================================ */
 
 .btn, .btn-search, .banner__cta, .bonus__cta,
-.chip, .view-all, .slider-btn, .social,
+.chip, .cat-tab, .view-all, .slider-btn, .social,
 .side-item, .sub-item, .side-support,
 .game, .lc, .provider {
   transition: background-color .12s ease, filter .12s ease,
@@ -772,8 +783,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .banner__cta:active { background: var(--register-active); transform: translateY(1px); }
 
 /* --- Вторичные кнопки на плотной подложке --- */
-.btn--ghost:hover, .btn-search:hover { background: var(--surface-hover); }
-.btn--ghost:active, .btn-search:active {
+.btn--ghost:hover, .btn-search:hover, .cat-tab:hover { background: var(--surface-hover); }
+.btn--ghost:active, .btn-search:active, .cat-tab:active {
   background: var(--surface-active); transform: translateY(1px);
 }
 
@@ -857,7 +868,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* --- Фокус с клавиатуры. В макете не задан, но без него интерфейс
        недоступен с клавиатуры — добавлен осознанно. --- */
 .btn:focus-visible, .btn-search:focus-visible, .nav-toggle:focus-visible, .banner__cta:focus-visible,
-.bonus__cta:focus-visible, .chip:focus-visible,
+.bonus__cta:focus-visible, .chip:focus-visible, .cat-tab:focus-visible,
 .view-all:focus-visible, .slider-btn:focus-visible, .social:focus-visible,
 .sub-item:focus-visible, .game:focus-visible, .lc:focus-visible, .provider:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -996,6 +1007,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .topbar__logo-wrap { width: 120px; height: 43px; padding-left: 0; }
   .topbar__logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
   .btn-search { display: none; }
+  /* В мобильной шапке только логотип и две кнопки — вкладок Casino/Sports нет */
+  .cat-buttons { display: none; }
   .header-actions { gap: 12px; margin-left: auto; }
   /* ── 925:2284 — шапка после входа: под верхней полосой идёт кошелёк ──
      Кадр 402x122: сверху 62 (логотип, профиль, колокольчик), снизу 60 —
@@ -3993,6 +4006,19 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     </div>
 
     <div class="header-desktop">
+      <nav class="cat-buttons">
+        <a class="cat-tab" href="#">
+          <span class="cat-tab__icon">
+            <img src="a/dd57cc1252.svg" alt="" style="inset:0 0 16.3% 46.46%">
+            <img src="a/1904eb85cf.svg" alt="" style="inset:14.22% 31.26% 0 0">
+          </span>
+          <span class="cat-tab__label">CASINO</span>
+        </a>
+        <a class="cat-tab" href="#">
+          <span class="cat-tab__icon"><img src="a/ca02f2e00c.svg" alt="" style="inset:0 0.03% 0 0.02%"></span>
+          <span class="cat-tab__label">SPORTS</span>
+        </a>
+      </nav>
       <!-- 905:4387 — баланс и пополнение отдельной группой: в макете после
            входа шапка делится на три части, кошелёк стоит между ними -->
       <div class="wallet" data-node-id="905:4387">
@@ -7724,7 +7750,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     game: document.getElementById('view-game') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
-    /* Чипы внутри лобби и страницы Crash Games переключают эти две страницы */
+    var tabs = document.querySelectorAll('.cat-tab');
+    /* Кнопка CASINO в шапке открывает лобби; чипы внутри лобби и страницы
+       Crash Games переключают между этими двумя страницами. */
     var chipView = { 'lobby': 'casino', 'crash games': 'crash' };
     /* Что было с панелью до входа в игру — чтобы вернуть на выходе */
     var gameRailWas = false;
@@ -7741,6 +7769,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       else fit();
       if (banner) banner.hidden = key !== 'home';
       if (hero) hero.hidden = key !== 'home';
+      tabs.forEach(function (t) {
+        var name = (t.textContent || '').trim().toLowerCase();
+        t.classList.toggle('is-active',
+          name === 'casino' ? (key === 'casino' || key === 'crash') : key === 'sport');
+      });
       /* Подсветка того, где мы находимся: чипы и пункты бокового меню */
       document.querySelectorAll('.chip, .sub-item').forEach(function (el) {
         el.classList.toggle('is-active',
@@ -7748,6 +7781,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       });
       scrollTo({ top: 0, behavior: 'smooth' });
     };
+    tabs.forEach(function (t) {
+      var label = (t.textContent || '').trim().toLowerCase();
+      var target = label === 'casino' ? 'casino' : (label === 'sports' ? 'sport' : null);
+      if (!target) return;
+      t.addEventListener('click', function (e) { e.preventDefault(); showView(target); });
+    });
     /* Фильтры видов спорта: активный — один */
     document.querySelectorAll('.spchip').forEach(function (c) {
       c.addEventListener('click', function () {
