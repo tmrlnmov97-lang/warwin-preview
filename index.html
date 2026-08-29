@@ -184,15 +184,15 @@ body {
   /* Круг садится ровно на правый край карточки меню, а не на край самой
      панели: у той ещё 12px поля, и кнопка висела в воздухе рядом с углом.
      right = поле панели − половина круга. */
-  position: absolute; right: calc(var(--pad, 12px) - 18px); top: 56px; z-index: 3;
+  position: absolute; right: calc(var(--pad, 12px) - 15px); top: 61px; z-index: 3;
   display: flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 30px; height: 30px; border-radius: 50%;
   background: var(--surface); border: 1px solid var(--white-10);
   box-shadow: 0 4px 12px -4px rgba(0, 0, 0, .6);
   color: var(--muted);
 }
 .nav-toggle::before {
-  content: ''; width: 17px; height: 17px; background: currentColor;
+  content: ''; width: 15px; height: 15px; background: currentColor;
   -webkit-mask: var(--ico-chevrons) center / contain no-repeat;
   mask: var(--ico-chevrons) center / contain no-repeat;
 }
