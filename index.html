@@ -342,6 +342,12 @@ body.nav-rail .sidebar__rule { margin: 4px 6px 8px; }
   transition: transform .3s cubic-bezier(.4, 0, .2, 1);
 }
 .side-item--active .chev { transform: rotate(180deg); }
+/* У спорта шеврон смотрит вправо, а не вниз — так в варфрейме. Берём тот же
+   файл, что у соседей, и разворачиваем: chevron-right.svg нарисован тёмным
+   (#42535E, он для строки языка) и рядом выглядел бы блёклым.
+   На раскрытии стрелка возвращается вниз, иначе указывала бы влево. */
+.side-item--chev-right .chev { transform: rotate(-90deg); }
+.side-item--chev-right.side-item--active .chev { transform: rotate(0deg); }
 
 /* Отступ 48 живёт на самом пункте, а не на контейнере — тогда подсветка
    при наведении идёт во всю ширину панели, а не начинается от иконки. */
@@ -4067,7 +4073,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             </div>
           </div>
 
-          <div class="side-item" data-node-id="894:29019">
+          <div class="side-item side-item--chev-right" data-node-id="894:29019">
             <img class="ico" src="a/401e94f115.svg" alt="">
             <span class="side-item__label">Sport</span>
             <img class="chev" src="a/346630b640.svg" alt="">
