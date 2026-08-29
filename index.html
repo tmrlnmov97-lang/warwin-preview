@@ -264,9 +264,9 @@ body {
    низ подтягивался прямо под неё. Когда контента больше высоты — запас
    обнуляется сам, и блок честно уезжает вниз под прокрутку. */
 .sidebar__bottom { display: flex; flex-direction: column; gap: 4px; width: 100%; flex: none; margin-top: auto; }
-/* Линия над языком и поддержкой — по варфрейму */
-.sidebar__rule { height: 1px; flex: none; margin: 4px 16px 8px; background: var(--white-10); }
-body.nav-rail .sidebar__rule { margin: 4px 6px 8px; }
+/* Меню разбито линиями на три группы: игры, бонусы, поддержка */
+.sidebar__rule { height: 1px; flex: none; margin: 8px 16px 12px; background: var(--white-10); }
+body.nav-rail .sidebar__rule { margin: 8px 8px 12px; }
 
 /* Раскрыто — прижатие снимается: список едет вместе с нижней группой,
    до языка и поддержки надо доскроллить. */
@@ -4025,7 +4025,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <!-- 860:5898 — две группы, между ними зазор 230 -->
       <div class="sidebar__inner" data-node-id="860:5898">
 
-        <!-- 860:5900 — навигация. Порядок и состав по варфрейму заказчика -->
+        <!-- 860:5900 — навигация. Порядок и состав по варфрейму заказчика.
+             Три группы, разделённые линиями: игры, бонусы, поддержка. -->
+        <!-- Первая группа: игровая -->
         <nav class="sidebar__nav" data-node-id="860:5900">
 
           <div class="side-item" data-node-id="860:5902">
@@ -4085,6 +4087,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             </div>
           </div>
 
+          <!-- Вторая группа: бонусная -->
+          <div class="sidebar__rule"></div>
           <div class="side-item" data-node-id="895:29050">
             <img class="ico" src="a/6b1e44858b.svg" alt="">
             <span class="side-item__label">Promotions</span>
