@@ -2392,7 +2392,7 @@ body.is-authed .wallet { display: flex; }
   }
 }
 
-.gv { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
+.gv { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
 .gv.is-solo { grid-template-columns: minmax(0, 1fr); }
 .gv.is-solo .gv__aside { display: none; }
 .gv__main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
@@ -2504,14 +2504,20 @@ body.is-authed .wallet { display: flex; }
 .gvrec { display: flex; align-items: center; gap: 12px; padding: 6px; border-radius: 10px;
          cursor: pointer; text-align: left; }
 .gvrec:hover { background: var(--white-06); }
-.gvrec__art { position: relative; width: 68px; height: 90px; flex: none;
+.gvrec__art { position: relative; width: 148px; height: 92px; flex: none;
               overflow: hidden; border-radius: 8px; background: var(--card-bg); }
 /* В миниатюре нужна только картинка: название стоит рядом обычным текстом */
 .gvrec__art .game__info, .gvrec__art .lc__info, .gvrec__art .card-veil { display: none; }
 .gvrec__txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.gvrec__name { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px; color: var(--white);
-               overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.gvrec__prov { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--dp-label); }
+.gvrec__name, .gvrec__prov, .gvrec__when {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gvrec__name { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px; color: var(--white); }
+.gvrec__prov { font-family: 'Work Sans', sans-serif; font-size: 13px; color: var(--dp-label); }
+/* Сколько играют и когда вышла — выдуманные значения, данных у нас нет */
+.gvrec__live { display: flex; align-items: center; gap: 6px; margin-top: 2px;
+               font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--muted); }
+.gvrec__live i { width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--tab-active); }
+.gvrec__when { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--dp-label); }
 
 /* До 1280 колонка рекомендаций уходит под кадр: рядом ему остаётся 332px
    на 1024 — кадр становится меньше миниатюры игры. */
@@ -8454,17 +8460,36 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       var gvName = function (card) { return gvText(card.querySelector('.game__name, .lc__name')); };
       var gvProv = function (card) { return gvText(card.querySelector('.game__provider, .lc__provider')); };
 
+      /* Сколько сейчас играют и когда игра вышла — данных у нас нет, значения
+         выдуманные. Считаем их от названия, а не через random: иначе числа
+         менялись бы при каждом открытии страницы и при каждой перерисовке. */
+      var GV_AGE = ['1 day ago', '3 days ago', '2 weeks ago', '3 weeks ago', '1 month ago',
+                    '2 months ago', '6 months ago', '1 year ago', '2 years ago', '4 years ago'];
+      var gvMeta = function (name) {
+        var h = 0;
+        for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+        /* сдвиг обязательно беззнаковый: у h взведён старший бит, и >> давал
+           отрицательный индекс — в строку попадало «Released undefined» */
+        return { players: 1 + (h % 240), age: GV_AGE[(h >>> 8) % GV_AGE.length] };
+      };
+
       /* Клон вписываем в коробку замером, а не постоянным коэффициентом:
          на мобильной сама карточка мельче (154 против 114), и один и тот же
          масштаб оставлял бы поля по краям. */
-      var gvFit = function (box) {
+      var gvFit = function (box, crop) {
         var card = box.firstElementChild;
         if (!card) return;
         card.style.transform = 'none';
         var cw = card.offsetWidth, ch = card.offsetHeight;
         if (!cw || !ch) return;
         var r = box.getBoundingClientRect();
-        var k = Math.min(r.width / cw, r.height / ch);
+        /* crop — миниатюра в списке: обложка у нас вертикальная, а плитка
+           горизонтальная. Тянем по ширине и показываем полосу чуть выше
+           середины: герой на обложках стоит в верхней трети. */
+        var k = crop ? (r.width / cw) : Math.min(r.width / cw, r.height / ch);
+        card.style.position = crop ? 'absolute' : '';
+        card.style.left = crop ? '0' : '';
+        card.style.top = crop ? Math.round(-(ch * k - r.height) * 0.28) + 'px' : '';
         card.style.transformOrigin = 'top left';
         card.style.transform = 'scale(' + k.toFixed(4) + ')';
       };
@@ -8486,7 +8511,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       var gvFitAll = function () {
         gvSizeCover();
         gvFit(gvCover);
-        gv.querySelectorAll('.gvrec__art').forEach(gvFit);
+        gv.querySelectorAll('.gvrec__art').forEach(function (a) { gvFit(a, true); });
       };
       addEventListener('resize', function () { if (!gv.hidden) gvFitAll(); });
 
@@ -8570,6 +8595,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         });
         gvRec.innerHTML = '';
         pool.forEach(function (c) {
+          var n = gvName(c);
+          var meta = gvMeta(n);
           var row = document.createElement('button');
           row.type = 'button';
           row.className = 'gvrec';
@@ -8578,9 +8605,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           art.appendChild(c.cloneNode(true));
           var txt = document.createElement('span');
           txt.className = 'gvrec__txt';
-          txt.innerHTML = '<span class="gvrec__name"></span><span class="gvrec__prov"></span>';
-          txt.querySelector('.gvrec__name').textContent = gvName(c);
+          txt.innerHTML = '<span class="gvrec__name"></span><span class="gvrec__prov"></span>' +
+                          '<span class="gvrec__live"><i></i></span><span class="gvrec__when"></span>';
+          txt.querySelector('.gvrec__name').textContent = n;
           txt.querySelector('.gvrec__prov').textContent = gvProv(c);
+          txt.querySelector('.gvrec__live').appendChild(
+            document.createTextNode(meta.players + ' playing'));
+          txt.querySelector('.gvrec__when').textContent = 'Released ' + meta.age;
           row.appendChild(art);
           row.appendChild(txt);
           row.addEventListener('click', function () { gvOpen(c); });
