@@ -1867,7 +1867,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .hero__side { flex: 0 0 351px; display: flex; flex-direction: column; gap: 16px; }
   .hcard {
     position: relative; height: 111px; overflow: hidden;
-    border: 1px solid var(--hero-border); border-radius: 18px; isolation: isolate;
+    border-radius: 18px; isolation: isolate;
     /* Стопы из Figma: 0% 041B4B, 35% 061537, 100% 0A1B49 */
     background-image: linear-gradient(182.46deg, #041b4b 0%, #061537 35%, #0a1b49 100%);
     transition: transform .34s cubic-bezier(.4,0,.2,1);
@@ -2198,9 +2198,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   /* min-width: 0 обязателен — иначе содержимое распирает флекс-элемент */
   /* 1159:10522 — карточка 182x71, радиус 16, кант #262939,
      заголовок Cora Medium 20 на 11,22, арт от 57.14% до правого края. */
-  .hcard { flex: 1 1 0; min-width: 0; height: 71px; overflow: hidden;
-           border: 1px solid var(--hero-border); border-radius: 16px; }
-  .hcard__title { left: 11px; top: 22px; font-size: 20px; font-weight: 500; }
+  .hcard { flex: 1 1 0; min-width: 0; height: 71px; overflow: hidden; border-radius: 16px; }
+  .hcard__title { left: 11px; top: 22px; font-size: 18px; font-weight: 500; }
   .hcard__go { display: none; }
   /* 1159:10532 — коробка от 57.14% до правого края −1, сверху 26; внутри
      картинка увеличена до 125.37% x 135.04% со сдвигом −9.21% / −11.25%. */
@@ -2232,6 +2231,12 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 
   .hcard { position: relative; isolation: isolate;
            background-image: linear-gradient(182.46deg, #041b4b 0%, #061537 35%, #0a1b49 100%); }
+  /* Кант рисуем поверх содержимого, а не рамкой: арт стоит на right: -1px,
+     пыль на top: -5px — оба заходили на настоящую рамку и закрашивали её
+     справа и сверху, отчего углы читались как необрезанные. */
+  .hcard::after { content: ''; position: absolute; inset: 0; z-index: 3;
+                  border: 1px solid var(--hero-border); border-radius: inherit;
+                  pointer-events: none; }
   .hcard > img { position: absolute; display: block; max-width: none; pointer-events: none; }
   .hcard__pic  { overflow: hidden; }
   .hcard__pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
