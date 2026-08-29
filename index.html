@@ -2041,8 +2041,12 @@ body {
     scrollbar-width: none;
   }
   body.is-authed .hero__mslides::-webkit-scrollbar { display: none; }
-  .mslide { position: relative; flex: 0 0 370px; height: 199px; overflow: hidden;
-            border-radius: 24px; scroll-snap-align: center; }
+  /* Кант 1px #464646 из макета рисуем стилем, а не картинкой: у первой
+     карточки он был впечатан в арт, у остальных его не было вовсе.
+     border-box — чтобы карточка осталась ровно 370x199, как в Figma. */
+  .mslide { position: relative; box-sizing: border-box; flex: 0 0 370px; height: 199px;
+            overflow: hidden; border: 1px solid #464646; border-radius: 24px;
+            scroll-snap-align: center; }
   .mslide__art { position: absolute; inset: 0; display: block;
                  width: 100%; height: 100%; object-fit: cover; }
   /* 920:31048 — копи-блок на (20,35): заголовок 158x48, подпись на 91,
