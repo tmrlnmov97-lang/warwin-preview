@@ -395,12 +395,7 @@ body.nav-rail .sidebar__rule { margin: 8px 8px 12px; }
    центру и скругляем — получается мини-плитка. Плитки вертикальные (155x204),
    поэтому именно cover, иначе в квадрат вписались бы поля по бокам. */
 .sub-item img.sub-item__art, .br__sub img.sub-item__art {
-  object-fit: cover; border-radius: 5px;
-  /* Обесцвечиваем и уводим в холодный светлый тон, чтобы плитки читались
-     заодно с остальными значками меню. Белыми, как глифы, они не станут:
-     это фотографии, а не силуэты — предел здесь светло-серый оттенок. */
-  filter: grayscale(1) brightness(1.45) contrast(.8)
-          sepia(.15) hue-rotate(170deg) saturate(1.6); }
+  object-fit: cover; border-radius: 5px; }
 .sub-item span {
   flex: 1 0 0; min-width: 0;
   font-weight: 600; font-size: 15px; line-height: 18px; color: var(--muted);
@@ -4151,7 +4146,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <a class="sub-item" href="#"><img class="sub-item__art" src="a/9210133f3f.webp" alt=""><span>Plinko</span></a>
               <a class="sub-item" href="#"><img class="sub-item__art" src="a/8fd2ce2c26.webp" alt=""><span>Dice</span></a>
               <a class="sub-item" href="#"><img class="sub-item__art" src="a/36547adab8.webp" alt=""><span>Limbo</span></a>
-              <a class="sub-item" href="#"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='12' cy='12' r='9.8'/%3E%3Cg fill='%23222a45'%3E%3Crect x='11.3' y='2.2' width='1.4' height='19.6'/%3E%3Crect x='2.2' y='11.3' width='19.6' height='1.4'/%3E%3Crect x='11.3' y='2.2' width='1.4' height='19.6' transform='rotate(45 12 12)'/%3E%3Crect x='11.3' y='2.2' width='1.4' height='19.6' transform='rotate(-45 12 12)'/%3E%3Ccircle cx='12' cy='12' r='2.2'/%3E%3C/g%3E%3C/svg%3E" alt=""><span>Wheel</span></a>
+              <a class="sub-item" href="#"><img class="sub-item__art" src="a/9c174d15ac.webp" alt=""><span>Wheel</span></a>
               <a class="sub-item" href="#"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='6' cy='6' r='2.7'/%3E%3Ccircle cx='12' cy='6' r='2.7'/%3E%3Ccircle cx='18' cy='6' r='2.7'/%3E%3Ccircle cx='6' cy='12' r='2.7'/%3E%3Ccircle cx='12' cy='12' r='2.7'/%3E%3Ccircle cx='18' cy='12' r='2.7'/%3E%3Ccircle cx='6' cy='18' r='2.7'/%3E%3Ccircle cx='12' cy='18' r='2.7'/%3E%3Ccircle cx='18' cy='18' r='2.7'/%3E%3Cg fill='%23222a45'%3E%3Ccircle cx='12' cy='6' r='1.2'/%3E%3Ccircle cx='6' cy='12' r='1.2'/%3E%3Ccircle cx='18' cy='18' r='1.2'/%3E%3C/g%3E%3C/svg%3E" alt=""><span>Keno</span></a>
             </div>
           </div>
@@ -6365,7 +6360,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <button class="br__sub" type="button"><img loading="lazy" decoding="async" class="sub-item__art" src="a/9210133f3f.webp" alt="" width="20" height="20"><span>Plinko</span></button>
           <button class="br__sub" type="button"><img loading="lazy" decoding="async" class="sub-item__art" src="a/8fd2ce2c26.webp" alt="" width="20" height="20"><span>Dice</span></button>
           <button class="br__sub" type="button"><img loading="lazy" decoding="async" class="sub-item__art" src="a/36547adab8.webp" alt="" width="20" height="20"><span>Limbo</span></button>
-          <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='12' cy='12' r='9.8'/%3E%3Cg fill='%23222a45'%3E%3Crect x='11.3' y='2.2' width='1.4' height='19.6'/%3E%3Crect x='2.2' y='11.3' width='19.6' height='1.4'/%3E%3Crect x='11.3' y='2.2' width='1.4' height='19.6' transform='rotate(45 12 12)'/%3E%3Crect x='11.3' y='2.2' width='1.4' height='19.6' transform='rotate(-45 12 12)'/%3E%3Ccircle cx='12' cy='12' r='2.2'/%3E%3C/g%3E%3C/svg%3E" alt="" width="20" height="20"><span>Wheel</span></button>
+          <button class="br__sub" type="button"><img loading="lazy" decoding="async" class="sub-item__art" src="a/9c174d15ac.webp" alt="" width="20" height="20"><span>Wheel</span></button>
           <button class="br__sub" type="button"><img loading="lazy" decoding="async" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='6' cy='6' r='2.7'/%3E%3Ccircle cx='12' cy='6' r='2.7'/%3E%3Ccircle cx='18' cy='6' r='2.7'/%3E%3Ccircle cx='6' cy='12' r='2.7'/%3E%3Ccircle cx='12' cy='12' r='2.7'/%3E%3Ccircle cx='18' cy='12' r='2.7'/%3E%3Ccircle cx='6' cy='18' r='2.7'/%3E%3Ccircle cx='12' cy='18' r='2.7'/%3E%3Ccircle cx='18' cy='18' r='2.7'/%3E%3Cg fill='%23222a45'%3E%3Ccircle cx='12' cy='6' r='1.2'/%3E%3Ccircle cx='6' cy='12' r='1.2'/%3E%3Ccircle cx='18' cy='18' r='1.2'/%3E%3C/g%3E%3C/svg%3E" alt="" width="20" height="20"><span>Keno</span></button>
       </div>
       <button class="br__row" type="button" data-toggle="br-sport" aria-expanded="false">
