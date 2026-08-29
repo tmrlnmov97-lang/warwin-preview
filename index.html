@@ -395,7 +395,12 @@ body.nav-rail .sidebar__rule { margin: 8px 8px 12px; }
    центру и скругляем — получается мини-плитка. Плитки вертикальные (155x204),
    поэтому именно cover, иначе в квадрат вписались бы поля по бокам. */
 .sub-item img.sub-item__art, .br__sub img.sub-item__art {
-  object-fit: cover; border-radius: 5px; }
+  object-fit: cover; border-radius: 5px;
+  /* Обесцвечиваем и уводим в холодный светлый тон, чтобы плитки читались
+     заодно с остальными значками меню. Белыми, как глифы, они не станут:
+     это фотографии, а не силуэты — предел здесь светло-серый оттенок. */
+  filter: grayscale(1) brightness(1.45) contrast(.8)
+          sepia(.15) hue-rotate(170deg) saturate(1.6); }
 .sub-item span {
   flex: 1 0 0; min-width: 0;
   font-weight: 600; font-size: 15px; line-height: 18px; color: var(--muted);
