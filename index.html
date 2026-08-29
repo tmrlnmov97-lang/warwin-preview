@@ -288,6 +288,20 @@ body {
 .sidebar.is-expanded .sidebar__inner::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 3px; }
 .sidebar.is-expanded .sidebar__inner::-webkit-scrollbar-track { background: transparent; }
 
+/* Казино и спорт — отдельная пара над меню, как у Stake. Разметка та же, что
+   раньше стояла в шапке, поэтому обработчики и подсветка активного раздела
+   работают без изменений. */
+.sidebar .cat-buttons { display: flex; gap: 6px; flex: none; padding: 0 8px 8px; }
+.sidebar .cat-tab { flex: 1 1 0; min-width: 0; justify-content: center;
+                    height: 40px; padding: 0; border-radius: 10px; }
+.sidebar__split { height: 1px; flex: none; margin: 0 8px 8px; background: var(--white-10); }
+/* В рейке пара встаёт столбиком, подписи уходят — как в свёрнутом меню Stake */
+body.nav-rail .sidebar .cat-buttons { flex-direction: column; gap: 4px; padding: 0 6px 8px; }
+/* flex:1 в колонке тянет по высоте, а ширина схлопывалась до иконки */
+body.nav-rail .sidebar .cat-tab { flex: none; width: 100%; height: 44px; }
+body.nav-rail .cat-tab__label { display: none; }
+body.nav-rail .sidebar__split { margin: 0 6px 8px; }
+
 .side-item {
   position: relative; display: flex; align-items: center; gap: 12px;
   width: 100%; height: 44px; flex: none; padding: 0 16px;
@@ -725,10 +739,9 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 @media (min-width: 1024px) {
   .sidebar { display: flex; }
   .burger { display: flex; }
-  /* Вкладок CASINO/SPORTS в шапке нет — разделы живут в боковом меню.
+  /* Вкладок CASINO/SPORTS в шапке нет — они переехали в боковое меню.
      Освободившееся место занимает знак: он встаёт на левый край колонки
      контента, как и заголовки секций под ним. */
-  .cat-buttons { display: none; }
   .topbar__brand { width: auto; }
   /* 60 — где знак лежит без сдвига: 16 поля + 40 кнопки + 4 зазора */
   .topbar__logo-wrap { margin-left: calc(var(--col-x, 296px) - 60px); }
@@ -4000,20 +4013,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     </div>
 
     <div class="header-desktop">
-      <nav class="cat-buttons">
-        <a class="cat-tab" href="#">
-          <span class="cat-tab__icon">
-            <img src="a/dd57cc1252.svg" alt="" style="inset:0 0 16.3% 46.46%">
-            <img src="a/1904eb85cf.svg" alt="" style="inset:14.22% 31.26% 0 0">
-          </span>
-          <span class="cat-tab__label">CASINO</span>
-        </a>
-        <a class="cat-tab" href="#">
-          <span class="cat-tab__icon"><img src="a/ca02f2e00c.svg" alt="" style="inset:0 0.03% 0 0.02%"></span>
-          <span class="cat-tab__label">SPORTS</span>
-        </a>
-      </nav>
-
       <!-- 905:4387 — баланс и пополнение отдельной группой: в макете после
            входа шапка делится на три части, кошелёк стоит между ними -->
       <div class="wallet" data-node-id="905:4387">
@@ -4046,6 +4045,22 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <div class="sidebar__menu" data-node-id="860:5897">
       <!-- 860:5898 — две группы, между ними зазор 230 -->
       <div class="sidebar__inner" data-node-id="860:5898">
+
+        <!-- Казино и спорт отдельной парой над меню, как у Stake -->
+        <nav class="cat-buttons">
+          <a class="cat-tab" href="#">
+            <span class="cat-tab__icon">
+              <img src="a/dd57cc1252.svg" alt="" style="inset:0 0 16.3% 46.46%">
+              <img src="a/1904eb85cf.svg" alt="" style="inset:14.22% 31.26% 0 0">
+            </span>
+            <span class="cat-tab__label">CASINO</span>
+          </a>
+          <a class="cat-tab" href="#">
+            <span class="cat-tab__icon"><img src="a/ca02f2e00c.svg" alt="" style="inset:0 0.03% 0 0.02%"></span>
+            <span class="cat-tab__label">SPORTS</span>
+          </a>
+        </nav>
+        <div class="sidebar__split"></div>
 
         <!-- 860:5900 — навигация -->
         <nav class="sidebar__nav" data-node-id="860:5900">
