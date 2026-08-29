@@ -2383,6 +2383,14 @@ body.is-authed .wallet { display: flex; }
    тогда кадр забирает её ширину; в «широком режиме» из панели инструментов
    происходит то же самое. */
 .view--game { gap: 16px; }
+/* В игре колонка идёт от панели навигации до правого поля шапки: потолок
+   в 1200 и центрирование тут только съедали бы место под кадр. */
+@media (min-width: 1024px) {
+  body.in-game .content {
+    left: calc(var(--nav-w) + 16px); right: 40px;
+    max-width: none; margin-inline: 0;
+  }
+}
 .gv__top { display: flex; align-items: center; gap: 12px; }
 .gv__back { display: flex; align-items: center; justify-content: center; width: 48px; height: 44px;
             flex: none; background: var(--white-10); border-radius: 12px; }
@@ -2399,9 +2407,10 @@ body.is-authed .wallet { display: flex; }
 
 .gv__frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden;
              background: var(--card-bg); border: 1px solid var(--hero-border); border-radius: 16px;
-             /* обложку укрупняем по ширине самого кадра, а не экрана: в широком
-                режиме колонка рекомендаций уходит и кадр становится больше */
-             container-type: inline-size; }
+             /* Потолок по высоте экрана: 74 шапка, 60 строка возврата, 56 панель
+                инструментов, 72 строка студии, зазоры и воздух снизу. Иначе на
+                широком мониторе кадр 16:9 уезжал вместе с панелью за нижний край. */
+             max-height: calc(100vh - 310px); }
 /* Подложка — та же обложка, размытая и притушенная: кадр не выглядит пустым,
    а цвет всегда совпадает с игрой. */
 .gv__bg { position: absolute; inset: -40px; background-size: cover; background-position: center;
@@ -2413,14 +2422,9 @@ body.is-authed .wallet { display: flex; }
 /* Размер коробки задают стили, а масштаб клона в неё подбирает скрипт замером:
    на мобильной сама карточка мельче, и постоянный коэффициент оставлял бы
    поля по краям. */
-.gv__cover {
-  /* Кадр 16:9, поэтому его высота — это 56.25% ширины. Вычитаем поля сцены
-     (40), два зазора (32), подпись режима (18) и кнопки (44) — остаток и есть
-     место под обложку. Без этого на 1280 кнопки уезжали за нижний край. */
-  --h: min(347px, max(120px, calc(56.25cqw - 134px)));
-  position: relative; flex: none;
-  height: var(--h); width: calc(var(--h) * .7559); /* 154.2 / 204 */
-}
+/* Размер здесь запасной: настоящий ставит скрипт от измеренной высоты кадра —
+   она зависит и от ширины колонки, и от потолка по экрану. */
+.gv__cover { position: relative; flex: none; width: 216px; height: 286px; }
 .gv__cover .card-veil { display: none; }
 .gv__mode-note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 13px; color: var(--dp-text); }
 .gv__launch { display: flex; gap: 10px; }
@@ -6929,6 +6933,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
          с сеткой: на 1728 CASINO оставался на 295 при колонке с 392.
          Левый край колонки зависит от ширины навигации, поэтому при сворачивании
          бургером сдвиг пересчитывается. При 252 выходят прежние значения. */
+      /* На странице игры колонка идёт во всю ширину без потолка в 1200,
+         поэтому подвигать шапку не под что — поля обнуляются. */
+      if (document.body.classList.contains('in-game')) {
+        page.style.setProperty('--gutter', '0px');
+        page.style.setProperty('--gutter-r', '0px');
+        return;
+      }
       var nav = document.body.classList.contains('nav-rail') ? NAV_RAIL : NAV_FULL;
       var free = w / zoom - nav - NAV_GAP - COL_EDGE;
       var extra = Math.max(0, (free - COL_MAX) / 2);
@@ -7655,8 +7666,19 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     /* Кнопка CASINO в шапке открывает лобби; чипы внутри лобби и страницы
        Crash Games переключают между этими двумя страницами. */
     var chipView = { 'lobby': 'casino', 'crash games': 'crash' };
+    /* Что было с панелью до входа в игру — чтобы вернуть на выходе */
+    var gameRailWas = false;
     var showView = function (key) {
       Object.keys(views).forEach(function (k) { views[k].hidden = key !== k; });
+      /* В игре навигация всегда свёрнута, а колонка контента идёт во всю
+         ширину: кадру нужно место, ради него сюда и заходят. */
+      var inGame = key === 'game';
+      var wasGame = document.body.classList.contains('in-game');
+      if (inGame && !wasGame) { gameRailWas = document.body.classList.contains('nav-rail'); }
+      document.body.classList.toggle('in-game', inGame);
+      if (inGame && !wasGame) railSet(true, false);
+      else if (!inGame && wasGame) railSet(gameRailWas, false);
+      else fit();
       if (banner) banner.hidden = key !== 'home';
       if (hero) hero.hidden = key !== 'home';
       tabs.forEach(function (t) {
@@ -8460,7 +8482,23 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         card.style.transformOrigin = 'top left';
         card.style.transform = 'scale(' + k.toFixed(4) + ')';
       };
+      /* Место под обложку — это высота кадра минус поля сцены (40), два
+         зазора (32), подпись режима (18) и кнопки (44). Считаем замером:
+         высота кадра зависит и от ширины колонки, и от потолка по экрану.
+         На мобильной кадр растёт по содержимому, там размер держат стили. */
+      var gvSizeCover = function () {
+        if (!matchMedia('(min-width: 768px)').matches) {
+          gvCover.style.width = gvCover.style.height = '';
+          return;
+        }
+        var f = gv.querySelector('.gv__frame').getBoundingClientRect();
+        if (!f.height) return;
+        var h = Math.max(120, Math.min(347, f.height - 134));
+        gvCover.style.height = Math.round(h) + 'px';
+        gvCover.style.width = Math.round(h * 0.7559) + 'px'; /* 154.2 / 204 */
+      };
       var gvFitAll = function () {
+        gvSizeCover();
         gvFit(gvCover);
         gv.querySelectorAll('.gvrec__art').forEach(gvFit);
       };
@@ -8585,7 +8623,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       var gvSolo = function (on) {
         gvGrid.classList.toggle('is-solo', on);
         gvWide.setAttribute('aria-pressed', String(on));
-        /* Кадр меняет ширину — обложка пересчитывается под новую коробку */
+        /* Кадр меняет ширину — обложка пересчитывается под новый размер */
+        gvSizeCover();
         gvFit(gvCover);
       };
       gv.querySelector('.gv__aside-close').addEventListener('click', function () { gvSolo(true); });
