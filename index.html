@@ -95,7 +95,15 @@
   --gap-lg: 16px;
   --section-pad: 20px;
   --icon-title: 8px;
+
+  /* Ширина колонки навигации. От неё считаются и сама панель, и левый край
+     контента, поэтому сворачивание бургером — это смена одного значения.
+     252 — макет; 84 — «рейка» из одних иконок (карточка 60 + поля 12). */
+  --nav-w: 252px;
 }
+body.nav-rail { --nav-w: 84px; }
+/* Состояние из localStorage ставится скриптом — на первом кадре без перехода */
+html.nav-boot .sidebar, html.nav-boot .content { transition: none; }
 
 * { box-sizing: border-box; }
 a { text-decoration: none; color: inherit; }
@@ -155,8 +163,24 @@ body {
 }
 /* 860:6106 — слот 235px, внутри 860:6113: только логотип, отступ 20 слева,
    выравнивание по нижнему краю. Кнопки меню в актуальном макете нет. */
-.topbar__brand { display: flex; align-items: center; width: 235px; flex: none; }
-.topbar__logo-wrap { display: flex; align-items: flex-end; padding-left: 20px; }
+.topbar__brand { display: flex; align-items: center; gap: 12px; width: 235px; flex: none; padding-left: 12px; }
+.topbar__logo-wrap { display: flex; align-items: flex-end; }
+/* Бургер сворачивает сайдбар в рейку из иконок. Иконка из макета
+   (heroicons menu-alt-2) нарисована серой — берём её маской, чтобы цветом
+   управлял CSS и на наведении глиф светлел вместе с подложкой. */
+/* Ниже 1024 сайдбара нет, сворачивать нечего — кнопка появляется на lg */
+.burger {
+  display: none; align-items: center; justify-content: center;
+  width: 40px; height: 40px; flex: none; border-radius: 10px;
+}
+.burger::before {
+  content: ''; width: 24px; height: 24px; background: var(--muted);
+  -webkit-mask: url(a/7aae139d08.svg) center / contain no-repeat;
+  mask: url(a/7aae139d08.svg) center / contain no-repeat;
+}
+.burger:hover { background: var(--surface); }
+.burger:hover::before { background: var(--white); }
+.burger:active { background: var(--surface-active); }
 .logo { width: 156px; height: 55px; display: block; }
 
 .header-desktop {
@@ -197,8 +221,9 @@ body {
 .sidebar {
   position: fixed; left: 0; top: 78px; bottom: 0;
   display: none; flex-direction: column;
-  width: 252px;
+  width: var(--nav-w);
   padding: 12px;
+  transition: width .24s cubic-bezier(.4, 0, .2, 1);
   background: transparent;
   z-index: 2;
   /* Сама панель не прокручивается — скролл живёт внутри карточки */
@@ -342,6 +367,43 @@ body {
    Узлы оставлены в разметке, чтобы правка легко откатывалась. */
 .sidebar__divider { display: none; }
 
+/* ── Свёрнутая навигация («рейка»), как у Stake ──
+   Бургер в шапке переключает body.nav-rail: панель ужимается до колонки
+   иконок, подписи и подменю уходят, контент забирает освободившееся место.
+   Разметка не меняется — сворачивание живёт целиком в стилях. */
+body.nav-rail .side-item__label,
+body.nav-rail .side-item .chev { display: none; }
+/* Подменю скрываем через display, а не через нулевую высоту: свёрнутое
+   .subcat всё равно занимает зазор колонки и в узкой панели это заметно. */
+body.nav-rail .subcat { display: none; }
+/* Отступ 6 с каждой стороны — тот же, что у строки поддержки в макете.
+   Одинаковый у всех пунктов, иначе уголок подменю у раскрытого раздела
+   съезжал бы относительно остальных. */
+body.nav-rail .side-item {
+  justify-content: center; gap: 0; padding: 0;
+  width: calc(100% - 12px); margin-inline: 6px; border-radius: 10px;
+}
+/* Подсветка раскрытого раздела: в широкой панели это градиент во всю строку,
+   в рейке — скруглённый квадрат под иконкой, иначе полоса выглядит обрубком. */
+body.nav-rail .side-item--active {
+  background-image: none; background-color: var(--surface);
+}
+/* Маркер «здесь есть подменю». В рейке штатный шеврон не помещается,
+   поэтому рисуем уголок в 5px у правого края — класс вешает скрипт. */
+body.nav-rail .side-item--has-sub::after {
+  content: ''; position: absolute; right: 1px; top: 50%;
+  width: 5px; height: 5px; margin-top: -3px;
+  border-top: 1.5px solid var(--muted); border-right: 1.5px solid var(--muted);
+  transform: rotate(45deg);
+}
+/* Класс is-expanded («какой-то раздел раскрыт») переносит прокрутку с ленты
+   на всю колонку. В рейке подменю скрыты, поэтому возвращаем обычный расклад,
+   иначе язык и поддержка перестают держаться низа. */
+body.nav-rail .sidebar.is-expanded .sidebar__nav {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+}
+body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
+
 .side-support-wrap { display: none; }
 .side-support {
   display: flex; flex: 1 0 0; min-width: 0; align-items: center; gap: var(--icon-title);
@@ -360,6 +422,7 @@ body {
   position: absolute; left: 20px; right: var(--edge); top: 106px;
   display: flex; flex-direction: column; gap: 24px;
   width: auto; min-width: 0;
+  transition: left .24s cubic-bezier(.4, 0, .2, 1);
 }
 
 /* Враппер чипов и секций · 920:26889 — внутренний зазор 16, не 32 */
@@ -654,7 +717,10 @@ body {
 /* lg — с этой ширины появляется сайдбар и включается раскладка макета */
 @media (min-width: 1024px) {
   .sidebar { display: flex; }
-  .content { --edge: 40px; left: 296px;
+  .burger { display: flex; }
+  /* 296 = 252 панели + 44 зазора. Считаем от --nav-w, чтобы при сворачивании
+     колонка сама подъезжала влево без второго набора правил. */
+  .content { --edge: 40px; left: calc(var(--nav-w) + 44px);
             /* Потолок колонки: дальше растёт не контент, а поле по краям */
             max-width: 1200px; margin-inline: auto; }
   .topbar  { gap: 60px; padding-right: 41px; }
@@ -774,7 +840,7 @@ body {
 
 /* --- Фокус с клавиатуры. В макете не задан, но без него интерфейс
        недоступен с клавиатуры — добавлен осознанно. --- */
-.btn:focus-visible, .btn-search:focus-visible, .banner__cta:focus-visible,
+.btn:focus-visible, .btn-search:focus-visible, .burger:focus-visible, .banner__cta:focus-visible,
 .bonus__cta:focus-visible, .chip:focus-visible, .cat-tab:focus-visible,
 .view-all:focus-visible, .slider-btn:focus-visible, .social:focus-visible,
 .sub-item:focus-visible, .game:focus-visible, .lc:focus-visible, .provider:focus-visible {
@@ -863,6 +929,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .side-item .ico, .side-item__label, .sub-item img, .sub-item span { transition: none; }
+  .sidebar, .content { transition: none; }
   .game, .lc, .provider { transition: none; }
   .game:hover, .lc:hover, .provider:hover,
   .game:active, .lc:active, .provider:active { transform: none; }
@@ -905,7 +972,7 @@ body {
      Закреплена сверху, а не приклеена: fixed не участвует в прокрутке
      документа и не едет вместе с ним. Место под неё держит .page. */
   .topbar { position: fixed; left: 0; right: 0; top: 0; height: 62px; gap: 0; padding: 0 16px; }
-  .topbar__brand { gap: 0; flex: none; width: 120px; }
+  .topbar__brand { gap: 0; flex: none; width: 120px; padding-left: 0; }
   /* 903:41863 — логотип 106x40 на x=16. Базовый отступ 20 слева сдвигал
      картинку на 36 и сжимал её до 86 — на мобильной он не нужен.
      Ширину подняли со 106 до 120: в макете знак терялся рядом с кнопками.
@@ -3706,6 +3773,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   <!-- ═══════════ Шапка ═══════════ -->
   <header class="topbar" data-node-id="860:5725">
     <div class="topbar__brand" data-node-id="860:6106">
+      <!-- Сворачивает сайдбар в колонку иконок и обратно -->
+      <button class="burger" type="button" aria-label="Свернуть меню"
+              aria-expanded="true" aria-controls="sidebar"></button>
       <div class="topbar__logo-wrap" data-node-id="860:6113">
         <img class="logo" src="a/0d526d6016.svg" alt="WarWin">
       </div>
@@ -3754,7 +3824,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   </header>
 
   <!-- ═══════════ Сайдбар ═══════════ -->
-  <aside class="sidebar" data-node-id="860:5895">
+  <aside class="sidebar" id="sidebar" data-node-id="860:5895">
     <div class="sidebar__menu" data-node-id="860:5897">
       <!-- 860:5898 — две группы, между ними зазор 230 -->
       <div class="sidebar__inner" data-node-id="860:5898">
@@ -6605,6 +6675,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
      интерфейс становится мелким. */
   (function () {
     var BASE = 1920;
+    /* Раскладка колонок: панель навигации, зазор до контента, потолок колонки
+       и правое поле. Те же числа лежат в --nav-w и .content в стилях. */
+    var NAV_FULL = 252, NAV_RAIL = 84, NAV_GAP = 44, COL_MAX = 1200, COL_EDGE = 40;
     var page = document.querySelector('.page');
     function fit() {
       var w = document.documentElement.clientWidth;
@@ -6613,12 +6686,44 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       /* Колонка контента упирается в 1200 и встаёт по центру, а шапка тянется
          во всю ширину. Без этой поправки кнопки в шапке переставали совпадать
          с сеткой: на 1728 CASINO оставался на 295 при колонке с 392.
-         Полка 1536 — ширина, на которой колонка как раз достигает потолка. */
-      var gutter = Math.max(0, (w / zoom - 1536) / 2);
-      page.style.setProperty('--gutter', gutter + 'px');
+         Левый край колонки зависит от ширины навигации, поэтому при сворачивании
+         бургером сдвиг пересчитывается. При 252 выходят прежние значения. */
+      var nav = document.body.classList.contains('nav-rail') ? NAV_RAIL : NAV_FULL;
+      var free = w / zoom - nav - NAV_GAP - COL_EDGE;
+      var left = nav + NAV_GAP + Math.max(0, (free - COL_MAX) / 2);
+      page.style.setProperty('--gutter', Math.max(0, left - (NAV_FULL + NAV_GAP)) + 'px');
     }
     fit();
     addEventListener('resize', fit);
+
+    /* Бургер в шапке сворачивает сайдбар в колонку иконок — как у Stake.
+       Выбор запоминается, иначе панель разворачивалась бы на каждой перезагрузке. */
+    var burger = document.querySelector('.burger');
+    function railSet(on, save) {
+      document.body.classList.toggle('nav-rail', on);
+      if (burger) {
+        burger.setAttribute('aria-expanded', String(!on));
+        burger.setAttribute('aria-label', on ? 'Развернуть меню' : 'Свернуть меню');
+      }
+      if (save) { try { localStorage.setItem('ww-nav-rail', on ? '1' : '0'); } catch (e) {} }
+      fit();
+    }
+    var railBoot = false;
+    try { railBoot = localStorage.getItem('ww-nav-rail') === '1'; } catch (e) {}
+    if (railBoot) {
+      /* Состояние из памяти ставим без анимации: иначе панель на глазах
+         съезжает от 252 к 84 при каждом открытии страницы. */
+      document.documentElement.classList.add('nav-boot');
+      railSet(true, false);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          document.documentElement.classList.remove('nav-boot');
+        });
+      });
+    }
+    if (burger) burger.addEventListener('click', function () {
+      railSet(!document.body.classList.contains('nav-rail'), true);
+    });
 
     /* Разделы с подменю раскрываются по клику. Подменю — следующий соседний
        .subcat, поэтому новый раздел достаточно добавить в разметку. */
@@ -6634,7 +6739,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       head.setAttribute('role', 'button');
       head.setAttribute('tabindex', '0');
       head.setAttribute('aria-expanded', String(!sub.classList.contains('is-collapsed')));
+      /* Метка для свёрнутой рейки: у таких пунктов рисуется уголок «есть подменю» */
+      head.classList.add('side-item--has-sub');
       var toggle = function () {
+        /* В рейке подменю не видно, поэтому нажатие сперва разворачивает
+           панель. Закрывать раздел в этот момент нечего — только открывать. */
+        if (document.body.classList.contains('nav-rail')) {
+          railSet(false, true);
+          if (!sub.classList.contains('is-collapsed')) return;
+        }
         var open = head.classList.toggle('side-item--active');
         sub.classList.toggle('is-collapsed', !open);
         head.setAttribute('aria-expanded', String(open));
