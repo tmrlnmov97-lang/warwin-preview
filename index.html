@@ -4885,7 +4885,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <div class="prof__tabs" role="tablist">
           <button class="prof__tab is-active" type="button" role="tab" aria-selected="true" data-tab="general">General</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="verification">Verification</button>
-          <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="security">Security</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="responsible">Responsible Gambling</button>
         </div>
         </div>
@@ -4979,7 +4978,41 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
         </section>
 
-        <div class="prof__save" hidden>
+        <section class="prof__card">
+            <div class="prof__card-head">
+              <h2>Password</h2>
+              <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
+            </div>
+            <div class="sec__pass">
+              <div class="prof__cell">
+                <span class="prof__label">Current password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="current-password" aria-label="Current password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+              <div class="prof__cell">
+                <span class="prof__label">New password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="new-password" aria-label="New password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+              <div class="prof__cell">
+                <span class="prof__label">Repeat new password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="new-password" aria-label="Repeat new password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+            </div>
+            <div class="sec__pass-foot">
+              <p class="sec__hint"></p>
+              <button class="prof__btn prof__btn--primary sec__submit" type="button" disabled>Change password</button>
+            </div>
+          </section>
+
+          <div class="prof__save" hidden>
           <span class="prof__save-text">Unsaved changes in the address</span>
           <button class="prof__btn prof__btn--ghost" type="button" data-prof="cancel">Cancel</button>
           <button class="prof__btn prof__btn--primary" type="button" data-prof="save">Save</button>
@@ -5081,109 +5114,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         </div>
         <!-- Security: смена пароля и журнал входов. Вид наш — те же карточки
              и та же лесенка отступов, что на General и Verification. -->
-        <div class="prof__panel" id="prof-security" role="tabpanel" hidden>
-          <section class="prof__card">
-            <div class="prof__card-head">
-              <h2>Password</h2>
-              <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
-            </div>
-            <div class="sec__pass">
-              <div class="prof__cell">
-                <span class="prof__label">Current password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="current-password" aria-label="Current password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-              <div class="prof__cell">
-                <span class="prof__label">New password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="new-password" aria-label="New password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-              <div class="prof__cell">
-                <span class="prof__label">Repeat new password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="new-password" aria-label="Repeat new password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-            </div>
-            <div class="sec__pass-foot">
-              <p class="sec__hint"></p>
-              <button class="prof__btn prof__btn--primary sec__submit" type="button" disabled>Change password</button>
-            </div>
-          </section>
-
-          <section class="prof__card">
-            <div class="prof__card-head">
-              <h2>Sessions</h2>
-              <p>Where your account was opened. If you see a device you do not recognise — change the password.</p>
-            </div>
-            <div class="sec__table-wrap">
-              <table class="sec__table">
-                <thead>
-                  <tr><th>Device</th><th>IP</th><th>System</th><th>Browser</th><th>Status</th><th>Date</th></tr>
-                </thead>
-                <tbody>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Opera 122.0.4.5</td>
-                <td><em class="sec__st sec__st--active">Active</em></td>
-                <td class="sec__date">22.04.2025, 22:40</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">69.67.148.93 <i>MX</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Opera 122.0.4.5</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">22.04.2025, 21:12</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">149.50.216.82 <i>TR</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Chrome 138.0.0.0</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">21.04.2025, 09:05</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">149.50.216.82 <i>SE</i></td>
-                <td>macOS 14.4</td>
-                <td>Safari 17.4</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">19.04.2025, 18:31</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Opera 122.0.4.5</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">17.04.2025, 12:47</td>
-              </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="sec__pager">
-              <button class="sec__page sec__page--nav" type="button" aria-label="Назад" disabled>&lsaquo;</button>
-              <button class="sec__page is-active" type="button">1</button>
-              <button class="sec__page" type="button">2</button>
-              <button class="sec__page" type="button">3</button>
-              <span class="sec__gap">…</span>
-              <button class="sec__page" type="button">12</button>
-              <button class="sec__page" type="button">13</button>
-              <button class="sec__page" type="button">14</button>
-              <button class="sec__page sec__page--nav" type="button" aria-label="Вперёд">&rsaquo;</button>
-            </div>
-          </section>
-        </div>
-
         <!-- 1335:18127 — Responsible Gambling: шесть карточек лимитов -->
         <div class="prof__panel prof__panel--rg" id="prof-responsible" role="tabpanel" hidden>
           <div class="rg__row-cards">
@@ -8305,8 +8235,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       /* Верификация: выбранный файл показываем в карточке, значок переходит
          в «In review». Replace возвращает зону загрузки. */
-      /* Security: показ пароля, проверка совпадения и листалка журнала. */
-      var secPanel = document.getElementById('prof-security');
+      /* Смена пароля переехала со вкладки Security в General, сама вкладка
+         убрана. Ищем форму в General; листалки журнала там нет, и пустой
+         secPages это переживает. */
+      var secPanel = document.getElementById('prof-general');
       if (secPanel) {
         secPanel.querySelectorAll('.sec__eye').forEach(function (eye) {
           eye.addEventListener('click', function (e) {
