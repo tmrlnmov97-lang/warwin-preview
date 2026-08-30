@@ -652,10 +652,10 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
                               rgba(7, 148, 255, .16) 0%, rgba(7, 148, 255, 0) 100%);
                   pointer-events: none; }
 .footer > * { position: relative; z-index: 1; }
-/* ── Навигация футера: шесть колонок разделов над юридическим блоком.
-   На мобильной колонки превращаются в аккордеоны — шесть длинных списков
-   подряд там не читаются. ── */
-.fnav { display: grid; grid-template-columns: repeat(6, 1fr); gap: 32px 24px; width: 100%;
+/* ── Навигация футера: пять колонок разделов над юридическим блоком.
+   На мобильной колонки превращаются в аккордеоны — пять списков подряд
+   там не читаются. ── */
+.fnav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px 24px; width: 100%;
         padding: 0 0 36px; margin-bottom: 36px;
         border-bottom: 1px solid rgba(255, 255, 255, .08); text-align: left; }
 .fnav__col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
@@ -693,20 +693,42 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .fnav__link { font-size: 14px; line-height: 20px; }
 }
 
-.footer__legal {
-  margin: 0 20px; width: auto;
-  font-weight: 400; font-size: 10px; line-height: 15px; text-align: center; color: var(--muted);
-}
 .footer__partners {
   display: flex; align-items: center; justify-content: center; gap: 16px;
-  margin: 16px 20px 0; width: auto; height: 37px; opacity: .7;
+  margin: 0 20px; width: auto; height: 37px; opacity: .7;
 }
 /* 904:2788 — ряд 1064x37, бейджи по центру */
 .footer__badges { display: block; width: 100%; max-width: 1064px; height: auto; }
 .footer__badges--mob { display: none; }
-.footer__copy {
-  margin: 16px 20px 0; width: auto;
-  font-weight: 400; font-size: 10px; line-height: 15px; text-align: center; color: var(--muted);
+
+/* ── Низ футера: знак 18+, права, реквизиты и место под печать лицензии ── */
+.fbot { display: flex; align-items: flex-start; gap: 18px;
+        margin: 28px 20px 0; padding-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, .08); }
+.fbot__age { display: flex; align-items: center; justify-content: center; flex: none;
+             width: 44px; height: 44px; border-radius: 50%;
+             border: 1px solid rgba(255, 255, 255, .28);
+             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+             color: var(--muted); }
+.fbot__text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.fbot__copy { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+              font-size: 14px; line-height: 20px; color: var(--white); }
+.fbot__co, .fbot__lic { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 400;
+                        font-size: 12px; line-height: 18px; color: var(--muted); }
+/* Текст лицензии заказчик ещё не прислал — держим его отдельной рамкой,
+   чтобы место под него было видно и не терялось среди реквизитов. */
+.fbot__lic { padding: 10px 14px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 10px; }
+/* Печати лицензии в ассетах нет — пока рамка нужного размера */
+.fbot__seal { display: flex; align-items: center; justify-content: center; flex: none;
+              width: 92px; height: 92px; border-radius: 12px;
+              border: 1px dashed rgba(255, 255, 255, .22);
+              font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+              text-align: center; color: var(--dp-label); }
+
+@media (max-width: 767px) {
+  .fbot { flex-wrap: wrap; gap: 14px; margin: 20px 0 0; }
+  .fbot__text { flex: 1 1 100%; order: 3; }
+  .fbot__seal { width: 72px; height: 72px; margin-left: auto; }
 }
 
 .footer-block { display: flex; flex-direction: column; gap: 24px; }
@@ -6205,7 +6227,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <button class="spmore" type="button" data-node-id="974:11954">Show more<img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt="" width="18" height="18"></button>
       </div>
         <footer class="footer" data-node-id="851:3651">
-          <!-- Навигация футера: разделы сайта одним списком -->
+          <!-- Навигация футера: пять разделов по варфрейму заказчика -->
           <nav class="fnav">
             <div class="fnav__col">
               <button class="fnav__head" type="button" aria-expanded="false">
@@ -6213,15 +6235,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <img loading="lazy" decoding="async" class="fnav__chev" src="a/e139209072.svg" alt="">
               </button>
               <ul class="fnav__list">
-                <li><button class="fnav__link" type="button" data-fgo="view:casino">Lobby</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:crash">Crash Games</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:casino">New Slots</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:casino">Popular Slots</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:casino">High RTP</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:casino">Table Games</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:casino">Video Poker</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:casino">Slots</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:casino">Live Casino</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:casino">Game Shows</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:crash">Fast Games</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:casino">Providers</button></li>
               </ul>
             </div>
@@ -6231,68 +6247,50 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <img loading="lazy" decoding="async" class="fnav__chev" src="a/e139209072.svg" alt="">
               </button>
               <ul class="fnav__list">
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">Upcoming</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">Outrights</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">Live</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">Soccer</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">Tennis</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">Basketball</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">Hockey</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:sport">MMA</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:sport">Sportsbook</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:sport">Live Betting</button></li>
               </ul>
             </div>
             <div class="fnav__col">
               <button class="fnav__head" type="button" aria-expanded="false">
-                <b>Account</b>
+                <b>WarWin</b>
                 <img loading="lazy" decoding="async" class="fnav__chev" src="a/e139209072.svg" alt="">
               </button>
               <ul class="fnav__list">
-                <li><button class="fnav__link" type="button" data-fgo="view:profile">Profile</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="tab:general">General</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="hist:bonus">Bonuses</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:promo">Promotions</button></li>
+                <li><button class="fnav__link" type="button">VIP Club</button></li>
+                <li><button class="fnav__link" type="button">Affiliate Program</button></li>
+                <li><button class="fnav__link" type="button">About Us</button></li>
+              </ul>
+            </div>
+            <div class="fnav__col">
+              <button class="fnav__head" type="button" aria-expanded="false">
+                <b>Help</b>
+                <img loading="lazy" decoding="async" class="fnav__chev" src="a/e139209072.svg" alt="">
+              </button>
+              <ul class="fnav__list">
+                <li><button class="fnav__link" type="button">Help Center / FAQ</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-crypto">Deposit &amp; Withdrawal</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="tab:verification">Verification</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="tab:security">Security</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="tab:responsible">Responsible Gambling</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:history">Game History</button></li>
+                <li><button class="fnav__link" type="button">Contact Support</button></li>
               </ul>
             </div>
             <div class="fnav__col">
               <button class="fnav__head" type="button" aria-expanded="false">
-                <b>Wallet</b>
+                <b>Legal</b>
                 <img loading="lazy" decoding="async" class="fnav__chev" src="a/e139209072.svg" alt="">
               </button>
               <ul class="fnav__list">
-                <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-crypto">Deposit</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="wallet:withdraw-crypto">Withdraw</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-crypto">Crypto</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="wallet:deposit-fiat">Fiat</button></li>
-              </ul>
-            </div>
-            <div class="fnav__col">
-              <button class="fnav__head" type="button" aria-expanded="false">
-                <b>Promotions</b>
-                <img loading="lazy" decoding="async" class="fnav__chev" src="a/e139209072.svg" alt="">
-              </button>
-              <ul class="fnav__list">
-                <li><button class="fnav__link" type="button" data-fgo="view:promo">All promotions</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="promo:welcome">Welcome Free Spins</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="promo:zeus">Zeus Friday</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="promo:deposit">First Deposit Bonus</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="promo:unlock">5% Bonus Unlock</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="promo:cash">Weekly Loss Cashback</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="promo:invite">Invite a Friend</button></li>
-              </ul>
-            </div>
-            <div class="fnav__col">
-              <button class="fnav__head" type="button" aria-expanded="false">
-                <b>Support</b>
-                <img loading="lazy" decoding="async" class="fnav__chev" src="a/e139209072.svg" alt="">
-              </button>
-              <ul class="fnav__list">
-                <li><button class="fnav__link" type="button">Live Support</button></li>
-                <li><button class="fnav__link" type="button">English</button></li>
+                <li><button class="fnav__link" type="button">Terms &amp; Conditions</button></li>
+                <li><button class="fnav__link" type="button">Privacy Policy</button></li>
+                <li><button class="fnav__link" type="button">Cookie Policy</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="tab:responsible">Responsible Gaming</button></li>
+                <li><button class="fnav__link" type="button">AML / KYC Policy</button></li>
               </ul>
             </div>
           </nav>
+
           <!-- 891:22532 — виден только на мобильной ширине -->
           <div class="footer__top" data-node-id="891:22532">
             <img loading="lazy" decoding="async" class="footer__logo" src="a/cfa22cccd3.svg" alt="Warwin" width="234" height="73">
@@ -6304,13 +6302,23 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <a class="fsoc" href="#" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
             </div>
           </div>
-          <p class="footer__legal">Owned and operated by WarWin Group International Ltd (Registration No. 000054736), with registered address at San Victor Street, Orange Walk Town, Belize. <br>WarWin Group International Ltd is currently in the process of obtaining an Anjouan Gaming License and is preparing its operational framework in accordance with the regulatory standards of the Anjouan Gaming Authority.</p>
+
+          <!-- Ряд бейджей регуляторов и ответственной игры -->
           <div class="footer__partners" data-node-id="904:2788">
-            <!-- 904:2788 — ряд бейджей десктопа; на мобильной свой кадр -->
             <img loading="lazy" decoding="async" class="footer__badges" src="a/53796263d7.webp" alt="Responsible Gambling, 18+, Gambling Therapy, BeGambleAware">
             <img loading="lazy" decoding="async" class="footer__badges--mob" src="a/ee07665fa8.webp" alt="">
           </div>
-          <p class="footer__copy">©2026 Warwin. All Rights Reserved.</p>
+
+          <!-- Нижний блок: возрастной знак, права, реквизиты и лицензия -->
+          <div class="fbot">
+            <span class="fbot__age" aria-label="Только для совершеннолетних">18+</span>
+            <div class="fbot__text">
+              <p class="fbot__copy">&#169; 2026 WarWin. All rights reserved</p>
+              <p class="fbot__co">Owned and operated by WarWin Group International Ltd (Registration No.&nbsp;000054736), registered at San Victor Street, Orange Walk Town, Belize.</p>
+              <p class="fbot__lic">WarWin Group International Ltd is currently in the process of obtaining an Anjouan Gaming License and is preparing its operational framework in accordance with the regulatory standards of the Anjouan Gaming Authority.</p>
+            </div>
+            <span class="fbot__seal">License<br>seal</span>
+          </div>
         </footer>
 
     </div><!-- /content-body -->
@@ -8594,6 +8602,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           showView('profile');
           var t = document.querySelector('.prof__tab[data-tab="' + what + '"]');
           if (t) t.click();
+          return;
+        }
+        if (kind === 'hist') {
+          showView('history');
+          var ht = document.querySelector('.hist__tab[data-hist="' + what + '"]');
+          if (ht) ht.click();
           return;
         }
         if (kind === 'promo') {
