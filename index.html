@@ -4034,8 +4034,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    Делим высоту поровну между пунктами: линии встают на равном
    удалении от обеих подписей, пустоты внизу не остаётся.
    ═══════════════════════════════════════════════════════════════════ */
-.pm__menu { justify-content: flex-start; padding: 12px 8px; }
-.pm__item { flex: 1 1 0; height: auto; min-height: 48px; padding: 0 8px; }
+.pm__menu { justify-content: center; padding: 12px 8px; }
+.pm__item { flex: 0 0 auto; height: 44px; min-height: 0; padding: 0 8px; }
 /* Мобильный сброс поля объявлен выше по файлу и моим правилом перебивался.
    Возвращаем его здесь, иначе на узких экранах меню получало лишние 8px. */
 @media (max-width: 720px) { .pm__menu { padding: 0; } }
@@ -4050,6 +4050,19 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    уходят с 20 на 16 и получают зазор, которого не было вовсе. */
 .pm__stats { gap: 20px; }
 .pm__stat b { font-size: 16px; line-height: 22px; }
+
+/* Баланс перестал быть крипто: вместо логотипа монеты — значок валюты.
+   Кружок тот же по размеру, что был у иконки, чтобы строка не поехала. */
+.pm__coin-badge { display: grid; place-items: center; flex: none;
+                  width: 28px; height: 28px; border-radius: 50%;
+                  background: var(--white-06);
+                  font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                  font-size: 15px; line-height: 1; color: var(--white); }
+.wallet__badge { display: grid; place-items: center; flex: none;
+                 width: 16px; height: 16px; border-radius: 50%;
+                 background: var(--white-10);
+                 font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                 font-size: 10px; line-height: 1; color: var(--white); }
 </style>
 </head>
 <body>
@@ -4172,8 +4185,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            входа шапка делится на три части, кошелёк стоит между ними -->
       <div class="wallet" data-node-id="905:4387">
         <button class="wallet__balance" type="button" data-node-id="905:4388">
-          <img src="a/eafab62439.svg" alt="" width="16" height="16">
-          <span>USDT 0.00</span>
+          <span class="wallet__badge" aria-hidden="true">$</span>
+          <span>0.00</span>
           <img class="wallet__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
         </button>
         <button class="wallet__deposit" type="button" data-node-id="905:4393">DEPOSIT</button>
@@ -6598,15 +6611,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <div class="pm__sum" data-node-id="1226:35559">
       <h2 class="pm__title">Account Summary</h2>
       <div class="pm__balance">
-        <span class="pm__cap">Balance (USDT)</span>
+        <span class="pm__cap">Balance (USD)</span>
         <div class="pm__coin" data-node-id="1226:35563">
           <span class="pm__coin-left">
-            <img loading="lazy" decoding="async" src="a/eafab62439.svg" alt="" width="28" height="28">
-            <b>USDT</b>
+            <span class="pm__coin-badge" aria-hidden="true">$</span>
+            <b>USD</b>
           </span>
           <span class="pm__coin-right">
             <b>0.00</b>
-            <i>$0.00</i>
           </span>
         </div>
       </div>
