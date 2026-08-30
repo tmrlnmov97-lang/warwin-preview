@@ -87,6 +87,8 @@
   /* Значки панели под кадром игры. Лежат прямо в стилях: сборка переименовывает
      файлы из assets в хэши, а data-URI трогать не нужно, и лишних четырёх
      запросов за 200-байтными svg тоже не будет. */
+  --ico-coins: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cellipse cx='12' cy='5.6' rx='7.6' ry='3.1'/%3E%3Cpath d='M4.4 8.2c1.6 1.5 4.4 2.4 7.6 2.4s6-.9 7.6-2.4v3.3c0 1.7-3.4 3.1-7.6 3.1s-7.6-1.4-7.6-3.1Z'/%3E%3Cpath d='M4.4 13.6c1.6 1.5 4.4 2.4 7.6 2.4s6-.9 7.6-2.4v3.3c0 1.7-3.4 3.1-7.6 3.1s-7.6-1.4-7.6-3.1Z'/%3E%3C/svg%3E");
+  --ico-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 2.8 21.4 12.4H16v8.8H8v-8.8H2.6Z'/%3E%3C/svg%3E");
   --ico-gift: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Ccircle cx='8.1' cy='4.4' r='2.7'/%3E%3Ccircle cx='15.9' cy='4.4' r='2.7'/%3E%3Crect x='2.4' y='6.6' width='19.2' height='4.2' rx='1.3'/%3E%3Cpath d='M4 12.2h16v7.2a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19.4Z'/%3E%3C/svg%3E");
   --ico-in: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v12M6.5 9.5 12 15l5.5-5.5M4 20h16'/%3E%3C/svg%3E");
   --ico-chevrons: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.5 5.5 6 12l6.5 6.5M19 5.5 12.5 12l6.5 6.5'/%3E%3C/svg%3E");
@@ -2386,6 +2388,142 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   VIP-клуб. Программы у нас пока нет — раскладка собрана по тому, как
+   это устроено на казино-сайтах: шапка с текущим уровнем, лестница
+   уровней, привилегии и порядок начисления.
+   ═══════════════════════════════════════════════════════════════════ */
+.view--vip { gap: 32px; }
+
+.vip__hero { position: relative; overflow: hidden; box-sizing: border-box;
+             padding: 36px 32px; border-radius: 20px;
+             background: linear-gradient(135deg, #16204a 0%, #101736 55%, #1a1230 100%);
+             border: 1px solid var(--hero-border); }
+/* мягкий ореол в углу, чтобы шапка не была плоской заливкой */
+.vip__hero::before { content: ''; position: absolute; right: -80px; top: -120px;
+                     width: 420px; height: 340px; pointer-events: none;
+                     background: radial-gradient(50% 50% at 50% 50%,
+                                 rgba(205, 250, 80, .16) 0%, rgba(205, 250, 80, 0) 100%); }
+.vip__hero > * { position: relative; }
+.vip__eyebrow { display: inline-flex; align-items: center; height: 26px; padding: 0 12px;
+                border-radius: 999px; background: rgba(205, 250, 80, .14);
+                font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px;
+                letter-spacing: .06em; text-transform: uppercase; color: #cdfa50; }
+.vip__h1 { margin: 14px 0 0; font-family: 'Cora', 'Instrument Sans', sans-serif;
+           font-weight: 700; font-size: 34px; line-height: 42px; color: var(--white); }
+.vip__lead { margin: 10px 0 0; max-width: 620px; font-family: 'Work Sans', sans-serif;
+             font-size: 15px; line-height: 24px; color: var(--modal-text-1, #bbc6cd); }
+/* Полоса прогресса до следующего уровня */
+.vip__state { max-width: 520px; margin-top: 24px; }
+.vip__state-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.vip__now { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px;
+            color: var(--white); }
+.vip__next { font-family: 'Work Sans', sans-serif; font-size: 13px; color: var(--dp-label); }
+.vip__next b { color: var(--white); font-weight: 600; }
+.vip__track { display: block; margin-top: 10px; height: 8px; border-radius: 999px;
+              background: rgba(255, 255, 255, .09); overflow: hidden; }
+.vip__track i { display: block; height: 100%; border-radius: 999px;
+                background: linear-gradient(90deg, #a6e22e, #cdfa50); }
+.vip__cta { margin-top: 24px; display: inline-flex; align-items: center; justify-content: center;
+            height: 46px; padding: 0 26px; border: 0; border-radius: 12px; cursor: pointer;
+            background: var(--primary); font-family: 'Work Sans', sans-serif;
+            font-weight: 700; font-size: 15px; color: var(--white);
+            transition: background-color .12s ease, transform .08s ease; }
+.vip__cta:hover { background: var(--primary-hover); }
+.vip__cta:active { transform: translateY(1px); }
+/* Полоса уровня — только после входа: гостю показывать нечего.
+   Кнопка тоже меняет подпись: гостю сначала регистрация. */
+.vip__state, .vip__cta-in { display: none; }
+body.is-authed .vip__state { display: block; }
+body.is-authed .vip__cta-in { display: inline; }
+body.is-authed .vip__cta-out { display: none; }
+body.is-authed .vtier__badge { display: inline-flex; }
+.vtier__badge { display: none; }
+body.is-authed .vtier--now { border-color: rgba(7, 148, 255, .5); }
+body:not(.is-authed) .vtier--now { border-color: var(--hero-border); box-shadow: none; }
+
+/* Лестница уровней */
+.vip__tiers { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.vtier { position: relative; box-sizing: border-box; display: flex; flex-direction: column;
+         gap: 14px; padding: 18px 16px; border-radius: 16px;
+         background: var(--chrome); border: 1px solid var(--hero-border); }
+/* Кружок уровня своим цветом — по нему карточки читаются с одного взгляда */
+.vtier__mark { width: 30px; height: 30px; border-radius: 50%; }
+.vtier--bronze   .vtier__mark { background: linear-gradient(140deg, #d08a4e, #8a5124); }
+.vtier--silver   .vtier__mark { background: linear-gradient(140deg, #dfe6ee, #98a3b3); }
+.vtier--gold     .vtier__mark { background: linear-gradient(140deg, #f6d365, #c9982a); }
+.vtier--platinum .vtier__mark { background: linear-gradient(140deg, #cfe4ff, #7f9cc4); }
+.vtier--diamond  .vtier__mark { background: linear-gradient(140deg, #8ce9ff, #3aa0f5); }
+.vtier__name { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif;
+               font-weight: 700; font-size: 18px; line-height: 24px; color: var(--white); }
+.vtier__badge { position: absolute; right: 14px; top: 16px;
+                display: inline-flex; align-items: center; height: 22px; padding: 0 9px;
+                border-radius: 999px; background: rgba(7, 148, 255, .16);
+                font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 11px;
+                color: var(--primary); }
+.vtier--now { border-color: rgba(7, 148, 255, .5);
+              box-shadow: 0 0 0 1px rgba(7, 148, 255, .25), 0 12px 28px -18px rgba(7, 148, 255, .8); }
+.vtier__rows { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.vtier__rows > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.vtier__rows dt { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--dp-label); }
+.vtier__rows dd { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                  font-size: 13px; line-height: 18px; color: var(--white); text-align: right; }
+
+/* Привилегии */
+.vip__perks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.vperk { box-sizing: border-box; padding: 20px; border-radius: 16px;
+         background: var(--chrome); border: 1px solid var(--hero-border); }
+.vperk__ico { position: relative; display: block; width: 40px; height: 40px; margin-bottom: 14px;
+              border-radius: 12px; background: rgba(7, 148, 255, .14); }
+.vperk__ico::after { content: ''; position: absolute; inset: 0; margin: auto;
+                     width: 20px; height: 20px; background: var(--primary); }
+.vperk__ico--coins::after { -webkit-mask: var(--ico-coins) center / contain no-repeat;
+                            mask: var(--ico-coins) center / contain no-repeat; }
+.vperk__ico--chat::after { -webkit-mask: url(a/60fc882413.svg) center / contain no-repeat;
+                           mask: url(a/60fc882413.svg) center / contain no-repeat; }
+.vperk__ico--up::after { -webkit-mask: var(--ico-up) center / contain no-repeat;
+                         mask: var(--ico-up) center / contain no-repeat; }
+.vperk__ico--bolt::after { -webkit-mask: url(a/21ad8ec927.svg) center / contain no-repeat;
+                           mask: url(a/21ad8ec927.svg) center / contain no-repeat; }
+.vperk__ico--gift::after { -webkit-mask: var(--ico-gift) center / contain no-repeat;
+                           mask: var(--ico-gift) center / contain no-repeat; }
+.vperk__ico--cup::after { -webkit-mask: url(a/eed79b599e.svg) center / contain no-repeat;
+                          mask: url(a/eed79b599e.svg) center / contain no-repeat; }
+.vperk h3 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 17px; line-height: 22px; color: var(--white); }
+.vperk p { margin: 8px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+           line-height: 21px; color: var(--modal-text-1, #bbc6cd); }
+
+/* Порядок начисления */
+.vip__steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+              margin: 0; padding: 0; list-style: none; counter-reset: none; }
+.vstep { display: flex; gap: 14px; box-sizing: border-box; padding: 18px;
+         border-radius: 16px; background: var(--chrome); border: 1px solid var(--hero-border); }
+.vstep__n { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
+            border-radius: 50%; background: rgba(255, 255, 255, .07);
+            font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px;
+            color: var(--white); }
+.vstep h3 { margin: 4px 0 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+            font-size: 15px; line-height: 20px; color: var(--white); }
+.vstep p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 13px;
+           line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+
+@media (max-width: 1279px) {
+  .vip__tiers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vip__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1023px) {
+  .vip__perks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  .view--vip { gap: 24px; }
+  .vip__hero { padding: 24px 18px; border-radius: 16px; }
+  .vip__h1 { font-size: 26px; line-height: 32px; }
+  .vip__lead { font-size: 14px; line-height: 22px; }
+  .vip__cta { width: 100%; }
+  .vip__tiers, .vip__perks, .vip__steps { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    1377:18464 «Promotions» — категории и сетка акций по четыре в ряд.
    Карточка компактная: арт, заголовок в две строки, суть в две строки
    и условие снизу. Высоты в ряду равны, условия стоят на одной линии.
@@ -3413,7 +3551,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    Было 24 = 24 и 20 = 20 — карточки слипались, уровни не различались. */
 .view--profile { gap: 24px; }
 .prof__head { display: flex; flex-direction: column; gap: 16px; }
-.prof__panel { display: flex; flex-direction: column; gap: 32px; }
+/* 24 между карточками, как в макете: с 32 они распадались на три отдельных
+   блока вместо одной колонки. Нижний отступ — место под липкую полосу
+   сохранения, иначе она накрывала последнее поле с ошибкой. */
+.prof__panel { display: flex; flex-direction: column; gap: 24px; padding-bottom: 8px; }
 /* display перебивает атрибут hidden — гасим адресно, иначе пустые
    панели Verification и Security видны под карточками */
 .prof__panel[hidden] { display: none; }
@@ -3427,16 +3568,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
              line-height: 20px; color: var(--white); }
 .prof__tab:hover { background: var(--white-16); }
 .prof__tab.is-active { background: var(--primary); }
-/* Витринный переключатель состояния — не из макета */
-.prof__who { display: flex; align-items: center; gap: 16px; }
-.prof__demo { display: flex; gap: 4px; margin-left: auto; flex: none; padding: 4px;
-              background: var(--white-04); border-radius: 999px; }
-.prof__demo-btn { padding: 6px 12px; border: 0; background: none; border-radius: 999px;
-                  cursor: pointer; font-family: 'Work Sans', sans-serif; font-weight: 500;
-                  font-size: 13px; line-height: 16px; color: var(--dp-label); }
-.prof__demo-btn.is-active { background: var(--white-10); color: var(--white); }
-
-.prof__who { display: flex; align-items: center; gap: 16px; }
+/* Шапка профиля отделена от карточек линией — иначе имя висит в воздухе */
+.prof__who { display: flex; align-items: center; gap: 14px;
+             padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, .07); }
 .prof__ava { display: grid; place-items: center; width: 48px; height: 48px; flex: none;
              background: var(--surface); border-radius: 50%;
              font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px;
@@ -3457,29 +3591,44 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               padding: 24px; background: var(--chrome); border-radius: 20px;
               border: 1px solid rgba(255, 255, 255, .12);
               box-shadow: 0 8px 24px -16px rgba(0, 0, 0, .8); }
-.prof__card-head { display: flex; flex-direction: column; gap: 4px; }
+.prof__card-head { display: flex; flex-direction: column; gap: 6px; }
 .prof__card-head h2 { display: flex; align-items: center; gap: 10px; margin: 0;
                       font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
                       font-size: 18px; line-height: 24px; color: var(--white); }
-.prof__card-head p { margin: 0; max-width: 720px;
-                     font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
-                     color: var(--dp-text); }
+/* Описание тише заголовка, иначе они спорят за первый взгляд */
+.prof__card-head p { margin: 0; max-width: 760px;
+                     font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 19px;
+                     color: var(--dp-label); }
 
-.prof__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px;
+/* Между рядами больше воздуха, чем между колонками: так пары «подпись —
+   поле» читаются рядами, а не решёткой из восьми одинаковых блоков. */
+.prof__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px;
               align-items: start; }
-.prof__cell { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.prof__cell { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .prof__cell--wide { grid-column: 1 / -1; }
-.prof__label { display: flex; align-items: center; gap: 8px; padding: 0 4px;
-               font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 12px;
-               line-height: 16px; color: var(--dp-label); }
-/* Статусы: зелёный и жёлтый из наших токенов, подложка — они же на 12% */
-.prof__badge { font-style: normal; padding: 3px 8px; border-radius: 999px;
-               font-weight: 600; font-size: 11px; line-height: 14px; }
-.prof__badge--ok   { background: rgba(0, 201, 40, .14); color: var(--register); }
-.prof__badge--warn { background: rgba(234, 255, 0, .14); color: var(--brand-yellow, #eaff00); }
+/* Подписи выровнены по левому краю карточки — там же, где заголовки секций,
+   поэтому колонка полей читается одной линией. */
+.prof__label { display: flex; align-items: center; gap: 8px; padding: 0;
+               font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 12.5px;
+               line-height: 16px; color: var(--muted); }
+/* Статус — нейтральная плашка с цветной точкой. Сплошные зелёная и кислотная
+   жёлтая заливки перетягивали внимание с самих полей. */
+.prof__badge { display: inline-flex; align-items: center; gap: 6px; font-style: normal;
+               padding: 3px 9px 3px 7px; border-radius: 999px;
+               background: rgba(255, 255, 255, .07); color: var(--muted);
+               font-weight: 600; font-size: 11px; line-height: 16px; }
+/* display перебивает атрибут hidden — гасим адресно, иначе плашка «checked»
+   остаётся видна у новичка, у которого проверять ещё нечего. */
+.prof__badge[hidden] { display: none; }
+.prof__badge::before { content: ''; width: 6px; height: 6px; flex: none; border-radius: 50%; }
+.prof__badge--ok::before   { background: var(--register); }
+.prof__badge--warn::before { background: var(--brand-yellow, #eaff00); }
 
+/* Поле на карточке отличается заливкой всего на пару процентов — держим
+   границу тонким кантом, иначе ряд полей сливается с плитой. */
 .prof__box { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
-             height: 48px; padding: 12px 14px; background: #30354f; border-radius: 12px; }
+             height: 46px; padding: 12px 14px; background: #262c47; border-radius: 12px;
+             border: 1px solid rgba(255, 255, 255, .07); }
 .prof__box input { flex: 1 0 0; min-width: 0; border: 0; background: none; outline: none;
                    font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px;
                    line-height: 20px; color: var(--white); }
@@ -3490,20 +3639,35 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 14px;
                line-height: 20px; color: var(--white); }
 /* Заблокированные после проверки поля: приглушены и с замком */
-.prof__box.is-locked { background: var(--white-04); }
+.prof__box.is-locked { background: rgba(255, 255, 255, .03);
+                       border-color: rgba(255, 255, 255, .05); }
 .prof__box.is-locked .prof__value { color: var(--dp-text); }
-.prof__box.is-locked img { display: block; flex: none; opacity: .5; }
+.prof__box.is-locked img { display: block; flex: none; opacity: .35; }
+.prof__box.is-locked img[hidden] { display: none; }
 .prof__link { flex: none; padding: 0; border: 0; background: none; cursor: pointer;
               font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
               line-height: 20px; color: var(--primary); }
 .prof__link:hover { color: var(--primary-hover); }
-.prof__note { padding: 0 4px; font-family: 'Work Sans', sans-serif; font-size: 12px;
+.prof__note { padding: 0; font-family: 'Work Sans', sans-serif; font-size: 12px;
               line-height: 16px; color: var(--dp-label); }
+/* Статус «на проверке» — та же нейтральная плашка, точка приглушённая:
+   данные уже отправлены, но зелёным их отмечать ещё рано. */
+.prof__badge--wait::before { background: var(--dp-label); }
+/* Ошибка поля: кант и строка под ним. Красный только на канте и тексте —
+   заливку не трогаем, иначе поле начинает кричать на всю карточку. */
+.prof__box.is-bad { border-color: rgba(229, 72, 77, .8);
+                    box-shadow: inset 0 0 0 1px rgba(229, 72, 77, .35); }
+.prof__err { display: flex; align-items: center; gap: 6px; padding: 0;
+             font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+             color: #e5484d; }
+.prof__err[hidden] { display: none; }
+.prof__err::before { content: ''; width: 5px; height: 5px; flex: none;
+                     border-radius: 50%; background: currentColor; }
 .prof__empty { margin: 0; padding: 32px 0;
                font-family: 'Work Sans', sans-serif; font-size: 14px; color: var(--dp-label); }
 
 /* Полоса сохранения — прилипает к низу окна, пока есть правки */
-.prof__save { position: sticky; bottom: 0; z-index: 5;
+.prof__save { position: sticky; bottom: 12px; z-index: 5;
               display: flex; align-items: center; gap: 12px; padding: 16px 20px;
               background: rgba(24, 30, 59, .92); border-radius: 16px;
               border: 1px solid rgba(255, 255, 255, .08);
@@ -3520,11 +3684,17 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .prof__btn--primary:hover { background: var(--primary-hover); }
 
 /* Пустой профиль: замков нет, поля ждут заполнения */
-.view--profile.is-new .prof__box.is-locked { background: #30354f; }
-.view--profile.is-new .prof__box.is-locked img { display: none; }
-.view--profile.is-new .prof__box.is-locked .prof__value { color: var(--dp-label); }
-.view--profile.is-new .prof__badge--ok { display: none; }
-.view--profile.is-new .prof__ok { color: var(--brand-yellow, #eaff00); }
+@media (max-width: 767px) {
+  /* На 402 имя, мета и витринный переключатель в одну строку не влезают:
+     имя ломалось на две строки, а мета на три. Переключатель уводим на
+     свою строку, сетку полей — в одну колонку. */
+  .prof__who { flex-wrap: wrap; gap: 12px 14px; padding-bottom: 16px; }
+  .prof__who-text { flex: 1 1 0; min-width: 0; }
+  .prof__grid { grid-template-columns: 1fr; gap: 18px; }
+  .prof__card { padding: 20px 18px; border-radius: 16px; }
+  .prof__panel { gap: 20px; }
+}
+
 
 @media (max-width: 720px) {
   .prof__grid { grid-template-columns: 1fr; gap: 12px; }
@@ -3532,7 +3702,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .prof__card { padding: 16px; gap: 12px; }
   .prof__panel { gap: 24px; }
   .prof__h1 { font-size: 24px; line-height: 32px; }
-  .prof__demo { margin-left: 0; }
   .prof__save { flex-wrap: wrap; }
   .prof__save-text { flex: 1 0 100%; }
 }
@@ -4023,46 +4192,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 #browse-menu .br__sheet { pointer-events: auto; }
 
 
-
-/* ═══════════════════════════════════════════════════════════════════
-   Поп-ап профиля: выравнивание меню и иерархия сводки.
-
-   Меню растягивалось через space-between: пункт 40, а зазор между
-   пунктами 33 — почти столько же. Разделитель при этом нарисован на
-   верхней кромке пункта, поэтому от подписи под ним он в 11px, а от
-   подписи над ним в 33 — подпись и читалась как сидящая на границе.
-   Делим высоту поровну между пунктами: линии встают на равном
-   удалении от обеих подписей, пустоты внизу не остаётся.
-   ═══════════════════════════════════════════════════════════════════ */
-.pm__menu { justify-content: center; padding: 12px 8px; }
-.pm__item { flex: 0 0 auto; height: 44px; min-height: 0; padding: 0 8px; }
-/* Мобильный сброс поля объявлен выше по файлу и моим правилом перебивался.
-   Возвращаем его здесь, иначе на узких экранах меню получало лишние 8px. */
-@media (max-width: 720px) { .pm__menu { padding: 0; } }
-
-/* Сводка: поле 16 как у самого окна — внутреннее совпало с внешним,
-   было 12/16 и верх с низом поджимались сильнее боков. */
-.pm__sum { padding: 16px; }
-/* Заголовок карточки стоял вровень с подписями полей: четыре одинаковых
-   капса подряд и ни одного главного. Поднимаем его на ступень. */
-.pm__title { color: var(--modal-text-1, #bbc6cd); }
-/* Крупное число в окне остаётся одно — баланс. Bonus и Withdrawable
-   уходят с 20 на 16 и получают зазор, которого не было вовсе. */
-.pm__stats { gap: 20px; }
-.pm__stat b { font-size: 16px; line-height: 22px; }
-
-/* Баланс перестал быть крипто: вместо логотипа монеты — значок валюты.
-   Кружок тот же по размеру, что был у иконки, чтобы строка не поехала. */
-.pm__coin-badge { display: grid; place-items: center; flex: none;
-                  width: 28px; height: 28px; border-radius: 50%;
-                  background: var(--white-06);
-                  font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-                  font-size: 15px; line-height: 1; color: var(--white); }
-.wallet__badge { display: grid; place-items: center; flex: none;
-                 width: 16px; height: 16px; border-radius: 50%;
-                 background: var(--white-10);
-                 font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-                 font-size: 10px; line-height: 1; color: var(--white); }
 </style>
 </head>
 <body>
@@ -4185,8 +4314,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            входа шапка делится на три части, кошелёк стоит между ними -->
       <div class="wallet" data-node-id="905:4387">
         <button class="wallet__balance" type="button" data-node-id="905:4388">
-          <span class="wallet__badge" aria-hidden="true">$</span>
-          <span>0.00</span>
+          <img src="a/eafab62439.svg" alt="" width="16" height="16">
+          <span>USDT 0.00</span>
           <img class="wallet__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
         </button>
         <button class="wallet__deposit" type="button" data-node-id="905:4393">DEPOSIT</button>
@@ -4925,6 +5054,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <div class="prof__tabs" role="tablist">
           <button class="prof__tab is-active" type="button" role="tab" aria-selected="true" data-tab="general">General</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="verification">Verification</button>
+          <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="security">Security</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="responsible">Responsible Gambling</button>
         </div>
         </div>
@@ -4935,12 +5065,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <div class="prof__who-text">
             <b>Ricardo Destaole</b>
             <span>Player since March 2026 <i>·</i> <em class="prof__ok">Identity verified</em></span>
-          </div>
-          <!-- Витринный переключатель: показать оба состояния профиля.
-               В макете его нет — снимается этим одним блоком. -->
-          <div class="prof__demo">
-            <button class="prof__demo-btn is-active" type="button" data-state="verified">Verified player</button>
-            <button class="prof__demo-btn" type="button" data-state="new">New player</button>
           </div>
         </div>
 
@@ -5018,41 +5142,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
         </section>
 
-        <section class="prof__card">
-            <div class="prof__card-head">
-              <h2>Password</h2>
-              <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
-            </div>
-            <div class="sec__pass">
-              <div class="prof__cell">
-                <span class="prof__label">Current password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="current-password" aria-label="Current password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-              <div class="prof__cell">
-                <span class="prof__label">New password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="new-password" aria-label="New password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-              <div class="prof__cell">
-                <span class="prof__label">Repeat new password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="new-password" aria-label="Repeat new password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-            </div>
-            <div class="sec__pass-foot">
-              <p class="sec__hint"></p>
-              <button class="prof__btn prof__btn--primary sec__submit" type="button" disabled>Change password</button>
-            </div>
-          </section>
-
-          <div class="prof__save" hidden>
+        <div class="prof__save" hidden>
           <span class="prof__save-text">Unsaved changes in the address</span>
           <button class="prof__btn prof__btn--ghost" type="button" data-prof="cancel">Cancel</button>
           <button class="prof__btn prof__btn--primary" type="button" data-prof="save">Save</button>
@@ -5154,6 +5244,109 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         </div>
         <!-- Security: смена пароля и журнал входов. Вид наш — те же карточки
              и та же лесенка отступов, что на General и Verification. -->
+        <div class="prof__panel" id="prof-security" role="tabpanel" hidden>
+          <section class="prof__card">
+            <div class="prof__card-head">
+              <h2>Password</h2>
+              <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
+            </div>
+            <div class="sec__pass">
+              <div class="prof__cell">
+                <span class="prof__label">Current password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="current-password" aria-label="Current password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+              <div class="prof__cell">
+                <span class="prof__label">New password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="new-password" aria-label="New password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+              <div class="prof__cell">
+                <span class="prof__label">Repeat new password</span>
+                <label class="prof__box">
+                  <input type="password" autocomplete="new-password" aria-label="Repeat new password">
+                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                </label>
+              </div>
+            </div>
+            <div class="sec__pass-foot">
+              <p class="sec__hint"></p>
+              <button class="prof__btn prof__btn--primary sec__submit" type="button" disabled>Change password</button>
+            </div>
+          </section>
+
+          <section class="prof__card">
+            <div class="prof__card-head">
+              <h2>Sessions</h2>
+              <p>Where your account was opened. If you see a device you do not recognise — change the password.</p>
+            </div>
+            <div class="sec__table-wrap">
+              <table class="sec__table">
+                <thead>
+                  <tr><th>Device</th><th>IP</th><th>System</th><th>Browser</th><th>Status</th><th>Date</th></tr>
+                </thead>
+                <tbody>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Opera 122.0.4.5</td>
+                <td><em class="sec__st sec__st--active">Active</em></td>
+                <td class="sec__date">22.04.2025, 22:40</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">69.67.148.93 <i>MX</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Opera 122.0.4.5</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">22.04.2025, 21:12</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">149.50.216.82 <i>TR</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Chrome 138.0.0.0</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">21.04.2025, 09:05</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">149.50.216.82 <i>SE</i></td>
+                <td>macOS 14.4</td>
+                <td>Safari 17.4</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">19.04.2025, 18:31</td>
+              </tr>
+              <tr>
+                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
+                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
+                <td>Windows NT 10.0</td>
+                <td>Opera 122.0.4.5</td>
+                <td><em class="sec__st sec__st--off">Inactive</em></td>
+                <td class="sec__date">17.04.2025, 12:47</td>
+              </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="sec__pager">
+              <button class="sec__page sec__page--nav" type="button" aria-label="Назад" disabled>&lsaquo;</button>
+              <button class="sec__page is-active" type="button">1</button>
+              <button class="sec__page" type="button">2</button>
+              <button class="sec__page" type="button">3</button>
+              <span class="sec__gap">…</span>
+              <button class="sec__page" type="button">12</button>
+              <button class="sec__page" type="button">13</button>
+              <button class="sec__page" type="button">14</button>
+              <button class="sec__page sec__page--nav" type="button" aria-label="Вперёд">&rsaquo;</button>
+            </div>
+          </section>
+        </div>
+
         <!-- 1335:18127 — Responsible Gambling: шесть карточек лимитов -->
         <div class="prof__panel prof__panel--rg" id="prof-responsible" role="tabpanel" hidden>
           <div class="rg__row-cards">
@@ -5266,6 +5459,129 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </section>
           </div>
         </div>
+      </div>
+
+      <!-- Страница VIP-клуба: уровни, привилегии и порядок начисления.
+           Программы у нас пока нет — структура и пороги собраны по тому,
+           как это устроено на казино-сайтах, валюта наша, USDT. -->
+      <div class="view view--vip" id="view-vip" hidden>
+        <section class="vip__hero">
+          <span class="vip__eyebrow">VIP Club</span>
+          <h1 class="vip__h1">Play more &#8212; get more back</h1>
+          <p class="vip__lead">Every bet earns club points. The higher your level, the more comes back: weekly cashback, higher limits and a manager who answers without the queue.</p>
+          <div class="vip__state">
+            <div class="vip__state-row">
+              <span class="vip__now">Bronze</span>
+              <span class="vip__next"><b>2,400</b> / 10,000 USDT to Silver</span>
+            </div>
+            <span class="vip__track"><i style="width:24%"></i></span>
+          </div>
+          <button class="vip__cta" type="button">Start playing</button>
+        </section>
+
+        <section class="section">
+          <div class="section__head">
+            <div class="section__title"><h2>Levels</h2></div>
+          </div>
+          <div class="vip__tiers">
+            <article class="vtier vtier--bronze vtier--now">
+              <span class="vtier__mark" aria-hidden="true"></span>
+              <h3 class="vtier__name">Bronze</h3>
+              <span class="vtier__badge">Your level</span>
+              <dl class="vtier__rows">
+                <div><dt>Wagered</dt><dd>1 000 USDT</dd></div>
+                <div><dt>Cashback</dt><dd>3%</dd></div>
+                <div><dt>Unlocks</dt><dd>Weekly cashback</dd></div>
+              </dl>
+            </article>
+            <article class="vtier vtier--silver">
+              <span class="vtier__mark" aria-hidden="true"></span>
+              <h3 class="vtier__name">Silver</h3>
+              <dl class="vtier__rows">
+                <div><dt>Wagered</dt><dd>10 000 USDT</dd></div>
+                <div><dt>Cashback</dt><dd>5%</dd></div>
+                <div><dt>Unlocks</dt><dd>Faster withdrawals</dd></div>
+              </dl>
+            </article>
+            <article class="vtier vtier--gold">
+              <span class="vtier__mark" aria-hidden="true"></span>
+              <h3 class="vtier__name">Gold</h3>
+              <dl class="vtier__rows">
+                <div><dt>Wagered</dt><dd>50 000 USDT</dd></div>
+                <div><dt>Cashback</dt><dd>7%</dd></div>
+                <div><dt>Unlocks</dt><dd>Personal manager</dd></div>
+              </dl>
+            </article>
+            <article class="vtier vtier--platinum">
+              <span class="vtier__mark" aria-hidden="true"></span>
+              <h3 class="vtier__name">Platinum</h3>
+              <dl class="vtier__rows">
+                <div><dt>Wagered</dt><dd>250 000 USDT</dd></div>
+                <div><dt>Cashback</dt><dd>10%</dd></div>
+                <div><dt>Unlocks</dt><dd>Custom limits</dd></div>
+              </dl>
+            </article>
+            <article class="vtier vtier--diamond">
+              <span class="vtier__mark" aria-hidden="true"></span>
+              <h3 class="vtier__name">Diamond</h3>
+              <dl class="vtier__rows">
+                <div><dt>Wagered</dt><dd>1 000 000 USDT</dd></div>
+                <div><dt>Cashback</dt><dd>15%</dd></div>
+                <div><dt>Unlocks</dt><dd>Private events</dd></div>
+              </dl>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section__head">
+            <div class="section__title"><h2>What you get</h2></div>
+          </div>
+          <div class="vip__perks">
+            <article class="vperk">
+              <span class="vperk__ico vperk__ico--coins" aria-hidden="true"></span>
+              <h3>Weekly cashback</h3>
+              <p>A share of your net loss comes back every Monday. The higher the level, the bigger the share.</p>
+            </article>
+            <article class="vperk">
+              <span class="vperk__ico vperk__ico--chat" aria-hidden="true"></span>
+              <h3>Personal manager</h3>
+              <p>From Gold up you get a manager in Telegram who solves everything without the queue.</p>
+            </article>
+            <article class="vperk">
+              <span class="vperk__ico vperk__ico--up" aria-hidden="true"></span>
+              <h3>Higher limits</h3>
+              <p>Deposit and withdrawal caps grow with the level, up to custom ones on Platinum.</p>
+            </article>
+            <article class="vperk">
+              <span class="vperk__ico vperk__ico--bolt" aria-hidden="true"></span>
+              <h3>Faster withdrawals</h3>
+              <p>VIP requests jump the queue: from Silver up they are processed first.</p>
+            </article>
+            <article class="vperk">
+              <span class="vperk__ico vperk__ico--gift" aria-hidden="true"></span>
+              <h3>Birthday bonus</h3>
+              <p>A bonus on your birthday, its size depends on the level you hold that day.</p>
+            </article>
+            <article class="vperk">
+              <span class="vperk__ico vperk__ico--cup" aria-hidden="true"></span>
+              <h3>Private tournaments</h3>
+              <p>Closed tournaments with a smaller field — the same prize pool split among fewer players.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section__head">
+            <div class="section__title"><h2>How it works</h2></div>
+          </div>
+          <ol class="vip__steps">
+            <li class="vstep"><span class="vstep__n">1</span><div><h3>Play</h3><p>Every bet in casino or sportsbook earns club points. Bets in bonus money do not count.</p></div></li>
+            <li class="vstep"><span class="vstep__n">2</span><div><h3>Collect points</h3><p>1 point for every 10 USDT wagered. Points are counted for the last 90 days.</p></div></li>
+            <li class="vstep"><span class="vstep__n">3</span><div><h3>Level up</h3><p>Reaching the next threshold raises the level right away — you keep it while the wager stays in the window.</p></div></li>
+            <li class="vstep"><span class="vstep__n">4</span><div><h3>Take the rewards</h3><p>Cashback lands on Monday, the rest of the perks turn on the moment the level changes.</p></div></li>
+          </ol>
+        </section>
       </div>
 
       <!-- 1377:18464 «Promotions» — категории и сетка акций -->
@@ -6264,7 +6580,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <ul class="fnav__list">
                 <li><button class="fnav__link" type="button" data-fgo="hist:bonus">Bonuses</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:promo">Promotions</button></li>
-                <li><button class="fnav__link" type="button">VIP Club</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:vip">VIP Club</button></li>
                 <li><button class="fnav__link" type="button">Affiliate Program</button></li>
                 <li><button class="fnav__link" type="button">About Us</button></li>
               </ul>
@@ -6611,14 +6927,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <div class="pm__sum" data-node-id="1226:35559">
       <h2 class="pm__title">Account Summary</h2>
       <div class="pm__balance">
-        <span class="pm__cap">Balance (USD)</span>
+        <span class="pm__cap">Balance (USDT)</span>
         <div class="pm__coin" data-node-id="1226:35563">
           <span class="pm__coin-left">
-            <span class="pm__coin-badge" aria-hidden="true">$</span>
-            <b>USD</b>
+            <img loading="lazy" decoding="async" src="a/eafab62439.svg" alt="" width="28" height="28">
+            <b>USDT</b>
           </span>
           <span class="pm__coin-right">
-            <b>0.00</b>
+            <b>0.00USDT</b>
+            <i>$0.00</i>
           </span>
         </div>
       </div>
@@ -7851,7 +8168,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     history: document.getElementById('view-history'),
                     promo: document.getElementById('view-promo'),
                     promoOne: document.getElementById('view-promo-one'),
-                    game: document.getElementById('view-game') };
+                    game: document.getElementById('view-game'),
+                    vip: document.getElementById('view-vip') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
@@ -7916,14 +8234,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       if (!target) return;
       it.addEventListener('click', function () { showView(target); });
     });
-    /* Своей страницы у бонусов нет, но есть вкладка Bonus в истории ставок —
-       пункт меню ведёт туда. У VIP Club страницы пока нет вовсе. */
+    /* У бонусов своей страницы нет — ведём на вкладку Bonus в истории ставок */
     document.querySelectorAll('.side-item, .br__row').forEach(function (it) {
       var label = it.querySelector('.side-item__label, .br__row-label');
-      if (((label && label.textContent) || '').trim().toLowerCase() !== 'bonuses') return;
+      var name = ((label && label.textContent) || '').trim().toLowerCase();
+      if (name !== 'bonuses' && name !== 'vip club') return;
       it.addEventListener('click', function () {
         var br = document.getElementById('browse-menu');
         if (br && !br.hidden) { br.hidden = true; document.body.style.overflow = ''; }
+        if (name === 'vip club') { showView('vip'); return; }
         showView('history');
         var tab = document.querySelector('.hist__tab[data-hist="bonus"]');
         if (tab) tab.click();
@@ -8274,10 +8593,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       /* Верификация: выбранный файл показываем в карточке, значок переходит
          в «In review». Replace возвращает зону загрузки. */
-      /* Смена пароля переехала со вкладки Security в General, сама вкладка
-         убрана. Ищем форму в General; листалки журнала там нет, и пустой
-         secPages это переживает. */
-      var secPanel = document.getElementById('prof-general');
+      /* Security: показ пароля, проверка совпадения и листалка журнала. */
+      var secPanel = document.getElementById('prof-security');
       if (secPanel) {
         secPanel.querySelectorAll('.sec__eye').forEach(function (eye) {
           eye.addEventListener('click', function (e) {
@@ -8360,8 +8677,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       vfSync();
 
-      /* Витринный переключатель: заполненный профиль или новичок */
-      var profDemo = [].slice.call(profView.querySelectorAll('.prof__demo-btn'));
       var profFields = [].slice.call(profView.querySelectorAll('[data-prof-addr]'));
       var profSave = profView.querySelector('.prof__save');
       var profBase = profFields.map(function (i) { return i.value; });
@@ -8369,21 +8684,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var dirty = profFields.some(function (i, k) { return i.value !== profBase[k]; });
         profSave.hidden = !dirty;
       };
-      profDemo.forEach(function (d) {
-        d.addEventListener('click', function () {
-          profDemo.forEach(function (o) { o.classList.toggle('is-active', o === d); });
-          var isNew = d.dataset.state === 'new';
-          profView.classList.toggle('is-new', isNew);
-          /* У новичка адрес пустой, у проверенного — значения из макета */
-          profFields.forEach(function (i, k) { i.value = isNew ? '' : profBase[k]; });
-          profView.querySelectorAll('.prof__value').forEach(function (v) {
-            if (!v.dataset.profBase) v.dataset.profBase = v.textContent;
-            v.textContent = isNew ? '—' : v.dataset.profBase;
-          });
-          profSave.hidden = true;
-        });
-      });
-
       /* Полоса сохранения поднимается, как только адрес отличается от исходного */
       profFields.forEach(function (i) { i.addEventListener('input', profSync); });
       profView.querySelector('[data-prof=cancel]').addEventListener('click', function () {
@@ -8902,6 +9202,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       gv.querySelector('.gv__prov-all').addEventListener('click', function () { showView('casino'); });
 
+      /* CTA на странице VIP: гостю — регистрация, вошедшему — лобби казино */
+      var vipCta = document.querySelector('.vip__cta');
+      if (vipCta) vipCta.addEventListener('click', function () {
+        if (!document.body.classList.contains('is-authed')) {
+          var reg = document.querySelector('.btn--primary');
+          if (reg) { reg.click(); return; }
+        }
+        showView('casino');
+      });
+
       /* Сами карточки. Внутри страницы игры их не трогаем: там клоны. */
       document.querySelectorAll('.game, .lc').forEach(function (card) {
         if (gv.contains(card)) return;
@@ -9150,6 +9460,105 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           empty.querySelector('button').hidden = !cta;
         }
       };
+      /* ── Состояния вкладки General в профиле ──
+         Три сценария, которых на странице не было: новичок сразу после
+         регистрации, личные данные на проверке и ошибки в адресе.
+         Значения полей запоминаем при первом переключении, чтобы можно
+         было вернуться к исходному виду. */
+      var profGen = function () {
+        var v = document.getElementById('view-profile');
+        if (!v) return null;
+        if (v.hidden) {
+          var u = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+          if (u) u.click();
+          var go = document.querySelector('.pm__item[data-go="profile"]');
+          if (go) go.click(); else showView('profile');
+        }
+        var tab = v.querySelector('.prof__tab[data-tab="general"]');
+        if (tab && !tab.classList.contains('is-active')) tab.click();
+        return v;
+      };
+      var profReset = function (v) {
+        v.querySelectorAll('[data-prof-base]').forEach(function (n) {
+          if (n.tagName === 'INPUT') n.value = n.dataset.profBase;
+          else n.textContent = n.dataset.profBase;
+        });
+        v.querySelectorAll('.prof__box').forEach(function (b) { b.classList.remove('is-bad'); });
+        v.querySelectorAll('.prof__err').forEach(function (e) { e.hidden = true; });
+        v.querySelectorAll('.prof__badge').forEach(function (b) {
+          b.hidden = false;
+          if (b.dataset.profBase) { b.textContent = b.dataset.profBase;
+            b.className = b.dataset.profCls; }
+        });
+        v.querySelectorAll('.prof__box.is-locked img').forEach(function (i) { i.hidden = false; });
+        var ok = v.querySelector('.prof__ok');
+        if (ok && ok.dataset.profBase) { ok.textContent = ok.dataset.profBase;
+                                         ok.style.color = ''; }
+        v.querySelector('.prof__save').hidden = true;
+      };
+      var profRemember = function (v) {
+        v.querySelectorAll('.prof__value, .prof__badge, .prof__ok, [data-prof-addr], .prof__card-head p')
+         .forEach(function (n) {
+           if (n.dataset.profBase === undefined) {
+             n.dataset.profBase = n.tagName === 'INPUT' ? n.value : n.textContent;
+             if (n.classList.contains('prof__badge')) n.dataset.profCls = n.className;
+           }
+         });
+      };
+      var profErr = function (box, text) {
+        box.classList.add('is-bad');
+        var cell = box.closest('.prof__cell');
+        var e = cell.querySelector('.prof__err');
+        if (!e) { e = document.createElement('span'); e.className = 'prof__err';
+                  cell.appendChild(e); }
+        e.textContent = text; e.hidden = false;
+      };
+      var profShow = function (what) {
+        var v = profGen(); if (!v) return;
+        profRemember(v); profReset(v);
+        var cards = v.querySelectorAll('#prof-general .prof__card');
+        if (what === 'new') {
+          /* Личные данные ещё не заданы, замков нет, проверок нет */
+          cards[1].querySelectorAll('.prof__value').forEach(function (n) { n.textContent = '\u2014'; });
+          cards[1].querySelectorAll('.prof__box.is-locked img').forEach(function (i) { i.hidden = true; });
+          cards[1].querySelectorAll('.prof__badge').forEach(function (b) { b.hidden = true; });
+          /* подпись карточки тоже своя: у новичка данных ещё нет, и обещать,
+             что они совпадают с документом, нельзя */
+          cards[1].querySelector('.prof__card-head p').textContent =
+            'Fill them in before the first withdrawal — they must match the document.';
+          v.querySelectorAll('[data-prof-addr]').forEach(function (i) { i.value = ''; });
+          var em = cards[0].querySelector('.prof__badge');
+          em.textContent = 'not verified'; em.className = 'prof__badge prof__badge--warn';
+          var ok = v.querySelector('.prof__ok');
+          ok.textContent = 'Identity not verified';
+          ok.style.color = 'var(--brand-yellow, #eaff00)';
+        } else if (what === 'review') {
+          /* Данные отправлены: поля уже заперты, но отметка ещё нейтральная */
+          var b2 = cards[1].querySelector('.prof__card-head .prof__badge');
+          b2.textContent = 'on review'; b2.className = 'prof__badge prof__badge--wait';
+          cards[1].querySelector('.prof__card-head p').textContent =
+            'Sent for checking on 12 August. Usually takes up to 24 hours.';
+          var ok2 = v.querySelector('.prof__ok');
+          ok2.textContent = 'Identity on review';
+          ok2.style.color = 'var(--dp-label)';
+        } else if (what === 'bad') {
+          /* Ошибки в адресе: индекс не того формата, город не заполнен */
+          var addr = cards[2];
+          var boxes = addr.querySelectorAll('.prof__box');
+          boxes[1].querySelector('input').value = '';
+          profErr(boxes[1], 'Fill in the city — without it a card withdrawal will not go through');
+          boxes[3].querySelector('input').value = '742-15';
+          profErr(boxes[3], 'Postal code must be 8 digits');
+          v.querySelector('.prof__save').hidden = false;
+        }
+      };
+      STATES.push(['Профиль · General', [
+        ['Новичок после регистрации', function () { profShow('new'); }],
+        ['Данные на проверке', function () { profShow('review'); }],
+        ['Ошибки в адресе', function () { profShow('bad'); }],
+        ['Проверенный игрок', function () { profShow('ok'); }]
+      ]]);
+
       STATES.push(['История', [
         ['Загрузка', function () { histShow('load'); }],
         ['Ставок ещё не было', function () { histShow('text', 'No bets yet',
