@@ -2348,6 +2348,12 @@ body.is-authed .wallet { display: flex; }
                    font-size: 14px; line-height: 14px; white-space: nowrap; }
 .wallet__balance:hover { background: var(--white-16); }
 .wallet__balance img { display: block; }
+/* тот же значок валюты, что в поп-апе, только 16 — под высоту чипа */
+.wallet__badge { display: grid; place-items: center; flex: none;
+                 width: 16px; height: 16px; border-radius: 50%;
+                 background: var(--white-10);
+                 font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                 font-size: 10px; line-height: 1; color: var(--white); }
 .wallet__deposit { display: flex; align-items: center; justify-content: center; flex: none;
                    padding: 12px; border: 0; cursor: pointer;
                    background: linear-gradient(to bottom, #cdfa50, #a6e22e); color: #00151f;
@@ -3738,7 +3744,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
 /* 1226:35559 — сводка: своя плита темнее окна */
 .pm__sum { position: relative; box-sizing: border-box; width: 340px; flex: none;
-           display: flex; flex-direction: column; gap: 16px; padding: 12px 16px;
+           display: flex; flex-direction: column; gap: 16px; padding: 16px;
            background: #0e132a; border: 0; border-radius: 12px; }
 /* кант слоем: внутри Figma он не занимает место, а border забирал по 1px */
 .pm__sum::after { content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -3748,7 +3754,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    не вело взгляд, а сам баланс был мельче тикера рядом. */
 .pm__title { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
              font-size: 12px; line-height: 16px; letter-spacing: .06em;
-             text-transform: uppercase; color: var(--dp-label); }
+             text-transform: uppercase; color: var(--modal-text-1, #bbc6cd); }
 .pm__cap { font-family: 'Work Sans', sans-serif; font-weight: 500;
            font-size: 11px; line-height: 16px; letter-spacing: .05em;
            text-transform: uppercase; color: var(--dp-label); }
@@ -3758,6 +3764,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             height: 76px; padding: 12px 14px; border: 1px solid #2f354f; border-radius: 12px; }
 .pm__coin-left { display: flex; align-items: center; gap: 8px; }
 .pm__coin-left img { display: block; }
+/* Баланс не крипта: вместо логотипа монеты — значок валюты на том же месте
+   и в том же размере, что был у иконки USDT */
+.pm__coin-badge { display: grid; place-items: center; flex: none;
+                  width: 28px; height: 28px; border-radius: 50%;
+                  background: var(--white-06);
+                  font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                  font-size: 15px; line-height: 1; color: var(--white); }
 .pm__coin-left b { font-family: 'Instrument Sans', sans-serif; font-weight: 600;
                    font-size: 14px; line-height: 18px; color: var(--modal-text-1, #bbc6cd); }
 .pm__coin-right { display: flex; flex-direction: column; align-items: flex-end; }
@@ -3767,11 +3780,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     font-variant-numeric: tabular-nums; }
 .pm__coin-right i { font-style: normal; font-family: 'Instrument Sans', sans-serif;
                     font-size: 13px; line-height: 17px; color: var(--dp-label); }
-/* 1226:35571 — две колонки поровну */
-.pm__stats { display: flex; }
+/* 1226:35571 — две колонки, между ними зазор: без него подписи сливались */
+.pm__stats { display: flex; gap: 20px; }
 .pm__stat { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+/* Крупное число в окне одно — баланс. Bonus и Withdrawable ушли с 20 на 16,
+   иначе три одинаково больших числа спорили друг с другом. */
 .pm__stat b { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-              font-size: 20px; line-height: 24px; color: var(--white);
+              font-size: 16px; line-height: 22px; color: var(--white);
               font-variant-numeric: tabular-nums; }
 /* 1226:35580 — сноска на подложке окна */
 .pm__note { box-sizing: border-box; display: flex; gap: 8px; height: 49px; padding: 10px 12px;
@@ -3780,11 +3795,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__note p { margin: 0; flex: 1 0 0; font-family: 'Instrument Sans', sans-serif;
               font-size: 12px; line-height: 15px; color: var(--dp-label); }
 
-/* 1226:35583 — меню: пункты 40, между ними линия 10% белого */
+/* 1226:35583 — меню: пункты 44, между ними линия 10% белого.
+   Группа центрируется по высоте сводки, а не растягивается на неё: при
+   space-between пункты разъезжались, разделитель на верхней кромке пункта
+   оказывался в 11px от подписи под ним и в 33 от подписи над ним. И высоту
+   пункта тянуть под сводку нельзя — подсветка выходила втрое выше строки. */
 .pm__menu { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column;
-            justify-content: space-between; padding: 12px 16px; }
+            justify-content: center; padding: 12px 8px; }
 .pm__item { box-sizing: border-box; display: flex; align-items: center; gap: 8px;
-            height: 40px; padding: 8px; width: 100%;
+            flex: 0 0 auto; height: 44px; min-height: 0; padding: 0 8px; width: 100%;
             background: none; border: 0; border-radius: 12px; cursor: pointer; text-align: left; }
 .pm__item + .pm__item { border-top: 1px solid rgba(255, 255, 255, .08); border-radius: 0; }
 .pm__item:hover { background: var(--white-06); border-radius: 10px; }
@@ -4314,8 +4333,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            входа шапка делится на три части, кошелёк стоит между ними -->
       <div class="wallet" data-node-id="905:4387">
         <button class="wallet__balance" type="button" data-node-id="905:4388">
-          <img src="a/eafab62439.svg" alt="" width="16" height="16">
-          <span>USDT 0.00</span>
+          <span class="wallet__badge" aria-hidden="true">$</span>
+          <span>0.00</span>
           <img class="wallet__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
         </button>
         <button class="wallet__deposit" type="button" data-node-id="905:4393">DEPOSIT</button>
@@ -5054,7 +5073,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <div class="prof__tabs" role="tablist">
           <button class="prof__tab is-active" type="button" role="tab" aria-selected="true" data-tab="general">General</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="verification">Verification</button>
-          <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="security">Security</button>
           <button class="prof__tab" type="button" role="tab" aria-selected="false" data-tab="responsible">Responsible Gambling</button>
         </div>
         </div>
@@ -5139,6 +5157,42 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="prof__label">Postal code</span>
               <label class="prof__box"><input data-prof-addr type="text" value="74215020" placeholder="Postal code" aria-label="Postal code"></label>
             </div>
+          </div>
+        </section>
+
+        <!-- Смена пароля живёт здесь же, в General: отдельная вкладка
+             ради одной карточки не нужна -->
+        <section class="prof__card">
+          <div class="prof__card-head">
+            <h2>Password</h2>
+            <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
+          </div>
+          <div class="sec__pass">
+            <div class="prof__cell">
+              <span class="prof__label">Current password</span>
+              <label class="prof__box">
+                <input type="password" autocomplete="current-password" aria-label="Current password">
+                <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+              </label>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">New password</span>
+              <label class="prof__box">
+                <input type="password" autocomplete="new-password" aria-label="New password">
+                <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+              </label>
+            </div>
+            <div class="prof__cell">
+              <span class="prof__label">Repeat new password</span>
+              <label class="prof__box">
+                <input type="password" autocomplete="new-password" aria-label="Repeat new password">
+                <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+              </label>
+            </div>
+          </div>
+          <div class="sec__pass-foot">
+            <p class="sec__hint"></p>
+            <button class="prof__btn prof__btn--primary sec__submit" type="button" disabled>Change password</button>
           </div>
         </section>
 
@@ -5242,111 +5296,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
           <p class="vf__foot">Documents are encrypted and visible only to the review team.</p>
         </div>
-        <!-- Security: смена пароля и журнал входов. Вид наш — те же карточки
-             и та же лесенка отступов, что на General и Verification. -->
-        <div class="prof__panel" id="prof-security" role="tabpanel" hidden>
-          <section class="prof__card">
-            <div class="prof__card-head">
-              <h2>Password</h2>
-              <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
-            </div>
-            <div class="sec__pass">
-              <div class="prof__cell">
-                <span class="prof__label">Current password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="current-password" aria-label="Current password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-              <div class="prof__cell">
-                <span class="prof__label">New password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="new-password" aria-label="New password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-              <div class="prof__cell">
-                <span class="prof__label">Repeat new password</span>
-                <label class="prof__box">
-                  <input type="password" autocomplete="new-password" aria-label="Repeat new password">
-                  <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
-                </label>
-              </div>
-            </div>
-            <div class="sec__pass-foot">
-              <p class="sec__hint"></p>
-              <button class="prof__btn prof__btn--primary sec__submit" type="button" disabled>Change password</button>
-            </div>
-          </section>
-
-          <section class="prof__card">
-            <div class="prof__card-head">
-              <h2>Sessions</h2>
-              <p>Where your account was opened. If you see a device you do not recognise — change the password.</p>
-            </div>
-            <div class="sec__table-wrap">
-              <table class="sec__table">
-                <thead>
-                  <tr><th>Device</th><th>IP</th><th>System</th><th>Browser</th><th>Status</th><th>Date</th></tr>
-                </thead>
-                <tbody>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Opera 122.0.4.5</td>
-                <td><em class="sec__st sec__st--active">Active</em></td>
-                <td class="sec__date">22.04.2025, 22:40</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">69.67.148.93 <i>MX</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Opera 122.0.4.5</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">22.04.2025, 21:12</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">149.50.216.82 <i>TR</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Chrome 138.0.0.0</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">21.04.2025, 09:05</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">149.50.216.82 <i>SE</i></td>
-                <td>macOS 14.4</td>
-                <td>Safari 17.4</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">19.04.2025, 18:31</td>
-              </tr>
-              <tr>
-                <td class="sec__ua" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0</td>
-                <td class="sec__ip">77.92.153.174 <i>TR</i></td>
-                <td>Windows NT 10.0</td>
-                <td>Opera 122.0.4.5</td>
-                <td><em class="sec__st sec__st--off">Inactive</em></td>
-                <td class="sec__date">17.04.2025, 12:47</td>
-              </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="sec__pager">
-              <button class="sec__page sec__page--nav" type="button" aria-label="Назад" disabled>&lsaquo;</button>
-              <button class="sec__page is-active" type="button">1</button>
-              <button class="sec__page" type="button">2</button>
-              <button class="sec__page" type="button">3</button>
-              <span class="sec__gap">…</span>
-              <button class="sec__page" type="button">12</button>
-              <button class="sec__page" type="button">13</button>
-              <button class="sec__page" type="button">14</button>
-              <button class="sec__page sec__page--nav" type="button" aria-label="Вперёд">&rsaquo;</button>
-            </div>
-          </section>
-        </div>
-
         <!-- 1335:18127 — Responsible Gambling: шесть карточек лимитов -->
         <div class="prof__panel prof__panel--rg" id="prof-responsible" role="tabpanel" hidden>
           <div class="rg__row-cards">
@@ -6927,15 +6876,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <div class="pm__sum" data-node-id="1226:35559">
       <h2 class="pm__title">Account Summary</h2>
       <div class="pm__balance">
-        <span class="pm__cap">Balance (USDT)</span>
+        <span class="pm__cap">Balance (USD)</span>
         <div class="pm__coin" data-node-id="1226:35563">
           <span class="pm__coin-left">
-            <img loading="lazy" decoding="async" src="a/eafab62439.svg" alt="" width="28" height="28">
-            <b>USDT</b>
+            <span class="pm__coin-badge" aria-hidden="true">$</span>
+            <b>USD</b>
           </span>
           <span class="pm__coin-right">
-            <b>0.00USDT</b>
-            <i>$0.00</i>
+            <!-- только сумма: тикер уже назван слева, а долларовый
+                 эквивалент второй строкой повторял бы её саму -->
+            <b>0.00</b>
           </span>
         </div>
       </div>
@@ -6948,7 +6898,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <p>To deposit or withdraw funds, please visit the Wallet section.</p>
       </div>
     </div>
-    <!-- 1226:35583 — меню, пункты 40 высотой с разделителями -->
+    <!-- 1226:35583 — меню, пункты 44 высотой с разделителями -->
     <nav class="pm__menu" data-node-id="1226:35583">
       <button class="pm__item" type="button" data-go="profile">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/5899700828.svg" alt="" width="18" height="20"><span>Profile</span>
@@ -8593,8 +8543,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       /* Верификация: выбранный файл показываем в карточке, значок переходит
          в «In review». Replace возвращает зону загрузки. */
-      /* Security: показ пароля, проверка совпадения и листалка журнала. */
-      var secPanel = document.getElementById('prof-security');
+      /* Пароль: показ, проверка совпадения. Карточка переехала в General,
+         журнала входов рядом с ней нет — пустой secPages это переживает. */
+      var secPanel = document.getElementById('prof-general');
       if (secPanel) {
         secPanel.querySelectorAll('.sec__eye').forEach(function (eye) {
           eye.addEventListener('click', function (e) {
