@@ -3755,6 +3755,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    Крипто-блоки на это время уходят, вместо них баланс, сумма в USD,
    выбор получателя и итог. Цвета и плитки те же, что у крипты. ── */
 .dp__fw { display: none; flex-direction: column; gap: 20px; width: 100%; }
+/* 1180:45844 — ряд адреса: три колонки по 99.33, зазор 12 против 20 у пар */
+.dp__row--three { gap: 12px; }
 .dp.is-withdraw.is-fiat .dp__fw { display: flex; }
 .dp__fw .dp__row { display: flex; gap: 12px; width: 100%; }
 .dp__fw .dp__field { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
@@ -7656,6 +7658,28 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="dp__hint">First Name*</span>
               <label class="dp__input">
                 <input class="dp__fw-first" type="text" placeholder="Gabriel" aria-label="First name">
+              </label>
+            </div>
+          </div>
+
+          <!-- 1180:45844 — адрес получателя: три колонки по 99.33 с зазором 12 -->
+          <div class="dp__row dp__row--three">
+            <div class="dp__field">
+              <span class="dp__hint">Country*</span>
+              <label class="dp__input">
+                <input class="dp__fw-country" type="text" placeholder="Country" aria-label="Country">
+              </label>
+            </div>
+            <div class="dp__field">
+              <span class="dp__hint">Street*</span>
+              <label class="dp__input">
+                <input class="dp__fw-street" type="text" placeholder="Street" aria-label="Street">
+              </label>
+            </div>
+            <div class="dp__field">
+              <span class="dp__hint">City*</span>
+              <label class="dp__input">
+                <input class="dp__fw-city" type="text" placeholder="City" aria-label="City">
               </label>
             </div>
           </div>
