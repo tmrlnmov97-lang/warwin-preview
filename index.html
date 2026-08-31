@@ -2405,44 +2405,49 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .vip__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
            font-size: 36px; line-height: 40px; color: var(--white); }
 
-/* ── прогресс ── */
-.vipro { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
-         gap: 24px; padding: 24px; border-radius: 16px;
-         background: linear-gradient(118deg, #131f43 0%, #16254e 42%, #1e3468 100%); }
-.vipro__card { box-sizing: border-box; flex: 0 1 484px; min-width: 0;
-               display: flex; flex-direction: column; gap: 14px;
-               padding: 20px; border-radius: 12px; background: var(--card, #181e3b); }
+/* ── прогресс: 1484:13231, кадр 1103x276 ────────────────────────────
+   Подпись раздела стоит внутри баннера, поэтому отдельного заголовка
+   секции над ним нет. Поля и кегли взяты из кадра один в один. */
+.vipro { position: relative; overflow: hidden; box-sizing: border-box;
+         display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+         padding: 32px; border-radius: 16px;
+         background: #16254e url(a/7887c6dd70.webp) center / cover no-repeat; }
+/* Водяной знак — логотип в цвет фона. Лежит под содержимым, поэтому
+   детям баннера задан position: relative */
+.vipro::before { content: ''; position: absolute; right: 1px; top: 0;
+                 width: 424px; height: 279px; pointer-events: none;
+                 background: url(a/726532d83e.svg) center / contain no-repeat; }
+.vipro > * { position: relative; }
+.vipro__head { font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 16px; line-height: 22px; color: var(--muted); }
+.vipro__card { box-sizing: border-box; width: 555px; max-width: calc(100% - 260px);
+               display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+               padding: 24px; border-radius: 16px; background: var(--card, #181e3b); }
 .vipro__who { display: flex; align-items: center; gap: 10px; }
 .vipro__who b { font-family: 'Work Sans', sans-serif; font-weight: 600;
-                font-size: 18px; line-height: 28px; color: var(--white); }
-/* Знак уровня подкрашен металлом самого уровня — так строка читается
-   без второй подписи «твой уровень» */
-.vipro__lvl, .vlvl__chip { display: inline-flex; align-items: center; height: 30px; padding: 0 14px;
-                           border-radius: 999px; font-family: 'Work Sans', sans-serif;
-                           font-weight: 600; font-size: 16px; line-height: 24px; white-space: nowrap; }
-.vipro__lvl, .vlvl__i--soldier .vlvl__chip { background: rgba(214, 124, 66, .16); color: #e0a172; }
+                font-size: 18px; line-height: 23px; color: var(--white); }
+.vipro__lvl { display: inline-flex; align-items: center; height: 25px; padding: 0 10px;
+              border-radius: 999px; background: #30283c; color: #b15d3c;
+              font-family: 'Work Sans', sans-serif; font-weight: 600;
+              font-size: 14px; line-height: 17px; white-space: nowrap; }
+.vipro__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+              font-size: 36px; line-height: 46px; color: var(--white);
+              font-variant-numeric: tabular-nums; }
+.vipro__track { display: block; align-self: stretch; height: 8px; border-radius: 999px;
+                background: #2d324d; }
+.vipro__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
+.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 19px;
+               color: var(--dp-label); }
+.vipro__badge { position: absolute; right: 31px; top: 31px; width: 217px; height: 217px; }
+
+/* Чипы уровней в карточках — металл своего уровня */
+.vlvl__chip { display: inline-flex; align-items: center; height: 30px; padding: 0 14px;
+              border-radius: 999px; font-family: 'Work Sans', sans-serif;
+              font-weight: 600; font-size: 16px; line-height: 24px; white-space: nowrap; }
+.vlvl__i--soldier .vlvl__chip { background: rgba(214, 124, 66, .16); color: #e0a172; }
 .vlvl__i--captain .vlvl__chip { background: rgba(159, 182, 217, .16); color: #c8d6ea; }
 .vlvl__i--general .vlvl__chip { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
 .vlvl__i--warlord .vlvl__chip { background: rgba(7, 148, 255, .18); color: #6bb8ff; }
-.vipro__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-              font-size: 36px; line-height: 40px; color: var(--white);
-              font-variant-numeric: tabular-nums; }
-.vipro__track { display: block; height: 6px; border-radius: 999px; background: var(--white-10); }
-.vipro__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
-.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 24px;
-               color: var(--dp-label); }
-
-.vipro__car { flex: none; display: grid; grid-template-columns: auto auto auto;
-              align-items: center; justify-items: center; gap: 10px 14px; }
-.vipro__badge { display: block; width: 190px; height: 190px; }
-.vipro__cap { grid-column: 1 / -1; font-family: 'Work Sans', sans-serif; font-weight: 600;
-              font-size: 16px; line-height: 24px; color: var(--white); }
-.vipro__arr { display: grid; place-items: center; width: 34px; height: 34px; flex: none;
-              padding: 0 0 2px; border: 0; border-radius: 50%; cursor: pointer;
-              background: var(--white-06); color: var(--muted);
-              font-family: 'Work Sans', sans-serif; font-size: 18px; line-height: 1;
-              transition: background .15s ease, color .15s ease; }
-.vipro__arr:hover { background: var(--white-10); color: var(--white); }
 
 /* ── лестница уровней ── */
 /* Точки степпера стоят по центрам карточек, линия идёт от точки к точке:
@@ -2544,18 +2549,18 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
      разрыв ряда — степпер здесь только точками */
   .vlvl__i::after { display: none; }
   .vprv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .vipro { flex-wrap: wrap; }
-  .vipro__card { flex: 1 1 320px; }
 }
 
 @media (max-width: 767px) {
   .view--vip { gap: 24px; }
   .vip__h1 { font-size: 30px; line-height: 36px; }
-  .vipro { flex-direction: column; align-items: stretch; gap: 16px;
-           padding: 0; background: none; }
-  .vipro__card { flex: none; padding: 18px; border-radius: 16px; }
-  .vipro__car { padding: 20px; border-radius: 16px; background: var(--card, #181e3b); }
-  .vipro__badge { width: 96px; height: 96px; }
+  .vipro { align-items: stretch; padding: 20px; }
+  .vipro__card { width: auto; max-width: none; padding: 18px; }
+  /* Знак не влезает в правый край — уводим его под карточку. Именно
+     relative, а не static: водяной знак нарисован абсолютным ::before и
+     перекрывал бы непозиционированную картинку. */
+  .vipro__badge { position: relative; align-self: center; width: 130px; height: 132px;
+                  margin-top: 8px; }
   /* Лента уровней: карточка 300, следующая выглядывает — видно, что
      список листается вбок */
   .vlvl { display: flex; padding-top: 0; margin: 0 -16px;
@@ -5471,25 +5476,23 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <div class="view view--vip" id="view-vip" hidden data-node-id="1462:13094">
         <h1 class="vip__h1">VIP Club</h1>
 
+        <!-- 1484:13231 — баннер 1103x276: подпись раздела внутри него,
+             поэтому заголовка секции сверху нет. Фон — своя картинка
+             (градиент с фактурой), поверх водяной знак логотипа. -->
         <section class="section">
-          <div class="section__head"><div class="section__title"><h2>Your VIP progress</h2></div></div>
           <div class="vipro">
+            <span class="vipro__head">Your VIP progress</span>
             <div class="vipro__card">
               <div class="vipro__who">
                 <b>username</b><span class="vipro__lvl">Soldier</span>
               </div>
               <span class="vipro__pct">0.00 %</span>
               <span class="vipro__track"><i style="width:0%"></i></span>
-              <span class="vipro__next">Next level: Soldier</span>
+              <span class="vipro__next">Next level: Silver</span>
             </div>
-            <!-- Знак уровня листается: так видно, к чему идёшь, а не только
-                 то, что уже есть -->
-            <div class="vipro__car">
-              <button class="vipro__arr" type="button" data-vipcar="-1" aria-label="Предыдущий уровень">&lsaquo;</button>
-              <img loading="lazy" decoding="async" class="vipro__badge" src="a/274357f383.webp" alt="" width="190" height="190">
-              <button class="vipro__arr" type="button" data-vipcar="1" aria-label="Следующий уровень">&rsaquo;</button>
-              <span class="vipro__cap">Soldier</span>
-            </div>
+            <!-- Знак берём прозрачным из спрайта: выгрузка узла из Figma
+                 приходит с запечённым фоном и даёт видимый прямоугольник -->
+            <img loading="lazy" decoding="async" class="vipro__badge" src="a/274357f383.webp" alt="" width="217" height="217">
           </div>
         </section>
 
@@ -9407,22 +9410,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         i.dispatchEvent(new Event('input'));
       };
 
-      /* ═══ VIP: карусель знаков и вкладки вопросов ═══════════════════ */
+      /* ═══ VIP: вкладки вопросов ═════════════════════════════════════ */
       var vipView = document.getElementById('view-vip');
       if (vipView) {
-        var vipLv = [['soldier', 'Soldier'], ['captain', 'Captain'],
-                     ['general', 'General'], ['warlord', 'Warlord I\u2013III']];
-        var vipI = 0;
-        var vipImg = vipView.querySelector('.vipro__badge');
-        var vipCap = vipView.querySelector('.vipro__cap');
-        vipView.querySelectorAll('[data-vipcar]').forEach(function (b) {
-          b.addEventListener('click', function () {
-            vipI = (vipI + (+b.dataset.vipcar) + vipLv.length) % vipLv.length;
-            vipImg.src = 'assets/vip-lvl-' + vipLv[vipI][0] + '.png';
-            vipCap.textContent = vipLv[vipI][1];
-          });
-        });
-
         var vipTabs = [].slice.call(vipView.querySelectorAll('[data-vipfaq]'));
         vipTabs.forEach(function (t) {
           t.addEventListener('click', function () {
