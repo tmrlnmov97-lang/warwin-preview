@@ -806,6 +806,10 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .lgl__ul--sub li::before { background: var(--dp-label); opacity: .6; }
 .lgl__req { margin: 8px 0 0 !important; font-size: 13px !important;
            line-height: 20px !important; color: var(--dp-label) !important; }
+/* «Срок хранения» — своя строка после примеров, а не часть списка */
+.lgl__req--solo { margin: 0 0 14px !important; padding: 8px 12px;
+                  border-radius: 10px; background: var(--white-04);
+                  border: 1px solid rgba(255, 255, 255, .06); display: inline-block; }
 .lgl__note { box-sizing: border-box; margin: 0 0 14px; padding: 14px 16px; border-radius: 12px;
             background: rgba(234, 166, 64, .10);
             border: 1px solid rgba(234, 166, 64, .22); color: var(--white) !important; }
@@ -7710,6 +7714,809 @@ body.br-open .bnav { z-index: 66; }
         </div>
       </div>
 
+      <!-- Legal, страница «Privacy Policy». Текст заказчика; показывается версия на
+           языке сайта, при её отсутствии — английская. -->
+      <div class="view view--legal" id="view-legal-pp" hidden>
+        <div class="lgl" data-langset>
+          <article class="lgl__doc" data-lang="en" lang="en">
+            <h1 class="lgl__h1">Privacy Policy</h1>
+            <dl class="lgl__meta">
+              <div><dt>Version</dt><dd>1.0</dd></div>
+              <div><dt>Effective Date</dt><dd>August 27, 2026</dd></div>
+              <div><dt>Last Updated</dt><dd>August 27, 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Privacy Policy">
+              <a href="#legalPp-en-s0">1. General Provisions</a>
+              <a href="#legalPp-en-s5">2. Data We Collect</a>
+              <a href="#legalPp-en-s13">3. Purposes of Data Processing</a>
+              <a href="#legalPp-en-s16">4. Legal Basis for Processing</a>
+              <a href="#legalPp-en-s19">5. Cookies and Similar Technologies</a>
+              <a href="#legalPp-en-s23">6. Disclosure to Third Parties</a>
+              <a href="#legalPp-en-s27">7. International Data Transfers</a>
+              <a href="#legalPp-en-s30">8. Data Retention Periods</a>
+              <a href="#legalPp-en-s34">9. Data Security</a>
+              <a href="#legalPp-en-s38">10. Player Rights</a>
+              <a href="#legalPp-en-s42">11. Marketing Communications</a>
+              <a href="#legalPp-en-s47">12. Self-Exclusion and Processing Restriction</a>
+              <a href="#legalPp-en-s49">13. Changes to This Policy</a>
+              <a href="#legalPp-en-s52">14. Contact Information</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalPp-en-s0">1. General Provisions</h2>
+              <p>This Privacy Policy (hereinafter&nbsp;— "Policy") governs the&nbsp;collection, processing, storage, use, and&nbsp;disclosure of&nbsp;personal data of&nbsp;players, visitors, and&nbsp;users of&nbsp;Warwin Services (hereinafter&nbsp;— "User", "You", "Player").</p>
+              <p>The&nbsp;data controller is&nbsp;WarWin Group International Ltd, registered under number 000054736 at&nbsp;San Victor Street, Orange Walk Town, Belize (hereinafter&nbsp;— "Warwin", "Company", "we", "us", or&nbsp;"our").</p>
+              <p>Warwin operates under an&nbsp;Anjouan Gaming License issued by&nbsp;Anjouan Licensing Services Inc. and&nbsp;regulated by&nbsp;the Anjouan Gaming Authority. This Policy is&nbsp;an integral part of&nbsp;the Terms and&nbsp;Conditions available at&nbsp;warwin.casino.</p>
+              <p>By&nbsp;using the&nbsp;Services, registering an&nbsp;account, or&nbsp;placing a&nbsp;bet, You&nbsp;confirm that You&nbsp;have read, understood, and&nbsp;agree to&nbsp;the terms of&nbsp;this Policy. If&nbsp;You do not agree, You&nbsp;are not entitled to&nbsp;use the&nbsp;Services.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s5">2. Data We Collect</h2>
+              <p>We&nbsp;collect and&nbsp;process the&nbsp;following categories of&nbsp;data:</p>
+              <h3 class="lgl__h3">2.1. Data provided by You during registration and use of the Services:</h3>
+              <ul class="lgl__ul">
+                <li>Full name (as&nbsp;shown on&nbsp;the identity document);</li>
+                <li>Date of&nbsp;birth;</li>
+                <li>Address of&nbsp;actual residence;</li>
+                <li>Email address;</li>
+                <li>Mobile phone number;</li>
+                <li>Identity documents (passport, ID card, driver’s license);</li>
+                <li>Proof of&nbsp;address;</li>
+                <li>Photographs, selfie with document, video verification;</li>
+                <li>Payment method data (card numbers with masked digits, e-wallet screenshots, cryptocurrency addresses);</li>
+                <li>Source of&nbsp;Funds (SoF) when total deposits exceed the&nbsp;equivalent of&nbsp;USD 10,000.</li>
+              </ul>
+              <h3 class="lgl__h3">2.2. Automatically collected data:</h3>
+              <ul class="lgl__ul">
+                <li>IP address and&nbsp;geolocation data;</li>
+                <li>Device type, operating system, browser;</li>
+                <li>Cookies and&nbsp;similar technologies (see Cookie Policy);</li>
+                <li>History of&nbsp;page visits on&nbsp;the Services;</li>
+                <li>Logs of&nbsp;gaming sessions, bets, transactions;</li>
+                <li>Data on&nbsp;interactions with support.</li>
+              </ul>
+              <h3 class="lgl__h3">2.3. Data from third parties:</h3>
+              <ul class="lgl__ul">
+                <li>Information from payment providers and&nbsp;processing centers;</li>
+                <li>Identity verification (KYC) results;</li>
+                <li>AML screening and&nbsp;fraud prevention data;</li>
+                <li>Information from regulatory and&nbsp;law enforcement authorities upon lawful request.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-en-s13">3. Purposes of Data Processing</h2>
+              <p>We&nbsp;process personal data for&nbsp;the following purposes:</p>
+              <ul class="lgl__ul">
+                <li>Registration and&nbsp;account management&nbsp;— creation, verification, maintenance, and&nbsp;protection of&nbsp;the account.</li>
+                <li>Provision of Services&nbsp;— processing deposits, withdrawals, bets, bonuses, gaming sessions.</li>
+                <li>Identity verification (KYC)&nbsp;— confirmation of&nbsp;age, identity, address, and&nbsp;payment method ownership.</li>
+                <li>Fraud and&nbsp;money laundering prevention (AML)&nbsp;— transaction monitoring, detection of&nbsp;suspicious activity, fulfillment of&nbsp;legal obligations.</li>
+                <li>Security&nbsp;— protection against unauthorized access, detection of&nbsp;multi-accounting, bonus abuse.</li>
+                <li>Communications&nbsp;— sending notifications about transactions, verification, changes to&nbsp;terms, as&nbsp;well as&nbsp;marketing materials (with consent).</li>
+                <li>Legal compliance&nbsp;— fulfilling the&nbsp;requirements of&nbsp;the Anjouan Gaming Authority, tax legislation, court decisions.</li>
+                <li>Dispute resolution&nbsp;— investigation of&nbsp;complaints, claims, disputed transactions.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-en-s16">4. Legal Basis for Processing</h2>
+              <p>Processing of&nbsp;personal data is&nbsp;carried out on&nbsp;the following legal grounds:</p>
+              <ul class="lgl__ul">
+                <li>Performance of&nbsp;a contract&nbsp;— the&nbsp;Terms and&nbsp;Conditions accepted upon registration.</li>
+                <li>Legal obligation&nbsp;— requirements of&nbsp;the Anjouan Gaming license, anti-money laundering legislation, tax legislation.</li>
+                <li>Protection of&nbsp;vital interests&nbsp;— when necessary to&nbsp;protect player safety or&nbsp;prevent crimes.</li>
+                <li>Legitimate interests of&nbsp;the Company&nbsp;— ensuring platform security, preventing fraud, protecting intellectual property.</li>
+                <li>Consent&nbsp;— for&nbsp;sending marketing messages and&nbsp;using certain types of&nbsp;cookies. Consent may be withdrawn at&nbsp;any time.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-en-s19">5. Cookies and Similar Technologies</h2>
+              <p>Warwin uses cookies and&nbsp;similar technologies to&nbsp;ensure proper operation of&nbsp;the Services, analyze traffic, personalize content, and&nbsp;conduct marketing.</p>
+              <p>Detailed information on&nbsp;the types of&nbsp;cookies, purposes of&nbsp;their use, and&nbsp;management procedures is&nbsp;contained in&nbsp;the separate Cookie Policy, which is&nbsp;part of&nbsp;this Policy.</p>
+              <p>By&nbsp;continuing to&nbsp;use the&nbsp;Services, You&nbsp;agree to&nbsp;the use of&nbsp;cookies in&nbsp;accordance with the&nbsp;said Policy. You&nbsp;may change cookie settings through Your browser at&nbsp;any time.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s23">6. Disclosure to Third Parties</h2>
+              <p>We&nbsp;do not sell personal data. However, in&nbsp;the course of&nbsp;lawful business activities, we&nbsp;may transfer data to&nbsp;the following categories of&nbsp;recipients:</p>
+              <ul class="lgl__ul">
+                <li>Payment providers and&nbsp;processing centers&nbsp;— for&nbsp;processing deposits and&nbsp;withdrawals.</li>
+                <li>Identity and&nbsp;verification services&nbsp;— for&nbsp;conducting KYC checks.</li>
+                <li>Game and&nbsp;sports data providers&nbsp;— for&nbsp;ensuring gameplay (when necessary).</li>
+                <li>Fraud prevention and&nbsp;AML screening systems&nbsp;— for&nbsp;detecting suspicious activity.</li>
+                <li>Professional consultants and auditors&nbsp;— lawyers, accountants, auditors acting on&nbsp;behalf of&nbsp;Warwin.</li>
+                <li>Regulatory authorities&nbsp;— Anjouan Gaming Authority, other licensing and&nbsp;supervisory bodies.</li>
+                <li>Government and&nbsp;law enforcement authorities&nbsp;— upon request, by&nbsp;court order, or&nbsp;other legal basis.</li>
+              </ul>
+              <p>All third parties are obligated to&nbsp;maintain confidentiality and&nbsp;use data solely for&nbsp;the purposes specified in&nbsp;this Policy.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s27">7. International Data Transfers</h2>
+              <p>Personal data may be transferred and&nbsp;processed outside Your country of&nbsp;residence, including Belize, the&nbsp;Union of&nbsp;the Comoros (Anjouan), and&nbsp;other jurisdictions where our&nbsp;servers, partners, or&nbsp;regulators are located.</p>
+              <p>All international transfers are carried out with adequate safeguards, including contractual obligations, encryption standards, and&nbsp;other technical and&nbsp;organizational measures ensuring data security.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s30">8. Data Retention Periods</h2>
+              <p>We&nbsp;retain personal data for&nbsp;the period necessary to&nbsp;achieve the&nbsp;processing purposes stated in&nbsp;this Policy:</p>
+              <ul class="lgl__ul">
+                <li>Account and&nbsp;transaction data&nbsp;— at&nbsp;least 5 (five) years from the&nbsp;date of&nbsp;account closure or&nbsp;last transaction.</li>
+                <li>Verification (KYC) data&nbsp;— at&nbsp;least 5 (five) years from the&nbsp;date of&nbsp;the last check.</li>
+                <li>Communications and complaints&nbsp;— at&nbsp;least 5 (five) years from the&nbsp;date of&nbsp;dispute resolution.</li>
+                <li>Marketing data&nbsp;— until consent is&nbsp;withdrawn or&nbsp;the account is&nbsp;closed.</li>
+              </ul>
+              <p>Longer retention periods may apply if&nbsp;required by&nbsp;law, regulatory authority, or&nbsp;pending legal dispute.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s34">9. Data Security</h2>
+              <p>Warwin applies modern technical and&nbsp;organizational measures to&nbsp;protect personal data against unauthorized access, loss, alteration, or&nbsp;destruction:</p>
+              <ul class="lgl__ul">
+                <li>Encryption of&nbsp;data in&nbsp;transit (SSL/TLS) and&nbsp;at rest;</li>
+                <li>Two-factor authentication for&nbsp;accounts;</li>
+                <li>Restriction of&nbsp;access to&nbsp;data to&nbsp;authorized personnel only;</li>
+                <li>Regular security audits;</li>
+                <li>Staff training on&nbsp;data protection.</li>
+              </ul>
+              <p>Despite the&nbsp;measures taken, Warwin cannot guarantee absolute security of&nbsp;data transmitted over the&nbsp;Internet. The&nbsp;player is&nbsp;responsible for&nbsp;maintaining the&nbsp;confidentiality of&nbsp;their credentials.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s38">10. Player Rights</h2>
+              <p>Depending on&nbsp;Your jurisdiction of&nbsp;residence, You&nbsp;may have the&nbsp;following rights regarding Your personal data:</p>
+              <ul class="lgl__ul">
+                <li>Right of access&nbsp;— obtaining information about what data we&nbsp;process.</li>
+                <li>Right to rectification&nbsp;— requesting correction of&nbsp;inaccurate or&nbsp;incomplete data.</li>
+                <li>Right to erasure&nbsp;— requesting deletion of&nbsp;data when there is&nbsp;no legal basis for&nbsp;further processing.</li>
+                <li>Right to&nbsp;restriction of processing&nbsp;— temporary suspension of&nbsp;data processing.</li>
+                <li>Right to object&nbsp;— objecting to&nbsp;processing based on&nbsp;legitimate interests or&nbsp;for direct marketing.</li>
+                <li>Right to&nbsp;data portability&nbsp;— receiving data in&nbsp;a structured format.</li>
+                <li>Right to&nbsp;withdraw consent&nbsp;— withdrawing consent for&nbsp;processing based on&nbsp;consent.</li>
+              </ul>
+              <p>To&nbsp;exercise Your rights, please contact support at&nbsp;<a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a> or&nbsp;<a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a>. We&nbsp;will review the&nbsp;request within a&nbsp;reasonable time, but no&nbsp;later than 30 (thirty) calendar days. Please note that Anjouan legislation and&nbsp;license requirements may limit certain rights if&nbsp;their exercise conflicts with Warwin’s legal obligations (e.g., AML and&nbsp;KYC requirements).</p>
+              <h2 class="lgl__h2" id="legalPp-en-s42">11. Marketing Communications</h2>
+              <p>Upon registration and&nbsp;with consent, You&nbsp;may receive marketing messages (email, SMS, push notifications) about bonuses, promotions, and&nbsp;new features.</p>
+              <p>You&nbsp;may opt out of&nbsp;marketing communications at&nbsp;any time:</p>
+              <ul class="lgl__ul">
+                <li>Through account settings in&nbsp;the personal cabinet;</li>
+                <li>Via the&nbsp;"Unsubscribe" link in&nbsp;the received email;</li>
+                <li>By&nbsp;contacting support at&nbsp;<a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a>.</li>
+              </ul>
+              <p>Opting out of&nbsp;contractual, technical, and&nbsp;regulatory notifications is&nbsp;not possible.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s47">12. Self-Exclusion and Processing Restriction</h2>
+              <p>When responsible gaming tools are activated (self-exclusion, cooling-off), the&nbsp;processing of&nbsp;personal data may be restricted in&nbsp;accordance with the&nbsp;Responsible Gaming Policy. During the&nbsp;self-exclusion period, direct marketing communications are suspended.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s49">13. Changes to This Policy</h2>
+              <p>Warwin may update this Policy in&nbsp;connection with changes in&nbsp;legislation, technology, business processes, or&nbsp;license requirements. The&nbsp;updated version is&nbsp;published on&nbsp;the website warwin.casino with the&nbsp;effective date indicated.</p>
+              <p>Players will be notified of&nbsp;material changes by&nbsp;email or&nbsp;through the&nbsp;personal cabinet. Continued use of&nbsp;the Services after publication of&nbsp;changes constitutes acceptance of&nbsp;the new version of&nbsp;the Policy.</p>
+              <h2 class="lgl__h2" id="legalPp-en-s52">14. Contact Information</h2>
+              <p>For&nbsp;all questions related to&nbsp;this Privacy Policy, please contact:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span><span>Registration Number: 000054736</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Email</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>KYC / Verification</dt><dd><a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a></dd></div>
+                <div><dt>Security</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+                <div><dt>Responsible Gaming</dt><dd><a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">This Policy is&nbsp;an integral part of&nbsp;the Warwin Terms and&nbsp;Conditions. In&nbsp;case of&nbsp;discrepancies, the&nbsp;English version of&nbsp;the documents shall prevail.</p>
+            </div>
+          </article>
+          <article class="lgl__doc" data-lang="ru" lang="ru" hidden>
+            <h1 class="lgl__h1">Политика конфиденциальности</h1>
+            <dl class="lgl__meta">
+              <div><dt>Версия</dt><dd>1.0</dd></div>
+              <div><dt>Дата вступления в силу</dt><dd>27 августа 2026</dd></div>
+              <div><dt>Последнее обновление</dt><dd>27 августа 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Политика конфиденциальности">
+              <a href="#legalPp-ru-s0">1. Общие положения</a>
+              <a href="#legalPp-ru-s5">2. Какие данные мы собираем</a>
+              <a href="#legalPp-ru-s13">3. Цели обработки данных</a>
+              <a href="#legalPp-ru-s16">4. Правовые основания обработки</a>
+              <a href="#legalPp-ru-s19">5. Cookies и аналогичные технологии</a>
+              <a href="#legalPp-ru-s23">6. Передача данных третьим лицам</a>
+              <a href="#legalPp-ru-s27">7. Международные передачи данных</a>
+              <a href="#legalPp-ru-s30">8. Сроки хранения данных</a>
+              <a href="#legalPp-ru-s34">9. Безопасность данных</a>
+              <a href="#legalPp-ru-s38">10. Права игрока</a>
+              <a href="#legalPp-ru-s42">11. Маркетинговые коммуникации</a>
+              <a href="#legalPp-ru-s47">12. Самоисключение и ограничение обработки</a>
+              <a href="#legalPp-ru-s49">13. Изменения Политики</a>
+              <a href="#legalPp-ru-s52">14. Контактная информация</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalPp-ru-s0">1. Общие положения</h2>
+              <p>Настоящая Политика конфиденциальности (далее&nbsp;— «Политика») регулирует порядок сбора, обработки, хранения, использования и&nbsp;раскрытия персональных данных игроков, посетителей и&nbsp;пользователей Сервисов Warwin (далее&nbsp;— «Пользователь», «Вы», «Игрок»).</p>
+              <p>Оператором персональных данных является WarWin Group International Ltd, зарегистрированная под&nbsp;номером 000054736 по&nbsp;адресу San Victor Street, Orange Walk Town, Belize (далее&nbsp;— «Warwin», «Компания», «мы», «нас» или «наш»).</p>
+              <p>Warwin осуществляет деятельность на&nbsp;основании игровой лицензии Anjouan Gaming License, выданной Anjouan Licensing Services Inc. и&nbsp;регулируемой Anjouan Gaming Authority. Настоящая Политика является неотъемлемой частью Пользовательского соглашения, размещённого по&nbsp;адресу warwin.casino.</p>
+              <p>Используя Сервисы, регистрируя аккаунт или размещая ставку, Вы&nbsp;подтверждаете, что&nbsp;прочитали, поняли и&nbsp;согласны с&nbsp;условиями настоящей Политики. Если Вы&nbsp;не согласны&nbsp;— Вы&nbsp;не вправе использовать Сервисы.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s5">2. Какие данные мы собираем</h2>
+              <p>Мы&nbsp;собираем и&nbsp;обрабатываем следующие категории данных:</p>
+              <h3 class="lgl__h3">2.1. Данные, предоставляемые Вами при регистрации и использовании Сервисов:</h3>
+              <ul class="lgl__ul">
+                <li>ФИО (полное имя, как&nbsp;в документе, удостоверяющем личность);</li>
+                <li>Дата рождения;</li>
+                <li>Адрес фактического проживания;</li>
+                <li>Адрес электронной почты;</li>
+                <li>Номер мобильного телефона;</li>
+                <li>Документы, удостоверяющие личность (паспорт, ID-карта, водительские права);</li>
+                <li>Подтверждение адреса проживания;</li>
+                <li>Фотографии, селфи с&nbsp;документом, видеоверификация;</li>
+                <li>Данные платёжных методов (номера карт с&nbsp;замазанными цифрами, скриншоты электронных кошельков, криптовалютные адреса);</li>
+                <li>Источник денежных средств (Source of Funds) при&nbsp;суммарных депозитах, превышающих эквивалент 10 000 USD.</li>
+              </ul>
+              <h3 class="lgl__h3">2.2. Автоматически собираемые данные:</h3>
+              <ul class="lgl__ul">
+                <li>IP-адрес и&nbsp;данные геолокации;</li>
+                <li>Тип устройства, операционная система, браузер;</li>
+                <li>Cookies и&nbsp;аналогичные технологии (см. Политику использования файлов cookie);</li>
+                <li>История посещений страниц Сервисов;</li>
+                <li>Логи игровых сессий, ставок, транзакций;</li>
+                <li>Данные о&nbsp;взаимодействии с&nbsp;поддержкой.</li>
+              </ul>
+              <h3 class="lgl__h3">2.3. Данные от третьих лиц:</h3>
+              <ul class="lgl__ul">
+                <li>Информация от&nbsp;платёжных провайдеров и&nbsp;процессинговых центров;</li>
+                <li>Результаты проверок верификации личности (KYC);</li>
+                <li>Данные AML-скрининга и&nbsp;систем предотвращения мошенничества;</li>
+                <li>Информация от&nbsp;регулирующих и&nbsp;правоохранительных органов по&nbsp;законному запросу.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-ru-s13">3. Цели обработки данных</h2>
+              <p>Мы&nbsp;обрабатываем персональные данные для&nbsp;следующих целей:</p>
+              <ul class="lgl__ul">
+                <li>Регистрация и&nbsp;управление аккаунтом&nbsp;— создание, верификация, обслуживание и&nbsp;защита аккаунта.</li>
+                <li>Предоставление Сервисов&nbsp;— обработка депозитов, выводов, ставок, бонусов, игровых сессий.</li>
+                <li>Верификация личности (KYC)&nbsp;— подтверждение возраста, личности, адреса, принадлежности платёжного метода.</li>
+                <li>Предотвращение мошенничества и&nbsp;отмывания денег (AML)&nbsp;— мониторинг транзакций, выявление подозрительной активности, выполнение законных обязательств.</li>
+                <li>Обеспечение безопасности&nbsp;— защита от&nbsp;несанкционированного доступа, выявление мультиаккаунтинга, бонусного абьюза.</li>
+                <li>Коммуникации&nbsp;— отправка уведомлений о&nbsp;транзакциях, верификации, изменениях условий, а&nbsp;также маркетинговых материалов (при&nbsp;наличии согласия).</li>
+                <li>Соблюдение законодательства&nbsp;— выполнение требований лицензии Anjouan Gaming Authority, налогового законодательства, судебных решений.</li>
+                <li>Разрешение споров&nbsp;— расследование жалоб, претензий, спорных транзакций.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-ru-s16">4. Правовые основания обработки</h2>
+              <p>Обработка персональных данных осуществляется на&nbsp;следующих правовых основаниях:</p>
+              <ul class="lgl__ul">
+                <li>Исполнение договора&nbsp;— Пользовательского соглашения, которое Вы&nbsp;принимаете при&nbsp;регистрации.</li>
+                <li>Законное обязательство&nbsp;— требования лицензии Anjouan Gaming, законодательства о&nbsp;борьбе с&nbsp;отмыванием денег, налоговое законодательство.</li>
+                <li>Защита жизненно важных интересов&nbsp;— в&nbsp;случаях, когда это необходимо для&nbsp;защиты безопасности игроков или предотвращения преступлений.</li>
+                <li>Законные интересы Компании&nbsp;— обеспечение безопасности платформы, предотвращение мошенничества, защита интеллектуальной собственности.</li>
+                <li>Согласие&nbsp;— для&nbsp;отправки маркетинговых сообщений и&nbsp;использования определённых типов cookies. Согласие может быть отозвано в&nbsp;любое время.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-ru-s19">5. Cookies и аналогичные технологии</h2>
+              <p>Warwin использует cookies и&nbsp;аналогичные технологии для&nbsp;обеспечения корректной работы Сервисов, анализа трафика, персонализации контента и&nbsp;маркетинга.</p>
+              <p>Подробная информация о&nbsp;типах cookies, целях их использования и&nbsp;порядке управления ими содержится в&nbsp;отдельной Политике использования файлов cookie, которая является частью настоящей Политики.</p>
+              <p>Продолжая использование Сервисов, Вы&nbsp;соглашаетесь с&nbsp;использованием cookies в&nbsp;соответствии с&nbsp;указанной Политикой. Вы&nbsp;можете изменить настройки cookies через свой браузер в&nbsp;любое время.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s23">6. Передача данных третьим лицам</h2>
+              <p>Мы&nbsp;не продаём персональные данные. Однако в&nbsp;рамках законной деятельности мы&nbsp;можем передавать данные следующим категориям получателей:</p>
+              <ul class="lgl__ul">
+                <li>Платёжные провайдеры и&nbsp;процессинговые центры&nbsp;— для&nbsp;обработки депозитов и&nbsp;выводов.</li>
+                <li>Сервисы идентификации и верификации&nbsp;— для&nbsp;проведения KYC-проверок.</li>
+                <li>Поставщики игр и&nbsp;спортивных данных&nbsp;— для&nbsp;обеспечения игрового процесса (при&nbsp;необходимости).</li>
+                <li>Системы предотвращения мошенничества и AML-скрининга&nbsp;— для&nbsp;выявления подозрительной активности.</li>
+                <li>Профессиональные консультанты и аудиторы&nbsp;— юристы, бухгалтеры, аудиторы, действующие по&nbsp;поручению Warwin.</li>
+                <li>Регулирующие органы&nbsp;— Anjouan Gaming Authority, иные лицензирующие и&nbsp;надзорные органы.</li>
+                <li>Государственные и&nbsp;правоохранительные органы&nbsp;— по&nbsp;запросу, в&nbsp;рамках судебного решения или иного законного основания.</li>
+              </ul>
+              <p>Все третьи лица обязаны соблюдать конфиденциальность и&nbsp;использовать данные исключительно в&nbsp;целях, указанных в&nbsp;настоящей Политике.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s27">7. Международные передачи данных</h2>
+              <p>Персональные данные могут передаваться и&nbsp;обрабатываться за&nbsp;пределами страны Вашего проживания, включая Белиз, Союз Коморских Островов (Анжуан) и&nbsp;иные юрисдикции, где находятся наши серверы, партнёры или регуляторы.</p>
+              <p>Все международные передачи осуществляются с&nbsp;применением адекватных мер защиты, включая договорные обязательства, стандарты шифрования и&nbsp;иные технические и&nbsp;организационные меры, обеспечивающие безопасность данных.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s30">8. Сроки хранения данных</h2>
+              <p>Мы&nbsp;храним персональные данные в&nbsp;течение срока, необходимого для&nbsp;достижения целей обработки, указанных в&nbsp;настоящей Политике:</p>
+              <ul class="lgl__ul">
+                <li>Данные аккаунта и транзакций&nbsp;— не&nbsp;менее 5 (пяти) лет с&nbsp;момента закрытия аккаунта или последней транзакции.</li>
+                <li>Данные верификации (KYC)&nbsp;— не&nbsp;менее 5 (пяти) лет с&nbsp;момента последней проверки.</li>
+                <li>Коммуникации и жалобы&nbsp;— не&nbsp;менее 5 (пяти) лет с&nbsp;момента завершения спора.</li>
+                <li>Маркетинговые данные&nbsp;— до&nbsp;момента отзыва согласия или закрытия аккаунта.</li>
+              </ul>
+              <p>Более длительные сроки хранения могут применяться, если это требуется законодательством, регулирующим органом или при&nbsp;наличии незавершённого судебного спора.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s34">9. Безопасность данных</h2>
+              <p>Warwin применяет современные технические и&nbsp;организационные меры для&nbsp;защиты персональных данных от&nbsp;несанкционированного доступа, утраты, изменения или уничтожения:</p>
+              <ul class="lgl__ul">
+                <li>Шифрование данных при&nbsp;передаче (SSL/TLS) и&nbsp;хранении;</li>
+                <li>Двухфакторная аутентификация для&nbsp;аккаунтов;</li>
+                <li>Ограничение доступа к&nbsp;данным только уполномоченным сотрудникам;</li>
+                <li>Регулярный аудит систем безопасности;</li>
+                <li>Обучение персонала вопросам защиты данных.</li>
+              </ul>
+              <p>Несмотря на&nbsp;принимаемые меры, Warwin не&nbsp;может гарантировать абсолютную безопасность данных, передаваемых через интернет. Игрок несёт ответственность за&nbsp;сохранение конфиденциальности своих учётных данных.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s38">10. Права игрока</h2>
+              <p>В&nbsp;зависимости от&nbsp;юрисдикции Вашего проживания Вы&nbsp;можете обладать следующими правами в&nbsp;отношении своих персональных данных:</p>
+              <ul class="lgl__ul">
+                <li>Право на доступ&nbsp;— получение информации о&nbsp;том, какие данные мы&nbsp;обрабатываем.</li>
+                <li>Право на исправление&nbsp;— требование исправления неточных или неполных данных.</li>
+                <li>Право на удаление&nbsp;— требование удаления данных при&nbsp;отсутствии законных оснований для&nbsp;их дальнейшей обработки.</li>
+                <li>Право на&nbsp;ограничение обработки&nbsp;— временная приостановка обработки данных.</li>
+                <li>Право на возражение&nbsp;— возражение против обработки данных на&nbsp;основании законных интересов или для&nbsp;прямого маркетинга.</li>
+                <li>Право на переносимость&nbsp;— получение данных в&nbsp;структурированном формате.</li>
+                <li>Право на&nbsp;отзыв согласия&nbsp;— отзыв согласия на&nbsp;обработку данных, основанной на&nbsp;согласии.</li>
+              </ul>
+              <p>Для&nbsp;реализации своих прав обратитесь в&nbsp;службу поддержки по&nbsp;адресу <a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a> или <a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a>. Мы&nbsp;рассмотрим запрос в&nbsp;разумный срок, но&nbsp;не позднее 30 (тридцати) календарных дней. Обращаем внимание, что&nbsp;законодательство Анжуана и&nbsp;требования лицензии могут ограничивать некоторые права, если их реализация противоречит законным обязательствам Warwin (например, требования AML и&nbsp;KYC).</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s42">11. Маркетинговые коммуникации</h2>
+              <p>При&nbsp;регистрации и&nbsp;согласии Вы&nbsp;можете получать маркетинговые сообщения (email, SMS, push-уведомления) о&nbsp;бонусах, акциях и&nbsp;новинках.</p>
+              <p>Вы&nbsp;можете отказаться от&nbsp;маркетинговых сообщений в&nbsp;любое время:</p>
+              <ul class="lgl__ul">
+                <li>Через настройки аккаунта в&nbsp;личном кабинете;</li>
+                <li>По&nbsp;ссылке «Отписаться» в&nbsp;полученном письме;</li>
+                <li>Обратившись в&nbsp;поддержку по&nbsp;адресу <a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a>.</li>
+              </ul>
+              <p>Отказ от&nbsp;договорных, технических и&nbsp;регуляторных уведомлений невозможен.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s47">12. Самоисключение и ограничение обработки</h2>
+              <p>При&nbsp;активации инструментов ответственной игры (самоисключение, временный перерыв) обработка персональных данных может быть ограничена в&nbsp;соответствии с&nbsp;Политикой ответственной игры. В&nbsp;период самоисключения прямые маркетинговые рассылки прекращаются.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s49">13. Изменения Политики</h2>
+              <p>Warwin вправе обновлять настоящую Политику в&nbsp;связи с&nbsp;изменениями законодательства, технологий, бизнес-процессов или требований лицензии. Обновлённая версия публикуется на&nbsp;сайте warwin.casino с&nbsp;указанием даты вступления в&nbsp;силу.</p>
+              <p>О&nbsp;существенных изменениях игрок уведомляется по&nbsp;email или через личный кабинет. Продолжение использования Сервисов после публикации изменений означает принятие новой версии Политики.</p>
+              <h2 class="lgl__h2" id="legalPp-ru-s52">14. Контактная информация</h2>
+              <p>По&nbsp;всем вопросам, связанным с&nbsp;настоящей Политикой конфиденциальности, обращайтесь:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span><span>Регистрационный номер: 000054736</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Email</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>KYC / Верификация</dt><dd><a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a></dd></div>
+                <div><dt>Безопасность</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+                <div><dt>Ответственная игра</dt><dd><a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">Настоящая Политика является неотъемлемой частью Пользовательского соглашения Warwin. В&nbsp;случае расхождений приоритет имеет английская версия документов.</p>
+            </div>
+          </article>
+          <article class="lgl__doc" data-lang="es" lang="es" hidden>
+            <h1 class="lgl__h1">Política de Privacidad</h1>
+            <dl class="lgl__meta">
+              <div><dt>Versión</dt><dd>1.0</dd></div>
+              <div><dt>Fecha de entrada en vigor</dt><dd>27 de agosto de 2026</dd></div>
+              <div><dt>Última actualización</dt><dd>27 de agosto de 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Política de Privacidad">
+              <a href="#legalPp-es-s0">1. Disposiciones Generales</a>
+              <a href="#legalPp-es-s5">2. Datos que Recopilamos</a>
+              <a href="#legalPp-es-s13">3. Fines del Tratamiento de Datos</a>
+              <a href="#legalPp-es-s16">4. Bases Legales del Tratamiento</a>
+              <a href="#legalPp-es-s19">5. Cookies y Tecnologías Similares</a>
+              <a href="#legalPp-es-s23">6. Transferencia de Datos a Terceros</a>
+              <a href="#legalPp-es-s27">7. Transferencias Internacionales de Datos</a>
+              <a href="#legalPp-es-s30">8. Plazos de Conservación de Datos</a>
+              <a href="#legalPp-es-s34">9. Seguridad de los Datos</a>
+              <a href="#legalPp-es-s38">10. Derechos del Jugador</a>
+              <a href="#legalPp-es-s42">11. Comunicaciones de Marketing</a>
+              <a href="#legalPp-es-s47">12. Autoexclusión y Limitación del Tratamiento</a>
+              <a href="#legalPp-es-s49">13. Cambios a esta Política</a>
+              <a href="#legalPp-es-s52">14. Información de Contacto</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalPp-es-s0">1. Disposiciones Generales</h2>
+              <p>La&nbsp;presente Política de&nbsp;Privacidad (en adelante&nbsp;— "Política") regula la&nbsp;recopilación, procesamiento, almacenamiento, uso y&nbsp;divulgación de&nbsp;datos personales de&nbsp;jugadores, visitantes y&nbsp;usuarios de&nbsp;los Servicios de&nbsp;Warwin (en adelante&nbsp;— "Usuario", "Usted", "Jugador").</p>
+              <p>El&nbsp;responsable del&nbsp;tratamiento de&nbsp;datos personales es&nbsp;WarWin Group International Ltd, registrada bajo el&nbsp;número 000054736 en&nbsp;San Victor Street, Orange Walk Town, Belize (en adelante&nbsp;— "Warwin", "Compañía", "nosotros", "nos" o&nbsp;"nuestro").</p>
+              <p>Warwin opera bajo una&nbsp;Licencia de&nbsp;Juegos de&nbsp;Anjouan emitida por&nbsp;Anjouan Licensing Services Inc. y&nbsp;regulada por&nbsp;la Anjouan Gaming Authority. Esta Política es&nbsp;parte integral de&nbsp;los Términos y&nbsp;Condiciones disponibles en&nbsp;warwin.casino.</p>
+              <p>Al&nbsp;utilizar los&nbsp;Servicios, registrar una&nbsp;cuenta o&nbsp;realizar una&nbsp;apuesta, Usted confirma que&nbsp;ha leído, entendido y&nbsp;acepta los&nbsp;términos de&nbsp;esta Política. Si no&nbsp;está de&nbsp;acuerdo, no&nbsp;tiene derecho a&nbsp;utilizar los&nbsp;Servicios.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s5">2. Datos que Recopilamos</h2>
+              <p>Recopilamos y&nbsp;procesamos las&nbsp;siguientes categorías de&nbsp;datos:</p>
+              <h3 class="lgl__h3">2.1. Datos proporcionados por Usted durante el registro y uso de los Servicios:</h3>
+              <ul class="lgl__ul">
+                <li>Nombre completo (tal como aparece en&nbsp;el documento de&nbsp;identidad);</li>
+                <li>Fecha de&nbsp;nacimiento;</li>
+                <li>Dirección de&nbsp;residencia real;</li>
+                <li>Dirección de&nbsp;correo electrónico;</li>
+                <li>Número de&nbsp;teléfono móvil;</li>
+                <li>Documentos de&nbsp;identidad (pasaporte, documento de&nbsp;identidad, licencia de&nbsp;conducir);</li>
+                <li>Comprobante de&nbsp;domicilio;</li>
+                <li>Fotografías, selfie con&nbsp;documento, verificación por&nbsp;video;</li>
+                <li>Datos de&nbsp;métodos de&nbsp;pago (números de&nbsp;tarjeta con&nbsp;dígitos enmascarados, capturas de&nbsp;pantalla de&nbsp;billeteras electrónicas, direcciones de&nbsp;criptomonedas);</li>
+                <li>Origen de&nbsp;los fondos (Source of Funds) cuando los&nbsp;depósitos totales superan el&nbsp;equivalente de&nbsp;USD 10,000.</li>
+              </ul>
+              <h3 class="lgl__h3">2.2. Datos recopilados automáticamente:</h3>
+              <ul class="lgl__ul">
+                <li>Dirección IP y&nbsp;datos de&nbsp;geolocalización;</li>
+                <li>Tipo de&nbsp;dispositivo, sistema operativo, navegador;</li>
+                <li>Cookies y&nbsp;tecnologías similares (ver Política de&nbsp;Cookies);</li>
+                <li>Historial de&nbsp;visitas a&nbsp;páginas de&nbsp;los Servicios;</li>
+                <li>Registros de&nbsp;sesiones de&nbsp;juego, apuestas, transacciones;</li>
+                <li>Datos sobre interacciones con&nbsp;el soporte.</li>
+              </ul>
+              <h3 class="lgl__h3">2.3. Datos de terceros:</h3>
+              <ul class="lgl__ul">
+                <li>Información de&nbsp;proveedores de&nbsp;pago y&nbsp;centros de&nbsp;procesamiento;</li>
+                <li>Resultados de&nbsp;verificación de&nbsp;identidad (KYC);</li>
+                <li>Datos de&nbsp;escaneo AML y&nbsp;prevención de&nbsp;fraude;</li>
+                <li>Información de&nbsp;organismos reguladores y&nbsp;de aplicación de&nbsp;la ley a&nbsp;solicitud legal.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-es-s13">3. Fines del Tratamiento de Datos</h2>
+              <p>Procesamos datos personales para&nbsp;los siguientes fines:</p>
+              <ul class="lgl__ul">
+                <li>Registro y&nbsp;gestión de&nbsp;la cuenta&nbsp;— creación, verificación, mantenimiento y&nbsp;protección de&nbsp;la cuenta.</li>
+                <li>Prestación de Servicios&nbsp;— procesamiento de&nbsp;depósitos, retiros, apuestas, bonos, sesiones de&nbsp;juego.</li>
+                <li>Verificación de&nbsp;identidad (KYC)&nbsp;— confirmación de&nbsp;edad, identidad, domicilio y&nbsp;titularidad del&nbsp;método de&nbsp;pago.</li>
+                <li>Prevención de&nbsp;fraude y&nbsp;lavado de&nbsp;dinero (AML)&nbsp;— monitoreo de&nbsp;transacciones, detección de&nbsp;actividad sospechosa, cumplimiento de&nbsp;obligaciones legales.</li>
+                <li>Seguridad&nbsp;— protección contra acceso no&nbsp;autorizado, detección de&nbsp;multicuenta, abuso de&nbsp;bonos.</li>
+                <li>Comunicaciones&nbsp;— envío de&nbsp;notificaciones sobre transacciones, verificación, cambios de&nbsp;términos, así como materiales de&nbsp;marketing (con&nbsp;consentimiento).</li>
+                <li>Cumplimiento legal&nbsp;— cumplimiento de&nbsp;los requisitos de&nbsp;la Anjouan Gaming Authority, legislación fiscal, decisiones judiciales.</li>
+                <li>Resolución de disputas&nbsp;— investigación de&nbsp;quejas, reclamos, transacciones disputadas.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-es-s16">4. Bases Legales del Tratamiento</h2>
+              <p>El&nbsp;tratamiento de&nbsp;datos personales se&nbsp;realiza sobre las&nbsp;siguientes bases legales:</p>
+              <ul class="lgl__ul">
+                <li>Ejecución de&nbsp;un contrato&nbsp;— los&nbsp;Términos y&nbsp;Condiciones aceptados al&nbsp;registrarse.</li>
+                <li>Obligación legal&nbsp;— requisitos de&nbsp;la licencia de&nbsp;Anjouan, legislación contra el&nbsp;lavado de&nbsp;dinero, legislación fiscal.</li>
+                <li>Protección de&nbsp;intereses vitales&nbsp;— cuando sea necesario para&nbsp;proteger la&nbsp;seguridad de&nbsp;los jugadores o&nbsp;prevenir delitos.</li>
+                <li>Intereses legítimos de&nbsp;la Compañía&nbsp;— garantizar la&nbsp;seguridad de&nbsp;la plataforma, prevenir el&nbsp;fraude, proteger la&nbsp;propiedad intelectual.</li>
+                <li>Consentimiento&nbsp;— para&nbsp;el envío de&nbsp;mensajes de&nbsp;marketing y&nbsp;el uso de&nbsp;ciertos tipos de&nbsp;cookies. El&nbsp;consentimiento puede retirarse en&nbsp;cualquier momento.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalPp-es-s19">5. Cookies y Tecnologías Similares</h2>
+              <p>Warwin utiliza cookies y&nbsp;tecnologías similares para&nbsp;garantizar el&nbsp;funcionamiento correcto de&nbsp;los Servicios, analizar el&nbsp;tráfico, personalizar el&nbsp;contenido y&nbsp;realizar marketing.</p>
+              <p>La&nbsp;información detallada sobre los&nbsp;tipos de&nbsp;cookies, los&nbsp;fines de&nbsp;su uso y&nbsp;los procedimientos de&nbsp;gestión se&nbsp;encuentra en&nbsp;la Política de&nbsp;Cookies separada, que&nbsp;forma parte de&nbsp;esta Política.</p>
+              <p>Al&nbsp;continuar utilizando los&nbsp;Servicios, Usted acepta el&nbsp;uso de&nbsp;cookies de&nbsp;acuerdo con&nbsp;la mencionada Política. Puede cambiar la&nbsp;configuración de&nbsp;cookies a&nbsp;través de&nbsp;su navegador en&nbsp;cualquier momento.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s23">6. Transferencia de Datos a Terceros</h2>
+              <p>No&nbsp;vendemos datos personales. Sin&nbsp;embargo, en&nbsp;el curso de&nbsp;actividades comerciales legítimas, podemos transferir datos a&nbsp;las siguientes categorías de&nbsp;destinatarios:</p>
+              <ul class="lgl__ul">
+                <li>Proveedores de&nbsp;pago y&nbsp;centros de procesamiento&nbsp;— para&nbsp;el procesamiento de&nbsp;depósitos y&nbsp;retiros.</li>
+                <li>Servicios de&nbsp;identificación y verificación&nbsp;— para&nbsp;la realización de&nbsp;controles KYC.</li>
+                <li>Proveedores de&nbsp;juegos y&nbsp;datos deportivos&nbsp;— para&nbsp;garantizar el&nbsp;juego (cuando sea necesario).</li>
+                <li>Sistemas de&nbsp;prevención de&nbsp;fraude y&nbsp;escaneo AML&nbsp;— para&nbsp;la detección de&nbsp;actividad sospechosa.</li>
+                <li>Consultores profesionales y auditores&nbsp;— abogados, contadores, auditores que&nbsp;actúan en&nbsp;nombre de&nbsp;Warwin.</li>
+                <li>Organismos reguladores&nbsp;— Anjouan Gaming Authority, otros organismos de&nbsp;licencias y&nbsp;supervisión.</li>
+                <li>Organismos gubernamentales y&nbsp;de aplicación de&nbsp;la ley&nbsp;— a&nbsp;solicitud, por&nbsp;orden judicial u&nbsp;otra base legal.</li>
+              </ul>
+              <p>Todos los&nbsp;terceros están obligados a&nbsp;mantener la&nbsp;confidencialidad y&nbsp;utilizar los&nbsp;datos exclusivamente para&nbsp;los fines especificados en&nbsp;esta Política.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s27">7. Transferencias Internacionales de Datos</h2>
+              <p>Los&nbsp;datos personales pueden transferirse y&nbsp;procesarse fuera de&nbsp;su país de&nbsp;residencia, incluyendo Belice, la&nbsp;Unión de&nbsp;las Comoras (Anjouan) y&nbsp;otras jurisdicciones donde se&nbsp;encuentran nuestros servidores, socios o&nbsp;reguladores.</p>
+              <p>Todas las&nbsp;transferencias internacionales se&nbsp;realizan con&nbsp;salvaguardas adecuadas, incluyendo obligaciones contractuales, estándares de&nbsp;cifrado y&nbsp;otras medidas técnicas y&nbsp;organizativas que&nbsp;garantizan la&nbsp;seguridad de&nbsp;los datos.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s30">8. Plazos de Conservación de Datos</h2>
+              <p>Conservamos los&nbsp;datos personales durante el&nbsp;período necesario para&nbsp;alcanzar los&nbsp;fines del&nbsp;tratamiento establecidos en&nbsp;esta Política:</p>
+              <ul class="lgl__ul">
+                <li>Datos de&nbsp;la cuenta y transacciones&nbsp;— al&nbsp;menos 5 (cinco) años desde la&nbsp;fecha de&nbsp;cierre de&nbsp;la cuenta o&nbsp;última transacción.</li>
+                <li>Datos de&nbsp;verificación (KYC)&nbsp;— al&nbsp;menos 5 (cinco) años desde la&nbsp;fecha del&nbsp;último control.</li>
+                <li>Comunicaciones y quejas&nbsp;— al&nbsp;menos 5 (cinco) años desde la&nbsp;fecha de&nbsp;resolución de&nbsp;la disputa.</li>
+                <li>Datos de marketing&nbsp;— hasta la&nbsp;retirada del&nbsp;consentimiento o&nbsp;el cierre de&nbsp;la cuenta.</li>
+              </ul>
+              <p>Pueden aplicarse plazos de&nbsp;conservación más&nbsp;prolongados si lo&nbsp;requiere la&nbsp;legislación, un&nbsp;organismo regulador o&nbsp;una disputa legal pendiente.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s34">9. Seguridad de los Datos</h2>
+              <p>Warwin aplica medidas técnicas y&nbsp;organizativas modernas para&nbsp;proteger los&nbsp;datos personales contra el&nbsp;acceso no&nbsp;autorizado, la&nbsp;pérdida, la&nbsp;alteración o&nbsp;la destrucción:</p>
+              <ul class="lgl__ul">
+                <li>Cifrado de&nbsp;datos en&nbsp;tránsito (SSL/TLS) y&nbsp;en reposo;</li>
+                <li>Autenticación de&nbsp;dos factores para&nbsp;las cuentas;</li>
+                <li>Restricción del&nbsp;acceso a&nbsp;datos solo al&nbsp;personal autorizado;</li>
+                <li>Auditorías de&nbsp;seguridad regulares;</li>
+                <li>Capacitación del&nbsp;personal en&nbsp;protección de&nbsp;datos.</li>
+              </ul>
+              <p>A&nbsp;pesar de&nbsp;las medidas adoptadas, Warwin no&nbsp;puede garantizar la&nbsp;seguridad absoluta de&nbsp;los datos transmitidos por&nbsp;Internet. El&nbsp;jugador es&nbsp;responsable de&nbsp;mantener la&nbsp;confidencialidad de&nbsp;sus credenciales.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s38">10. Derechos del Jugador</h2>
+              <p>Dependiendo de&nbsp;su jurisdicción de&nbsp;residencia, Usted puede tener los&nbsp;siguientes derechos respecto a&nbsp;sus datos personales:</p>
+              <ul class="lgl__ul">
+                <li>Derecho de acceso&nbsp;— obtener información sobre qué datos procesamos.</li>
+                <li>Derecho de rectificación&nbsp;— solicitar la&nbsp;corrección de&nbsp;datos inexactos o&nbsp;incompletos.</li>
+                <li>Derecho de supresión&nbsp;— solicitar la&nbsp;eliminación de&nbsp;datos cuando no&nbsp;exista base legal para&nbsp;su procesamiento posterior.</li>
+                <li>Derecho de&nbsp;limitación del tratamiento&nbsp;— suspensión temporal del&nbsp;tratamiento de&nbsp;datos.</li>
+                <li>Derecho de oposición&nbsp;— oponerse al&nbsp;tratamiento basado en&nbsp;intereses legítimos o&nbsp;para marketing directo.</li>
+                <li>Derecho a&nbsp;la portabilidad&nbsp;— recibir datos en&nbsp;un formato estructurado.</li>
+                <li>Derecho a&nbsp;retirar el consentimiento&nbsp;— retirar el&nbsp;consentimiento para&nbsp;el tratamiento basado en&nbsp;el consentimiento.</li>
+              </ul>
+              <p>Para&nbsp;ejercer sus&nbsp;derechos, comuníquese con&nbsp;el soporte en&nbsp;<a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a> o&nbsp;<a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a>. Revisaremos la&nbsp;solicitud dentro de&nbsp;un plazo razonable, pero no&nbsp;más tarde de&nbsp;30 (treinta) días calendario. Tenga en&nbsp;cuenta que&nbsp;la legislación de&nbsp;Anjouan y&nbsp;los requisitos de&nbsp;la licencia pueden limitar ciertos derechos si su&nbsp;ejercicio entra en&nbsp;conflicto con&nbsp;las obligaciones legales de&nbsp;Warwin (por&nbsp;ejemplo, requisitos AML y&nbsp;KYC).</p>
+              <h2 class="lgl__h2" id="legalPp-es-s42">11. Comunicaciones de Marketing</h2>
+              <p>Al&nbsp;registrarse y&nbsp;con su&nbsp;consentimiento, Usted puede recibir mensajes de&nbsp;marketing (correo electrónico, SMS, notificaciones push) sobre bonos, promociones y&nbsp;novedades.</p>
+              <p>Puede optar por&nbsp;no recibir comunicaciones de&nbsp;marketing en&nbsp;cualquier momento:</p>
+              <ul class="lgl__ul">
+                <li>A&nbsp;través de&nbsp;la configuración de&nbsp;la cuenta en&nbsp;el panel personal;</li>
+                <li>Mediante el&nbsp;enlace "Darse de&nbsp;baja" en&nbsp;el correo electrónico recibido;</li>
+                <li>Contactando al&nbsp;soporte en&nbsp;<a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a>.</li>
+              </ul>
+              <p>No&nbsp;es posible optar por&nbsp;no recibir notificaciones contractuales, técnicas y&nbsp;regulatorias.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s47">12. Autoexclusión y Limitación del Tratamiento</h2>
+              <p>Al&nbsp;activar las&nbsp;herramientas de&nbsp;juego responsable (autoexclusión, pausa temporal), el&nbsp;tratamiento de&nbsp;datos personales puede limitarse de&nbsp;conformidad con&nbsp;la Política de&nbsp;Juego Responsable. Durante el&nbsp;período de&nbsp;autoexclusión, se&nbsp;suspenden las&nbsp;comunicaciones de&nbsp;marketing directo.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s49">13. Cambios a esta Política</h2>
+              <p>Warwin puede actualizar esta Política en&nbsp;relación con&nbsp;cambios en&nbsp;la legislación, la&nbsp;tecnología, los&nbsp;procesos comerciales o&nbsp;los requisitos de&nbsp;la licencia. La&nbsp;versión actualizada se&nbsp;publica en&nbsp;el sitio web warwin.casino con&nbsp;la fecha de&nbsp;entrada en&nbsp;vigor indicada.</p>
+              <p>Se&nbsp;notificará a&nbsp;los jugadores sobre cambios sustanciales por&nbsp;correo electrónico o&nbsp;a través del&nbsp;panel personal. El&nbsp;uso continuado de&nbsp;los Servicios después de&nbsp;la publicación de&nbsp;los cambios constituye la&nbsp;aceptación de&nbsp;la nueva versión de&nbsp;la Política.</p>
+              <h2 class="lgl__h2" id="legalPp-es-s52">14. Información de Contacto</h2>
+              <p>Para&nbsp;todas las&nbsp;preguntas relacionadas con&nbsp;esta Política de&nbsp;Privacidad, comuníquese con:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span><span>Número de Registro: 000054736</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Correo electrónico</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>KYC / Verificación</dt><dd><a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a></dd></div>
+                <div><dt>Seguridad</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+                <div><dt>Juego Responsable</dt><dd><a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">Esta Política es&nbsp;parte integral de&nbsp;los Términos y&nbsp;Condiciones de&nbsp;Warwin. En&nbsp;caso de&nbsp;discrepancias, prevalecerá la&nbsp;versión en&nbsp;inglés de&nbsp;los documentos.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Legal, страница «Cookie Policy». Текст заказчика; показывается версия на
+           языке сайта, при её отсутствии — английская. -->
+      <div class="view view--legal" id="view-legal-ck" hidden>
+        <div class="lgl" data-langset>
+          <article class="lgl__doc" data-lang="en" lang="en">
+            <h1 class="lgl__h1">Cookie Policy</h1>
+            <dl class="lgl__meta">
+              <div><dt>Version</dt><dd>1.0</dd></div>
+              <div><dt>Effective Date</dt><dd>August 27, 2026</dd></div>
+              <div><dt>Last Updated</dt><dd>August 27, 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Cookie Policy">
+              <a href="#legalCk-en-s0">1. What Are Cookies</a>
+              <a href="#legalCk-en-s3">2. Types of Cookies We Use</a>
+              <a href="#legalCk-en-s25">3. Third-Party Cookies</a>
+              <a href="#legalCk-en-s29">4. Managing Cookies</a>
+              <a href="#legalCk-en-s35">5. Local Storage and Similar Technologies</a>
+              <a href="#legalCk-en-s39">6. Changes to This Policy</a>
+              <a href="#legalCk-en-s42">7. Contact Information</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalCk-en-s0">1. What Are Cookies</h2>
+              <p>Cookies are small text files that a&nbsp;website saves on&nbsp;Your device (computer, smartphone, tablet) when You&nbsp;visit the&nbsp;site. Cookies allow the&nbsp;website to&nbsp;remember Your actions and&nbsp;preferences (e.g., language, currency, login settings) for&nbsp;a certain period, saving You&nbsp;from having to&nbsp;re-enter them each time You&nbsp;visit or&nbsp;navigate between pages.</p>
+              <p>This Policy is&nbsp;part of&nbsp;the Privacy Policy and&nbsp;Terms and&nbsp;Conditions of&nbsp;Warwin (hereinafter&nbsp;— "Company", "we", "us").</p>
+              <h2 class="lgl__h2" id="legalCk-en-s3">2. Types of Cookies We Use</h2>
+              <p>We&nbsp;use the&nbsp;following categories of&nbsp;cookies:</p>
+              <h3 class="lgl__h3">2.1. Strictly Necessary Cookies</h3>
+              <p>These cookies are essential for&nbsp;the proper functioning of&nbsp;the Services. Without them, it&nbsp;is impossible to&nbsp;ensure basic site functionality, including secure login, transaction processing, and&nbsp;compliance with legal requirements.</p>
+              <p>Examples:</p>
+              <ul class="lgl__ul">
+                <li>Session login cookies (session ID);</li>
+                <li>Security cookies (protection against CSRF, XSS);</li>
+                <li>Language and&nbsp;currency preference cookies;</li>
+                <li>Cookies remembering acceptance of&nbsp;terms.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Retention period: from session to&nbsp;12 months.</p>
+              <h3 class="lgl__h3">2.2. Functional Cookies</h3>
+              <p>These cookies allow the&nbsp;site to&nbsp;remember Your choices and&nbsp;provide enhanced features, improving user experience.</p>
+              <p>Examples:</p>
+              <ul class="lgl__ul">
+                <li>Remembering game lobby settings;</li>
+                <li>Saving history of&nbsp;recent games;</li>
+                <li>Bet display and&nbsp;odds settings.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Retention period: up&nbsp;to 12 months.</p>
+              <h3 class="lgl__h3">2.3. Analytical (Statistical) Cookies</h3>
+              <p>These cookies help us understand how visitors interact with the&nbsp;site, which pages are visited most often, and&nbsp;how long sessions last. Information is&nbsp;collected in&nbsp;an anonymized form.</p>
+              <p>Examples:</p>
+              <ul class="lgl__ul">
+                <li>Google Analytics, Yandex.Metrica, or&nbsp;similar services;</li>
+                <li>Internal Warwin analytics tools.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Retention period: up&nbsp;to 24 months.</p>
+              <h3 class="lgl__h3">2.4. Marketing Cookies</h3>
+              <p>These cookies are used to&nbsp;personalize advertising messages, track the&nbsp;effectiveness of&nbsp;marketing campaigns, and&nbsp;prevent repeated display of&nbsp;the same advertisement.</p>
+              <p>Examples:</p>
+              <ul class="lgl__ul">
+                <li>Affiliate and&nbsp;referral program cookies;</li>
+                <li>Retargeting platform cookies;</li>
+                <li>Cookies tracking referral source (affiliate ID).</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Retention period: up&nbsp;to 24 months.</p>
+              <h2 class="lgl__h2" id="legalCk-en-s25">3. Third-Party Cookies</h2>
+              <p>Some cookies are set by&nbsp;third parties whose services we&nbsp;use:</p>
+              <ul class="lgl__ul">
+                <li>Payment providers&nbsp;— for&nbsp;secure transaction processing;</li>
+                <li>Game providers&nbsp;— for&nbsp;correct loading of&nbsp;game content;</li>
+                <li>Analytics services&nbsp;— for&nbsp;collecting traffic statistics;</li>
+                <li>Affiliate networks&nbsp;— for&nbsp;tracking referral visits.</li>
+              </ul>
+              <p>We&nbsp;do not control cookies set by&nbsp;third parties. We&nbsp;recommend reviewing the&nbsp;privacy policies of&nbsp;the respective services.</p>
+              <h2 class="lgl__h2" id="legalCk-en-s29">4. Managing Cookies</h2>
+              <p>Upon Your first visit to&nbsp;the site, You&nbsp;will see a&nbsp;banner requesting consent to&nbsp;the use of&nbsp;cookies. You&nbsp;may:</p>
+              <ul class="lgl__ul">
+                <li>Accept all cookies&nbsp;— the&nbsp;site will function with full functionality;</li>
+                <li>Accept only necessary&nbsp;— basic functionality will remain, but some features (analytics, personalization) will be limited;</li>
+                <li>Customize preferences&nbsp;— select which categories of&nbsp;cookies are allowed.</li>
+              </ul>
+              <p>You&nbsp;may change Your preferences at&nbsp;any time through browser settings or&nbsp;via the&nbsp;consent banner (if&nbsp;available).</p>
+              <div class="lgl__group">
+                <p class="lgl__group-t">How to&nbsp;disable cookies in&nbsp;Your browser:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Google Chrome: Settings → Privacy and&nbsp;Security → Cookies and&nbsp;other site data.</li>
+                  <li>Mozilla Firefox: Settings → Privacy &amp; Security → Cookies and&nbsp;Site Data.</li>
+                  <li>Safari: Settings → Privacy → Cookies and&nbsp;website data.</li>
+                  <li>Microsoft Edge: Settings → Cookies and&nbsp;site permissions.</li>
+                </ul>
+              </div>
+              <p class="lgl__note">Please note: completely disabling cookies may lead to&nbsp;incorrect operation of&nbsp;the Services, including inability to&nbsp;log in&nbsp;to the&nbsp;account or&nbsp;process payments.</p>
+              <h2 class="lgl__h2" id="legalCk-en-s35">5. Local Storage and Similar Technologies</h2>
+              <p>In&nbsp;addition to&nbsp;cookies, we&nbsp;may use other tracking technologies:</p>
+              <ul class="lgl__ul">
+                <li>LocalStorage / SessionStorage&nbsp;— for&nbsp;storing interface settings without transmitting data to&nbsp;the server;</li>
+                <li>Tracking pixels (web beacons)&nbsp;— for&nbsp;analyzing email open rates;</li>
+                <li>Device fingerprinting&nbsp;— for&nbsp;detecting multi-accounting and&nbsp;ensuring security.</li>
+              </ul>
+              <p>These technologies are subject to&nbsp;the same principles as&nbsp;cookies and&nbsp;are governed by&nbsp;this Policy.</p>
+              <h2 class="lgl__h2" id="legalCk-en-s39">6. Changes to This Policy</h2>
+              <p>Warwin may update this Policy in&nbsp;connection with changes in&nbsp;technology, legislation, or&nbsp;business processes. The&nbsp;updated version is&nbsp;published on&nbsp;the website warwin.casino.</p>
+              <p>Continued use of&nbsp;the Services after publication of&nbsp;changes constitutes acceptance of&nbsp;the new version of&nbsp;the Policy.</p>
+              <h2 class="lgl__h2" id="legalCk-en-s42">7. Contact Information</h2>
+              <p>For&nbsp;questions regarding the&nbsp;use of&nbsp;cookies, please contact:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Email</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>Security</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">This Policy is&nbsp;an integral part of&nbsp;the Warwin Privacy Policy.</p>
+            </div>
+          </article>
+          <article class="lgl__doc" data-lang="ru" lang="ru" hidden>
+            <h1 class="lgl__h1">Политика использования файлов cookie</h1>
+            <dl class="lgl__meta">
+              <div><dt>Версия</dt><dd>1.0</dd></div>
+              <div><dt>Дата вступления в силу</dt><dd>27 августа 2026</dd></div>
+              <div><dt>Последнее обновление</dt><dd>27 августа 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Политика использования файлов cookie">
+              <a href="#legalCk-ru-s0">1. Что такое файлы cookie</a>
+              <a href="#legalCk-ru-s3">2. Какие cookies мы используем</a>
+              <a href="#legalCk-ru-s25">3. Cookies третьих сторон</a>
+              <a href="#legalCk-ru-s29">4. Управление cookies</a>
+              <a href="#legalCk-ru-s35">5. Локальное хранилище и аналогичные технологии</a>
+              <a href="#legalCk-ru-s39">6. Изменения Политики</a>
+              <a href="#legalCk-ru-s42">7. Контактная информация</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalCk-ru-s0">1. Что такое файлы cookie</h2>
+              <p>Файлы cookie (далее&nbsp;— «cookies»)&nbsp;— это небольшие текстовые файлы, которые веб-сайт сохраняет на&nbsp;Вашем устройстве (компьютере, смартфоне, планшете) при&nbsp;посещении сайта. Cookies позволяют сайту запоминать Ваши действия и&nbsp;предпочтения (например, язык, валюту, параметры входа) в&nbsp;течение определённого времени, избавляя от&nbsp;необходимости повторно вводить их при&nbsp;каждом посещении или переходе между страницами.</p>
+              <p>Настоящая Политика является частью Политики конфиденциальности и&nbsp;Пользовательского соглашения Warwin (далее&nbsp;— «Компания», «мы», «нас»).</p>
+              <h2 class="lgl__h2" id="legalCk-ru-s3">2. Какие cookies мы используем</h2>
+              <p>Мы&nbsp;используем следующие категории cookies:</p>
+              <h3 class="lgl__h3">2.1. Строго необходимые cookies</h3>
+              <p>Эти cookies необходимы для&nbsp;корректной работы Сервисов. Без&nbsp;них невозможно обеспечить базовую функциональность сайта, включая безопасный вход в&nbsp;аккаунт, обработку транзакций и&nbsp;соблюдение юридических требований.</p>
+              <p>Примеры:</p>
+              <ul class="lgl__ul">
+                <li>Cookies сессии входа (session ID);</li>
+                <li>Cookies безопасности (защита от&nbsp;CSRF, XSS);</li>
+                <li>Cookies предпочтений языка и&nbsp;валюты;</li>
+                <li>Cookies, запоминающие согласие с&nbsp;условиями.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Срок хранения: от&nbsp;сессии до&nbsp;12 месяцев.</p>
+              <h3 class="lgl__h3">2.2. Функциональные cookies</h3>
+              <p>Эти cookies позволяют сайту запоминать Ваши выборы и&nbsp;предоставлять расширенные функции, повышая удобство использования.</p>
+              <p>Примеры:</p>
+              <ul class="lgl__ul">
+                <li>Запоминание настроек игрового лобби;</li>
+                <li>Сохранение истории последних игр;</li>
+                <li>Настройки отображения ставок и&nbsp;коэффициентов.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Срок хранения: до&nbsp;12 месяцев.</p>
+              <h3 class="lgl__h3">2.3. Аналитические (статистические) cookies</h3>
+              <p>Эти cookies помогают нам понимать, как&nbsp;посетители взаимодействуют с&nbsp;сайтом, какие страницы посещаются чаще, как&nbsp;долго длится сессия. Информация собирается в&nbsp;обезличенном виде.</p>
+              <p>Примеры:</p>
+              <ul class="lgl__ul">
+                <li>Google Analytics, Yandex.Metrica или аналогичные сервисы;</li>
+                <li>Внутние аналитические инструменты Warwin.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Срок хранения: до&nbsp;24 месяцев.</p>
+              <h3 class="lgl__h3">2.4. Маркетинговые cookies</h3>
+              <p>Эти cookies используются для&nbsp;персонализации рекламных сообщений, отслеживания эффективности маркетинговых кампаний и&nbsp;предотвращения повторного показа одной и&nbsp;той же&nbsp;рекламы.</p>
+              <p>Примеры:</p>
+              <ul class="lgl__ul">
+                <li>Cookies партнёрских и&nbsp;реферальных программ;</li>
+                <li>Cookies ретаргетинговых платформ;</li>
+                <li>Cookies, отслеживающие источник перехода (affiliate ID).</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Срок хранения: до&nbsp;24 месяцев.</p>
+              <h2 class="lgl__h2" id="legalCk-ru-s25">3. Cookies третьих сторон</h2>
+              <p>Некоторые cookies устанавливаются третьими лицами, чьи сервисы мы&nbsp;используем:</p>
+              <ul class="lgl__ul">
+                <li>Платёжные провайдеры&nbsp;— для&nbsp;безопасной обработки транзакций;</li>
+                <li>Поставщики игр&nbsp;— для&nbsp;корректной загрузки игрового контента;</li>
+                <li>Аналитические сервисы&nbsp;— для&nbsp;сбора статистики посещаемости;</li>
+                <li>Партнёрские сети&nbsp;— для&nbsp;учёта реферальных переходов.</li>
+              </ul>
+              <p>Мы&nbsp;не контролируем cookies, устанавливаемые третьими лицами. Рекомендуем ознакомиться с&nbsp;политиками конфиденциальности соответствующих сервисов.</p>
+              <h2 class="lgl__h2" id="legalCk-ru-s29">4. Управление cookies</h2>
+              <p>При&nbsp;первом посещении сайта Вы&nbsp;видите баннер с&nbsp;запросом согласия на&nbsp;использование cookies. Вы&nbsp;можете:</p>
+              <ul class="lgl__ul">
+                <li>Принять все cookies&nbsp;— сайт будет работать с&nbsp;полной функциональностью;</li>
+                <li>Принять только необходимые&nbsp;— базовая функциональность сохранится, но&nbsp;некоторые функции (аналитика, персонализация) будут ограничены;</li>
+                <li>Настроить предпочтения&nbsp;— выбрать, какие категории cookies разрешены.</li>
+              </ul>
+              <p>Вы&nbsp;можете изменить свои предпочтения в&nbsp;любое время через настройки браузера или повторно через баннер согласия (если доступен).</p>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Как&nbsp;отключить cookies в&nbsp;браузере:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Google Chrome: Настройки → Конфиденциальность и&nbsp;безопасность → Cookies и&nbsp;другие данные сайтов.</li>
+                  <li>Mozilla Firefox: Настройки → Приватность и&nbsp;защита → Cookies и&nbsp;данные сайтов.</li>
+                  <li>Safari: Настройки → Конфиденциальность → Cookies и&nbsp;данные веб-сайтов.</li>
+                  <li>Microsoft Edge: Настройки → Cookies и&nbsp;разрешения сайтов.</li>
+                </ul>
+              </div>
+              <p class="lgl__note">Обращаем внимание: полное отключение cookies может привести к&nbsp;некорректной работе Сервисов, включая невозможность входа в&nbsp;аккаунт или обработки платежей.</p>
+              <h2 class="lgl__h2" id="legalCk-ru-s35">5. Локальное хранилище и аналогичные технологии</h2>
+              <p>Помимо cookies мы&nbsp;можем использовать другие технологии отслеживания:</p>
+              <ul class="lgl__ul">
+                <li>LocalStorage / SessionStorage&nbsp;— для&nbsp;хранения настроек интерфейса без&nbsp;передачи данных на&nbsp;сервер;</li>
+                <li>Пиксели отслеживания (web beacons)&nbsp;— для&nbsp;анализа открываемости email-рассылок;</li>
+                <li>Отпечатки устройства (device fingerprinting)&nbsp;— для&nbsp;выявления мультиаккаунтинга и&nbsp;обеспечения безопасности.</li>
+              </ul>
+              <p>Эти технологии подчиняются тем же&nbsp;принципам, что&nbsp;и cookies, и&nbsp;регулируются настоящей Политикой.</p>
+              <h2 class="lgl__h2" id="legalCk-ru-s39">6. Изменения Политики</h2>
+              <p>Warwin вправе обновлять настоящую Политику в&nbsp;связи с&nbsp;изменениями технологий, законодательства или бизнес-процессов. Обновлённая версия публикуется на&nbsp;сайте warwin.casino.</p>
+              <p>Продолжение использования Сервисов после публикации изменений означает принятие новой версии Политики.</p>
+              <h2 class="lgl__h2" id="legalCk-ru-s42">7. Контактная информация</h2>
+              <p>По&nbsp;вопросам, связанным с&nbsp;использованием cookies, обращайтесь:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Email</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>Безопасность</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">Настоящая Политика является неотъемлемой частью Политики конфиденциальности Warwin.</p>
+            </div>
+          </article>
+          <article class="lgl__doc" data-lang="es" lang="es" hidden>
+            <h1 class="lgl__h1">Política de Cookies</h1>
+            <dl class="lgl__meta">
+              <div><dt>Versión</dt><dd>1.0</dd></div>
+              <div><dt>Fecha de entrada en vigor</dt><dd>27 de agosto de 2026</dd></div>
+              <div><dt>Última actualización</dt><dd>27 de agosto de 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Política de Cookies">
+              <a href="#legalCk-es-s0">1. Qué son las Cookies</a>
+              <a href="#legalCk-es-s3">2. Tipos de Cookies que Utilizamos</a>
+              <a href="#legalCk-es-s25">3. Cookies de Terceros</a>
+              <a href="#legalCk-es-s29">4. Gestión de Cookies</a>
+              <a href="#legalCk-es-s35">5. Almacenamiento Local y Tecnologías Similares</a>
+              <a href="#legalCk-es-s39">6. Cambios a esta Política</a>
+              <a href="#legalCk-es-s42">7. Información de Contacto</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalCk-es-s0">1. Qué son las Cookies</h2>
+              <p>Las&nbsp;cookies son pequeños archivos de&nbsp;texto que&nbsp;un sitio web guarda en&nbsp;su dispositivo (computadora, smartphone, tablet) al&nbsp;visitar el&nbsp;sitio. Las&nbsp;cookies permiten que&nbsp;el sitio web recuerde sus&nbsp;acciones y&nbsp;preferencias (por&nbsp;ejemplo, idioma, moneda, configuración de&nbsp;inicio de&nbsp;sesión) durante un&nbsp;período determinado, evitándole tener que&nbsp;volver a&nbsp;introducirlas cada vez que&nbsp;visita o&nbsp;navega entre páginas.</p>
+              <p>Esta Política es&nbsp;parte de&nbsp;la Política de&nbsp;Privacidad y&nbsp;de los&nbsp;Términos y&nbsp;Condiciones de&nbsp;Warwin (en adelante&nbsp;— "Compañía", "nosotros", "nos").</p>
+              <h2 class="lgl__h2" id="legalCk-es-s3">2. Tipos de Cookies que Utilizamos</h2>
+              <p>Utilizamos las&nbsp;siguientes categorías de&nbsp;cookies:</p>
+              <h3 class="lgl__h3">2.1. Cookies Estrictamente Necesarias</h3>
+              <p>Estas cookies son esenciales para&nbsp;el funcionamiento correcto de&nbsp;los Servicios. Sin&nbsp;ellas, no&nbsp;es posible garantizar la&nbsp;funcionalidad básica del&nbsp;sitio, incluyendo el&nbsp;inicio de&nbsp;sesión seguro, el&nbsp;procesamiento de&nbsp;transacciones y&nbsp;el cumplimiento de&nbsp;los requisitos legales.</p>
+              <p>Ejemplos:</p>
+              <ul class="lgl__ul">
+                <li>Cookies de&nbsp;sesión de&nbsp;inicio de&nbsp;sesión (session ID);</li>
+                <li>Cookies de&nbsp;seguridad (protección contra CSRF, XSS);</li>
+                <li>Cookies de&nbsp;preferencia de&nbsp;idioma y&nbsp;moneda;</li>
+                <li>Cookies que&nbsp;recuerdan la&nbsp;aceptación de&nbsp;términos.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Plazo de&nbsp;conservación: desde la&nbsp;sesión hasta 12 meses.</p>
+              <h3 class="lgl__h3">2.2. Cookies Funcionales</h3>
+              <p>Estas cookies permiten que&nbsp;el sitio recuerde sus&nbsp;elecciones y&nbsp;proporcione funciones mejoradas, mejorando la&nbsp;experiencia del&nbsp;usuario.</p>
+              <p>Ejemplos:</p>
+              <ul class="lgl__ul">
+                <li>Recordar la&nbsp;configuración del&nbsp;lobby de&nbsp;juegos;</li>
+                <li>Guardar el&nbsp;historial de&nbsp;juegos recientes;</li>
+                <li>Configuración de&nbsp;visualización de&nbsp;apuestas y&nbsp;cuotas.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Plazo de&nbsp;conservación: hasta 12 meses.</p>
+              <h3 class="lgl__h3">2.3. Cookies Analíticas (Estadísticas)</h3>
+              <p>Estas cookies nos ayudan a&nbsp;comprender cómo los&nbsp;visitantes interactúan con&nbsp;el sitio, qué páginas se&nbsp;visitan con&nbsp;más frecuencia y&nbsp;cuánto duran las&nbsp;sesiones. La&nbsp;información se&nbsp;recopila de&nbsp;forma anónima.</p>
+              <p>Ejemplos:</p>
+              <ul class="lgl__ul">
+                <li>Google Analytics, Yandex.Metrica o&nbsp;servicios similares;</li>
+                <li>Herramientas analíticas internas de&nbsp;Warwin.</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Plazo de&nbsp;conservación: hasta 24 meses.</p>
+              <h3 class="lgl__h3">2.4. Cookies de Marketing</h3>
+              <p>Estas cookies se&nbsp;utilizan para&nbsp;personalizar los&nbsp;mensajes publicitarios, rastrear la&nbsp;efectividad de&nbsp;las campañas de&nbsp;marketing y&nbsp;evitar la&nbsp;visualización repetida del&nbsp;mismo anuncio.</p>
+              <p>Ejemplos:</p>
+              <ul class="lgl__ul">
+                <li>Cookies de&nbsp;programas de&nbsp;afiliados y&nbsp;referidos;</li>
+                <li>Cookies de&nbsp;plataformas de&nbsp;retargeting;</li>
+                <li>Cookies que&nbsp;rastrean la&nbsp;fuente de&nbsp;referencia (affiliate ID).</li>
+              </ul>
+              <p class="lgl__req lgl__req--solo">Plazo de&nbsp;conservación: hasta 24 meses.</p>
+              <h2 class="lgl__h2" id="legalCk-es-s25">3. Cookies de Terceros</h2>
+              <p>Algunas cookies son establecidas por&nbsp;terceros cuyos servicios utilizamos:</p>
+              <ul class="lgl__ul">
+                <li>Proveedores de pago&nbsp;— para&nbsp;el procesamiento seguro de&nbsp;transacciones;</li>
+                <li>Proveedores de juegos&nbsp;— para&nbsp;la carga correcta del&nbsp;contenido de&nbsp;juegos;</li>
+                <li>Servicios analíticos&nbsp;— para&nbsp;la recopilación de&nbsp;estadísticas de&nbsp;tráfico;</li>
+                <li>Redes de afiliados&nbsp;— para&nbsp;el seguimiento de&nbsp;visitas de&nbsp;referencia.</li>
+              </ul>
+              <p>No&nbsp;controlamos las&nbsp;cookies establecidas por&nbsp;terceros. Recomendamos revisar las&nbsp;políticas de&nbsp;privacidad de&nbsp;los servicios correspondientes.</p>
+              <h2 class="lgl__h2" id="legalCk-es-s29">4. Gestión de Cookies</h2>
+              <p>En&nbsp;su primera visita al&nbsp;sitio, verá un&nbsp;banner solicitando su&nbsp;consentimiento para&nbsp;el uso de&nbsp;cookies. Usted puede:</p>
+              <ul class="lgl__ul">
+                <li>Aceptar todas las cookies&nbsp;— el&nbsp;sitio funcionará con&nbsp;toda la&nbsp;funcionalidad;</li>
+                <li>Aceptar solo las necesarias&nbsp;— la&nbsp;funcionalidad básica se&nbsp;mantendrá, pero algunas funciones (análisis, personalización) estarán limitadas;</li>
+                <li>Personalizar preferencias&nbsp;— seleccionar qué categorías de&nbsp;cookies están permitidas.</li>
+              </ul>
+              <p>Puede cambiar sus&nbsp;preferencias en&nbsp;cualquier momento a&nbsp;través de&nbsp;la configuración de&nbsp;su navegador o&nbsp;mediante el&nbsp;banner de&nbsp;consentimiento (si está disponible).</p>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Cómo desactivar cookies en&nbsp;su navegador:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Google Chrome: Configuración → Privacidad y&nbsp;seguridad → Cookies y&nbsp;otros datos de&nbsp;sitios.</li>
+                  <li>Mozilla Firefox: Configuración → Privacidad y&nbsp;seguridad → Cookies y&nbsp;datos de&nbsp;sitios.</li>
+                  <li>Safari: Configuración → Privacidad → Cookies y&nbsp;datos de&nbsp;sitios web.</li>
+                  <li>Microsoft Edge: Configuración → Cookies y&nbsp;permisos de&nbsp;sitios.</li>
+                </ul>
+              </div>
+              <p class="lgl__note">Tenga en&nbsp;cuenta: desactivar completamente las&nbsp;cookies puede provocar un&nbsp;funcionamiento incorrecto de&nbsp;los Servicios, incluyendo la&nbsp;imposibilidad de&nbsp;iniciar sesión en&nbsp;la cuenta o&nbsp;procesar pagos.</p>
+              <h2 class="lgl__h2" id="legalCk-es-s35">5. Almacenamiento Local y Tecnologías Similares</h2>
+              <p>Además de&nbsp;las cookies, podemos utilizar otras tecnologías de&nbsp;seguimiento:</p>
+              <ul class="lgl__ul">
+                <li>LocalStorage / SessionStorage&nbsp;— para&nbsp;almacenar la&nbsp;configuración de&nbsp;la interfaz sin&nbsp;transmitir datos al&nbsp;servidor;</li>
+                <li>Píxeles de&nbsp;seguimiento (web beacons)&nbsp;— para&nbsp;analizar las&nbsp;tasas de&nbsp;apertura de&nbsp;correos electrónicos;</li>
+                <li>Huellas digitales de&nbsp;dispositivo (device fingerprinting)&nbsp;— para&nbsp;detectar multicuenta y&nbsp;garantizar la&nbsp;seguridad.</li>
+              </ul>
+              <p>Estas tecnologías están sujetas a&nbsp;los mismos principios que&nbsp;las cookies y&nbsp;se rigen por&nbsp;esta Política.</p>
+              <h2 class="lgl__h2" id="legalCk-es-s39">6. Cambios a esta Política</h2>
+              <p>Warwin puede actualizar esta Política en&nbsp;relación con&nbsp;cambios en&nbsp;la tecnología, la&nbsp;legislación o&nbsp;los procesos comerciales. La&nbsp;versión actualizada se&nbsp;publica en&nbsp;el sitio web warwin.casino.</p>
+              <p>El&nbsp;uso continuado de&nbsp;los Servicios después de&nbsp;la publicación de&nbsp;los cambios constituye la&nbsp;aceptación de&nbsp;la nueva versión de&nbsp;la Política.</p>
+              <h2 class="lgl__h2" id="legalCk-es-s42">7. Información de Contacto</h2>
+              <p>Para&nbsp;preguntas sobre el&nbsp;uso de&nbsp;cookies, comuníquese con:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Correo electrónico</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>Seguridad</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">Esta Política es&nbsp;parte integral de&nbsp;la Política de&nbsp;Privacidad de&nbsp;Warwin.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
       <!-- Центр помощи, страница «Help Center / FAQ». Текст заказчика на трёх языках;
            показывается тот, на котором сейчас сайт. -->
       <div class="view view--help" id="view-help-faq" hidden>
@@ -10096,8 +10903,8 @@ body.br-open .bnav { z-index: 66; }
               </button>
               <ul class="fnav__list">
                 <li><button class="fnav__link" type="button">Terms &amp; Conditions</button></li>
-                <li><button class="fnav__link" type="button">Privacy Policy</button></li>
-                <li><button class="fnav__link" type="button">Cookie Policy</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:legalPp">Privacy Policy</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:legalCk">Cookie Policy</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:legalRg">Responsible Gaming</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:legalAml">AML / KYC Policy</button></li>
               </ul>
@@ -11719,7 +12526,9 @@ body.br-open .bnav { z-index: 66; }
                     helpKyc: document.getElementById('view-help-kyc'),
                     helpSup: document.getElementById('view-help-sup'),
                     legalAml: document.getElementById('view-legal-aml'),
-                    legalRg: document.getElementById('view-legal-rg') };
+                    legalRg: document.getElementById('view-legal-rg'),
+                    legalPp: document.getElementById('view-legal-pp'),
+                    legalCk: document.getElementById('view-legal-ck') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
