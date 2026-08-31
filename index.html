@@ -2709,6 +2709,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 /* Карточка отзывается на курсор: кант светлеет, сама приподнимается */
 .bncard { transition: border-color .15s ease, transform .15s ease; }
 .bncard:hover { border-color: rgba(255, 255, 255, .12); transform: translateY(-2px); }
+/* Полученный бонус остаётся в списке, но помечен: кант зелёный, как и тег */
+.bncard.is-taken { border-color: rgba(0, 201, 40, .35); }
+.bncard.is-taken:hover { border-color: rgba(0, 201, 40, .5); }
 @media (prefers-reduced-motion: reduce) { .bncard, .bncard:hover { transform: none; } }
 .bncard__art { display: block; width: 100%; height: 150px; flex: none;
                object-fit: cover; background: #07173d; }
@@ -9789,6 +9792,30 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         c.addEventListener('click', function () { bnShow(c.dataset.bn); });
       });
 
+      /* Карточка полученного бонуса остаётся в списке, но меняет вид: тег
+         становится зелёным, а кнопка вместо повторного получения ведёт
+         на вкладку, где бонус отыгрывается. */
+      var bnTake = function (c, on) {
+        var b = c.querySelector('[data-bn-act], [data-bn-goactive]');
+        var tag = c.querySelector('.bn__tag');
+        c.classList.toggle('is-taken', on);
+        if (on) {
+          tag.textContent = 'In progress';
+          tag.classList.add('bn__tag--live');
+          b.textContent = 'Open in Active';
+          b.classList.remove('bn__btn--primary');
+          b.removeAttribute('data-bn-act');
+          b.setAttribute('data-bn-goactive', '');
+        } else {
+          tag.textContent = tag.dataset.base || tag.textContent;
+          tag.classList.remove('bn__tag--live');
+          b.textContent = b.dataset.base || 'Receive';
+          b.classList.add('bn__btn--primary');
+          b.removeAttribute('data-bn-goactive');
+          b.setAttribute('data-bn-act', '');
+        }
+      };
+
       bnView.addEventListener('click', function (e) {
         var t = e.target.closest('button');
         if (!t) return;
@@ -9835,9 +9862,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         }
         if (t.dataset.bnGo === 'available') { bnShow('available'); return; }
 
-        /* Получение: бонус действительно переезжает во вкладку Active.
-           Карточка уходит из списка доступных, отыгрыш забирает её имя и срок —
-           иначе непонятно, куда делся бонус и что теперь отыгрывается. */
+        /* Получение: бонус заводится в отыгрыш, но карточка остаётся в списке
+           и сама показывает, что уже активна. Так видно и что произошло, и где
+           бонус теперь искать — кнопка ведёт на вкладку Active. */
         if (t.hasAttribute('data-bn-act')) {
           var c = t.closest('.bncard');
           var act = bnView.querySelector('.bnact');
@@ -9851,11 +9878,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           act.hidden = false;
           bnView.querySelector('.bnact__ask').hidden = true;
           bnView.querySelector('.bnact__foot').hidden = false;
-          c.hidden = true;
+          bnTake(c, true);
           bnSync();
-          bnShow('active');
           return;
         }
+        /* С активной карточки уходим туда, где бонус отыгрывается */
+        if (t.hasAttribute('data-bn-goactive')) { bnShow('active'); return; }
 
         /* Отмена необратима — спрашиваем в самой карточке */
         if (t.hasAttribute('data-bn-cancel')) {
@@ -9873,15 +9901,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           /* Отменённый бонус возвращается в доступные — иначе он исчезал совсем */
           var back = dropped.dataset.from &&
                      bnView.querySelector('.bncard[data-key="' + dropped.dataset.from + '"]');
-          if (back) {
-            back.hidden = false;
-            var bb = back.querySelector('[data-bn-act]');
-            var bt = back.querySelector('.bn__tag');
-            bb.disabled = false;
-            bb.textContent = bb.dataset.base || 'Receive';
-            bt.textContent = bt.dataset.base || bt.textContent;
-            bt.classList.remove('bn__tag--live');
-          }
+          if (back) bnTake(back, false);
           dropped.hidden = true;
           bnView.querySelector('.bnact__ask').hidden = true;
           bnView.querySelector('.bnact__foot').hidden = false;
@@ -10192,12 +10212,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var empty = what === 'empty';
         cards.forEach(function (c) {
           c.hidden = empty;
-          var b = c.querySelector('[data-bn-act]');
-          b.disabled = false;
-          b.textContent = b.dataset.base || 'Receive';
-          var tag = c.querySelector('.bn__tag');
-          tag.textContent = tag.dataset.base || tag.textContent;
-          tag.classList.remove('bn__tag--live');
+          bnTake(c, what === 'active' && c.dataset.key === 'welcome');
         });
         var act = bnView.querySelector('.bnact');
         /* Отыгрыш показываем только в своём состоянии: иначе один и тот же
