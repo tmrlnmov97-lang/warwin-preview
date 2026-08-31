@@ -2399,8 +2399,11 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
    Проценты нигде не называются намеренно — это решение из макета.
    ═══════════════════════════════════════════════════════════════════ */
 .view--vip { gap: 32px; }
+/* Заголовки разделов на этой странице на ступень крупнее общесайтовых:
+   вся шкала страницы сдвинута вверх по Tailwind */
+.view--vip .section__title h2 { font-size: 24px; line-height: 32px; }
 .vip__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-           font-size: 32px; line-height: 40px; color: var(--white); }
+           font-size: 36px; line-height: 40px; color: var(--white); }
 
 /* ── прогресс ── */
 .vipro { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
@@ -2411,33 +2414,33 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                padding: 20px; border-radius: 12px; background: var(--card, #181e3b); }
 .vipro__who { display: flex; align-items: center; gap: 10px; }
 .vipro__who b { font-family: 'Work Sans', sans-serif; font-weight: 600;
-                font-size: 16px; line-height: 22px; color: var(--white); }
+                font-size: 18px; line-height: 28px; color: var(--white); }
 /* Знак уровня подкрашен металлом самого уровня — так строка читается
    без второй подписи «твой уровень» */
-.vipro__lvl, .vlvl__chip { display: inline-flex; align-items: center; height: 22px; padding: 0 10px;
+.vipro__lvl, .vlvl__chip { display: inline-flex; align-items: center; height: 26px; padding: 0 12px;
                            border-radius: 999px; font-family: 'Work Sans', sans-serif;
-                           font-weight: 600; font-size: 12px; line-height: 16px; white-space: nowrap; }
+                           font-weight: 600; font-size: 14px; line-height: 20px; white-space: nowrap; }
 .vipro__lvl, .vlvl__i--soldier .vlvl__chip { background: rgba(214, 124, 66, .16); color: #e0a172; }
 .vlvl__i--captain .vlvl__chip { background: rgba(159, 182, 217, .16); color: #c8d6ea; }
 .vlvl__i--general .vlvl__chip { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
 .vlvl__i--warlord .vlvl__chip { background: rgba(7, 148, 255, .18); color: #6bb8ff; }
 .vipro__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-              font-size: 32px; line-height: 38px; color: var(--white);
+              font-size: 36px; line-height: 40px; color: var(--white);
               font-variant-numeric: tabular-nums; }
 .vipro__track { display: block; height: 6px; border-radius: 999px; background: var(--white-10); }
 .vipro__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
-.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
                color: var(--dp-label); }
 
 .vipro__car { flex: none; display: grid; grid-template-columns: auto auto auto;
               align-items: center; justify-items: center; gap: 10px 14px; }
 .vipro__badge { display: block; width: 190px; height: 190px; }
 .vipro__cap { grid-column: 1 / -1; font-family: 'Work Sans', sans-serif; font-weight: 600;
-              font-size: 14px; line-height: 20px; color: var(--white); }
-.vipro__arr { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
+              font-size: 16px; line-height: 24px; color: var(--white); }
+.vipro__arr { display: grid; place-items: center; width: 34px; height: 34px; flex: none;
               padding: 0 0 2px; border: 0; border-radius: 50%; cursor: pointer;
               background: var(--white-06); color: var(--muted);
-              font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 1;
+              font-family: 'Work Sans', sans-serif; font-size: 18px; line-height: 1;
               transition: background .15s ease, color .15s ease; }
 .vipro__arr:hover { background: var(--white-10); color: var(--white); }
 
@@ -2455,23 +2458,23 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                   right: calc(-50% - 16px); height: 1px; background: #292e42; }
 .vlvl__i:last-child::after { display: none; }
 .vlvl__card { box-sizing: border-box; width: 100%; display: flex; flex-direction: column; gap: 10px;
-              padding: 20px; border-radius: 16px; background: var(--card, #181e3b);
+              padding: 18px; border-radius: 16px; background: var(--card, #181e3b);
               border: 1px solid rgba(255, 255, 255, .05); }
 .vlvl__i.is-now .vlvl__card { border-color: rgba(7, 148, 255, .38); }
 .vlvl__chip { align-self: flex-start; }
 .vlvl__mark { display: block; width: 44px; height: 44px; }
 .vlvl__sum { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 20px; line-height: 26px; color: var(--white); }
-.vlvl__cap { margin-top: -6px; font-family: 'Work Sans', sans-serif; font-size: 12px;
-             line-height: 16px; color: var(--dp-label); }
+             font-size: 24px; line-height: 32px; color: var(--white); }
+.vlvl__cap { margin-top: -6px; font-family: 'Work Sans', sans-serif; font-size: 14px;
+             line-height: 20px; color: var(--dp-label); }
 .vlvl__perks { list-style: none; margin: 0; padding: 0;
                display: flex; flex-direction: column; gap: 8px; }
-.vlvl__perks li { position: relative; padding-left: 16px; font-family: 'Work Sans', sans-serif;
-                  font-size: 13px; line-height: 18px; color: var(--muted); }
-.vlvl__perks li::before { content: ''; position: absolute; left: 0; top: 7px;
+.vlvl__perks li { position: relative; padding-left: 18px; font-family: 'Work Sans', sans-serif;
+                  font-size: 14px; line-height: 20px; color: var(--muted); }
+.vlvl__perks li::before { content: ''; position: absolute; left: 0; top: 8px;
                           width: 5px; height: 5px; border-radius: 50%; background: var(--primary); }
-.vlvl__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 12px;
-              line-height: 17px; color: var(--dp-label); }
+.vlvl__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+              line-height: 20px; color: var(--dp-label); }
 
 /* ── привилегии ── */
 .vprv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
@@ -2479,17 +2482,17 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
            padding: 16px 18px; border-radius: 16px; background: var(--card, #181e3b); }
 .vprv__i img { display: block; width: 44px; height: 44px; flex: none; }
 .vprv__i h3 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-              font-size: 14px; line-height: 20px; color: var(--white); }
-.vprv__i p { margin: 2px 0 0; font-family: 'Work Sans', sans-serif; font-size: 12px;
-             line-height: 17px; color: var(--dp-label); }
+              font-size: 16px; line-height: 24px; color: var(--white); }
+.vprv__i p { margin: 4px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+             line-height: 20px; color: var(--dp-label); }
 
 /* ── вопросы ── */
 .vfaq { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 24px; align-items: start; }
 .vfaq__tabs { display: flex; flex-direction: column; gap: 4px; }
-.vfaq__tab { display: flex; align-items: center; height: 44px; padding: 0 18px;
+.vfaq__tab { display: flex; align-items: center; height: 48px; padding: 0 18px;
              border: 0; border-radius: 10px; background: none; cursor: pointer; text-align: left;
-             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
-             line-height: 20px; color: var(--dp-label);
+             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 16px;
+             line-height: 24px; color: var(--dp-label);
              transition: background .15s ease, color .15s ease; }
 .vfaq__tab:hover { color: var(--white); }
 .vfaq__tab.is-active { background: #1f2439; color: var(--white); }
@@ -2498,43 +2501,44 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .vfaq__list[hidden] { display: none; }
 .vfaq__q { box-sizing: border-box; padding: 16px 20px; border-radius: 12px;
            background: var(--card, #181e3b); }
-.vfaq__q summary { position: relative; display: block; padding-right: 28px; cursor: pointer;
+.vfaq__q summary { position: relative; display: block; padding-right: 32px; cursor: pointer;
                    list-style: none; font-family: 'Work Sans', sans-serif; font-weight: 600;
-                   font-size: 14px; line-height: 20px; color: var(--white); }
+                   font-size: 16px; line-height: 24px; color: var(--white); }
 .vfaq__q summary::-webkit-details-marker { display: none; }
 /* Плюс превращается в минус поворотом одной перекладины — так знак
    меняется без второй иконки */
 .vfaq__q summary::before, .vfaq__q summary::after {
-  content: ''; position: absolute; right: 4px; top: 9px; width: 12px; height: 1.5px;
+  content: ''; position: absolute; right: 4px; top: 11px; width: 13px; height: 1.5px;
   background: var(--muted); transition: transform .18s ease, opacity .18s ease; }
 .vfaq__q summary::after { transform: rotate(90deg); }
 .vfaq__q[open] summary::after { transform: rotate(0); opacity: 0; }
-.vfaq__q p { margin: 10px 0 0; font-family: 'Work Sans', sans-serif; font-size: 13px;
-             line-height: 19px; color: var(--dp-label); }
+.vfaq__q p { margin: 10px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+             line-height: 20px; color: var(--dp-label); }
 
 /* ── поддержка и условия ── */
 .vsup { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
         gap: 24px; padding: 24px; border-radius: 16px; background: var(--card, #181e3b); }
 .vsup__text h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-                 font-size: 20px; line-height: 26px; color: var(--white); }
-.vsup__text p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 13px;
-                line-height: 19px; color: var(--dp-label); }
+                 font-size: 24px; line-height: 32px; color: var(--white); }
+.vsup__text p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+                line-height: 20px; color: var(--dp-label); }
 .vsup__btns { display: flex; gap: 12px; flex: none; }
-.vsup__btn { display: grid; place-items: center; height: 44px; padding: 0 26px; flex: none;
+.vsup__btn { display: grid; place-items: center; height: 48px; padding: 0 28px; flex: none;
              border: 1px solid var(--white-10); border-radius: 10px; cursor: pointer;
              background: none; color: var(--white); font-family: 'Work Sans', sans-serif;
-             font-weight: 600; font-size: 14px; line-height: 20px;
+             font-weight: 600; font-size: 16px; line-height: 24px;
              transition: background .15s ease, border-color .15s ease; }
 .vsup__btn:hover { background: var(--white-06); }
 .vsup__btn--primary { background: var(--primary); border-color: transparent; }
 .vsup__btn--primary:hover { background: var(--primary-hover); }
 .vip__terms { align-self: center; padding: 6px 8px; border: 0; background: none; cursor: pointer;
-              font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 19px;
+              font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
               color: var(--dp-label); transition: color .15s ease; }
 .vip__terms:hover { color: var(--white); text-decoration: underline; }
 
-/* Колонка контента узкая уже при 1280: слева стоит меню на 252 */
-@media (max-width: 1279px) {
+/* Четыре в ряд только пока в карточку влезает «1,000,000 USDT+» одной
+   строкой: 24px это 222px плюс поля. Ниже — две колонки */
+@media (max-width: 1439px) {
   .vlvl { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 16px; }
   /* при двух колонках линия к «следующей» карточке ушла бы вбок через
      разрыв ряда — степпер здесь только точками */
@@ -2546,7 +2550,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 
 @media (max-width: 767px) {
   .view--vip { gap: 24px; }
-  .vip__h1 { font-size: 26px; line-height: 32px; }
+  .vip__h1 { font-size: 30px; line-height: 36px; }
   .vipro { flex-direction: column; align-items: stretch; gap: 16px;
            padding: 0; background: none; }
   .vipro__card { flex: none; padding: 18px; border-radius: 16px; }
