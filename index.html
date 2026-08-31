@@ -167,8 +167,12 @@ body {
 /* ─────────────── Шапка · 1440×74 ─────────────── */
 /* Шапка тянется на всю ширину. Зазор и правый отступ — базовые,
    значения макета включаются на брейкпоинте lg. */
+/* Шапка закреплена, а не липкая: липкая держится только в пределах своего
+   родителя, а у .page высота 2025 из макета — колонка контента абсолютная
+   и в неё не входит. На длинных страницах шапка уезжала после 2025px.
+   Ничего не смещается: остальные дети .page тоже вне потока. */
 .topbar {
-  position: sticky; top: 0;
+  position: fixed; left: 0; right: 0; top: 0;
   display: flex; align-items: center; gap: 24px;
   width: auto; height: 74px; padding-right: 20px;
   background: var(--chrome);
@@ -8523,6 +8527,469 @@ body.br-open .bnav { z-index: 66; }
            языке сайта, при её отсутствии — английская. -->
       <div class="view view--legal" id="view-legal-tc" hidden>
         <div class="lgl" data-langset>
+          <article class="lgl__doc" data-lang="en" lang="en">
+            <h1 class="lgl__h1">Terms and Conditions of Warwin</h1>
+            <dl class="lgl__meta">
+              <div><dt>Version</dt><dd>1.1</dd></div>
+              <div><dt>Effective Date</dt><dd>August 27, 2026</dd></div>
+              <div><dt>Last Updated</dt><dd>August 27, 2026</dd></div>
+              <div><dt>License</dt><dd>Anjouan Gaming License</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Terms and Conditions of Warwin">
+              <a href="#legalTc-en-s0">1. General Provisions</a>
+              <a href="#legalTc-en-s5">2. Documents Constituting Part of the Agreement</a>
+              <a href="#legalTc-en-s9">3. Player Requirements</a>
+              <a href="#legalTc-en-s14">4. Prohibited Territories</a>
+              <a href="#legalTc-en-s19">5. Account Registration</a>
+              <a href="#legalTc-en-s26">6. Identification, KYC and AML Checks</a>
+              <a href="#legalTc-en-s33">7. Account Security</a>
+              <a href="#legalTc-en-s39">8. Deposits</a>
+              <a href="#legalTc-en-s46">9. Withdrawals, Timeframes, Limits and Fees</a>
+              <a href="#legalTc-en-s68">10. Currencies and Cryptocurrency Transactions</a>
+              <a href="#legalTc-en-s72">11. Player Funds</a>
+              <a href="#legalTc-en-s77">12. Casino Games</a>
+              <a href="#legalTc-en-s82">13. Errors, Technical Failures and Game Interruption</a>
+              <a href="#legalTc-en-s89">14. Bonuses and Promotions</a>
+              <a href="#legalTc-en-s96">15. Prohibited Actions</a>
+              <a href="#legalTc-en-s101">16. Account Review and Temporary Blocking</a>
+              <a href="#legalTc-en-s106">17. Account Closure</a>
+              <a href="#legalTc-en-s111">18. Inactive Accounts</a>
+              <a href="#legalTc-en-s115">19. Responsible Gaming (RG Tools)</a>
+              <a href="#legalTc-en-s124">20. Personal Data, Record Keeping and Communications</a>
+              <a href="#legalTc-en-s130">21. Complaints and Dispute Resolution</a>
+              <a href="#legalTc-en-s137">22. Intellectual Property</a>
+              <a href="#legalTc-en-s140">23. Third-Party Services</a>
+              <a href="#legalTc-en-s143">24. Taxes</a>
+              <a href="#legalTc-en-s146">25. Service Availability and Force Majeure</a>
+              <a href="#legalTc-en-s151">26. Limitation of Liability</a>
+              <a href="#legalTc-en-s157">27. Amendments to the Agreement</a>
+              <a href="#legalTc-en-s161">28. Language of Documents</a>
+              <a href="#legalTc-en-s163">29. Governing Law and Dispute Resolution</a>
+              <a href="#legalTc-en-s174">30. Final Provisions</a>
+              <a href="#legalTc-en-s180">31. Contact Information</a>
+              <a href="#legalTc-en-s182">32. Acceptance of the Agreement</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalTc-en-s0">1. General Provisions</h2>
+              <p>These Terms and&nbsp;Conditions (hereinafter referred to&nbsp;as the&nbsp;"Agreement") govern access to&nbsp;the website warwin.casino, its mobile version, applications, games, betting, promotions, payment functions and&nbsp;other services provided under the&nbsp;Warwin brand (hereinafter referred to&nbsp;as the&nbsp;"Services").</p>
+              <p>The&nbsp;Services are provided by&nbsp;WarWin Group International Ltd, registered under number 000054736 at&nbsp;San Victor Street, Orange Walk Town, Belize (hereinafter referred to&nbsp;as "Warwin", "Company", "we", "us" or&nbsp;"our").</p>
+              <p>Warwin operates through the&nbsp;domain warwin.casino under an&nbsp;Anjouan Gaming License issued by&nbsp;Anjouan Licensing Services Inc. and&nbsp;regulated by&nbsp;the Anjouan Gaming Authority. The&nbsp;existence of&nbsp;a license does not override or&nbsp;replace the&nbsp;requirements of&nbsp;local law applicable to&nbsp;the player at&nbsp;their place of&nbsp;actual residence.</p>
+              <p>By&nbsp;registering an&nbsp;account, using the&nbsp;Services or&nbsp;placing a&nbsp;bet, you&nbsp;confirm that you&nbsp;have read, understood and&nbsp;unconditionally accepted this Agreement. If&nbsp;you do not agree with any provision, you&nbsp;are not entitled to&nbsp;create an&nbsp;account or&nbsp;use the&nbsp;Services.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s5">2. Documents Constituting Part of the Agreement</h2>
+              <p>This Agreement also includes the&nbsp;following documents:</p>
+              <ul class="lgl__ul">
+                <li>Privacy Policy;</li>
+                <li>Cookie Policy;</li>
+                <li>Responsible Gaming Policy;</li>
+                <li>AML and&nbsp;KYC Policy;</li>
+                <li>Bonus and&nbsp;Promotional Terms;</li>
+                <li>Individual Game Rules, Payout Tables and&nbsp;Instructions;</li>
+                <li>Sports Betting Rules (if&nbsp;applicable);</li>
+                <li>Special Terms displayed prior to&nbsp;participation in&nbsp;a promotion or&nbsp;placement of&nbsp;a bet.</li>
+              </ul>
+              <p>In&nbsp;the event of&nbsp;any conflict between this Agreement and&nbsp;the special rules, the&nbsp;special rules shall prevail, but only with respect to&nbsp;the relevant game, bet or&nbsp;promotion.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s9">3. Player Requirements</h2>
+              <p>A&nbsp;Warwin account may only be created and&nbsp;used by&nbsp;a person who simultaneously meets all of&nbsp;the following conditions:</p>
+              <ul class="lgl__ul">
+                <li>Has reached the&nbsp;age of&nbsp;18 (or&nbsp;the higher minimum age for&nbsp;gambling established by&nbsp;the laws of&nbsp;the country of&nbsp;actual residence);</li>
+                <li>Has full legal capacity to&nbsp;enter into a&nbsp;legally binding agreement;</li>
+                <li>Participation in&nbsp;online gambling is&nbsp;not prohibited by&nbsp;the laws of&nbsp;the country of&nbsp;actual residence, presence or&nbsp;citizenship;</li>
+                <li>Is&nbsp;not located in&nbsp;a jurisdiction included in&nbsp;the list of&nbsp;prohibited jurisdictions (Section 4);</li>
+                <li>Is&nbsp;not subject to&nbsp;self-exclusion, a&nbsp;court order or&nbsp;any other restriction on&nbsp;gambling participation;</li>
+                <li>The&nbsp;information provided during registration is&nbsp;complete, accurate and&nbsp;up to&nbsp;date;</li>
+                <li>Acts solely in&nbsp;their own name and&nbsp;not on&nbsp;behalf of&nbsp;a third party or&nbsp;in the&nbsp;interests of&nbsp;another person.</li>
+              </ul>
+              <p>The&nbsp;player is&nbsp;solely responsible for&nbsp;verifying that the&nbsp;use of&nbsp;the Services complies with the&nbsp;laws of&nbsp;their country, province, state or&nbsp;other applicable jurisdiction. Warwin does not advise players on&nbsp;matters of&nbsp;applicable local law.</p>
+              <p>Warwin reserves the&nbsp;right to&nbsp;request proof of&nbsp;age, identity, address and&nbsp;actual location at&nbsp;any time. If&nbsp;a minor or&nbsp;a person who does not meet the&nbsp;requirements is&nbsp;identified, the&nbsp;account will be blocked, deposits will be returned (without winnings), and&nbsp;information about the&nbsp;violation may be reported to&nbsp;the competent authorities.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s14">4. Prohibited Territories</h2>
+              <p>The&nbsp;Services are not available to&nbsp;persons located, residing or&nbsp;holding citizenship in&nbsp;the following countries and&nbsp;territories where online casinos are prohibited or&nbsp;require a&nbsp;local license that Warwin does not hold:</p>
+              <ul class="lgl__ul">
+                <li>United States of&nbsp;America (all states and&nbsp;territories without exception);</li>
+                <li>Australia;</li>
+                <li>China, including Hong Kong and&nbsp;Macau;</li>
+                <li>Japan;</li>
+                <li>Singapore;</li>
+                <li>South Korea;</li>
+                <li>Thailand;</li>
+                <li>Vietnam, Cambodia, Laos, Myanmar;</li>
+                <li>Indonesia, Malaysia, Brunei;</li>
+                <li>Bangladesh, Bhutan, Maldives, Nepal;</li>
+                <li>India;</li>
+                <li>Pakistan, Afghanistan;</li>
+                <li>United Arab Emirates, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman;</li>
+                <li>Iran, Iraq, Yemen, Syria, Jordan, Lebanon, Israel;</li>
+                <li>North Korea;</li>
+                <li>Turkmenistan, Uzbekistan, Tajikistan;</li>
+                <li>Cuba;</li>
+                <li>Albania, Iceland;</li>
+                <li>New Zealand;</li>
+                <li>Finland, Norway;</li>
+                <li>United Kingdom;</li>
+                <li>Sweden, Denmark, Netherlands, Belgium, Germany;</li>
+                <li>Italy, Spain, Portugal, Greece, Switzerland;</li>
+                <li>France;</li>
+                <li>Poland;</li>
+                <li>Austria;</li>
+                <li>Ireland;</li>
+                <li>Estonia, Latvia, Lithuania;</li>
+                <li>Colombia;</li>
+                <li>Chile;</li>
+                <li>Any other jurisdiction where the&nbsp;provision of&nbsp;online gambling is&nbsp;prohibited or&nbsp;requires a&nbsp;local license that Warwin does not hold.</li>
+              </ul>
+              <p>Warwin uses location detection technologies (IP analysis, geolocation, registration data) to&nbsp;monitor compliance with territorial restrictions. Warwin reserves the&nbsp;right to&nbsp;supplement or&nbsp;modify the&nbsp;list of&nbsp;prohibited jurisdictions at&nbsp;any time without prior notice. The&nbsp;current list is&nbsp;published on&nbsp;the website warwin.casino.</p>
+              <p class="lgl__note">The&nbsp;use of&nbsp;VPNs, proxy servers, false addresses, location concealment technologies or&nbsp;any other means to&nbsp;circumvent territorial restrictions is&nbsp;prohibited. If&nbsp;such actions are detected, the&nbsp;account will be immediately blocked, funds will be confiscated and&nbsp;winnings will be annulled without the&nbsp;right to&nbsp;a refund.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s19">5. Account Registration</h2>
+              <p>Each player is&nbsp;entitled to&nbsp;have only one personal Warwin account. Creating multiple accounts by&nbsp;one person (multi-accounting) is&nbsp;prohibited and&nbsp;constitutes a&nbsp;material breach of&nbsp;this Agreement.</p>
+              <p>During registration, the&nbsp;following current and&nbsp;accurate information must be provided:</p>
+              <ul class="lgl__ul">
+                <li>full name (as&nbsp;shown on&nbsp;the identity document);</li>
+                <li>date of&nbsp;birth;</li>
+                <li>address of&nbsp;actual residence;</li>
+                <li>valid email address;</li>
+                <li>mobile phone number;</li>
+                <li>other information reasonably requested by&nbsp;Warwin.</li>
+              </ul>
+              <p>If&nbsp;the provided information changes, the&nbsp;player must promptly update it&nbsp;in their account. Warwin reserves the&nbsp;right to&nbsp;temporarily restrict account functionality until outdated or&nbsp;contradictory information is&nbsp;corrected.</p>
+              <p>The&nbsp;account is&nbsp;strictly personal. It&nbsp;is prohibited to&nbsp;sell, transfer, lease, share or&nbsp;otherwise allow another person to&nbsp;use the&nbsp;account.</p>
+              <p>The&nbsp;use of&nbsp;a shared device, home address or&nbsp;internet connection is&nbsp;not in&nbsp;itself a&nbsp;violation. However, Warwin reserves the&nbsp;right to&nbsp;conduct additional verification if&nbsp;multiple accounts are linked or&nbsp;if there are reasonable signs of&nbsp;fraud, collusion or&nbsp;bonus abuse.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s26">6. Identification, KYC and AML Checks</h2>
+              <p>Warwin is&nbsp;required to&nbsp;verify the&nbsp;identity of&nbsp;players, take measures to&nbsp;prevent money laundering and&nbsp;combat fraud. KYC verification is&nbsp;a mandatory condition for&nbsp;withdrawals.</p>
+              <p>Warwin may request the&nbsp;following documents and&nbsp;information:</p>
+              <ul class="lgl__ul">
+                <li>Identity document (passport, ID card, driver’s license);</li>
+                <li>Proof of&nbsp;address (utility bill, bank statement, tax notice&nbsp;— not older than 3 months);</li>
+                <li>Proof of&nbsp;age;</li>
+                <li>Proof of&nbsp;ownership of&nbsp;the payment method (photo of&nbsp;card with masked digits, screenshot of&nbsp;e-wallet, statement);</li>
+                <li>Source of&nbsp;Funds information when total deposits exceed the&nbsp;equivalent of&nbsp;10,000 USD;</li>
+                <li>Photograph, selfie with document or&nbsp;video verification;</li>
+                <li>Explanations regarding individual deposits, withdrawals or&nbsp;other suspicious account activity.</li>
+              </ul>
+              <p>Documents must be valid, legible, genuine and&nbsp;belong to&nbsp;the account owner. Providing false, altered, stolen or&nbsp;misleading documents constitutes a&nbsp;material breach, resulting in&nbsp;immediate account blocking and&nbsp;confiscation of&nbsp;all funds without the&nbsp;right to&nbsp;a refund.</p>
+              <p>Until the&nbsp;necessary checks are completed, Warwin may apply proportionate restrictions: freeze deposits, bets, bonuses or&nbsp;withdrawals. Withdrawals may be delayed for&nbsp;an indefinite period if&nbsp;additional verification or&nbsp;investigation is&nbsp;required.</p>
+              <p>Where there is&nbsp;a legal basis, Warwin may report suspicions of&nbsp;fraud, money laundering, terrorist financing or&nbsp;other unlawful activity to&nbsp;the competent authorities. The&nbsp;law may prohibit the&nbsp;Company from informing the&nbsp;player that such a&nbsp;report has been made.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s33">7. Account Security</h2>
+              <p>The&nbsp;player bears full responsibility for&nbsp;maintaining the&nbsp;confidentiality of&nbsp;their login, password, PIN code, two-factor authentication data and&nbsp;other credentials.</p>
+              <p>The&nbsp;player must immediately notify Warwin at&nbsp;<a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a> if:</p>
+              <ul class="lgl__ul">
+                <li>Another person has gained access to&nbsp;the account;</li>
+                <li>The&nbsp;password or&nbsp;device may have been compromised;</li>
+                <li>A&nbsp;transaction was made without the&nbsp;player’s authorization;</li>
+                <li>The&nbsp;registered email or&nbsp;phone number is&nbsp;no longer secure.</li>
+              </ul>
+              <p>Warwin may temporarily restrict the&nbsp;account during the&nbsp;investigation of&nbsp;a security incident. Restoration of&nbsp;access may require a&nbsp;password change or&nbsp;additional verification.</p>
+              <p class="lgl__note">Warwin never requests a&nbsp;full password, CVV code, full card number or&nbsp;cryptocurrency wallet private keys via email, messengers or&nbsp;social networks. Any such request is&nbsp;fraudulent, and&nbsp;the player must immediately report it&nbsp;to customer support.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s39">8. Deposits</h2>
+              <p>Deposits must be made using a&nbsp;payment method belonging to&nbsp;the account owner. The&nbsp;use of&nbsp;third-party payment details is&nbsp;prohibited and&nbsp;constitutes fraud.</p>
+              <p>Available payment methods, currencies, limits, fees and&nbsp;estimated processing times are displayed in&nbsp;the Cashier prior to&nbsp;confirming the&nbsp;transaction. Warwin reserves the&nbsp;right to&nbsp;change the&nbsp;list of&nbsp;available methods without prior notice.</p>
+              <p class="lgl__note">IMPORTANT: If&nbsp;funds are withdrawn before the&nbsp;deposited amount has been wagered at&nbsp;least 1 (one) time, a&nbsp;fee of&nbsp;10% of&nbsp;the withdrawal amount will be charged (anti-money-laundering fee). This condition is&nbsp;displayed in&nbsp;the withdrawal interface and&nbsp;is applied automatically.</p>
+              <p>A&nbsp;deposit may be declined, returned or&nbsp;sent for&nbsp;additional review if:</p>
+              <ul class="lgl__ul">
+                <li>The&nbsp;payment details do not match the&nbsp;account owner’s information;</li>
+                <li>The&nbsp;transaction is&nbsp;incomplete or&nbsp;cannot be confirmed by&nbsp;the payment provider;</li>
+                <li>The&nbsp;operation creates a&nbsp;legal, regulatory or&nbsp;fraud risk;</li>
+                <li>The&nbsp;payment method belongs to&nbsp;a prohibited jurisdiction;</li>
+                <li>There are signs of&nbsp;money laundering or&nbsp;transaction structuring.</li>
+              </ul>
+              <p>Making a&nbsp;deposit does not guarantee the&nbsp;ability to&nbsp;withdraw it&nbsp;immediately. Warwin may pre-verify the&nbsp;player’s identity, ownership of&nbsp;the payment method and&nbsp;the legitimacy of&nbsp;the transaction origin. A&nbsp;Warwin account is&nbsp;not a&nbsp;bank account and&nbsp;must not be used for&nbsp;money transfers, currency exchange, cryptocurrency exchange or&nbsp;investment activities.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s46">9. Withdrawals, Timeframes, Limits and Fees</h2>
+              <p>Withdrawal of&nbsp;the available cash balance is&nbsp;possible through the&nbsp;Cashier subject to&nbsp;the following mandatory conditions:</p>
+              <ul class="lgl__ul">
+                <li>Full KYC verification has been successfully completed (identification, payment method verification);</li>
+                <li>Applicable withdrawal limits are observed (see below);</li>
+                <li>There are no&nbsp;unsettled bets, unconfirmed transactions or&nbsp;active bonus obligations;</li>
+                <li>All necessary AML and&nbsp;antifraud checks have been completed;</li>
+                <li>There are no&nbsp;legal, regulatory or&nbsp;internal restrictions on&nbsp;the account.</li>
+              </ul>
+              <h3 class="lgl__h3">9.1. Withdrawal Processing Timeframes</h3>
+              <p>Warwin endeavors to&nbsp;process fully submitted withdrawal requests within 24–72 hours from the&nbsp;receipt of&nbsp;all requested documents and&nbsp;information. This timeframe is&nbsp;indicative and&nbsp;not a&nbsp;binding obligation. During periods of&nbsp;high load, technical maintenance or&nbsp;when additional checks are required, the&nbsp;processing time may be extended without prior notice.</p>
+              <p>The&nbsp;crediting time to&nbsp;the payment instrument depends on&nbsp;the chosen method: cryptocurrency and e-wallets&nbsp;— from instant to&nbsp;24 hours; bank transfers and cards&nbsp;— from 3 to&nbsp;10 banking days. These timeframes are beyond Warwin’s direct control.</p>
+              <h3 class="lgl__h3">9.2. Withdrawal Limits</h3>
+              <p>Limits depend on&nbsp;the verification level, player status and&nbsp;the chosen withdrawal method:</p>
+              <div class="hc__tablewrap">
+                <table class="hc__table hc__table--tight">
+                  <thead><tr><th>Level</th><th>Daily limit</th><th>Weekly limit</th><th>Monthly limit</th></tr></thead>
+                  <tbody>
+                    <tr><td>Standard (basic KYC)</td><td>€/$ 2,000</td><td>€/$ 5,000</td><td>€/$ 20,000</td></tr>
+                    <tr><td>Enhanced (full KYC)</td><td>€/$ 5,000</td><td>€/$ 15,000</td><td>€/$ 50,000</td></tr>
+                    <tr><td>VIP (at Warwin’s discretion)</td><td>€/$ 10,000</td><td>€/$ 30,000</td><td>€/$ 100,000</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>The&nbsp;minimum withdrawal amount is&nbsp;€/$ 20 (twenty) or&nbsp;the equivalent in&nbsp;the selected currency. Warwin reserves the&nbsp;right to&nbsp;set individual limits for&nbsp;a particular player without giving reasons. In&nbsp;the event of&nbsp;a progressive jackpot win, payment may be made in&nbsp;instalments over 12 months at&nbsp;Warwin’s discretion.</p>
+              <h3 class="lgl__h3">9.3. Fees</h3>
+              <p>Warwin does not charge a&nbsp;fee for&nbsp;processing a&nbsp;standard withdrawal. However, fees may be deducted in&nbsp;the following cases:</p>
+              <ul class="lgl__ul">
+                <li>By&nbsp;the payment provider, bank or&nbsp;cryptocurrency network&nbsp;— in&nbsp;the amount set by&nbsp;the third party;</li>
+                <li>On&nbsp;currency conversion&nbsp;— at&nbsp;the payment system rate or&nbsp;at the&nbsp;market rate with a&nbsp;margin of&nbsp;up to&nbsp;3%;</li>
+                <li>On&nbsp;withdrawal to&nbsp;details that do not match the&nbsp;deposit method (where reverse withdrawal is&nbsp;not possible)&nbsp;— in&nbsp;the amount of&nbsp;the direct processing costs, but no&nbsp;more than 5% of&nbsp;the amount;</li>
+                <li>On&nbsp;withdrawal before the&nbsp;deposit has been wagered at&nbsp;least 1 (one) time&nbsp;— a&nbsp;fee of&nbsp;10% of&nbsp;the withdrawal amount is&nbsp;charged (anti-money-laundering fee).</li>
+              </ul>
+              <p>All fees are displayed in&nbsp;the withdrawal interface before the&nbsp;transaction is&nbsp;confirmed. The&nbsp;player must review the&nbsp;total amount to&nbsp;be credited before confirming the&nbsp;operation.</p>
+              <h3 class="lgl__h3">9.4. Withdrawal Procedure</h3>
+              <p>Withdrawals are available only to&nbsp;a payment instrument registered in&nbsp;the name of&nbsp;the account owner. Withdrawal to&nbsp;third-party details is&nbsp;strictly prohibited and&nbsp;constitutes fraud.</p>
+              <p>Where possible, funds are withdrawn to&nbsp;the same payment method that was used for&nbsp;the deposit (reverse withdrawal rule). Warwin may request another verified withdrawal method if&nbsp;the original method does not support withdrawals or&nbsp;if its use is&nbsp;impossible for&nbsp;security reasons.</p>
+              <h3 class="lgl__h3">9.5. Cancellation and Rejection of a Withdrawal</h3>
+              <p>Until the&nbsp;funds are actually sent, the&nbsp;player may cancel the&nbsp;withdrawal request through the&nbsp;personal cabinet. Once processed, a&nbsp;withdrawal is&nbsp;irreversible.</p>
+              <p>Warwin may reject or&nbsp;suspend a&nbsp;withdrawal in&nbsp;the following cases:</p>
+              <ul class="lgl__ul">
+                <li>Verification is&nbsp;incomplete or&nbsp;has raised questions;</li>
+                <li>There is&nbsp;an active bonus with unfulfilled wagering requirements;</li>
+                <li>Suspicion of&nbsp;fraud, multi-accounting, bonus abuse or&nbsp;collusion;</li>
+                <li>Breach of&nbsp;this Agreement by&nbsp;the player;</li>
+                <li>Technical failures, force majeure or&nbsp;requirements of&nbsp;the competent authorities;</li>
+                <li>The&nbsp;requested withdrawal amount exceeds the&nbsp;established limit&nbsp;— in&nbsp;this case the&nbsp;player may resubmit a&nbsp;request for&nbsp;an amount within the&nbsp;limit.</li>
+              </ul>
+              <p>If&nbsp;a withdrawal is&nbsp;rejected, Warwin will state the&nbsp;reason through the&nbsp;personal cabinet or&nbsp;by email, except where disclosure of&nbsp;such information is&nbsp;prohibited by&nbsp;law or&nbsp;may impede an&nbsp;investigation.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s68">10. Currencies and Cryptocurrency Transactions</h2>
+              <p>An&nbsp;account may support one or&nbsp;more of&nbsp;the currencies available on&nbsp;the Warwin platform. If&nbsp;conversion is&nbsp;required to&nbsp;carry out a&nbsp;transaction, the&nbsp;applicable rate and&nbsp;any fee are displayed or&nbsp;explained before the&nbsp;operation is&nbsp;confirmed.</p>
+              <p>Crediting a&nbsp;cryptocurrency transaction may require a&nbsp;certain number of&nbsp;blockchain confirmations. Warwin does not control blockchain network fees, network congestion, changes in&nbsp;the value of&nbsp;cryptocurrency, the&nbsp;processing of&nbsp;a transaction by&nbsp;a third-party wallet or&nbsp;exchange, or&nbsp;the consequences of&nbsp;specifying an&nbsp;incorrect address or&nbsp;network.</p>
+              <p>Before confirming a&nbsp;transaction, the&nbsp;player must check the&nbsp;wallet address, the&nbsp;selected network and&nbsp;the type of&nbsp;cryptocurrency. Transactions sent to&nbsp;an incorrect address or&nbsp;through an&nbsp;incompatible network are irreversible. Warwin is&nbsp;not responsible for&nbsp;the loss of&nbsp;funds resulting from a&nbsp;player’s error when entering payment details.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s72">11. Player Funds</h2>
+              <p>Player funds are accounted for&nbsp;in accordance with Warwin’s internal policy. A&nbsp;Warwin account is&nbsp;not a&nbsp;bank account, is&nbsp;not insured and&nbsp;does not accrue interest.</p>
+              <p>The&nbsp;account balance may consist of:</p>
+              <ul class="lgl__ul">
+                <li>Real money (deposits, non-bonus winnings);</li>
+                <li>Bonus funds (funds credited under promotions and&nbsp;subject to&nbsp;wagering);</li>
+                <li>Funds pending withdrawal (frozen while the&nbsp;request is&nbsp;processed);</li>
+                <li>Funds relating to&nbsp;unsettled bets.</li>
+              </ul>
+              <p>Each category of&nbsp;funds is&nbsp;indicated in&nbsp;the player’s account. Bonus funds may not be withdrawn until the&nbsp;wagering conditions are met. The&nbsp;deposit balance is&nbsp;available for&nbsp;withdrawal at&nbsp;any time, except where withdrawal is&nbsp;blocked in&nbsp;accordance with this Agreement.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s77">12. Casino Games</h2>
+              <p>Each game is&nbsp;governed by&nbsp;its own rules, payout table and&nbsp;technical information. Before placing a&nbsp;bet, the&nbsp;player must review this information.</p>
+              <p>Warwin provides information on:</p>
+              <ul class="lgl__ul">
+                <li>The&nbsp;objective and&nbsp;rules of&nbsp;the game;</li>
+                <li>Permitted bet sizes;</li>
+                <li>Possible payouts and&nbsp;odds;</li>
+                <li>The&nbsp;return to&nbsp;player (RTP) rate;</li>
+                <li>Jackpot conditions;</li>
+                <li>Special game features and&nbsp;bonus rounds.</li>
+              </ul>
+              <p>Game results are generated or&nbsp;recorded by&nbsp;the game servers of&nbsp;Warwin or&nbsp;of certified providers. If&nbsp;the visual animation on&nbsp;the player’s device differs from the&nbsp;result recorded by&nbsp;the server, the&nbsp;server record confirmed by&nbsp;technical logs shall prevail.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s82">13. Errors, Technical Failures and Game Interruption</h2>
+              <p>Warwin takes reasonable measures to&nbsp;ensure the&nbsp;accuracy of&nbsp;odds, balances, game information and&nbsp;results. Nevertheless, technical or&nbsp;human errors are occasionally possible.</p>
+              <p>A&nbsp;technical failure, an&nbsp;incorrect payout table, a&nbsp;duplicate credit, an&nbsp;obviously erroneous odd, an&nbsp;incorrect settlement or&nbsp;any other manifest error does not entitle the&nbsp;player to&nbsp;an unintended benefit. Once an&nbsp;error is&nbsp;confirmed, Warwin takes reasonable measures to&nbsp;restore the&nbsp;position of&nbsp;the parties that would have existed had the&nbsp;error not occurred. Such measures may include:</p>
+              <ul class="lgl__ul">
+                <li>Correcting the&nbsp;balance (including debiting funds credited in&nbsp;error);</li>
+                <li>Re-settling the&nbsp;bet at&nbsp;the correct odds;</li>
+                <li>Cancelling the&nbsp;affected transaction;</li>
+                <li>Paying the&nbsp;amount actually due to&nbsp;the player.</li>
+              </ul>
+              <p>A&nbsp;minor error that did not affect the&nbsp;outcome is&nbsp;not grounds for&nbsp;confiscating lawfully obtained funds. Any decision must be proportionate and&nbsp;supported by&nbsp;system records.</p>
+              <h3 class="lgl__h3">13.1. Game Interruption and Loss of Connection</h3>
+              <p>If&nbsp;a game is&nbsp;interrupted due to&nbsp;loss of&nbsp;connection, a&nbsp;device failure or&nbsp;a technical fault, the&nbsp;result is&nbsp;determined by&nbsp;the game server record. Upon logging back into the&nbsp;account, an&nbsp;unfinished game may be resumed from the&nbsp;point of&nbsp;interruption or&nbsp;settled automatically according to&nbsp;the server record. If&nbsp;resumption is&nbsp;impossible, the&nbsp;bet is&nbsp;returned to&nbsp;the player and&nbsp;the winnings are annulled. Warwin is&nbsp;not responsible for&nbsp;loss of&nbsp;connection on&nbsp;the player’s side (problems with the&nbsp;internet, device or&nbsp;power supply).</p>
+              <h2 class="lgl__h2" id="legalTc-en-s89">14. Bonuses and Promotions</h2>
+              <p>Participation in&nbsp;bonuses and&nbsp;promotions is&nbsp;voluntary. Before a&nbsp;bonus is&nbsp;accepted, Warwin provides the&nbsp;material terms of&nbsp;the offer, including:</p>
+              <ul class="lgl__ul">
+                <li>Eligibility requirements and&nbsp;the minimum deposit amount;</li>
+                <li>Wagering requirements and&nbsp;the contribution of&nbsp;individual games;</li>
+                <li>The&nbsp;maximum permitted bet while a&nbsp;bonus is&nbsp;active;</li>
+                <li>The&nbsp;validity period of&nbsp;the bonus;</li>
+                <li>Withdrawal restrictions and&nbsp;the maximum bonus conversion amount;</li>
+                <li>Excluded payment methods, games and&nbsp;territories.</li>
+              </ul>
+              <p>The&nbsp;terms of&nbsp;a promotion already accepted by&nbsp;a player may not be changed retroactively to&nbsp;the player’s detriment, except where the&nbsp;change is&nbsp;required by&nbsp;law or&nbsp;is necessary to&nbsp;correct a&nbsp;genuine technical error.</p>
+              <p>The&nbsp;following is&nbsp;considered bonus abuse:</p>
+              <ul class="lgl__ul">
+                <li>Using linked accounts to&nbsp;claim the&nbsp;same offer repeatedly;</li>
+                <li>Manipulating identification data;</li>
+                <li>Placing opposing bets (hedging) to&nbsp;guarantee the&nbsp;completion of&nbsp;wagering;</li>
+                <li>Exploiting a&nbsp;technical fault;</li>
+                <li>Registering multiple accounts to&nbsp;claim a&nbsp;single limited offer;</li>
+                <li>Any other action aimed at&nbsp;obtaining an&nbsp;unintended benefit by&nbsp;circumventing the&nbsp;terms of&nbsp;a promotion.</li>
+              </ul>
+              <p>If&nbsp;bonus abuse is&nbsp;detected, Warwin may annul the&nbsp;bonus and&nbsp;any related winnings, close the&nbsp;account and&nbsp;confiscate funds obtained as&nbsp;a result of&nbsp;the abuse, without the&nbsp;right to&nbsp;a refund. Using an&nbsp;ordinary playing strategy or&nbsp;winning a&nbsp;large amount is&nbsp;not in&nbsp;itself abuse.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s96">15. Prohibited Actions</h2>
+              <p>Players are strictly prohibited from:</p>
+              <ul class="lgl__ul">
+                <li>Using false, stolen or&nbsp;third-party personal and&nbsp;payment data;</li>
+                <li>Creating multiple accounts without the&nbsp;written permission of&nbsp;Warwin;</li>
+                <li>Engaging in&nbsp;fraud, collusion, money laundering or&nbsp;payment manipulation;</li>
+                <li>Using bots, scripts, auto-clickers or&nbsp;other unauthorized automated tools;</li>
+                <li>Interfering with the&nbsp;operation of&nbsp;Warwin’s systems, servers or&nbsp;security mechanisms;</li>
+                <li>Knowingly exploiting a&nbsp;technical error, failure or&nbsp;vulnerability;</li>
+                <li>Manipulating games, betting markets or&nbsp;sporting events;</li>
+                <li>Selling, transferring, buying or&nbsp;exchanging Warwin accounts;</li>
+                <li>Initiating unjustified chargebacks, payment disputes or&nbsp;claims against payment providers;</li>
+                <li>Threatening Warwin employees, insulting them or&nbsp;other players, or&nbsp;using aggressive, threatening or&nbsp;systematically abusive language in&nbsp;communications;</li>
+                <li>Using the&nbsp;Services for&nbsp;unlawful purposes, including terrorist financing;</li>
+                <li>Circumventing territorial restrictions, responsible gaming limits or&nbsp;an account block by&nbsp;any means, including VPN, proxy or&nbsp;data substitution.</li>
+              </ul>
+              <p>Before taking a&nbsp;decision, Warwin considers the&nbsp;available evidence and&nbsp;the severity and&nbsp;persistence of&nbsp;the violation. Depending on&nbsp;the circumstances, Warwin may:</p>
+              <ul class="lgl__ul">
+                <li>Reverse a&nbsp;benefit obtained unlawfully;</li>
+                <li>Annul the&nbsp;affected transactions and&nbsp;winnings;</li>
+                <li>Restrict account functionality (including freezing withdrawals);</li>
+                <li>Close the&nbsp;account and&nbsp;confiscate funds obtained as&nbsp;a result of&nbsp;the violation;</li>
+                <li>Notify the&nbsp;competent regulatory or&nbsp;law enforcement authorities;</li>
+                <li>Add the&nbsp;player to&nbsp;a shared operator stop-list.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalTc-en-s101">16. Account Review and Temporary Blocking</h2>
+              <p>Warwin may temporarily restrict an&nbsp;account where this is&nbsp;reasonably necessary in&nbsp;order to:</p>
+              <ul class="lgl__ul">
+                <li>Verify identity, age, location or&nbsp;ownership of&nbsp;the payment method;</li>
+                <li>Investigate possible fraud or&nbsp;prohibited actions;</li>
+                <li>Protect the&nbsp;account against unauthorized access;</li>
+                <li>Comply with a&nbsp;requirement of&nbsp;law, a&nbsp;court or&nbsp;a government authority;</li>
+                <li>Carry out an&nbsp;AML check or&nbsp;a responsible gaming review;</li>
+                <li>Correct a&nbsp;technical or&nbsp;accounting error.</li>
+              </ul>
+              <p>Where permitted by&nbsp;law, Warwin states the&nbsp;general reason for&nbsp;the restriction and&nbsp;specifies which documents or&nbsp;information must be provided to&nbsp;have the&nbsp;block lifted. The&nbsp;restriction remains in&nbsp;force for&nbsp;the time reasonably necessary to&nbsp;complete the&nbsp;review. Warwin does not guarantee specific timeframes for&nbsp;lifting a&nbsp;block.</p>
+              <p>Lawful and&nbsp;undisputed funds are not confiscated solely because of&nbsp;a temporary block, provided the&nbsp;player has not breached this Agreement. Where a&nbsp;breach is&nbsp;suspected, withdrawals may be blocked until the&nbsp;investigation is&nbsp;completed, with no&nbsp;time limit.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s106">17. Account Closure</h2>
+              <p>A&nbsp;player may request closure of&nbsp;their account by&nbsp;contacting customer support at&nbsp;<a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a>. Before closure, Warwin may require identification and&nbsp;the completion of&nbsp;pending transactions. The&nbsp;balance available for&nbsp;withdrawal is&nbsp;returned via a&nbsp;verified payment method, subject to&nbsp;the requirements of&nbsp;the law.</p>
+              <p>Warwin may close an&nbsp;account immediately if:</p>
+              <ul class="lgl__ul">
+                <li>There is&nbsp;evidence of&nbsp;fraud, serious abuse or&nbsp;systematic violations;</li>
+                <li>Further provision of&nbsp;the Services would breach the&nbsp;law or&nbsp;license requirements;</li>
+                <li>Closure is&nbsp;required by&nbsp;a regulator, a&nbsp;payment provider or&nbsp;a competent court;</li>
+                <li>The&nbsp;account creates a&nbsp;material security or&nbsp;AML risk;</li>
+                <li>The&nbsp;player has seriously or&nbsp;repeatedly breached this Agreement;</li>
+                <li>The&nbsp;player circumvents territorial restrictions or&nbsp;responsible gaming tools.</li>
+              </ul>
+              <p>Where an&nbsp;account is&nbsp;closed on&nbsp;Warwin’s initiative in&nbsp;connection with a&nbsp;breach of&nbsp;the Agreement, Warwin may withhold amounts obtained by&nbsp;the player as&nbsp;a result of&nbsp;the breach (including bonuses, winnings from bonuses and&nbsp;unlawfully obtained funds). The&nbsp;deposit balance unrelated to&nbsp;the breach is&nbsp;subject to&nbsp;return via a&nbsp;verified payment method, less any applicable fees. Closure of&nbsp;an account does not terminate rights and&nbsp;obligations that arose before the&nbsp;closure date.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s111">18. Inactive Accounts</h2>
+              <p>An&nbsp;account is&nbsp;deemed inactive if&nbsp;the player has not logged in&nbsp;and has not carried out any transactions for&nbsp;12 (twelve) months.</p>
+              <p>After 18 (eighteen) months of&nbsp;inactivity, Warwin may charge an&nbsp;administrative fee of&nbsp;5% of&nbsp;the account balance per month, but no&nbsp;more than €/$ 50 (fifty) per month. If&nbsp;the balance is&nbsp;below €/$ 5 (five), the&nbsp;account may be closed and&nbsp;the remaining balance annulled.</p>
+              <p>Before the&nbsp;fee is&nbsp;charged, Warwin sends advance notice to&nbsp;the registered email address. To&nbsp;prevent the&nbsp;charge, it&nbsp;is sufficient to&nbsp;log in&nbsp;to the&nbsp;account or&nbsp;carry out any transaction.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s115">19. Responsible Gaming (RG Tools)</h2>
+              <p>Warwin is&nbsp;intended solely for&nbsp;entertainment. Gambling should not be regarded as&nbsp;a source of&nbsp;regular income or&nbsp;a means of&nbsp;investment. Warwin provides the&nbsp;following self-control tools (subject to&nbsp;technical availability):</p>
+              <ul class="lgl__ul">
+                <li>Deposit limits (daily, weekly, monthly);</li>
+                <li>Bet or&nbsp;loss limits;</li>
+                <li>Gaming session duration limits;</li>
+                <li>Temporary break (cooling-off)&nbsp;— from 24 hours to&nbsp;30 days;</li>
+                <li>Self-exclusion&nbsp;— from 6 months to&nbsp;indefinite;</li>
+                <li>Access to&nbsp;account and&nbsp;transaction history;</li>
+                <li>Reality checks (pop-up notifications about time spent playing and&nbsp;amounts wagered).</li>
+              </ul>
+              <h3 class="lgl__h3">19.1. How Limits Are Applied</h3>
+              <p>A&nbsp;reduction of&nbsp;limits is&nbsp;applied immediately. An&nbsp;increase or&nbsp;cancellation of&nbsp;limits takes effect after 24–72 hours (cooling-off period). A&nbsp;player may set limits in&nbsp;the personal cabinet or&nbsp;by contacting customer support at&nbsp;<a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a>.</p>
+              <h3 class="lgl__h3">19.2. Self-Exclusion</h3>
+              <p>A&nbsp;self-exclusion request is&nbsp;applied as&nbsp;soon as&nbsp;reasonably practicable after confirmation. During the&nbsp;self-exclusion period, the&nbsp;player cannot log in&nbsp;to the&nbsp;account, make deposits, place bets or&nbsp;request withdrawals. Self-exclusion cannot be cancelled early. Upon expiry, the&nbsp;player may request reinstatement of&nbsp;access by&nbsp;undergoing re-verification. Warwin takes reasonable measures to&nbsp;cease direct marketing communications during self-exclusion.</p>
+              <p>Circumventing limits or&nbsp;self-exclusion by&nbsp;creating a&nbsp;new account, using different personal data, VPN or&nbsp;other means is&nbsp;prohibited. If&nbsp;circumvention is&nbsp;detected, all accounts are blocked and&nbsp;funds are confiscated.</p>
+              <p>Players experiencing problems controlling their gambling may seek help from: GamCare (<a class="lgl__link" href="https://www.gamcare.org.uk" target="_blank" rel="noopener noreferrer">www.gamcare.org.uk</a>), Gamblers Anonymous (<a class="lgl__link" href="https://www.gamblersanonymous.org" target="_blank" rel="noopener noreferrer">www.gamblersanonymous.org</a>), Gambling Therapy (<a class="lgl__link" href="https://www.gamblingtherapy.org" target="_blank" rel="noopener noreferrer">www.gamblingtherapy.org</a>), BeGambleAware (<a class="lgl__link" href="https://www.begambleaware.org" target="_blank" rel="noopener noreferrer">www.begambleaware.org</a>). For&nbsp;responsible gaming enquiries, contact: <a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a>.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s124">20. Personal Data, Record Keeping and Communications</h2>
+              <p>Warwin processes personal data in&nbsp;accordance with the&nbsp;Privacy Policy and&nbsp;applicable data protection requirements.</p>
+              <p>Where there is&nbsp;a legal basis, information may be transferred to:</p>
+              <ul class="lgl__ul">
+                <li>Identity and&nbsp;verification services;</li>
+                <li>Payment providers and&nbsp;processing centers;</li>
+                <li>Game and&nbsp;sports data providers;</li>
+                <li>Fraud prevention and&nbsp;AML screening systems;</li>
+                <li>Professional consultants and&nbsp;auditors;</li>
+                <li>Regulatory authorities;</li>
+                <li>Government and&nbsp;law enforcement authorities upon request, by&nbsp;court order or&nbsp;on another legal basis.</li>
+              </ul>
+              <p>Records of&nbsp;the account, transactions, verification and&nbsp;communications are retained for&nbsp;5 (five) years, or&nbsp;for a&nbsp;longer period if&nbsp;required by&nbsp;law, a&nbsp;regulatory authority or&nbsp;an ongoing dispute.</p>
+              <p>Email, SMS and&nbsp;account notifications are used to&nbsp;convey contractual, technical, regulatory and&nbsp;marketing information. A&nbsp;player may opt out of&nbsp;marketing messages through account settings or&nbsp;the link in&nbsp;the email. Opting out of&nbsp;contractual and&nbsp;technical notifications is&nbsp;not possible.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s130">21. Complaints and Dispute Resolution</h2>
+              <p>If&nbsp;a player believes that an&nbsp;account decision, a&nbsp;payment, a&nbsp;game result, a&nbsp;bonus decision or&nbsp;a bet settlement is&nbsp;incorrect, they must first submit a&nbsp;complaint directly to&nbsp;Warwin.</p>
+              <p>Address for&nbsp;complaints: <a class="hc__mail" href="mailto:complaints@warwin.casino">complaints@warwin.casino</a></p>
+              <p>The&nbsp;complaint must state:</p>
+              <ul class="lgl__ul">
+                <li>The&nbsp;username or&nbsp;account number;</li>
+                <li>The&nbsp;transaction, bet or&nbsp;game session ID;</li>
+                <li>The&nbsp;date and&nbsp;time of&nbsp;the event;</li>
+                <li>A&nbsp;detailed description of&nbsp;the problem;</li>
+                <li>Any supporting materials available (screenshots, correspondence).</li>
+              </ul>
+              <p>Warwin acknowledges receipt of&nbsp;a complaint within 5 (five) business days and&nbsp;conducts an&nbsp;objective investigation. The&nbsp;Company endeavors to&nbsp;provide a&nbsp;final response within 30 (thirty) calendar days of&nbsp;receiving all information reasonably necessary for&nbsp;the investigation. Complaints must be submitted without undue delay and&nbsp;no later than 6 (six) months from the&nbsp;date of&nbsp;the event.</p>
+              <p>Warwin is&nbsp;not a&nbsp;member of&nbsp;an independent ADR scheme. If&nbsp;a dispute is&nbsp;not resolved under the&nbsp;internal procedure, the&nbsp;parties refer it&nbsp;for consideration in&nbsp;accordance with Section 29 of&nbsp;this Agreement. Warwin does not guarantee a&nbsp;favourable outcome for&nbsp;any complaint and&nbsp;reserves the&nbsp;right to&nbsp;make final decisions on&nbsp;disputed situations on&nbsp;the basis of&nbsp;internal data and&nbsp;logs.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s137">22. Intellectual Property</h2>
+              <p>The&nbsp;Warwin brand, the&nbsp;website design, software, texts, images, interfaces, databases and&nbsp;other elements belong to&nbsp;Warwin or&nbsp;are used under the&nbsp;relevant license.</p>
+              <p>The&nbsp;player is&nbsp;granted a&nbsp;limited, personal, revocable and&nbsp;non-transferable right to&nbsp;use the&nbsp;Services solely for&nbsp;lawful personal entertainment purposes. Without the&nbsp;written permission of&nbsp;Warwin, it&nbsp;is prohibited to&nbsp;copy, distribute, sell or&nbsp;modify the&nbsp;software, carry out reverse engineering, collect data automatically or&nbsp;use Warwin content for&nbsp;commercial purposes.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s140">23. Third-Party Services</h2>
+              <p>Certain games, payment methods, verification services and&nbsp;technical functions are provided by&nbsp;third-party organizations. Warwin remains responsible to&nbsp;players within the&nbsp;limits established by&nbsp;this Agreement and&nbsp;applicable law. Processing times of&nbsp;third-party services, network failures and&nbsp;the availability of&nbsp;external systems may be beyond Warwin’s direct control.</p>
+              <p>Links to&nbsp;third-party websites are provided for&nbsp;convenience and&nbsp;do not imply endorsement of&nbsp;all materials or&nbsp;services of&nbsp;such websites. Warwin is&nbsp;not responsible for&nbsp;the content, privacy policies or&nbsp;actions of&nbsp;third-party websites.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s143">24. Taxes</h2>
+              <p>The&nbsp;player independently determines whether taxes, levies and&nbsp;reporting obligations apply to&nbsp;their deposits, withdrawals or&nbsp;winnings. Warwin is&nbsp;not the&nbsp;player’s tax agent and&nbsp;does not provide tax advice. Warwin may withhold taxes, disclose information or&nbsp;take other mandatory actions where expressly required by&nbsp;applicable law.</p>
+              <p>If&nbsp;a player is&nbsp;unsure of&nbsp;their tax obligations, it&nbsp;is recommended that they consult an&nbsp;independent tax specialist. Warwin is&nbsp;not responsible for&nbsp;the tax consequences of&nbsp;using the&nbsp;Services.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s146">25. Service Availability and Force Majeure</h2>
+              <p>Warwin may temporarily suspend all or&nbsp;part of&nbsp;the Services for&nbsp;maintenance, updates, security or&nbsp;to comply with regulatory requirements. Where possible, large-scale planned work is&nbsp;announced in&nbsp;advance through the&nbsp;website or&nbsp;by email.</p>
+              <p>Warwin is&nbsp;not responsible for&nbsp;a delay in&nbsp;or failure to&nbsp;perform its obligations caused by:</p>
+              <ul class="lgl__ul">
+                <li>Large-scale network failures and&nbsp;DDoS attacks;</li>
+                <li>Natural disasters;</li>
+                <li>Military action, terrorism, civil unrest;</li>
+                <li>Decisions of&nbsp;government authorities, sanctions, embargoes;</li>
+                <li>Failures of&nbsp;external payment systems or&nbsp;blockchain networks;</li>
+                <li>Large-scale cyber incidents or&nbsp;third-party breaches.</li>
+              </ul>
+              <p>This Section does not exclude obligations that cannot be excluded under applicable law.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s151">26. Limitation of Liability</h2>
+              <p>Nothing in&nbsp;this Agreement excludes or&nbsp;limits Warwin’s liability for: fraud; wilful misconduct; gross negligence; death or&nbsp;personal injury caused by&nbsp;negligence; or&nbsp;any other liability that cannot be excluded by&nbsp;law.</p>
+              <p>Subject to&nbsp;those exclusions, Warwin is&nbsp;liable only for&nbsp;direct and&nbsp;reasonably foreseeable loss arising from a&nbsp;proven breach by&nbsp;the Company of&nbsp;this Agreement. Warwin’s maximum liability under any claim is&nbsp;limited to&nbsp;the amount of&nbsp;the player’s deposits over the&nbsp;last 6 (six) months, and&nbsp;in any event to&nbsp;no more than €/$ 10,000 (ten thousand).</p>
+              <p>Warwin is&nbsp;not liable for:</p>
+              <ul class="lgl__ul">
+                <li>Indirect, incidental, punitive or&nbsp;presumed losses;</li>
+                <li>Loss of&nbsp;profit or&nbsp;lost commercial opportunities;</li>
+                <li>The&nbsp;consequences of&nbsp;the player’s own unlawful actions;</li>
+                <li>The&nbsp;consequences of&nbsp;the player providing incorrect or&nbsp;incomplete information;</li>
+                <li>Use by&nbsp;third parties of&nbsp;compromised login credentials (where the&nbsp;player did not report the&nbsp;compromise);</li>
+                <li>Sending funds to&nbsp;an incorrect payment address or&nbsp;an incompatible blockchain network through the&nbsp;player’s fault;</li>
+                <li>Changes in&nbsp;cryptocurrency rates, blockchain network delays or&nbsp;the actions of&nbsp;payment providers;</li>
+                <li>Any losses exceeding the&nbsp;amount of&nbsp;deposits made by&nbsp;the player at&nbsp;the time the&nbsp;loss arose.</li>
+              </ul>
+              <p>This Section does not limit the&nbsp;player’s right to&nbsp;receive lawful funds and&nbsp;winnings obtained in&nbsp;accordance with this Agreement where the&nbsp;player has committed no&nbsp;breach.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s157">27. Amendments to the Agreement</h2>
+              <p>Warwin may update this Agreement where there is&nbsp;a reasonable need connected with:</p>
+              <ul class="lgl__ul">
+                <li>Changes in&nbsp;legislation or&nbsp;license requirements;</li>
+                <li>The&nbsp;addition or&nbsp;discontinuation of&nbsp;individual Services;</li>
+                <li>Developments in&nbsp;technology and&nbsp;security mechanisms;</li>
+                <li>Changes in&nbsp;fraud prevention methods;</li>
+                <li>A&nbsp;change of&nbsp;payment or&nbsp;game providers;</li>
+                <li>The&nbsp;need to&nbsp;improve the&nbsp;clarity of&nbsp;the text or&nbsp;correct an&nbsp;error.</li>
+              </ul>
+              <p>The&nbsp;updated version and&nbsp;its effective date are published on&nbsp;the website warwin.casino. Players are notified of&nbsp;material changes by&nbsp;email or&nbsp;through the&nbsp;personal cabinet where reasonably possible. Continued use of&nbsp;the Services after publication of&nbsp;the changes constitutes unconditional acceptance of&nbsp;the new version of&nbsp;the Agreement. If&nbsp;a player does not agree with the&nbsp;changes, they must stop using the&nbsp;Services and&nbsp;close their account. Changes do not apply retroactively to&nbsp;cancel a&nbsp;right that has already arisen on&nbsp;the basis of&nbsp;a correct and&nbsp;completed transaction, except where required by&nbsp;law.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s161">28. Language of Documents</h2>
+              <p>This Agreement is&nbsp;published in&nbsp;Russian, English and&nbsp;Spanish. In&nbsp;the event of&nbsp;any discrepancy between the&nbsp;translations, the&nbsp;English version shall prevail. Translations must accurately convey the&nbsp;content of&nbsp;the English document and&nbsp;may not be used to&nbsp;diminish the&nbsp;lawful rights of&nbsp;the player. If&nbsp;a player does not understand a&nbsp;provision of&nbsp;the Agreement, they must contact customer support at&nbsp;<a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a> before making a&nbsp;deposit or&nbsp;placing a&nbsp;bet.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s163">29. Governing Law and Dispute Resolution</h2>
+              <h3 class="lgl__h3">29.1. Governing Law</h3>
+              <p>This Agreement and&nbsp;all relations between the&nbsp;player and&nbsp;Warwin are governed by&nbsp;the laws of&nbsp;Anjouan, Comoros, without regard to&nbsp;conflict of&nbsp;law rules. If&nbsp;the player’s mandatory local law provides a&nbsp;higher level of&nbsp;consumer protection that cannot be excluded by&nbsp;contract, such rules apply to&nbsp;the minimum extent necessary.</p>
+              <h3 class="lgl__h3">29.2. Pre-Action Procedure</h3>
+              <p>Before applying to&nbsp;a court or&nbsp;arbitration, the&nbsp;player must send a&nbsp;written claim to&nbsp;Warwin customer support at&nbsp;<a class="hc__mail" href="mailto:complaints@warwin.casino">complaints@warwin.casino</a>. Warwin considers the&nbsp;claim within 30 (thirty) calendar days of&nbsp;receiving all necessary documents. If&nbsp;the claim is&nbsp;not resolved within that period, the&nbsp;dispute is&nbsp;referred for&nbsp;consideration in&nbsp;the manner established by&nbsp;this Section.</p>
+              <h3 class="lgl__h3">29.3. Arbitration</h3>
+              <p>Any disputes, disagreements or&nbsp;claims arising out of&nbsp;or in&nbsp;connection with this Agreement, including questions of&nbsp;its validity, interpretation, performance or&nbsp;termination, shall be finally resolved by&nbsp;arbitration in&nbsp;accordance with the&nbsp;Rules of&nbsp;the Arbitration Institute of&nbsp;the Stockholm Chamber of&nbsp;Commerce (SCC Rules). The&nbsp;seat of&nbsp;arbitration is&nbsp;Stockholm, Sweden. The&nbsp;arbitral tribunal shall consist of&nbsp;one (1) arbitrator. The&nbsp;language of&nbsp;the arbitration is&nbsp;English. The&nbsp;arbitral award is&nbsp;final, binding and&nbsp;not subject to&nbsp;appeal.</p>
+              <h3 class="lgl__h3">29.4. Class Action Waiver</h3>
+              <p>The&nbsp;player acknowledges and&nbsp;agrees that any disputes with Warwin are resolved solely on&nbsp;an individual basis. The&nbsp;player waives the&nbsp;right to&nbsp;participate in&nbsp;class actions, class arbitrations or&nbsp;any other joint court or&nbsp;arbitration proceedings against Warwin. The&nbsp;arbitrator may not consolidate the&nbsp;claims of&nbsp;several players or&nbsp;hear them jointly. If&nbsp;any court or&nbsp;competent authority finds this clause invalid, the&nbsp;remaining provisions of&nbsp;this Section continue to&nbsp;apply in&nbsp;full.</p>
+              <h3 class="lgl__h3">29.5. Jurisdiction</h3>
+              <p>In&nbsp;cases where a&nbsp;dispute by&nbsp;its nature cannot be referred to&nbsp;arbitration (including claims for&nbsp;interim relief), the&nbsp;parties agree to&nbsp;the jurisdiction of&nbsp;the competent courts of&nbsp;Anjouan, Comoros. The&nbsp;player confirms that they will not initiate legal proceedings in&nbsp;other jurisdictions in&nbsp;respect of&nbsp;disputes governed by&nbsp;this Agreement.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s174">30. Final Provisions</h2>
+              <p>If&nbsp;any provision of&nbsp;the Agreement is&nbsp;found invalid or&nbsp;unenforceable by&nbsp;a competent court or&nbsp;arbitration, the&nbsp;remaining provisions continue to&nbsp;apply in&nbsp;full. The&nbsp;invalid provision is&nbsp;replaced by&nbsp;a valid provision that is&nbsp;as close as&nbsp;possible in&nbsp;meaning to&nbsp;the original.</p>
+              <p>If&nbsp;Warwin has not exercised any right immediately, this does not constitute a&nbsp;waiver of&nbsp;that right and&nbsp;does not deprive Warwin of&nbsp;the right to&nbsp;exercise it&nbsp;in the&nbsp;future.</p>
+              <p>The&nbsp;player may not transfer the&nbsp;account or&nbsp;any rights or&nbsp;obligations under this Agreement to&nbsp;a third party without the&nbsp;written consent of&nbsp;Warwin.</p>
+              <p>Warwin may transfer its rights or&nbsp;obligations as&nbsp;part of&nbsp;a lawful corporate reorganization, sale of&nbsp;business or&nbsp;regulatory procedure, provided that players’ rights are not materially diminished.</p>
+              <p>This Agreement and&nbsp;the documents listed in&nbsp;Section 2 constitute the&nbsp;entire agreement between the&nbsp;player and&nbsp;Warwin. Provisions which by&nbsp;their nature are intended to&nbsp;continue in&nbsp;force after account closure shall survive. In&nbsp;particular, this applies to&nbsp;the provisions on&nbsp;checks, payments, intellectual property, complaints, liability and&nbsp;dispute resolution.</p>
+              <h2 class="lgl__h2" id="legalTc-en-s180">31. Contact Information</h2>
+              <dl class="lgl__contacts">
+                <div><dt>Operator</dt><dd>WarWin Group International Ltd</dd></div>
+                <div><dt>Registered address</dt><dd>San Victor Street, Orange Walk Town, Belize</dd></div>
+                <div><dt>Registration number</dt><dd>000054736</dd></div>
+                <div><dt>License</dt><dd>Anjouan Gaming License, issued by Anjouan Licensing Services Inc.</dd></div>
+                <div><dt>Regulator</dt><dd>Anjouan Gaming Authority</dd></div>
+                <div><dt>Licensed domain</dt><dd>warwin.casino</dd></div>
+                <div><dt>Customer support</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>Complaints</dt><dd><a class="hc__mail" href="mailto:complaints@warwin.casino">complaints@warwin.casino</a></dd></div>
+                <div><dt>Verification / KYC</dt><dd><a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a></dd></div>
+                <div><dt>Security</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+                <div><dt>Responsible Gaming / RG</dt><dd><a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a></dd></div>
+                <div><dt>Affiliates</dt><dd><a class="hc__mail" href="mailto:affiliates@warwin.casino">affiliates@warwin.casino</a></dd></div>
+              </dl>
+              <h2 class="lgl__h2" id="legalTc-en-s182">32. Acceptance of the Agreement</h2>
+              <p>By&nbsp;clicking "Register", "Create account", "Accept" or&nbsp;a similar button, or&nbsp;by making your first deposit or&nbsp;placing your first bet, you&nbsp;confirm that:</p>
+              <ul class="lgl__ul">
+                <li>You&nbsp;are 18 years of&nbsp;age or&nbsp;older, or&nbsp;have reached the&nbsp;higher minimum age established in&nbsp;your jurisdiction;</li>
+                <li>You&nbsp;have read, understood and&nbsp;unconditionally accepted all provisions of&nbsp;this Agreement and&nbsp;the documents related to&nbsp;it;</li>
+                <li>You&nbsp;understand that gambling involves the&nbsp;risk of&nbsp;losing money;</li>
+                <li>You&nbsp;are not located in&nbsp;a prohibited jurisdiction and&nbsp;are not using any means of&nbsp;concealing your location;</li>
+                <li>The&nbsp;information you&nbsp;have provided is&nbsp;accurate and&nbsp;complete;</li>
+                <li>You&nbsp;are acting in&nbsp;your own name and&nbsp;are not an&nbsp;intermediary or&nbsp;agent of&nbsp;a third party.</li>
+              </ul>
+              <p>If&nbsp;you do not agree with any of&nbsp;the above points, you&nbsp;must immediately stop the&nbsp;registration process and&nbsp;not use the&nbsp;Warwin Services.</p>
+            </div>
+          </article>
           <article class="lgl__doc" data-lang="ru" lang="ru" hidden>
             <h1 class="lgl__h1">Пользовательское соглашение Warwin</h1>
             <dl class="lgl__meta">
@@ -13035,7 +13502,9 @@ body.br-open .bnav { z-index: 66; }
       });
       /* Гостю на бонусах показываем приглашение войти, а не пустые вкладки */
       if (key === 'bonuses' && bnSync) bnSync();
-      scrollTo({ top: 0, behavior: 'smooth' });
+      /* Переход по ссылке — это новая страница, а не прокрутка к её началу:
+         из подвала длинного документа плавный скролл летел через весь текст. */
+      scrollTo(0, 0);
     };
     tabs.forEach(function (t) {
       var label = (t.textContent || '').trim().toLowerCase();
