@@ -2343,19 +2343,20 @@ body.is-authed .authed { display: flex; }
    группы сами встают на 0 / 470 / 960 внутри колонки 1104, как в макете. */
 .wallet { display: none; align-items: center; overflow: hidden; border-radius: 8px; }
 body.is-authed .wallet { display: flex; }
+/* Сумма набиралась Work Sans 14 против Cora 14 у кнопки: при одном кегле
+   капитель Cora крупнее, и баланс читался мельче соседа. Даём цифрам тот же
+   гротеск, что в поп-апе профиля, и кегль 16. */
 .wallet__balance { display: flex; align-items: center; gap: 8px; flex: none;
                    padding: 12px; border: 0; cursor: pointer;
                    background: var(--white-10); color: var(--white);
-                   font-family: 'Work Sans', sans-serif; font-weight: 700;
-                   font-size: 14px; line-height: 14px; white-space: nowrap; }
+                   font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                   font-size: 16px; line-height: 16px; white-space: nowrap;
+                   font-variant-numeric: tabular-nums; }
 .wallet__balance:hover { background: var(--white-16); }
 .wallet__balance img { display: block; }
-/* тот же значок валюты, что в поп-апе, только 16 — под высоту чипа */
-.wallet__badge { display: grid; place-items: center; flex: none;
-                 width: 16px; height: 16px; border-radius: 50%;
-                 background: var(--white-10);
-                 font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-                 font-size: 10px; line-height: 1; color: var(--white); }
+/* тот же флаг, что в поп-апе профиля, только 16 — на этой высоте чип
+   остаётся 40, как был со значком доллара */
+.wallet__flag { display: block; flex: none; width: 16px; height: 16px; border-radius: 50%; }
 .wallet__deposit { display: flex; align-items: center; justify-content: center; flex: none;
                    padding: 12px; border: 0; cursor: pointer;
                    background: linear-gradient(to bottom, #cdfa50, #a6e22e); color: #00151f;
@@ -4655,7 +4656,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            входа шапка делится на три части, кошелёк стоит между ними -->
       <div class="wallet" data-node-id="905:4387">
         <button class="wallet__balance" type="button" data-node-id="905:4388">
-          <span class="wallet__badge" aria-hidden="true">$</span>
+          <!-- Флаг вместо значка доллара — как в поп-апе профиля -->
+          <img class="wallet__flag" src="a/21c85c9e5d.svg" alt="" width="16" height="16">
           <span>0.00</span>
           <img class="wallet__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
         </button>
