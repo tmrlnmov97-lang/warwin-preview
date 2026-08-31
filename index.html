@@ -2394,139 +2394,184 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   VIP-клуб. Программы у нас пока нет — раскладка собрана по тому, как
-   это устроено на казино-сайтах: шапка с текущим уровнем, лестница
-   уровней, привилегии и порядок начисления.
+   1462:13094 «VIP Club» и 1467:13191 — мобильная. Порядок разделов:
+   прогресс, лестница уровней, привилегии, вопросы, поддержка.
+   Проценты нигде не называются намеренно — это решение из макета.
    ═══════════════════════════════════════════════════════════════════ */
 .view--vip { gap: 32px; }
+.vip__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+           font-size: 32px; line-height: 40px; color: var(--white); }
 
-.vip__hero { position: relative; overflow: hidden; box-sizing: border-box;
-             padding: 36px 32px; border-radius: 20px;
-             background: linear-gradient(135deg, #16204a 0%, #101736 55%, #1a1230 100%);
-             border: 1px solid var(--hero-border); }
-/* мягкий ореол в углу, чтобы шапка не была плоской заливкой */
-.vip__hero::before { content: ''; position: absolute; right: -80px; top: -120px;
-                     width: 420px; height: 340px; pointer-events: none;
-                     background: radial-gradient(50% 50% at 50% 50%,
-                                 rgba(205, 250, 80, .16) 0%, rgba(205, 250, 80, 0) 100%); }
-.vip__hero > * { position: relative; }
-.vip__eyebrow { display: inline-flex; align-items: center; height: 26px; padding: 0 12px;
-                border-radius: 999px; background: rgba(205, 250, 80, .14);
-                font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px;
-                letter-spacing: .06em; text-transform: uppercase; color: #cdfa50; }
-.vip__h1 { margin: 14px 0 0; font-family: 'Cora', 'Instrument Sans', sans-serif;
-           font-weight: 700; font-size: 34px; line-height: 42px; color: var(--white); }
-.vip__lead { margin: 10px 0 0; max-width: 620px; font-family: 'Work Sans', sans-serif;
-             font-size: 15px; line-height: 24px; color: var(--modal-text-1, #bbc6cd); }
-/* Полоса прогресса до следующего уровня */
-.vip__state { max-width: 520px; margin-top: 24px; }
-.vip__state-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
-.vip__now { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px;
-            color: var(--white); }
-.vip__next { font-family: 'Work Sans', sans-serif; font-size: 13px; color: var(--dp-label); }
-.vip__next b { color: var(--white); font-weight: 600; }
-.vip__track { display: block; margin-top: 10px; height: 8px; border-radius: 999px;
-              background: rgba(255, 255, 255, .09); overflow: hidden; }
-.vip__track i { display: block; height: 100%; border-radius: 999px;
-                background: linear-gradient(90deg, #a6e22e, #cdfa50); }
-.vip__cta { margin-top: 24px; display: inline-flex; align-items: center; justify-content: center;
-            height: 46px; padding: 0 26px; border: 0; border-radius: 12px; cursor: pointer;
-            background: var(--primary); font-family: 'Work Sans', sans-serif;
-            font-weight: 700; font-size: 15px; color: var(--white);
-            transition: background-color .12s ease, transform .08s ease; }
-.vip__cta:hover { background: var(--primary-hover); }
-.vip__cta:active { transform: translateY(1px); }
-/* Полоса уровня — только после входа: гостю показывать нечего.
-   Кнопка тоже меняет подпись: гостю сначала регистрация. */
-.vip__state, .vip__cta-in { display: none; }
-body.is-authed .vip__state { display: block; }
-body.is-authed .vip__cta-in { display: inline; }
-body.is-authed .vip__cta-out { display: none; }
-body.is-authed .vtier__badge { display: inline-flex; }
-.vtier__badge { display: none; }
-body.is-authed .vtier--now { border-color: rgba(7, 148, 255, .5); }
-body:not(.is-authed) .vtier--now { border-color: var(--hero-border); box-shadow: none; }
+/* ── прогресс ── */
+.vipro { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
+         gap: 24px; padding: 24px; border-radius: 16px;
+         background: linear-gradient(118deg, #131f43 0%, #16254e 42%, #1e3468 100%); }
+.vipro__card { box-sizing: border-box; flex: 0 1 484px; min-width: 0;
+               display: flex; flex-direction: column; gap: 14px;
+               padding: 20px; border-radius: 12px; background: var(--card, #181e3b); }
+.vipro__who { display: flex; align-items: center; gap: 10px; }
+.vipro__who b { font-family: 'Work Sans', sans-serif; font-weight: 600;
+                font-size: 16px; line-height: 22px; color: var(--white); }
+/* Знак уровня подкрашен металлом самого уровня — так строка читается
+   без второй подписи «твой уровень» */
+.vipro__lvl, .vlvl__chip { display: inline-flex; align-items: center; height: 22px; padding: 0 10px;
+                           border-radius: 999px; font-family: 'Work Sans', sans-serif;
+                           font-weight: 600; font-size: 12px; line-height: 16px; white-space: nowrap; }
+.vipro__lvl, .vlvl__i--soldier .vlvl__chip { background: rgba(214, 124, 66, .16); color: #e0a172; }
+.vlvl__i--captain .vlvl__chip { background: rgba(159, 182, 217, .16); color: #c8d6ea; }
+.vlvl__i--general .vlvl__chip { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
+.vlvl__i--warlord .vlvl__chip { background: rgba(7, 148, 255, .18); color: #6bb8ff; }
+.vipro__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+              font-size: 32px; line-height: 38px; color: var(--white);
+              font-variant-numeric: tabular-nums; }
+.vipro__track { display: block; height: 6px; border-radius: 999px; background: var(--white-10); }
+.vipro__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
+.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+               color: var(--dp-label); }
 
-/* Лестница уровней */
-.vip__tiers { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
-.vtier { position: relative; box-sizing: border-box; display: flex; flex-direction: column;
-         gap: 14px; padding: 18px 16px; border-radius: 16px;
-         background: var(--chrome); border: 1px solid var(--hero-border); }
-/* Кружок уровня своим цветом — по нему карточки читаются с одного взгляда */
-.vtier__mark { width: 30px; height: 30px; border-radius: 50%; }
-.vtier--bronze   .vtier__mark { background: linear-gradient(140deg, #d08a4e, #8a5124); }
-.vtier--silver   .vtier__mark { background: linear-gradient(140deg, #dfe6ee, #98a3b3); }
-.vtier--gold     .vtier__mark { background: linear-gradient(140deg, #f6d365, #c9982a); }
-.vtier--platinum .vtier__mark { background: linear-gradient(140deg, #cfe4ff, #7f9cc4); }
-.vtier--diamond  .vtier__mark { background: linear-gradient(140deg, #8ce9ff, #3aa0f5); }
-.vtier__name { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif;
-               font-weight: 700; font-size: 18px; line-height: 24px; color: var(--white); }
-.vtier__badge { position: absolute; right: 14px; top: 16px;
-                display: inline-flex; align-items: center; height: 22px; padding: 0 9px;
-                border-radius: 999px; background: rgba(7, 148, 255, .16);
-                font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 11px;
-                color: var(--primary); }
-.vtier--now { border-color: rgba(7, 148, 255, .5);
-              box-shadow: 0 0 0 1px rgba(7, 148, 255, .25), 0 12px 28px -18px rgba(7, 148, 255, .8); }
-.vtier__rows { margin: 0; display: flex; flex-direction: column; gap: 10px; }
-.vtier__rows > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-.vtier__rows dt { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--dp-label); }
-.vtier__rows dd { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-                  font-size: 13px; line-height: 18px; color: var(--white); text-align: right; }
+.vipro__car { flex: none; display: grid; grid-template-columns: auto auto auto;
+              align-items: center; justify-items: center; gap: 10px 14px; }
+.vipro__badge { display: block; width: 190px; height: 190px; }
+.vipro__cap { grid-column: 1 / -1; font-family: 'Work Sans', sans-serif; font-weight: 600;
+              font-size: 14px; line-height: 20px; color: var(--white); }
+.vipro__arr { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
+              padding: 0 0 2px; border: 0; border-radius: 50%; cursor: pointer;
+              background: var(--white-06); color: var(--muted);
+              font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 1;
+              transition: background .15s ease, color .15s ease; }
+.vipro__arr:hover { background: var(--white-10); color: var(--white); }
 
-/* Привилегии */
-.vip__perks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.vperk { box-sizing: border-box; padding: 20px; border-radius: 16px;
-         background: var(--chrome); border: 1px solid var(--hero-border); }
-.vperk__ico { position: relative; display: block; width: 40px; height: 40px; margin-bottom: 14px;
-              border-radius: 12px; background: rgba(7, 148, 255, .14); }
-.vperk__ico::after { content: ''; position: absolute; inset: 0; margin: auto;
-                     width: 20px; height: 20px; background: var(--primary); }
-.vperk__ico--coins::after { -webkit-mask: var(--ico-coins) center / contain no-repeat;
-                            mask: var(--ico-coins) center / contain no-repeat; }
-.vperk__ico--chat::after { -webkit-mask: url(a/60fc882413.svg) center / contain no-repeat;
-                           mask: url(a/60fc882413.svg) center / contain no-repeat; }
-.vperk__ico--up::after { -webkit-mask: var(--ico-up) center / contain no-repeat;
-                         mask: var(--ico-up) center / contain no-repeat; }
-.vperk__ico--bolt::after { -webkit-mask: url(a/21ad8ec927.svg) center / contain no-repeat;
-                           mask: url(a/21ad8ec927.svg) center / contain no-repeat; }
-.vperk__ico--gift::after { -webkit-mask: var(--ico-gift) center / contain no-repeat;
-                           mask: var(--ico-gift) center / contain no-repeat; }
-.vperk__ico--cup::after { -webkit-mask: url(a/eed79b599e.svg) center / contain no-repeat;
-                          mask: url(a/eed79b599e.svg) center / contain no-repeat; }
-.vperk h3 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-            font-size: 17px; line-height: 22px; color: var(--white); }
-.vperk p { margin: 8px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
-           line-height: 21px; color: var(--modal-text-1, #bbc6cd); }
+/* ── лестница уровней ── */
+/* Точки степпера стоят по центрам карточек, линия идёт от точки к точке:
+   так связь «это одна дорожка» видна без отдельной подложки */
+.vlvl { list-style: none; margin: 0; padding: 26px 0 0;
+        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.vlvl__i { position: relative; display: flex; }
+.vlvl__i::before { content: ''; position: absolute; left: 50%; top: -26px;
+                   width: 11px; height: 11px; margin-left: -5.5px; border-radius: 50%;
+                   background: var(--bg, #0e132a); border: 1px solid #2a3050; }
+.vlvl__i.is-now::before { background: var(--primary); border-color: var(--primary); }
+.vlvl__i::after { content: ''; position: absolute; top: -21px; left: 50%;
+                  right: calc(-50% - 16px); height: 1px; background: #292e42; }
+.vlvl__i:last-child::after { display: none; }
+.vlvl__card { box-sizing: border-box; width: 100%; display: flex; flex-direction: column; gap: 10px;
+              padding: 20px; border-radius: 16px; background: var(--card, #181e3b);
+              border: 1px solid rgba(255, 255, 255, .05); }
+.vlvl__i.is-now .vlvl__card { border-color: rgba(7, 148, 255, .38); }
+.vlvl__chip { align-self: flex-start; }
+.vlvl__mark { display: block; width: 44px; height: 44px; }
+.vlvl__sum { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 20px; line-height: 26px; color: var(--white); }
+.vlvl__cap { margin-top: -6px; font-family: 'Work Sans', sans-serif; font-size: 12px;
+             line-height: 16px; color: var(--dp-label); }
+.vlvl__perks { list-style: none; margin: 0; padding: 0;
+               display: flex; flex-direction: column; gap: 8px; }
+.vlvl__perks li { position: relative; padding-left: 16px; font-family: 'Work Sans', sans-serif;
+                  font-size: 13px; line-height: 18px; color: var(--muted); }
+.vlvl__perks li::before { content: ''; position: absolute; left: 0; top: 7px;
+                          width: 5px; height: 5px; border-radius: 50%; background: var(--primary); }
+.vlvl__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 12px;
+              line-height: 17px; color: var(--dp-label); }
 
-/* Порядок начисления */
-.vip__steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
-              margin: 0; padding: 0; list-style: none; counter-reset: none; }
-.vstep { display: flex; gap: 14px; box-sizing: border-box; padding: 18px;
-         border-radius: 16px; background: var(--chrome); border: 1px solid var(--hero-border); }
-.vstep__n { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
-            border-radius: 50%; background: rgba(255, 255, 255, .07);
-            font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px;
-            color: var(--white); }
-.vstep h3 { margin: 4px 0 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-            font-size: 15px; line-height: 20px; color: var(--white); }
-.vstep p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 13px;
-           line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+/* ── привилегии ── */
+.vprv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.vprv__i { box-sizing: border-box; display: flex; align-items: center; gap: 14px;
+           padding: 16px 18px; border-radius: 16px; background: var(--card, #181e3b); }
+.vprv__i img { display: block; width: 44px; height: 44px; flex: none; }
+.vprv__i h3 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+              font-size: 14px; line-height: 20px; color: var(--white); }
+.vprv__i p { margin: 2px 0 0; font-family: 'Work Sans', sans-serif; font-size: 12px;
+             line-height: 17px; color: var(--dp-label); }
 
+/* ── вопросы ── */
+.vfaq { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 24px; align-items: start; }
+.vfaq__tabs { display: flex; flex-direction: column; gap: 4px; }
+.vfaq__tab { display: flex; align-items: center; height: 44px; padding: 0 18px;
+             border: 0; border-radius: 10px; background: none; cursor: pointer; text-align: left;
+             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+             line-height: 20px; color: var(--dp-label);
+             transition: background .15s ease, color .15s ease; }
+.vfaq__tab:hover { color: var(--white); }
+.vfaq__tab.is-active { background: #1f2439; color: var(--white); }
+.vfaq__lists { display: grid; }
+.vfaq__list { display: flex; flex-direction: column; gap: 12px; }
+.vfaq__list[hidden] { display: none; }
+.vfaq__q { box-sizing: border-box; padding: 16px 20px; border-radius: 12px;
+           background: var(--card, #181e3b); }
+.vfaq__q summary { position: relative; display: block; padding-right: 28px; cursor: pointer;
+                   list-style: none; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                   font-size: 14px; line-height: 20px; color: var(--white); }
+.vfaq__q summary::-webkit-details-marker { display: none; }
+/* Плюс превращается в минус поворотом одной перекладины — так знак
+   меняется без второй иконки */
+.vfaq__q summary::before, .vfaq__q summary::after {
+  content: ''; position: absolute; right: 4px; top: 9px; width: 12px; height: 1.5px;
+  background: var(--muted); transition: transform .18s ease, opacity .18s ease; }
+.vfaq__q summary::after { transform: rotate(90deg); }
+.vfaq__q[open] summary::after { transform: rotate(0); opacity: 0; }
+.vfaq__q p { margin: 10px 0 0; font-family: 'Work Sans', sans-serif; font-size: 13px;
+             line-height: 19px; color: var(--dp-label); }
+
+/* ── поддержка и условия ── */
+.vsup { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
+        gap: 24px; padding: 24px; border-radius: 16px; background: var(--card, #181e3b); }
+.vsup__text h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+                 font-size: 20px; line-height: 26px; color: var(--white); }
+.vsup__text p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 13px;
+                line-height: 19px; color: var(--dp-label); }
+.vsup__btns { display: flex; gap: 12px; flex: none; }
+.vsup__btn { display: grid; place-items: center; height: 44px; padding: 0 26px; flex: none;
+             border: 1px solid var(--white-10); border-radius: 10px; cursor: pointer;
+             background: none; color: var(--white); font-family: 'Work Sans', sans-serif;
+             font-weight: 600; font-size: 14px; line-height: 20px;
+             transition: background .15s ease, border-color .15s ease; }
+.vsup__btn:hover { background: var(--white-06); }
+.vsup__btn--primary { background: var(--primary); border-color: transparent; }
+.vsup__btn--primary:hover { background: var(--primary-hover); }
+.vip__terms { align-self: center; padding: 6px 8px; border: 0; background: none; cursor: pointer;
+              font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 19px;
+              color: var(--dp-label); transition: color .15s ease; }
+.vip__terms:hover { color: var(--white); text-decoration: underline; }
+
+/* Колонка контента узкая уже при 1280: слева стоит меню на 252 */
 @media (max-width: 1279px) {
-  .vip__tiers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .vip__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vlvl { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 16px; }
+  /* при двух колонках линия к «следующей» карточке ушла бы вбок через
+     разрыв ряда — степпер здесь только точками */
+  .vlvl__i::after { display: none; }
+  .vprv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vipro { flex-wrap: wrap; }
+  .vipro__card { flex: 1 1 320px; }
 }
-@media (max-width: 1023px) {
-  .vip__perks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
+
 @media (max-width: 767px) {
   .view--vip { gap: 24px; }
-  .vip__hero { padding: 24px 18px; border-radius: 16px; }
   .vip__h1 { font-size: 26px; line-height: 32px; }
-  .vip__lead { font-size: 14px; line-height: 22px; }
-  .vip__cta { width: 100%; }
-  .vip__tiers, .vip__perks, .vip__steps { grid-template-columns: 1fr; }
+  .vipro { flex-direction: column; align-items: stretch; gap: 16px;
+           padding: 0; background: none; }
+  .vipro__card { flex: none; padding: 18px; border-radius: 16px; }
+  .vipro__car { padding: 20px; border-radius: 16px; background: var(--card, #181e3b); }
+  .vipro__badge { width: 96px; height: 96px; }
+  /* Лента уровней: карточка 300, следующая выглядывает — видно, что
+     список листается вбок */
+  .vlvl { display: flex; padding-top: 0; margin: 0 -16px;
+          padding-inline: 16px; gap: 12px;
+          overflow-x: auto; scroll-snap-type: x mandatory;
+          /* без scroll-padding привязка отсчитывается от края скроллера и
+             съедает поле: лента сразу приезжала на 16px влево */
+          scroll-padding-inline: 16px;
+          -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .vlvl::-webkit-scrollbar { display: none; }
+  .vlvl__i { flex: 0 0 300px; scroll-snap-align: start; }
+  .vlvl__i::before, .vlvl__i::after { display: none; }
+  .vprv { grid-template-columns: 1fr; gap: 12px; }
+  .vfaq { grid-template-columns: 1fr; gap: 16px; }
+  .vfaq__tabs { flex-direction: row; gap: 8px; }
+  .vfaq__tab { height: 36px; padding: 0 16px; border-radius: 999px; background: var(--white-06); }
+  .vfaq__tab.is-active { background: var(--primary); color: var(--white); }
+  .vsup { flex-direction: column; align-items: stretch; gap: 18px; padding: 20px; }
+  .vsup__btns { flex: 1 1 auto; }
+  .vsup__btn { flex: 1 1 0; padding: 0; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -5416,124 +5461,170 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <!-- Страница VIP-клуба: уровни, привилегии и порядок начисления.
            Программы у нас пока нет — структура и пороги собраны по тому,
            как это устроено на казино-сайтах, валюта наша, USDT. -->
-      <div class="view view--vip" id="view-vip" hidden>
-        <section class="vip__hero">
-          <span class="vip__eyebrow">VIP Club</span>
-          <h1 class="vip__h1">Play more &#8212; get more back</h1>
-          <p class="vip__lead">Every bet earns club points. The higher your level, the more comes back: weekly cashback, higher limits and a manager who answers without the queue.</p>
-          <div class="vip__state">
-            <div class="vip__state-row">
-              <span class="vip__now">Bronze</span>
-              <span class="vip__next"><b>2,400</b> / 10,000 USDT to Silver</span>
+      <!-- 1462:13094 «VIP Club» — прогресс, лестница уровней, привилегии,
+           частые вопросы и поддержка. Процентов на странице нет намеренно:
+           они живут в аккаунте, а не в витрине. -->
+      <div class="view view--vip" id="view-vip" hidden data-node-id="1462:13094">
+        <h1 class="vip__h1">VIP Club</h1>
+
+        <section class="section">
+          <div class="section__head"><div class="section__title"><h2>Your VIP progress</h2></div></div>
+          <div class="vipro">
+            <div class="vipro__card">
+              <div class="vipro__who">
+                <b>username</b><span class="vipro__lvl">Soldier</span>
+              </div>
+              <span class="vipro__pct">0.00 %</span>
+              <span class="vipro__track"><i style="width:0%"></i></span>
+              <span class="vipro__next">Next level: Soldier</span>
             </div>
-            <span class="vip__track"><i style="width:24%"></i></span>
-          </div>
-          <button class="vip__cta" type="button">Start playing</button>
-        </section>
-
-        <section class="section">
-          <div class="section__head">
-            <div class="section__title"><h2>Levels</h2></div>
-          </div>
-          <div class="vip__tiers">
-            <article class="vtier vtier--bronze vtier--now">
-              <span class="vtier__mark" aria-hidden="true"></span>
-              <h3 class="vtier__name">Bronze</h3>
-              <span class="vtier__badge">Your level</span>
-              <dl class="vtier__rows">
-                <div><dt>Wagered</dt><dd>1 000 USDT</dd></div>
-                <div><dt>Cashback</dt><dd>3%</dd></div>
-                <div><dt>Unlocks</dt><dd>Weekly cashback</dd></div>
-              </dl>
-            </article>
-            <article class="vtier vtier--silver">
-              <span class="vtier__mark" aria-hidden="true"></span>
-              <h3 class="vtier__name">Silver</h3>
-              <dl class="vtier__rows">
-                <div><dt>Wagered</dt><dd>10 000 USDT</dd></div>
-                <div><dt>Cashback</dt><dd>5%</dd></div>
-                <div><dt>Unlocks</dt><dd>Faster withdrawals</dd></div>
-              </dl>
-            </article>
-            <article class="vtier vtier--gold">
-              <span class="vtier__mark" aria-hidden="true"></span>
-              <h3 class="vtier__name">Gold</h3>
-              <dl class="vtier__rows">
-                <div><dt>Wagered</dt><dd>50 000 USDT</dd></div>
-                <div><dt>Cashback</dt><dd>7%</dd></div>
-                <div><dt>Unlocks</dt><dd>Personal manager</dd></div>
-              </dl>
-            </article>
-            <article class="vtier vtier--platinum">
-              <span class="vtier__mark" aria-hidden="true"></span>
-              <h3 class="vtier__name">Platinum</h3>
-              <dl class="vtier__rows">
-                <div><dt>Wagered</dt><dd>250 000 USDT</dd></div>
-                <div><dt>Cashback</dt><dd>10%</dd></div>
-                <div><dt>Unlocks</dt><dd>Custom limits</dd></div>
-              </dl>
-            </article>
-            <article class="vtier vtier--diamond">
-              <span class="vtier__mark" aria-hidden="true"></span>
-              <h3 class="vtier__name">Diamond</h3>
-              <dl class="vtier__rows">
-                <div><dt>Wagered</dt><dd>1 000 000 USDT</dd></div>
-                <div><dt>Cashback</dt><dd>15%</dd></div>
-                <div><dt>Unlocks</dt><dd>Private events</dd></div>
-              </dl>
-            </article>
+            <!-- Знак уровня листается: так видно, к чему идёшь, а не только
+                 то, что уже есть -->
+            <div class="vipro__car">
+              <button class="vipro__arr" type="button" data-vipcar="-1" aria-label="Предыдущий уровень">&lsaquo;</button>
+              <img loading="lazy" decoding="async" class="vipro__badge" src="a/274357f383.webp" alt="" width="190" height="190">
+              <button class="vipro__arr" type="button" data-vipcar="1" aria-label="Следующий уровень">&rsaquo;</button>
+              <span class="vipro__cap">Soldier</span>
+            </div>
           </div>
         </section>
 
         <section class="section">
-          <div class="section__head">
-            <div class="section__title"><h2>What you get</h2></div>
-          </div>
-          <div class="vip__perks">
-            <article class="vperk">
-              <span class="vperk__ico vperk__ico--coins" aria-hidden="true"></span>
-              <h3>Weekly cashback</h3>
-              <p>A share of your net loss comes back every Monday. The higher the level, the bigger the share.</p>
-            </article>
-            <article class="vperk">
-              <span class="vperk__ico vperk__ico--chat" aria-hidden="true"></span>
-              <h3>Personal manager</h3>
-              <p>From Gold up you get a manager in Telegram who solves everything without the queue.</p>
-            </article>
-            <article class="vperk">
-              <span class="vperk__ico vperk__ico--up" aria-hidden="true"></span>
-              <h3>Higher limits</h3>
-              <p>Deposit and withdrawal caps grow with the level, up to custom ones on Platinum.</p>
-            </article>
-            <article class="vperk">
-              <span class="vperk__ico vperk__ico--bolt" aria-hidden="true"></span>
-              <h3>Faster withdrawals</h3>
-              <p>VIP requests jump the queue: from Silver up they are processed first.</p>
-            </article>
-            <article class="vperk">
-              <span class="vperk__ico vperk__ico--gift" aria-hidden="true"></span>
-              <h3>Birthday bonus</h3>
-              <p>A bonus on your birthday, its size depends on the level you hold that day.</p>
-            </article>
-            <article class="vperk">
-              <span class="vperk__ico vperk__ico--cup" aria-hidden="true"></span>
-              <h3>Private tournaments</h3>
-              <p>Closed tournaments with a smaller field — the same prize pool split among fewer players.</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section__head">
-            <div class="section__title"><h2>How it works</h2></div>
-          </div>
-          <ol class="vip__steps">
-            <li class="vstep"><span class="vstep__n">1</span><div><h3>Play</h3><p>Every bet in casino or sportsbook earns club points. Bets in bonus money do not count.</p></div></li>
-            <li class="vstep"><span class="vstep__n">2</span><div><h3>Collect points</h3><p>1 point for every 10 USDT wagered. Points are counted for the last 90 days.</p></div></li>
-            <li class="vstep"><span class="vstep__n">3</span><div><h3>Level up</h3><p>Reaching the next threshold raises the level right away — you keep it while the wager stays in the window.</p></div></li>
-            <li class="vstep"><span class="vstep__n">4</span><div><h3>Take the rewards</h3><p>Cashback lands on Monday, the rest of the perks turn on the moment the level changes.</p></div></li>
+          <div class="section__head"><div class="section__title"><h2>WarWin level system</h2></div></div>
+          <ol class="vlvl">
+            <li class="vlvl__i vlvl__i--soldier is-now">
+              <div class="vlvl__card">
+                <span class="vlvl__chip">Soldier</span>
+                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/274357f383.webp" alt="" width="44" height="44">
+                <b class="vlvl__sum">10,000 USDT</b>
+                <span class="vlvl__cap">Wagered</span>
+                <ul class="vlvl__perks">
+                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up bonus</li>
+                </ul>
+              </div>
+            </li>
+            <li class="vlvl__i vlvl__i--captain">
+              <div class="vlvl__card">
+                <span class="vlvl__chip">Captain</span>
+                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/3c38490295.webp" alt="" width="44" height="44">
+                <b class="vlvl__sum">50,000 USDT</b>
+                <span class="vlvl__cap">Wagered</span>
+                <ul class="vlvl__perks">
+                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up bonus</li><li>Higher bonuses</li>
+                </ul>
+              </div>
+            </li>
+            <li class="vlvl__i vlvl__i--general">
+              <div class="vlvl__card">
+                <span class="vlvl__chip">General</span>
+                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/ab8492bd00.webp" alt="" width="44" height="44">
+                <b class="vlvl__sum">250,000 USDT</b>
+                <span class="vlvl__cap">Wagered</span>
+                <ul class="vlvl__perks">
+                  <li>Everything from Captain</li><li>Personal manager</li><li>Higher withdrawal limit</li>
+                </ul>
+              </div>
+            </li>
+            <li class="vlvl__i vlvl__i--warlord">
+              <div class="vlvl__card">
+                <span class="vlvl__chip">Warlord I&ndash;III</span>
+                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/aba35aeabd.webp" alt="" width="44" height="44">
+                <b class="vlvl__sum">1,000,000 USDT+</b>
+                <span class="vlvl__cap">Wagered</span>
+                <ul class="vlvl__perks">
+                  <li>Everything from General</li><li>Custom terms</li><li>Daily reload</li>
+                </ul>
+              </div>
+            </li>
           </ol>
+          <p class="vlvl__note">No percentages on this page on purpose &mdash; the numbers live in your account.</p>
         </section>
+
+        <section class="section">
+          <div class="section__head"><div class="section__title"><h2>Privileges</h2></div></div>
+          <div class="vprv">
+            <article class="vprv__i">
+              <img loading="lazy" decoding="async" src="a/cdf135e524.webp" alt="" width="44" height="44">
+              <div><h3>Boost</h3><p>Bonus for your activity every week and month</p></div>
+            </article>
+            <article class="vprv__i">
+              <img loading="lazy" decoding="async" src="a/897608697f.webp" alt="" width="44" height="44">
+              <div><h3>Personal manager</h3><p>Handles your questions outside the general queue</p></div>
+            </article>
+            <article class="vprv__i">
+              <img loading="lazy" decoding="async" src="a/8b17613478.webp" alt="" width="44" height="44">
+              <div><h3>Play bonus</h3><p>Part of the losses back when you move up a level</p></div>
+            </article>
+            <article class="vprv__i">
+              <img loading="lazy" decoding="async" src="a/db20a74fb1.webp" alt="" width="44" height="44">
+              <div><h3>Level-up bonus</h3><p>The higher the level, the bigger the payout</p></div>
+            </article>
+            <article class="vprv__i">
+              <img loading="lazy" decoding="async" src="a/3e6874f40e.webp" alt="" width="44" height="44">
+              <div><h3>Custom terms</h3><p>Privileges tuned through your manager</p></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section__head"><div class="section__title"><h2>FAQ</h2></div></div>
+          <div class="vfaq">
+            <div class="vfaq__tabs" role="tablist">
+              <button class="vfaq__tab is-active" type="button" role="tab" aria-selected="true" data-vipfaq="general">General</button>
+              <button class="vfaq__tab" type="button" role="tab" aria-selected="false" data-vipfaq="privileges">Privileges</button>
+              <button class="vfaq__tab" type="button" role="tab" aria-selected="false" data-vipfaq="managers">Managers</button>
+            </div>
+            <div class="vfaq__lists">
+              <div class="vfaq__list" data-vipset="general">
+                <details class="vfaq__q" open>
+                  <summary>How to join the club</summary>
+                  <p>The club opens automatically once your wagering reaches the Soldier threshold. No application needed &mdash; the level and its perks turn on the same day.</p>
+                </details>
+                <details class="vfaq__q">
+                  <summary>How wagering is counted</summary>
+                  <p>Only real money counts, in casino and sportsbook alike. Bets placed with bonus funds and cancelled bets stay out of the total.</p>
+                </details>
+                <details class="vfaq__q">
+                  <summary>Does the level expire</summary>
+                  <p>The level stays as long as the wagering behind it does. It is recalculated once a month, and the drop is never more than one step at a time.</p>
+                </details>
+              </div>
+              <div class="vfaq__list" data-vipset="privileges" hidden>
+                <details class="vfaq__q" open>
+                  <summary>When bonuses are credited</summary>
+                  <p>The weekly bonus lands on Monday, the monthly one on the first day of the month. Both go straight to the balance &mdash; nothing to claim.</p>
+                </details>
+                <details class="vfaq__q">
+                  <summary>Do privileges stack</summary>
+                  <p>Every level keeps everything from the one below it and adds its own. Nothing is taken away when you move up.</p>
+                </details>
+              </div>
+              <div class="vfaq__list" data-vipset="managers" hidden>
+                <details class="vfaq__q" open>
+                  <summary>Who gets a manager</summary>
+                  <p>From General up. The manager writes first the day the level turns on.</p>
+                </details>
+                <details class="vfaq__q">
+                  <summary>How to reach the manager</summary>
+                  <p>In the same chat you already use. Messages from club players are answered outside the general queue.</p>
+                </details>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="vsup">
+          <div class="vsup__text">
+            <h2>Support 24/7</h2>
+            <p>Live chat and email. Spanish and Portuguese planned from October</p>
+          </div>
+          <div class="vsup__btns">
+            <button class="vsup__btn" type="button">Espa&ntilde;ol</button>
+            <button class="vsup__btn vsup__btn--primary" type="button">Chat</button>
+          </div>
+        </section>
+
+        <button class="vip__terms" type="button">Full VIP Terms &amp; Conditions</button>
       </div>
 
       <!-- 1377:18464 «Promotions» — категории и сетка акций -->
@@ -9156,16 +9247,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
       gv.querySelector('.gv__prov-all').addEventListener('click', function () { showView('casino'); });
 
-      /* CTA на странице VIP: гостю — регистрация, вошедшему — лобби казино */
-      var vipCta = document.querySelector('.vip__cta');
-      if (vipCta) vipCta.addEventListener('click', function () {
-        if (!document.body.classList.contains('is-authed')) {
-          var reg = document.querySelector('.btn--primary');
-          if (reg) { reg.click(); return; }
-        }
-        showView('casino');
-      });
-
       /* Сами карточки. Внутри страницы игры их не трогаем: там клоны. */
       document.querySelectorAll('.game, .lc').forEach(function (card) {
         if (gv.contains(card)) return;
@@ -9321,6 +9402,38 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         i.value = value;
         i.dispatchEvent(new Event('input'));
       };
+
+      /* ═══ VIP: карусель знаков и вкладки вопросов ═══════════════════ */
+      var vipView = document.getElementById('view-vip');
+      if (vipView) {
+        var vipLv = [['soldier', 'Soldier'], ['captain', 'Captain'],
+                     ['general', 'General'], ['warlord', 'Warlord I\u2013III']];
+        var vipI = 0;
+        var vipImg = vipView.querySelector('.vipro__badge');
+        var vipCap = vipView.querySelector('.vipro__cap');
+        vipView.querySelectorAll('[data-vipcar]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            vipI = (vipI + (+b.dataset.vipcar) + vipLv.length) % vipLv.length;
+            vipImg.src = 'assets/vip-lvl-' + vipLv[vipI][0] + '.png';
+            vipCap.textContent = vipLv[vipI][1];
+          });
+        });
+
+        var vipTabs = [].slice.call(vipView.querySelectorAll('[data-vipfaq]'));
+        vipTabs.forEach(function (t) {
+          t.addEventListener('click', function () {
+            vipTabs.forEach(function (o) {
+              var on = o === t;
+              o.classList.toggle('is-active', on);
+              o.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            vipView.querySelectorAll('[data-vipset]').forEach(function (l) {
+              l.hidden = l.dataset.vipset !== t.dataset.vipfaq;
+            });
+          });
+        });
+      }
+
 
       var STATES = [
         ['Кошелёк · ввод', [
