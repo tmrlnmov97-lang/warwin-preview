@@ -749,6 +749,107 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   Юридические страницы (Legal). Это документы, а не интерфейс: колонка
+   на ~75 знаков, ясная лесенка заголовков и оглавление сверху — по
+   двенадцати разделам без него не пройти. Языковых переключателей нет,
+   версия берётся у сайта, как на About Us и в справке.
+   ═══════════════════════════════════════════════════════════════════ */
+.lgl { box-sizing: border-box; width: 100%; max-width: 860px; margin: 0 auto; }
+.lgl__doc[hidden] { display: none; }
+.lgl__h1 { margin: 0 0 16px; font-family: 'Cora', 'Instrument Sans', sans-serif;
+          font-weight: 700; font-size: 34px; line-height: 42px;
+          color: var(--white); text-wrap: balance; }
+/* Выходные данные документа: версия и даты одной строкой пар */
+.lgl__meta { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 0 0 28px; }
+.lgl__meta > div { display: flex; align-items: baseline; gap: 6px;
+                  padding: 6px 12px; border-radius: 999px;
+                  background: var(--white-06); border: 1px solid rgba(255, 255, 255, .06); }
+.lgl__meta dt { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 500;
+               font-size: 12px; line-height: 16px; color: var(--dp-label); }
+.lgl__meta dd { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 12px; line-height: 16px; color: var(--white); }
+
+.lgl__toc { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 20px;
+           box-sizing: border-box; padding: 18px 20px; margin: 0 0 36px;
+           border-radius: 16px; background: #181e3b;
+           border: 1px solid rgba(255, 255, 255, .06); }
+.lgl__toc a { padding: 6px 0; text-decoration: none;
+             font-family: 'Work Sans', sans-serif; font-weight: 500;
+             font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd);
+             transition: color .15s ease; }
+.lgl__toc a:hover { color: var(--white); }
+
+/* Отступ сверху — под закреплённую шапку, иначе переход по оглавлению
+   ставит заголовок ровно под неё */
+.lgl__h2 { margin: 40px 0 14px; scroll-margin-top: 100px;
+          font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+          font-size: 22px; line-height: 30px; color: var(--white); text-wrap: balance; }
+.lgl__body > .lgl__h2:first-child { margin-top: 0; }
+.lgl__h3 { margin: 26px 0 10px; font-family: 'Work Sans', sans-serif; font-weight: 700;
+          font-size: 16px; line-height: 24px; color: var(--white); }
+.lgl__body p { margin: 0 0 14px; font-family: 'Work Sans', sans-serif; font-weight: 400;
+              font-size: 15px; line-height: 26px; color: var(--modal-text-1, #bbc6cd);
+              text-wrap: pretty; }
+.lgl__ul { margin: 0 0 14px; padding: 0; list-style: none;
+          display: flex; flex-direction: column; gap: 8px; }
+.lgl__ul li { position: relative; padding-left: 18px; font-family: 'Work Sans', sans-serif;
+             font-size: 15px; line-height: 24px; color: var(--modal-text-1, #bbc6cd);
+             text-wrap: pretty; }
+.lgl__ul li::before { content: ''; position: absolute; left: 2px; top: 10px;
+                     width: 5px; height: 5px; border-radius: 50%;
+                     background: var(--primary); opacity: .75; }
+/* Группа документов: подзаголовок, вложенный список и требование к нему */
+.lgl__group { margin: 0 0 18px; padding-left: 14px;
+             border-left: 2px solid rgba(255, 255, 255, .08); }
+.lgl__group-t { margin: 0 0 8px !important; font-weight: 600 !important;
+               color: var(--white) !important; }
+.lgl__ul--sub li::before { background: var(--dp-label); opacity: .6; }
+.lgl__req { margin: 8px 0 0 !important; font-size: 13px !important;
+           line-height: 20px !important; color: var(--dp-label) !important; }
+.lgl__note { box-sizing: border-box; margin: 0 0 14px; padding: 14px 16px; border-radius: 12px;
+            background: rgba(234, 166, 64, .10);
+            border: 1px solid rgba(234, 166, 64, .22); color: var(--white) !important; }
+
+/* Организации помощи: название ссылкой, адрес и пояснение рядом */
+.lgl__orgs { margin: 0 0 14px; padding: 0; list-style: none;
+            display: flex; flex-direction: column; gap: 10px; }
+.lgl__orgs li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+               font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 24px; }
+.lgl__orgs a { font-weight: 600; color: var(--white); text-decoration: none;
+              border-bottom: 1px solid rgba(255, 255, 255, .3); }
+.lgl__orgs a:hover { border-bottom-color: var(--white); }
+.lgl__orgs span { color: var(--primary); font-size: 14px; }
+.lgl__orgs i { font-style: normal; color: var(--dp-label); font-size: 13px; }
+
+.lgl__addr { display: flex; flex-direction: column; gap: 2px; margin: 0 0 14px;
+            font-style: normal; font-family: 'Work Sans', sans-serif; }
+.lgl__addr b { font-weight: 700; font-size: 15px; line-height: 24px; color: var(--white); }
+.lgl__addr span { font-size: 14px; line-height: 22px; color: var(--modal-text-1, #bbc6cd); }
+.lgl__contacts { display: flex; flex-direction: column; gap: 6px; margin: 0 0 14px; }
+.lgl__contacts > div { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.lgl__contacts dt { margin: 0; min-width: 190px; font-family: 'Work Sans', sans-serif;
+                   font-weight: 500; font-size: 14px; line-height: 22px; color: var(--dp-label); }
+.lgl__contacts dd { margin: 0; font-family: 'Work Sans', sans-serif;
+                   font-size: 14px; line-height: 22px; }
+.lgl__foot { margin: 32px 0 0 !important; padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            font-size: 13px !important; line-height: 21px !important;
+            color: var(--dp-label) !important; }
+.lgl__doc .hc__mail, .lgl__contacts a { color: var(--primary); text-decoration: none;
+                                      border-bottom: 1px solid rgba(7, 148, 255, .35); }
+
+@media (max-width: 1023px) { .lgl__h1 { font-size: 28px; line-height: 36px; } }
+@media (max-width: 767px) {
+  .lgl__h1 { font-size: 23px; line-height: 31px; }
+  .lgl__meta { margin-bottom: 22px; }
+  .lgl__toc { grid-template-columns: 1fr; padding: 14px 16px; margin-bottom: 28px; }
+  .lgl__h2 { margin: 32px 0 12px; font-size: 19px; line-height: 27px; scroll-margin-top: 136px; }
+  .lgl__h3 { margin: 22px 0 8px; font-size: 15px; line-height: 22px; }
+  .lgl__body p, .lgl__ul li, .lgl__orgs li { font-size: 14px; line-height: 24px; }
+  .lgl__contacts dt { min-width: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    «Help Center». 34 вопроса в четырёх разделах: сплошным полотном это
    не читается, поэтому разделы переключаются чипами, а ответы свёрнуты
    и раскрываются по нажатию. Своего выбора языка нет — как на About Us.
@@ -6604,6 +6705,1011 @@ body.br-open .bnav { z-index: 66; }
         <button class="pone__cta" type="button">Activate bonus</button>
       </div>
 
+      <!-- Legal, страница «AML / KYC Policy». Текст заказчика; показывается версия на
+           языке сайта, при её отсутствии — английская. -->
+      <div class="view view--legal" id="view-legal-aml" hidden>
+        <div class="lgl" data-langset>
+          <article class="lgl__doc" data-lang="en" lang="en">
+            <h1 class="lgl__h1">Anti-Money Laundering and Counter-Terrorist Financing Policy (AML / KYC)</h1>
+            <dl class="lgl__meta">
+              <div><dt>Version</dt><dd>1.0</dd></div>
+              <div><dt>Effective Date</dt><dd>August 27, 2026</dd></div>
+              <div><dt>Last Updated</dt><dd>August 27, 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Anti-Money Laundering and Counter-Terrorist Financing Policy (AML / KYC)">
+              <a href="#legalAml-en-s0">1. General Provisions</a>
+              <a href="#legalAml-en-s5">2. Appointed Responsible Person (Compliance Officer)</a>
+              <a href="#legalAml-en-s9">3. Risk Assessment (Risk-Based Approach)</a>
+              <a href="#legalAml-en-s14">4. Customer Identification and Verification (KYC — Know Your Customer)</a>
+              <a href="#legalAml-en-s29">5. Transaction Monitoring</a>
+              <a href="#legalAml-en-s35">6. Suspicious Activity Reporting (SAR / STR)</a>
+              <a href="#legalAml-en-s39">7. Prohibited Actions and Sanctions</a>
+              <a href="#legalAml-en-s46">8. Record Keeping</a>
+              <a href="#legalAml-en-s51">9. Staff Training</a>
+              <a href="#legalAml-en-s54">10. Interaction with Third Parties</a>
+              <a href="#legalAml-en-s57">11. Changes to This Policy</a>
+              <a href="#legalAml-en-s60">12. Contact Information</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalAml-en-s0">1. General Provisions</h2>
+              <p>This Anti-Money Laundering, Counter-Terrorist Financing, and&nbsp;Anti-Fraud Policy (hereinafter&nbsp;— "AML/KYC Policy") establishes the&nbsp;principles, procedures, and&nbsp;measures applied by&nbsp;WarWin Group International Ltd (hereinafter&nbsp;— "Warwin", "Company", "we", "us"), registered in&nbsp;Belize under number 000054736, in&nbsp;the course of&nbsp;activities under the&nbsp;Anjouan Gaming License.</p>
+              <p>This Policy is&nbsp;an integral part of&nbsp;the Terms and&nbsp;Conditions and&nbsp;is mandatory for&nbsp;all Warwin players, employees, agents, and&nbsp;partners.</p>
+              <p>Key objectives:</p>
+              <ul class="lgl__ul">
+                <li>Preventing the&nbsp;use of&nbsp;Warwin Services for&nbsp;money laundering (ML);</li>
+                <li>Preventing terrorist financing (TF);</li>
+                <li>Identifying, assessing, and&nbsp;managing risks associated with unlawful activity;</li>
+                <li>Ensuring full compliance with the&nbsp;requirements of&nbsp;the Anjouan Gaming Authority and&nbsp;applicable legislation.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-en-s5">2. Appointed Responsible Person (Compliance Officer)</h2>
+              <p>Warwin appoints a&nbsp;Compliance Officer who:</p>
+              <ul class="lgl__ul">
+                <li>Develops, implements, and&nbsp;monitors compliance with this Policy;</li>
+                <li>Organizes staff training on&nbsp;AML/KYC issues;</li>
+                <li>Reviews and&nbsp;approves decisions on&nbsp;suspicious transactions;</li>
+                <li>Interacts with regulatory authorities, law enforcement agencies, and&nbsp;FIUs (Financial Intelligence Units);</li>
+                <li>Ensures timely submission of&nbsp;Suspicious Activity Reports (SAR);</li>
+                <li>Conducts periodic review and&nbsp;updating of&nbsp;the Policy.</li>
+              </ul>
+              <p>Contact the&nbsp;Compliance Officer: <a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a> / <a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a>.</p>
+              <h2 class="lgl__h2" id="legalAml-en-s9">3. Risk Assessment (Risk-Based Approach)</h2>
+              <p>Warwin applies a&nbsp;Risk-Based Approach (RBA) to&nbsp;AML/KYC. This means that the&nbsp;depth and&nbsp;scope of&nbsp;checks depend on&nbsp;the level of&nbsp;risk associated with a&nbsp;particular player, transaction, payment method, or&nbsp;jurisdiction.</p>
+              <p>Risk factors:</p>
+              <ul class="lgl__ul">
+                <li>Geographic risk&nbsp;— player’s country of&nbsp;residence/citizenship, presence of&nbsp;sanctions, level of&nbsp;corruption;</li>
+                <li>Customer risk&nbsp;— player behavior, source of&nbsp;funds, politically exposed persons (PEP);</li>
+                <li>Product/service risk&nbsp;— anonymity of&nbsp;payment method, speed of&nbsp;transactions, complexity of&nbsp;operations;</li>
+                <li>Channel risk&nbsp;— use of&nbsp;VPN, proxy, transaction structuring.</li>
+              </ul>
+              <p>Players with elevated risk are subject to&nbsp;Enhanced Due Diligence (EDD).</p>
+              <h2 class="lgl__h2" id="legalAml-en-s14">4. Customer Identification and Verification (KYC — Know Your Customer)</h2>
+              <h3 class="lgl__h3">4.1. When KYC Is Conducted</h3>
+              <p>Warwin conducts KYC checks:</p>
+              <ul class="lgl__ul">
+                <li>Upon account registration (basic check);</li>
+                <li>Before the&nbsp;first withdrawal (full check);</li>
+                <li>Upon reaching certain deposit or&nbsp;withdrawal thresholds;</li>
+                <li>When changing payment methods;</li>
+                <li>When there are suspicions of&nbsp;fraud, multi-accounting, or&nbsp;bonus abuse;</li>
+                <li>Upon request from a&nbsp;regulator or&nbsp;law enforcement authority.</li>
+              </ul>
+              <h3 class="lgl__h3">4.2. Standard Due Diligence (CDD)</h3>
+              <p>Documents and&nbsp;information that Warwin may request:</p>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Proof of&nbsp;identity:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Passport;</li>
+                  <li>National ID card;</li>
+                  <li>Driver’s license.</li>
+                </ul>
+                <p class="lgl__req">The&nbsp;document must be valid, legible, contain a&nbsp;photograph, full name, date of&nbsp;birth, document number, and&nbsp;expiry date.</p>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Proof of&nbsp;address (not older than 3 months):</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Utility bill (electricity, water, internet, phone);</li>
+                  <li>Bank statement;</li>
+                  <li>Tax notice;</li>
+                  <li>Official letter from a&nbsp;government body.</li>
+                </ul>
+                <p class="lgl__req">The&nbsp;document must contain the&nbsp;player’s name and&nbsp;address matching the&nbsp;registration address.</p>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Proof of&nbsp;payment method ownership:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Photo of&nbsp;bank card with middle 8 digits and&nbsp;CVV masked (first 6 and&nbsp;last 4 digits, cardholder name, and&nbsp;expiry date must be visible);</li>
+                  <li>Screenshot of&nbsp;e-wallet with visible owner name and&nbsp;ID;</li>
+                  <li>Account statement confirming ownership.</li>
+                </ul>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Proof of&nbsp;age:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Identity document containing date of&nbsp;birth;</li>
+                  <li>Additional measures in&nbsp;case of&nbsp;doubt (selfie with document, video verification).</li>
+                </ul>
+              </div>
+              <h3 class="lgl__h3">4.3. Enhanced Due Diligence (EDD)</h3>
+              <p>EDD is&nbsp;applied to&nbsp;players with elevated risk, including:</p>
+              <ul class="lgl__ul">
+                <li>Total deposits exceeding the&nbsp;equivalent of&nbsp;USD 10,000;</li>
+                <li>Politically Exposed Persons (PEP) and&nbsp;their close relatives;</li>
+                <li>Players from high-risk jurisdictions;</li>
+                <li>Players with suspicious behavior (unusual betting patterns, frequent changes of&nbsp;payment methods);</li>
+                <li>Players using anonymous or&nbsp;difficult-to-trace payment methods.</li>
+              </ul>
+              <p>Additional EDD measures:</p>
+              <ul class="lgl__ul">
+                <li>Source of&nbsp;Funds (SoF)&nbsp;— documentary confirmation of&nbsp;the origin of&nbsp;funds (salary account statement, tax return, property sale documents, business reports);</li>
+                <li>Source of&nbsp;Wealth (SoW)&nbsp;— explanation of&nbsp;the player’s overall financial status and&nbsp;sources of&nbsp;wealth;</li>
+                <li>Additional checks through external databases and&nbsp;screening systems;</li>
+                <li>Enhanced transaction monitoring;</li>
+                <li>Approval by&nbsp;the Compliance Officer before processing large withdrawals.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-en-s29">5. Transaction Monitoring</h2>
+              <p>Warwin conducts continuous monitoring of&nbsp;all transactions to&nbsp;detect suspicious activity.</p>
+              <p>Indicators triggering attention:</p>
+              <ul class="lgl__ul">
+                <li>Deposits and&nbsp;withdrawals without intermediate gaming activity;</li>
+                <li>Transaction structuring (breaking large amounts into smaller ones to&nbsp;bypass thresholds);</li>
+                <li>Frequent changes of&nbsp;payment methods or&nbsp;cryptocurrency addresses;</li>
+                <li>Transactions inconsistent with the&nbsp;player’s declared profile (SoF);</li>
+                <li>Use of&nbsp;third-party payment details;</li>
+                <li>Attempts to&nbsp;withdraw before wagering the&nbsp;deposit (indicative of&nbsp;layering);</li>
+                <li>Sudden changes in&nbsp;gaming patterns (sharp increase in&nbsp;bets after a&nbsp;long break);</li>
+                <li>Account links to&nbsp;known fraudulent schemes or&nbsp;bonus abuse.</li>
+              </ul>
+              <p>Measures upon detection of&nbsp;suspicious activity:</p>
+              <ul class="lgl__ul">
+                <li>Temporary account block pending investigation;</li>
+                <li>Request for&nbsp;additional documents and&nbsp;explanations;</li>
+                <li>Enhanced monitoring;</li>
+                <li>Filing a&nbsp;Suspicious Activity Report (SAR) with competent authorities if&nbsp;grounds exist.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-en-s35">6. Suspicious Activity Reporting (SAR / STR)</h2>
+              <p>When there are reasonable grounds to&nbsp;believe that a&nbsp;transaction or&nbsp;player behavior is&nbsp;related to&nbsp;money laundering, terrorist financing, or&nbsp;other unlawful activity, Warwin is&nbsp;obligated to:</p>
+              <ul class="lgl__ul">
+                <li>Immediately document the&nbsp;suspicion;</li>
+                <li>Suspend the&nbsp;relevant transactions (if&nbsp;this does not impede the&nbsp;investigation);</li>
+                <li>File a&nbsp;Suspicious Activity Report (SAR) or&nbsp;Suspicious Transaction Report (STR) with the&nbsp;Financial Intelligence Unit (FIU) of&nbsp;the Comoros or&nbsp;other competent authority;</li>
+                <li>Cooperate with law enforcement and&nbsp;regulatory authorities within the&nbsp;framework of&nbsp;the investigation.</li>
+              </ul>
+              <p class="lgl__note">Important: Legislation may prohibit Warwin from informing the&nbsp;player that a&nbsp;SAR/STR has been filed. Any disclosure of&nbsp;information ("tipping off") is&nbsp;a violation and&nbsp;entails liability.</p>
+              <h2 class="lgl__h2" id="legalAml-en-s39">7. Prohibited Actions and Sanctions</h2>
+              <h3 class="lgl__h3">7.1. Prohibited Actions</h3>
+              <p>Players are strictly prohibited from:</p>
+              <ul class="lgl__ul">
+                <li>Using false, stolen, or&nbsp;third-party personal and&nbsp;payment data;</li>
+                <li>Creating multiple accounts (multi-accounting);</li>
+                <li>Using the&nbsp;Services for&nbsp;money laundering, terrorist financing, or&nbsp;other unlawful purposes;</li>
+                <li>Structuring transactions to&nbsp;bypass verification or&nbsp;reporting thresholds;</li>
+                <li>Using third-party payment details;</li>
+                <li>Using VPN, proxy, or&nbsp;other location concealment means to&nbsp;circumvent territorial restrictions;</li>
+                <li>Providing forged, altered, or&nbsp;stolen documents for&nbsp;KYC.</li>
+              </ul>
+              <h3 class="lgl__h3">7.2. Sanctions</h3>
+              <p>Upon detection of&nbsp;violations of&nbsp;this Policy, Warwin may apply the&nbsp;following measures:</p>
+              <ul class="lgl__ul">
+                <li>Rejection or&nbsp;freezing of&nbsp;deposits and&nbsp;withdrawals;</li>
+                <li>Cancellation of&nbsp;bonuses and&nbsp;associated winnings;</li>
+                <li>Temporary account block pending investigation completion;</li>
+                <li>Account closure with confiscation of&nbsp;funds obtained as&nbsp;a result of&nbsp;the violation;</li>
+                <li>Reporting information to&nbsp;regulatory and&nbsp;law enforcement authorities;</li>
+                <li>Adding the&nbsp;player to&nbsp;a shared operator stop-list.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-en-s46">8. Record Keeping</h2>
+              <p>Warwin is&nbsp;obligated to&nbsp;retain all records related to&nbsp;AML/KYC for&nbsp;at least 5 (five) years from:</p>
+              <ul class="lgl__ul">
+                <li>The&nbsp;date of&nbsp;account closure;</li>
+                <li>The&nbsp;date of&nbsp;transaction completion;</li>
+                <li>The&nbsp;termination of&nbsp;business relations with the&nbsp;player.</li>
+              </ul>
+              <p>Retained records include:</p>
+              <ul class="lgl__ul">
+                <li>Copies of&nbsp;provided verification documents;</li>
+                <li>Transaction history (deposits, withdrawals, bets);</li>
+                <li>Screening results and&nbsp;risk assessments;</li>
+                <li>Correspondence with the&nbsp;player on&nbsp;KYC/AML matters;</li>
+                <li>SAR/STR and&nbsp;related documentation;</li>
+                <li>Internal investigations and&nbsp;decisions taken.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-en-s51">9. Staff Training</h2>
+              <p>All Warwin employees involved in&nbsp;transaction processing, verification, customer support, and&nbsp;security undergo regular training on&nbsp;AML/KYC issues:</p>
+              <ul class="lgl__ul">
+                <li>Signs of&nbsp;money laundering and&nbsp;terrorist financing;</li>
+                <li>KYC and&nbsp;EDD procedures;</li>
+                <li>Transaction monitoring and&nbsp;detection of&nbsp;suspicious activity;</li>
+                <li>SAR/STR filing procedures;</li>
+                <li>Legislative requirements of&nbsp;the Anjouan Gaming Authority.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-en-s54">10. Interaction with Third Parties</h2>
+              <p>Warwin cooperates with:</p>
+              <ul class="lgl__ul">
+                <li>Payment providers&nbsp;— for&nbsp;verification of&nbsp;payment method ownership;</li>
+                <li>KYC/AML screening services&nbsp;— for&nbsp;automated document verification and&nbsp;PEP/sanctions detection;</li>
+                <li>Regulators&nbsp;— Anjouan Gaming Authority, FIU of&nbsp;the Comoros;</li>
+                <li>Law enforcement authorities&nbsp;— upon lawful requests and&nbsp;within investigations.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-en-s57">11. Changes to This Policy</h2>
+              <p>Warwin may update this Policy in&nbsp;connection with changes in&nbsp;legislation, license requirements, technology, or&nbsp;identification of&nbsp;new risks. The&nbsp;updated version is&nbsp;published on&nbsp;the website warwin.casino.</p>
+              <p>Continued use of&nbsp;the Services after publication of&nbsp;changes constitutes acceptance of&nbsp;the new version of&nbsp;the Policy.</p>
+              <h2 class="lgl__h2" id="legalAml-en-s60">12. Contact Information</h2>
+              <p>For&nbsp;all questions related to&nbsp;AML/KYC, please contact:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>KYC / Verification</dt><dd><a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a></dd></div>
+                <div><dt>Security / Compliance</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+                <div><dt>Customer Support</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">This Policy is&nbsp;an integral part of&nbsp;the Warwin Terms and&nbsp;Conditions. In&nbsp;case of&nbsp;discrepancies, the&nbsp;English version of&nbsp;the documents shall prevail.</p>
+            </div>
+          </article>
+          <article class="lgl__doc" data-lang="ru" lang="ru" hidden>
+            <h1 class="lgl__h1">Политика противодействия отмыванию денег и финансированию терроризма (AML / KYC)</h1>
+            <dl class="lgl__meta">
+              <div><dt>Версия</dt><dd>1.0</dd></div>
+              <div><dt>Дата вступления в силу</dt><dd>27 августа 2026</dd></div>
+              <div><dt>Последнее обновление</dt><dd>27 августа 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Политика противодействия отмыванию денег и финансированию терроризма (AML / KYC)">
+              <a href="#legalAml-ru-s0">1. Общие положения</a>
+              <a href="#legalAml-ru-s5">2. Назначенный ответственный (Compliance Officer)</a>
+              <a href="#legalAml-ru-s9">3. Оценка рисков (Risk-Based Approach)</a>
+              <a href="#legalAml-ru-s14">4. Идентификация и верификация клиентов (KYC — Know Your Customer)</a>
+              <a href="#legalAml-ru-s29">5. Мониторинг транзакций</a>
+              <a href="#legalAml-ru-s35">6. Отчётность о подозрительной активности (SAR / STR)</a>
+              <a href="#legalAml-ru-s39">7. Запрещённые действия и санкции</a>
+              <a href="#legalAml-ru-s46">8. Хранение записей</a>
+              <a href="#legalAml-ru-s51">9. Обучение персонала</a>
+              <a href="#legalAml-ru-s54">10. Взаимодействие с третьими лицами</a>
+              <a href="#legalAml-ru-s57">11. Изменения Политики</a>
+              <a href="#legalAml-ru-s60">12. Контактная информация</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalAml-ru-s0">1. Общие положения</h2>
+              <p>Настоящая Политика противодействия отмыванию денег, финансированию терроризма и&nbsp;мошенничеству (далее&nbsp;— «Политика AML/KYC») устанавливает принципы, процедуры и&nbsp;меры, применяемые WarWin Group International Ltd (далее&nbsp;— «Warwin», «Компания», «мы», «нас»), зарегистрированной в&nbsp;Белизе под&nbsp;номером 000054736, в&nbsp;рамках деятельности на&nbsp;основании игровой лицензии Anjouan Gaming License.</p>
+              <p>Настоящая Политика является неотъемлемой частью Пользовательского соглашения и&nbsp;обязательна для&nbsp;исполнения всеми игроками, сотрудниками, агентами и&nbsp;партнёрами Warwin.</p>
+              <p>Основные цели:</p>
+              <ul class="lgl__ul">
+                <li>Предотвращение использования Сервисов Warwin для&nbsp;отмывания денег (Money Laundering&nbsp;— ML);</li>
+                <li>Предотвращение финансирования терроризма (Terrorist Financing&nbsp;— TF);</li>
+                <li>Выявление, оценение и&nbsp;управление рисками, связанными с&nbsp;противоправной деятельностью;</li>
+                <li>Обеспечение полного соответствия требованиям лицензии Anjouan Gaming Authority и&nbsp;применимому законодательству.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-ru-s5">2. Назначенный ответственный (Compliance Officer)</h2>
+              <p>Warwin назначает Compliance Officer (Ответственное лицо по&nbsp;соблюдению требований), которое:</p>
+              <ul class="lgl__ul">
+                <li>Разрабатывает, внедряет и&nbsp;контролирует исполнение настоящей Политики;</li>
+                <li>Организует обучение персонала вопросам AML/KYC;</li>
+                <li>Рассматривает и&nbsp;утверждает решения по&nbsp;подозрительным транзакциям;</li>
+                <li>Взаимодействует с&nbsp;регулирующими органами, правоохранительными органами и&nbsp;FIUs (Financial Intelligence Units);</li>
+                <li>Гарантирует своевременное представление отчётов о&nbsp;подозрительной активности (SAR/STR);</li>
+                <li>Проводит периодический пересмотр и&nbsp;обновление Политики.</li>
+              </ul>
+              <p>Контакт Compliance Officer: <a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a> / <a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a>.</p>
+              <h2 class="lgl__h2" id="legalAml-ru-s9">3. Оценка рисков (Risk-Based Approach)</h2>
+              <p>Warwin применяет риск-ориентированный подход (Risk-Based Approach, RBA) к&nbsp;AML/KYC. Это означает, что&nbsp;глубина и&nbsp;объём проверок зависят от&nbsp;уровня риска, связанного с&nbsp;конкретным игроком, транзакцией, платёжным методом или юрисдикцией.</p>
+              <p>Факторы риска:</p>
+              <ul class="lgl__ul">
+                <li>Географический риск&nbsp;— страна проживания/гражданства игрока, наличие санкций, уровень коррупции;</li>
+                <li>Риск клиента&nbsp;— поведение игрока, источник средств, политически значимые лица (PEP);</li>
+                <li>Риск продукта/сервиса&nbsp;— анонимность платёжного метода, скорость транзакций, сложность операций;</li>
+                <li>Риск канала&nbsp;— использование VPN, прокси, структурирование транзакций.</li>
+              </ul>
+              <p>Игроки с&nbsp;повышенным риском подлежат усиленной проверке (EDD).</p>
+              <h2 class="lgl__h2" id="legalAml-ru-s14">4. Идентификация и верификация клиентов (KYC — Know Your Customer)</h2>
+              <h3 class="lgl__h3">4.1. Момент проведения KYC</h3>
+              <p>Warwin проводит KYC-проверки:</p>
+              <ul class="lgl__ul">
+                <li>При&nbsp;регистрации аккаунта (базовая проверка);</li>
+                <li>Перед первым выводом средств (полная проверка);</li>
+                <li>При&nbsp;достижении определённых порогов депозитов или выводов;</li>
+                <li>При&nbsp;изменении платёжных методов;</li>
+                <li>При&nbsp;наличии подозрений в&nbsp;мошенничестве, мультиаккаунтинге или бонусном абьюзе;</li>
+                <li>По&nbsp;запросу регулятора или правоохранительных органов.</li>
+              </ul>
+              <h3 class="lgl__h3">4.2. Стандартная проверка (CDD — Customer Due Diligence)</h3>
+              <p>Документы и&nbsp;сведения, которые Warwin вправе запросить:</p>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Подтверждение личности:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Паспорт;</li>
+                  <li>Национальная ID-карта;</li>
+                  <li>Водительские права.</li>
+                </ul>
+                <p class="lgl__req">Документ должен быть действительным, читаемым, содержать фотографию, ФИО, дату рождения, номер документа, срок действия.</p>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Подтверждение адреса проживания (не&nbsp;старше 3 месяцев):</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Выписка по&nbsp;счёту (коммунальные услуги, интернет, телефон);</li>
+                  <li>Банковская выписка;</li>
+                  <li>Налоговое уведомление;</li>
+                  <li>Официальное письмо от&nbsp;государственного органа.</li>
+                </ul>
+                <p class="lgl__req">Документ должен содержать имя игрока и&nbsp;адрес, совпадающий с&nbsp;адресом регистрации.</p>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Подтверждение принадлежности платёжного метода:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Фото банковской карты с&nbsp;замазанными средними 8 цифрами и&nbsp;CVV-кодом (должны быть видны первые 6 и&nbsp;последние 4 цифры, имя владельца, срок действия);</li>
+                  <li>Скриншот электронного кошелька с&nbsp;видимым именем владельца и&nbsp;ID;</li>
+                  <li>Выписка по&nbsp;счёту с&nbsp;подтверждением владения.</li>
+                </ul>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Подтверждение возраста:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Документ, удостоверяющий личность, содержащий дату рождения;</li>
+                  <li>Дополнительные меры при&nbsp;сомнениях (селфи с&nbsp;документом, видеоверификация).</li>
+                </ul>
+              </div>
+              <h3 class="lgl__h3">4.3. Усиленная проверка (EDD — Enhanced Due Diligence)</h3>
+              <p>EDD применяется к&nbsp;игрокам с&nbsp;повышенным риском, включая:</p>
+              <ul class="lgl__ul">
+                <li>Суммарные депозиты, превышающие эквивалент 10 000 USD;</li>
+                <li>Политически значимые лица (PEP) и&nbsp;их близкие родственники;</li>
+                <li>Игроки из&nbsp;юрисдикций с&nbsp;повышенным риском;</li>
+                <li>Игроки с&nbsp;подозрительным поведением (необычные паттерны ставок, частые смены платёжных методов);</li>
+                <li>Игроки, использующие анонимные или сложноотслеживаемые платёжные методы.</li>
+              </ul>
+              <p>Дополнительные меры EDD:</p>
+              <ul class="lgl__ul">
+                <li>Source of Funds (SoF)&nbsp;— документальное подтверждение происхождения денежных средств (выписка с&nbsp;зарплатного счёта, налоговая декларация, документы о&nbsp;продаже имущества, бизнес-отчёты);</li>
+                <li>Source of Wealth (SoW)&nbsp;— объяснение общего состояния и&nbsp;источников богатства игрока;</li>
+                <li>Дополнительные проверки через внешние базы данных и&nbsp;скрининговые системы;</li>
+                <li>Усиленный мониторинг транзакций;</li>
+                <li>Одобрение Compliance Officer перед обработкой крупных выводов.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-ru-s29">5. Мониторинг транзакций</h2>
+              <p>Warwin осуществляет постоянный мониторинг всех транзакций с&nbsp;целью выявления подозрительной активности.</p>
+              <p>Признаки, вызывающие внимание:</p>
+              <ul class="lgl__ul">
+                <li>Депозиты и&nbsp;выводы без&nbsp;промежуточной игровой активности;</li>
+                <li>Структурирование транзакций (разбиение крупных сумм на&nbsp;мелкие для&nbsp;обхода порогов);</li>
+                <li>Частая смена платёжных методов или криптовалютных адресов;</li>
+                <li>Транзакции, не&nbsp;соответствующие заявленному профилю игрока (SoF);</li>
+                <li>Использование чужих платёжных реквизитов;</li>
+                <li>Попытки вывода до&nbsp;отыгрыша депозита (indicative of layering);</li>
+                <li>Резкое изменение паттерна игры (резкий рост ставок после длительного перерыва);</li>
+                <li>Связь аккаунтов с&nbsp;известными мошенническими схемами или бонусным абьюзом.</li>
+              </ul>
+              <p>Меры при&nbsp;выявлении подозрительной активности:</p>
+              <ul class="lgl__ul">
+                <li>Временная блокировка аккаунта до&nbsp;выяснения обстоятельств;</li>
+                <li>Запрос дополнительных документов и&nbsp;пояснений;</li>
+                <li>Усиленный мониторинг;</li>
+                <li>Направление отчёта о&nbsp;подозрительной транзакции (SAR) в&nbsp;компетентные органы, если имеются основания.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-ru-s35">6. Отчётность о подозрительной активности (SAR / STR)</h2>
+              <p>При&nbsp;наличии разумных оснований полагать, что&nbsp;транзакция или поведение игрока связаны с&nbsp;отмыванием денег, финансированием терроризма или иной противоправной деятельностью, Warwin обязана:</p>
+              <ul class="lgl__ul">
+                <li>Немедленно задокументировать подозрение;</li>
+                <li>Приостановить соответствующие транзакции (если это не&nbsp;помешает расследованию);</li>
+                <li>Направить Suspicious Activity Report (SAR) или Suspicious Transaction Report (STR) в&nbsp;Financial Intelligence Unit (FIU) Коморских Островов или иной компетентный орган;</li>
+                <li>Сотрудничать с&nbsp;правоохранительными и&nbsp;регулирующими органами в&nbsp;рамках расследования.</li>
+              </ul>
+              <p class="lgl__note">Важно: Законодательство может запрещать Warwin информировать игрока о&nbsp;направлении SAR/STR. Любое раскрытие информации («tipping off») является нарушением и&nbsp;влечёт ответственность.</p>
+              <h2 class="lgl__h2" id="legalAml-ru-s39">7. Запрещённые действия и санкции</h2>
+              <h3 class="lgl__h3">7.1. Запрещённые действия</h3>
+              <p>Игроку категорически запрещается:</p>
+              <ul class="lgl__ul">
+                <li>Использовать ложные, украденные или чужие персональные и&nbsp;платёжные данные;</li>
+                <li>Создавать несколько аккаунтов (мультиаккаунтинг);</li>
+                <li>Использовать Сервисы для&nbsp;отмывания денег, финансирования терроризма или иных противоправных целей;</li>
+                <li>Структурировать транзакции с&nbsp;целью обхода порогов верификации или отчётности;</li>
+                <li>Использовать чужие платёжные реквизиты;</li>
+                <li>Использовать VPN, прокси или иные средства сокрытия местоположения для&nbsp;обхода территориальных ограничений;</li>
+                <li>Предоставлять поддельные, изменённые или краденые документы для&nbsp;KYC.</li>
+              </ul>
+              <h3 class="lgl__h3">7.2. Санкции</h3>
+              <p>При&nbsp;выявлении нарушений настоящей Политики Warwin вправе применить следующие меры:</p>
+              <ul class="lgl__ul">
+                <li>Отклонение или заморозка депозитов и&nbsp;выводов;</li>
+                <li>Отмена бонусов и&nbsp;связанных выигрышей;</li>
+                <li>Временная блокировка аккаунта до&nbsp;завершения расследования;</li>
+                <li>Закрытие аккаунта с&nbsp;конфискацией средств, полученных в&nbsp;результате нарушения;</li>
+                <li>Направление информации в&nbsp;регулирующие и&nbsp;правоохранительные органы;</li>
+                <li>Внесение игрока в&nbsp;общий стоп-лист операторов.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-ru-s46">8. Хранение записей</h2>
+              <p>Warwin обязана хранить все записи, связанные с&nbsp;AML/KYC, в&nbsp;течение не&nbsp;менее 5 (пяти) лет с&nbsp;момента:</p>
+              <ul class="lgl__ul">
+                <li>Закрытия аккаунта игрока;</li>
+                <li>Завершения транзакции;</li>
+                <li>Окончания деловых отношений с&nbsp;игроком.</li>
+              </ul>
+              <p>Хранимые записи включают:</p>
+              <ul class="lgl__ul">
+                <li>Копии предоставленных документов верификации;</li>
+                <li>Историю транзакций (депозиты, выводы, ставки);</li>
+                <li>Результаты скрининга и&nbsp;оценки рисков;</li>
+                <li>Переписку с&nbsp;игроком по&nbsp;вопросам KYC/AML;</li>
+                <li>SAR/STR и&nbsp;связанную документацию;</li>
+                <li>Внутренние расследования и&nbsp;принятые решения.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-ru-s51">9. Обучение персонала</h2>
+              <p>Все сотрудники Warwin, вовлечённые в&nbsp;обработку транзакций, верификацию, поддержку клиентов и&nbsp;безопасность, проходят регулярное обучение по&nbsp;вопросам AML/KYC:</p>
+              <ul class="lgl__ul">
+                <li>Признаки отмывания денег и&nbsp;финансирования терроризма;</li>
+                <li>Процедуры KYC и&nbsp;EDD;</li>
+                <li>Мониторинг транзакций и&nbsp;выявление подозрительной активности;</li>
+                <li>Порядок подачи SAR/STR;</li>
+                <li>Законодательные требования лицензии Anjouan Gaming Authority.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-ru-s54">10. Взаимодействие с третьими лицами</h2>
+              <p>Warwin сотрудничает с:</p>
+              <ul class="lgl__ul">
+                <li>Платёжными провайдерами&nbsp;— для&nbsp;верификации принадлежности платёжных методов;</li>
+                <li>Сервисами KYC/AML-скрининга&nbsp;— для&nbsp;автоматизированной проверки документов и&nbsp;выявления PEP/sanctions;</li>
+                <li>Регуляторами&nbsp;— Anjouan Gaming Authority, FIU Коморских Островов;</li>
+                <li>Правоохранительными органами&nbsp;— по&nbsp;законным запросам и&nbsp;в рамках расследований.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-ru-s57">11. Изменения Политики</h2>
+              <p>Warwin вправе обновлять настоящую Политику в&nbsp;связи с&nbsp;изменениями законодательства, требований лицензии, технологий или выявлением новых рисков. Обновлённая версия публикуется на&nbsp;сайте warwin.casino.</p>
+              <p>Продолжение использования Сервисов после публикации изменений означает принятие новой версии Политики.</p>
+              <h2 class="lgl__h2" id="legalAml-ru-s60">12. Контактная информация</h2>
+              <p>По&nbsp;всем вопросам, связанным с&nbsp;AML/KYC, обращайтесь:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>KYC / Верификация</dt><dd><a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a></dd></div>
+                <div><dt>Безопасность / Compliance</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+                <div><dt>Служба поддержки</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">Настоящая Политика является неотъемлемой частью Пользовательского соглашения Warwin. В&nbsp;случае расхождений приоритет имеет английская версия документов.</p>
+            </div>
+          </article>
+          <article class="lgl__doc" data-lang="es" lang="es" hidden>
+            <h1 class="lgl__h1">Política de Prevención de Lavado de Dinero y Financiamiento del Terrorismo (AML / KYC)</h1>
+            <dl class="lgl__meta">
+              <div><dt>Versión</dt><dd>1.0</dd></div>
+              <div><dt>Fecha de entrada en vigor</dt><dd>27 de agosto de 2026</dd></div>
+              <div><dt>Última actualización</dt><dd>27 de agosto de 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Política de Prevención de Lavado de Dinero y Financiamiento del Terrorismo (AML / KYC)">
+              <a href="#legalAml-es-s0">1. Disposiciones Generales</a>
+              <a href="#legalAml-es-s5">2. Persona Responsable Designada (Compliance Officer)</a>
+              <a href="#legalAml-es-s9">3. Evaluación de Riesgos (Enfoque Basado en Riesgos)</a>
+              <a href="#legalAml-es-s14">4. Identificación y Verificación del Cliente (KYC — Know Your Customer)</a>
+              <a href="#legalAml-es-s29">5. Monitoreo de Transacciones</a>
+              <a href="#legalAml-es-s35">6. Reporte de Actividad Sospechosa (SAR / STR)</a>
+              <a href="#legalAml-es-s39">7. Acciones Prohibidas y Sanciones</a>
+              <a href="#legalAml-es-s46">8. Conservación de Registros</a>
+              <a href="#legalAml-es-s51">9. Capacitación del Personal</a>
+              <a href="#legalAml-es-s54">10. Interacción con Terceros</a>
+              <a href="#legalAml-es-s57">11. Cambios a esta Política</a>
+              <a href="#legalAml-es-s60">12. Información de Contacto</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalAml-es-s0">1. Disposiciones Generales</h2>
+              <p>La&nbsp;presente Política de&nbsp;Prevención de&nbsp;Lavado de&nbsp;Dinero, Financiamiento del&nbsp;Terrorismo y&nbsp;Fraude (en adelante&nbsp;— "Política AML/KYC") establece los&nbsp;principios, procedimientos y&nbsp;medidas aplicadas por&nbsp;WarWin Group International Ltd (en adelante&nbsp;— "Warwin", "Compañía", "nosotros", "nos"), registrada en&nbsp;Belice bajo el&nbsp;número 000054736, en&nbsp;el marco de&nbsp;sus actividades bajo la&nbsp;Licencia de&nbsp;Juegos de&nbsp;Anjouan.</p>
+              <p>Esta Política es&nbsp;parte integral de&nbsp;los Términos y&nbsp;Condiciones y&nbsp;es obligatoria para&nbsp;todos los&nbsp;jugadores, empleados, agentes y&nbsp;socios de&nbsp;Warwin.</p>
+              <p>Objetivos principales:</p>
+              <ul class="lgl__ul">
+                <li>Prevenir el&nbsp;uso de&nbsp;los Servicios de&nbsp;Warwin para&nbsp;el lavado de&nbsp;dinero (ML);</li>
+                <li>Prevenir el&nbsp;financiamiento del&nbsp;terrorismo (TF);</li>
+                <li>Identificar, evaluar y&nbsp;gestionar los&nbsp;riesgos asociados con&nbsp;actividades ilícitas;</li>
+                <li>Garantizar el&nbsp;cumplimiento total de&nbsp;los requisitos de&nbsp;la Anjouan Gaming Authority y&nbsp;la legislación aplicable.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-es-s5">2. Persona Responsable Designada (Compliance Officer)</h2>
+              <p>Warwin designa un&nbsp;Compliance Officer (Oficial de&nbsp;Cumplimiento) que:</p>
+              <ul class="lgl__ul">
+                <li>Desarrolla, implementa y&nbsp;supervisa el&nbsp;cumplimiento de&nbsp;esta Política;</li>
+                <li>Organiza la&nbsp;capacitación del&nbsp;personal en&nbsp;temas AML/KYC;</li>
+                <li>Revisa y&nbsp;aprueba decisiones sobre transacciones sospechosas;</li>
+                <li>Interactúa con&nbsp;organismos reguladores, autoridades de&nbsp;aplicación de&nbsp;la ley y&nbsp;UIFs (Unidades de&nbsp;Inteligencia Financiera);</li>
+                <li>Garantiza la&nbsp;presentación oportuna de&nbsp;Reportes de&nbsp;Actividad Sospechosa (SAR);</li>
+                <li>Realiza revisiones periódicas y&nbsp;actualizaciones de&nbsp;la Política.</li>
+              </ul>
+              <p>Contacto del&nbsp;Compliance Officer: <a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a> / <a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a>.</p>
+              <h2 class="lgl__h2" id="legalAml-es-s9">3. Evaluación de Riesgos (Enfoque Basado en Riesgos)</h2>
+              <p>Warwin aplica un&nbsp;Enfoque Basado en&nbsp;Riesgos (Risk-Based Approach, RBA) para&nbsp;AML/KYC. Esto significa que&nbsp;la profundidad y&nbsp;el alcance de&nbsp;los controles dependen del&nbsp;nivel de&nbsp;riesgo asociado con&nbsp;un jugador, transacción, método de&nbsp;pago o&nbsp;jurisdicción particular.</p>
+              <p>Factores de&nbsp;riesgo:</p>
+              <ul class="lgl__ul">
+                <li>Riesgo geográfico&nbsp;— país de&nbsp;residencia/ciudadanía del&nbsp;jugador, presencia de&nbsp;sanciones, nivel de&nbsp;corrupción;</li>
+                <li>Riesgo del cliente&nbsp;— comportamiento del&nbsp;jugador, origen de&nbsp;los fondos, personas políticamente expuestas (PEP);</li>
+                <li>Riesgo del producto/servicio&nbsp;— anonimato del&nbsp;método de&nbsp;pago, velocidad de&nbsp;las transacciones, complejidad de&nbsp;las operaciones;</li>
+                <li>Riesgo del canal&nbsp;— uso de&nbsp;VPN, proxy, estructuración de&nbsp;transacciones.</li>
+              </ul>
+              <p>Los&nbsp;jugadores con&nbsp;riesgo elevado están sujetos a&nbsp;Debida Diligencia Reforzada (EDD).</p>
+              <h2 class="lgl__h2" id="legalAml-es-s14">4. Identificación y Verificación del Cliente (KYC — Know Your Customer)</h2>
+              <h3 class="lgl__h3">4.1. Momento de Realización del KYC</h3>
+              <p>Warwin realiza controles KYC:</p>
+              <ul class="lgl__ul">
+                <li>Al&nbsp;registrar la&nbsp;cuenta (control básico);</li>
+                <li>Antes del&nbsp;primer retiro (control completo);</li>
+                <li>Al&nbsp;alcanzar ciertos umbrales de&nbsp;depósitos o&nbsp;retiros;</li>
+                <li>Al&nbsp;cambiar métodos de&nbsp;pago;</li>
+                <li>Cuando existen sospechas de&nbsp;fraude, multicuenta o&nbsp;abuso de&nbsp;bonos;</li>
+                <li>A&nbsp;solicitud de&nbsp;un regulador o&nbsp;autoridad de&nbsp;aplicación de&nbsp;la ley.</li>
+              </ul>
+              <h3 class="lgl__h3">4.2. Debida Diligencia del Cliente (CDD — Customer Due Diligence)</h3>
+              <p>Documentos e&nbsp;información que&nbsp;Warwin puede solicitar:</p>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Comprobante de&nbsp;identidad:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Pasaporte;</li>
+                  <li>Documento de&nbsp;identidad nacional;</li>
+                  <li>Licencia de&nbsp;conducir.</li>
+                </ul>
+                <p class="lgl__req">El&nbsp;documento debe ser válido, legible, contener una&nbsp;fotografía, nombre completo, fecha de&nbsp;nacimiento, número de&nbsp;documento y&nbsp;fecha de&nbsp;vencimiento.</p>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Comprobante de&nbsp;domicilio (no&nbsp;mayor a&nbsp;3 meses):</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Factura de&nbsp;servicios (electricidad, agua, internet, teléfono);</li>
+                  <li>Extracto bancario;</li>
+                  <li>Aviso impositivo;</li>
+                  <li>Carta oficial de&nbsp;un organismo gubernamental.</li>
+                </ul>
+                <p class="lgl__req">El&nbsp;documento debe contener el&nbsp;nombre del&nbsp;jugador y&nbsp;la dirección que&nbsp;coincida con&nbsp;la dirección de&nbsp;registro.</p>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Comprobante de&nbsp;titularidad del&nbsp;método de&nbsp;pago:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Foto de&nbsp;tarjeta bancaria con&nbsp;los 8 dígitos centrales y&nbsp;el CVV enmascarados (deben ser visibles los&nbsp;primeros 6 y&nbsp;últimos 4 dígitos, el&nbsp;nombre del&nbsp;titular y&nbsp;la fecha de&nbsp;vencimiento);</li>
+                  <li>Captura de&nbsp;pantalla de&nbsp;billetera electrónica con&nbsp;el nombre del&nbsp;titular y&nbsp;el ID visibles;</li>
+                  <li>Extracto de&nbsp;cuenta que&nbsp;confirme la&nbsp;titularidad.</li>
+                </ul>
+              </div>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Comprobante de&nbsp;edad:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Documento de&nbsp;identidad que&nbsp;contenga la&nbsp;fecha de&nbsp;nacimiento;</li>
+                  <li>Medidas adicionales en&nbsp;caso de&nbsp;duda (selfie con&nbsp;documento, verificación por&nbsp;video).</li>
+                </ul>
+              </div>
+              <h3 class="lgl__h3">4.3. Debida Diligencia Reforzada (EDD — Enhanced Due Diligence)</h3>
+              <p>La&nbsp;EDD se&nbsp;aplica a&nbsp;jugadores con&nbsp;riesgo elevado, incluyendo:</p>
+              <ul class="lgl__ul">
+                <li>Depósitos totales que&nbsp;superen el&nbsp;equivalente de&nbsp;USD 10,000;</li>
+                <li>Personas Políticamente Expuestas (PEP) y&nbsp;sus familiares cercanos;</li>
+                <li>Jugadores de&nbsp;jurisdicciones de&nbsp;alto riesgo;</li>
+                <li>Jugadores con&nbsp;comportamiento sospechoso (patrones de&nbsp;apuestas inusuales, cambios frecuentes de&nbsp;métodos de&nbsp;pago);</li>
+                <li>Jugadores que&nbsp;utilizan métodos de&nbsp;pago anónimos o&nbsp;difíciles de&nbsp;rastrear.</li>
+              </ul>
+              <p>Medidas EDD adicionales:</p>
+              <ul class="lgl__ul">
+                <li>Origen de&nbsp;los Fondos (SoF)&nbsp;— confirmación documental del&nbsp;origen de&nbsp;los fondos (extracto de&nbsp;cuenta salarial, declaración de&nbsp;impuestos, documentos de&nbsp;venta de&nbsp;propiedad, informes comerciales);</li>
+                <li>Origen de&nbsp;la Riqueza (SoW)&nbsp;— explicación de&nbsp;la situación financiera general y&nbsp;las fuentes de&nbsp;riqueza del&nbsp;jugador;</li>
+                <li>Controles adicionales a&nbsp;través de&nbsp;bases de&nbsp;datos externas y&nbsp;sistemas de&nbsp;escaneo;</li>
+                <li>Monitoreo reforzado de&nbsp;transacciones;</li>
+                <li>Aprobación del&nbsp;Compliance Officer antes de&nbsp;procesar retiros grandes.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-es-s29">5. Monitoreo de Transacciones</h2>
+              <p>Warwin realiza monitoreo continuo de&nbsp;todas las&nbsp;transacciones para&nbsp;detectar actividad sospechosa.</p>
+              <p>Indicadores que&nbsp;desencadenan atención:</p>
+              <ul class="lgl__ul">
+                <li>Depósitos y&nbsp;retiros sin&nbsp;actividad de&nbsp;juego intermedia;</li>
+                <li>Estructuración de&nbsp;transacciones (división de&nbsp;montos grandes en&nbsp;pequeños para&nbsp;evadir umbrales);</li>
+                <li>Cambios frecuentes de&nbsp;métodos de&nbsp;pago o&nbsp;direcciones de&nbsp;criptomonedas;</li>
+                <li>Transacciones inconsistentes con&nbsp;el perfil declarado del&nbsp;jugador (SoF);</li>
+                <li>Uso de&nbsp;datos de&nbsp;pago de&nbsp;terceros;</li>
+                <li>Intentos de&nbsp;retiro antes de&nbsp;apostar el&nbsp;depósito (indicativo de&nbsp;layering);</li>
+                <li>Cambios repentinos en&nbsp;los patrones de&nbsp;juego (aumento brusco de&nbsp;apuestas después de&nbsp;una pausa prolongada);</li>
+                <li>Vínculos de&nbsp;cuentas con&nbsp;esquemas de&nbsp;fraude conocidos o&nbsp;abuso de&nbsp;bonos.</li>
+              </ul>
+              <p>Medidas ante la&nbsp;detección de&nbsp;actividad sospechosa:</p>
+              <ul class="lgl__ul">
+                <li>Bloqueo temporal de&nbsp;la cuenta a&nbsp;la espera de&nbsp;investigación;</li>
+                <li>Solicitud de&nbsp;documentos y&nbsp;explicaciones adicionales;</li>
+                <li>Monitoreo reforzado;</li>
+                <li>Presentación de&nbsp;un Reporte de&nbsp;Actividad Sospechosa (SAR) ante las&nbsp;autoridades competentes si existen motivos.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-es-s35">6. Reporte de Actividad Sospechosa (SAR / STR)</h2>
+              <p>Cuando existen motivos razonables para&nbsp;creer que&nbsp;una transacción o&nbsp;el comportamiento de&nbsp;un jugador están relacionados con&nbsp;el lavado de&nbsp;dinero, el&nbsp;financiamiento del&nbsp;terrorismo u&nbsp;otra actividad ilícita, Warwin está obligada a:</p>
+              <ul class="lgl__ul">
+                <li>Documentar inmediatamente la&nbsp;sospecha;</li>
+                <li>Suspender las&nbsp;transacciones relevantes (si esto no&nbsp;obstaculiza la&nbsp;investigación);</li>
+                <li>Presentar un&nbsp;Reporte de&nbsp;Actividad Sospechosa (SAR) o&nbsp;Reporte de&nbsp;Transacción Sospechosa (STR) ante la&nbsp;Unidad de&nbsp;Inteligencia Financiera (UIF) de&nbsp;las Comoras u&nbsp;otra autoridad competente;</li>
+                <li>Cooperar con&nbsp;las autoridades de&nbsp;aplicación de&nbsp;la ley y&nbsp;los organismos reguladores en&nbsp;el marco de&nbsp;la investigación.</li>
+              </ul>
+              <p class="lgl__note">Importante: La&nbsp;legislación puede prohibir a&nbsp;Warwin informar al&nbsp;jugador que&nbsp;se ha presentado un&nbsp;SAR/STR. Cualquier divulgación de&nbsp;información ("tipping off") es&nbsp;una infracción y&nbsp;conlleva responsabilidad.</p>
+              <h2 class="lgl__h2" id="legalAml-es-s39">7. Acciones Prohibidas y Sanciones</h2>
+              <h3 class="lgl__h3">7.1. Acciones Prohibidas</h3>
+              <p>Al&nbsp;jugador le está estrictamente prohibido:</p>
+              <ul class="lgl__ul">
+                <li>Utilizar datos personales y&nbsp;de pago falsos, robados o&nbsp;de terceros;</li>
+                <li>Crear varias cuentas (multicuenta);</li>
+                <li>Utilizar los&nbsp;Servicios para&nbsp;lavado de&nbsp;dinero, financiamiento del&nbsp;terrorismo u&nbsp;otros fines ilícitos;</li>
+                <li>Estructurar transacciones para&nbsp;evadir umbrales de&nbsp;verificación o&nbsp;reporte;</li>
+                <li>Utilizar datos de&nbsp;pago de&nbsp;terceros;</li>
+                <li>Utilizar VPN, proxy u&nbsp;otros medios de&nbsp;ocultamiento de&nbsp;ubicación para&nbsp;eludir restricciones territoriales;</li>
+                <li>Proporcionar documentos falsificados, alterados o&nbsp;robados para&nbsp;KYC.</li>
+              </ul>
+              <h3 class="lgl__h3">7.2. Sanciones</h3>
+              <p>Al&nbsp;detectar infracciones de&nbsp;esta Política, Warwin puede aplicar las&nbsp;siguientes medidas:</p>
+              <ul class="lgl__ul">
+                <li>Rechazo o&nbsp;congelación de&nbsp;depósitos y&nbsp;retiros;</li>
+                <li>Cancelación de&nbsp;bonos y&nbsp;ganancias asociadas;</li>
+                <li>Bloqueo temporal de&nbsp;la cuenta a&nbsp;la espera de&nbsp;conclusión de&nbsp;la investigación;</li>
+                <li>Cierre de&nbsp;la cuenta con&nbsp;confiscación de&nbsp;fondos obtenidos como resultado de&nbsp;la infracción;</li>
+                <li>Reporte de&nbsp;información a&nbsp;organismos reguladores y&nbsp;de aplicación de&nbsp;la ley;</li>
+                <li>Inclusión del&nbsp;jugador en&nbsp;una lista de&nbsp;exclusión compartida entre operadores.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-es-s46">8. Conservación de Registros</h2>
+              <p>Warwin está obligada a&nbsp;conservar todos los&nbsp;registros relacionados con&nbsp;AML/KYC durante al&nbsp;menos 5 (cinco) años desde:</p>
+              <ul class="lgl__ul">
+                <li>La&nbsp;fecha de&nbsp;cierre de&nbsp;la cuenta;</li>
+                <li>La&nbsp;fecha de&nbsp;finalización de&nbsp;la transacción;</li>
+                <li>La&nbsp;terminación de&nbsp;la relación comercial con&nbsp;el jugador.</li>
+              </ul>
+              <p>Los&nbsp;registros conservados incluyen:</p>
+              <ul class="lgl__ul">
+                <li>Copias de&nbsp;los documentos de&nbsp;verificación proporcionados;</li>
+                <li>Historial de&nbsp;transacciones (depósitos, retiros, apuestas);</li>
+                <li>Resultados de&nbsp;escaneos y&nbsp;evaluaciones de&nbsp;riesgo;</li>
+                <li>Correspondencia con&nbsp;el jugador sobre temas KYC/AML;</li>
+                <li>SAR/STR y&nbsp;documentación relacionada;</li>
+                <li>Investigaciones internas y&nbsp;decisiones tomadas.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-es-s51">9. Capacitación del Personal</h2>
+              <p>Todos los&nbsp;empleados de&nbsp;Warwin involucrados en&nbsp;el procesamiento de&nbsp;transacciones, verificación, atención al&nbsp;cliente y&nbsp;seguridad reciben capacitación regular sobre temas AML/KYC:</p>
+              <ul class="lgl__ul">
+                <li>Signos de&nbsp;lavado de&nbsp;dinero y&nbsp;financiamiento del&nbsp;terrorismo;</li>
+                <li>Procedimientos KYC y&nbsp;EDD;</li>
+                <li>Monitoreo de&nbsp;transacciones y&nbsp;detección de&nbsp;actividad sospechosa;</li>
+                <li>Procedimientos de&nbsp;presentación de&nbsp;SAR/STR;</li>
+                <li>Requisitos legislativos de&nbsp;la Anjouan Gaming Authority.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-es-s54">10. Interacción con Terceros</h2>
+              <p>Warwin coopera con:</p>
+              <ul class="lgl__ul">
+                <li>Proveedores de pago&nbsp;— para&nbsp;la verificación de&nbsp;la titularidad de&nbsp;los métodos de&nbsp;pago;</li>
+                <li>Servicios de&nbsp;escaneo KYC/AML&nbsp;— para&nbsp;la verificación automatizada de&nbsp;documentos y&nbsp;detección de&nbsp;PEP/sanciones;</li>
+                <li>Reguladores&nbsp;— Anjouan Gaming Authority, UIF de&nbsp;las Comoras;</li>
+                <li>Autoridades de&nbsp;aplicación de&nbsp;la ley&nbsp;— a&nbsp;solicitud legal y&nbsp;en el&nbsp;marco de&nbsp;investigaciones.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalAml-es-s57">11. Cambios a esta Política</h2>
+              <p>Warwin puede actualizar esta Política en&nbsp;relación con&nbsp;cambios en&nbsp;la legislación, los&nbsp;requisitos de&nbsp;la licencia, la&nbsp;tecnología o&nbsp;la identificación de&nbsp;nuevos riesgos. La&nbsp;versión actualizada se&nbsp;publica en&nbsp;el sitio web warwin.casino.</p>
+              <p>El&nbsp;uso continuado de&nbsp;los Servicios después de&nbsp;la publicación de&nbsp;los cambios constituye la&nbsp;aceptación de&nbsp;la nueva versión de&nbsp;la Política.</p>
+              <h2 class="lgl__h2" id="legalAml-es-s60">12. Información de Contacto</h2>
+              <p>Para&nbsp;todas las&nbsp;preguntas relacionadas con&nbsp;AML/KYC, comuníquese con:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>KYC / Verificación</dt><dd><a class="hc__mail" href="mailto:kyc@warwin.casino">kyc@warwin.casino</a></dd></div>
+                <div><dt>Seguridad / Cumplimiento</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+                <div><dt>Servicio de Atención al Cliente</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">Esta Política es&nbsp;parte integral de&nbsp;los Términos y&nbsp;Condiciones de&nbsp;Warwin. En&nbsp;caso de&nbsp;discrepancias, prevalecerá la&nbsp;versión en&nbsp;inglés de&nbsp;los documentos.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Legal, страница «Responsible Gaming». Текст заказчика; показывается версия на
+           языке сайта, при её отсутствии — английская. -->
+      <div class="view view--legal" id="view-legal-rg" hidden>
+        <div class="lgl" data-langset>
+          <article class="lgl__doc" data-lang="en" lang="en">
+            <h1 class="lgl__h1">Responsible Gaming Policy</h1>
+            <dl class="lgl__meta">
+              <div><dt>Version</dt><dd>1.0</dd></div>
+              <div><dt>Effective Date</dt><dd>August 27, 2026</dd></div>
+              <div><dt>Last Updated</dt><dd>August 27, 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Responsible Gaming Policy">
+              <a href="#legalRg-en-s0">1. Responsible Gaming Philosophy</a>
+              <a href="#legalRg-en-s3">2. Age Restriction</a>
+              <a href="#legalRg-en-s9">3. Self-Control Tools</a>
+              <a href="#legalRg-en-s39">4. Setting Limits</a>
+              <a href="#legalRg-en-s43">5. Signs of Problem Gambling</a>
+              <a href="#legalRg-en-s47">6. Help Organizations</a>
+              <a href="#legalRg-en-s51">7. Staff Training</a>
+              <a href="#legalRg-en-s54">8. Interaction with Self-Excluded Players</a>
+              <a href="#legalRg-en-s57">9. Changes to This Policy</a>
+              <a href="#legalRg-en-s60">10. Contact Information</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalRg-en-s0">1. Responsible Gaming Philosophy</h2>
+              <p>Warwin (hereinafter&nbsp;— "Company", "we", "us") provides online gaming services exclusively for&nbsp;entertainment purposes. Gambling is&nbsp;not a&nbsp;source of&nbsp;income, a&nbsp;means of&nbsp;investment, or&nbsp;a solution to&nbsp;financial problems.</p>
+              <p>We&nbsp;are committed to&nbsp;protecting our&nbsp;players, preventing gambling addiction, and&nbsp;ensuring a&nbsp;safe environment for&nbsp;all users. This Policy is&nbsp;an integral part of&nbsp;the Terms and&nbsp;Conditions and&nbsp;is mandatory for&nbsp;all Warwin players, employees, agents, and&nbsp;partners.</p>
+              <h2 class="lgl__h2" id="legalRg-en-s3">2. Age Restriction</h2>
+              <p>Use of&nbsp;Warwin Services is&nbsp;permitted exclusively to&nbsp;persons who have reached 18 (eighteen) years of&nbsp;age or&nbsp;the higher minimum age established by&nbsp;the laws of&nbsp;the country of&nbsp;actual residence.</p>
+              <p>We&nbsp;take the&nbsp;following measures to&nbsp;prevent access by&nbsp;minors:</p>
+              <ul class="lgl__ul">
+                <li>Age verification&nbsp;— mandatory check upon registration and&nbsp;before first withdrawal;</li>
+                <li>KYC procedures&nbsp;— request for&nbsp;identity documents confirming age;</li>
+                <li>Technical means&nbsp;— behavioral analysis to&nbsp;detect signs of&nbsp;underage users;</li>
+              </ul>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Parental advice&nbsp;— recommendations for&nbsp;protecting devices from children’s access:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Set a&nbsp;password on&nbsp;the computer, smartphone, and&nbsp;tablet;</li>
+                  <li>Do not leave the&nbsp;device unattended with the&nbsp;account open;</li>
+                  <li>Keep bank card details in&nbsp;a place inaccessible to&nbsp;children;</li>
+                  <li>Do not save passwords on&nbsp;devices;</li>
+                  <li>Install filtering software (e.g., Net Nanny, Qustodio, Covenant Eyes) to&nbsp;block access to&nbsp;gambling sites.</li>
+                </ul>
+              </div>
+              <p>If&nbsp;an underage user is&nbsp;detected, the&nbsp;account is&nbsp;immediately blocked, deposits are returned (without winnings), and&nbsp;information about the&nbsp;violation may be reported to&nbsp;competent authorities.</p>
+              <h2 class="lgl__h2" id="legalRg-en-s9">3. Self-Control Tools</h2>
+              <p>Warwin provides players with the&nbsp;following tools to&nbsp;manage their gaming activity (subject to&nbsp;technical availability):</p>
+              <h3 class="lgl__h3">3.1. Deposit Limits</h3>
+              <p>Players may set a&nbsp;maximum deposit amount:</p>
+              <ul class="lgl__ul">
+                <li>Daily limit</li>
+                <li>Weekly limit</li>
+                <li>Monthly limit</li>
+              </ul>
+              <p>Application procedure:</p>
+              <ul class="lgl__ul">
+                <li>Limit reduction&nbsp;— applied immediately.</li>
+                <li>Limit increase or cancellation&nbsp;— takes effect after 24–72 hours (cooling-off period).</li>
+              </ul>
+              <h3 class="lgl__h3">3.2. Bet and Loss Limits</h3>
+              <ul class="lgl__ul">
+                <li>Bet limit&nbsp;— the&nbsp;maximum amount that can be wagered over a&nbsp;specified period.</li>
+                <li>Loss limit&nbsp;— the&nbsp;maximum amount of&nbsp;losses, after reaching which bets are blocked.</li>
+              </ul>
+              <h3 class="lgl__h3">3.3. Session Duration Limits</h3>
+              <p>Players may set a&nbsp;maximum duration of&nbsp;a continuous gaming session. Upon expiration of&nbsp;the set time, the&nbsp;system automatically ends the&nbsp;session or&nbsp;suggests a&nbsp;break.</p>
+              <h3 class="lgl__h3">3.4. Temporary Break (Cooling-off)</h3>
+              <p>Players may request a&nbsp;temporary suspension of&nbsp;account access for&nbsp;a period from 24 hours to&nbsp;30 days.</p>
+              <p>During the&nbsp;cooling-off period:</p>
+              <ul class="lgl__ul">
+                <li>Account login is&nbsp;not possible;</li>
+                <li>Deposits and&nbsp;bets are prohibited;</li>
+                <li>Withdrawal of&nbsp;available funds is&nbsp;possible through customer support;</li>
+                <li>Marketing communications are suspended.</li>
+              </ul>
+              <h3 class="lgl__h3">3.5. Self-Exclusion</h3>
+              <p>Players may request complete self-exclusion for&nbsp;a period of:</p>
+              <ul class="lgl__ul">
+                <li>6 months;</li>
+                <li>1 year;</li>
+                <li>3 years;</li>
+                <li>Indefinite.</li>
+              </ul>
+              <p>Self-exclusion procedure:</p>
+              <ul class="lgl__ul">
+                <li>The&nbsp;request is&nbsp;sent to&nbsp;customer support at&nbsp;<a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a> or&nbsp;through the&nbsp;personal cabinet.</li>
+                <li>The&nbsp;request is&nbsp;applied as&nbsp;soon as&nbsp;reasonably practicable after identity confirmation.</li>
+              </ul>
+              <div class="lgl__group">
+                <p class="lgl__group-t">During the&nbsp;self-exclusion period, the&nbsp;player cannot:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Log in&nbsp;to the&nbsp;account;</li>
+                  <li>Create a&nbsp;new account;</li>
+                  <li>Make a&nbsp;deposit or&nbsp;place a&nbsp;bet;</li>
+                  <li>Request a&nbsp;withdrawal (except when the&nbsp;balance is&nbsp;withdrawn before the&nbsp;start of&nbsp;self-exclusion).</li>
+                </ul>
+              </div>
+              <ul class="lgl__ul">
+                <li>Self-exclusion cannot be cancelled early. Upon expiry, the&nbsp;player may request reinstatement of&nbsp;access by&nbsp;undergoing re-verification.</li>
+                <li>Warwin takes reasonable measures to&nbsp;cease direct marketing communications during self-exclusion.</li>
+              </ul>
+              <p>Circumventing self-exclusion by&nbsp;creating a&nbsp;new account, using different personal data, VPN, or&nbsp;other means is&nbsp;prohibited. If&nbsp;circumvention is&nbsp;detected, all accounts are blocked and&nbsp;funds are confiscated.</p>
+              <h3 class="lgl__h3">3.6. Reality Checks</h3>
+              <p>During a&nbsp;gaming session, the&nbsp;player receives pop-up notifications informing about:</p>
+              <ul class="lgl__ul">
+                <li>Duration of&nbsp;the current session;</li>
+                <li>Total amount wagered during the&nbsp;session;</li>
+                <li>Account balance (wins/losses).</li>
+              </ul>
+              <p>Players may configure the&nbsp;frequency of&nbsp;reality checks in&nbsp;the personal cabinet.</p>
+              <h3 class="lgl__h3">3.7. Access to History</h3>
+              <p>Players may at&nbsp;any time view in&nbsp;the personal cabinet:</p>
+              <ul class="lgl__ul">
+                <li>History of&nbsp;deposits and&nbsp;withdrawals;</li>
+                <li>History of&nbsp;bets and&nbsp;gaming sessions;</li>
+                <li>Time spent playing.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalRg-en-s39">4. Setting Limits</h2>
+              <p>Players may set or&nbsp;change limits in&nbsp;the following ways:</p>
+              <ul class="lgl__ul">
+                <li>In&nbsp;the personal cabinet in&nbsp;the "Responsible Gaming" section;</li>
+                <li>By&nbsp;contacting customer support at&nbsp;<a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a>;</li>
+                <li>Through the&nbsp;live chat support.</li>
+              </ul>
+              <p>Warwin recommends that players set limits before starting to&nbsp;play, not during a&nbsp;session.</p>
+              <h2 class="lgl__h2" id="legalRg-en-s43">5. Signs of Problem Gambling</h2>
+              <p>We&nbsp;recommend that players regularly assess their behavior. Signs that gambling may be becoming a&nbsp;problem:</p>
+              <ul class="lgl__ul">
+                <li>More time and&nbsp;money is&nbsp;spent on&nbsp;gambling than planned;</li>
+                <li>Attempts to&nbsp;hide from loved ones the&nbsp;time or&nbsp;amounts spent on&nbsp;gambling;</li>
+                <li>Gambling to&nbsp;chase losses;</li>
+                <li>Borrowing money for&nbsp;gambling or&nbsp;to pay gambling debts;</li>
+                <li>Neglecting work, studies, or&nbsp;family obligations due to&nbsp;gambling;</li>
+                <li>Anxiety, irritability, or&nbsp;depression when trying to&nbsp;reduce gambling;</li>
+                <li>Feeling that gambling is&nbsp;the only source of&nbsp;pleasure or&nbsp;income.</li>
+              </ul>
+              <p class="lgl__note">If&nbsp;You recognize at&nbsp;least 2–3 signs from this list&nbsp;— seek help immediately.</p>
+              <h2 class="lgl__h2" id="legalRg-en-s47">6. Help Organizations</h2>
+              <p>Players experiencing problems controlling their gambling may seek free and&nbsp;confidential assistance from:</p>
+              <ul class="lgl__orgs">
+                <li><a href="https://www.gamcare.org.uk" target="_blank" rel="noopener noreferrer">GamCare</a><span>www.gamcare.org.uk</span><i>UK, international support</i></li>
+                <li><a href="https://www.gamblersanonymous.org" target="_blank" rel="noopener noreferrer">Gamblers Anonymous</a><span>www.gamblersanonymous.org</span><i>player support groups worldwide</i></li>
+                <li><a href="https://www.gamblingtherapy.org" target="_blank" rel="noopener noreferrer">Gambling Therapy</a><span>www.gamblingtherapy.org</span><i>online therapy, multilingual support</i></li>
+                <li><a href="https://www.begambleaware.org" target="_blank" rel="noopener noreferrer">BeGambleAware</a><span>www.begambleaware.org</span><i>information and counseling</i></li>
+              </ul>
+              <p>Warwin does not provide medical or&nbsp;psychological assistance. We&nbsp;refer players to&nbsp;qualified specialists.</p>
+              <h2 class="lgl__h2" id="legalRg-en-s51">7. Staff Training</h2>
+              <p>All Warwin employees working with players (support, verification, security) undergo training on&nbsp;responsible gaming issues:</p>
+              <ul class="lgl__ul">
+                <li>Recognizing signs of&nbsp;problem gambling;</li>
+                <li>Procedures for&nbsp;interacting with players requesting self-exclusion;</li>
+                <li>Application of&nbsp;self-control tools;</li>
+                <li>Referral to&nbsp;specialized organizations.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalRg-en-s54">8. Interaction with Self-Excluded Players</h2>
+              <p>Warwin takes reasonable measures to&nbsp;prevent self-excluded players from accessing the&nbsp;Services:</p>
+              <ul class="lgl__ul">
+                <li>Blocking the&nbsp;account and&nbsp;all associated data;</li>
+                <li>Suspension of&nbsp;marketing communications;</li>
+                <li>Checking new registrations against the&nbsp;self-exclusion database;</li>
+                <li>Cooperation with other operators (where shared stop-lists exist).</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalRg-en-s57">9. Changes to This Policy</h2>
+              <p>Warwin may update this Policy in&nbsp;connection with changes in&nbsp;legislation, license requirements, or&nbsp;industry best practices. The&nbsp;updated version is&nbsp;published on&nbsp;the website warwin.casino.</p>
+              <p>Continued use of&nbsp;the Services after publication of&nbsp;changes constitutes acceptance of&nbsp;the new version of&nbsp;the Policy.</p>
+              <h2 class="lgl__h2" id="legalRg-en-s60">10. Contact Information</h2>
+              <p>For&nbsp;all responsible gaming inquiries, please contact:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Email</dt><dd><a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a></dd></div>
+                <div><dt>Customer Support</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>Security</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">This Policy is&nbsp;an integral part of&nbsp;the Warwin Terms and&nbsp;Conditions. In&nbsp;case of&nbsp;discrepancies, the&nbsp;English version of&nbsp;the documents shall prevail.</p>
+            </div>
+          </article>
+          <article class="lgl__doc" data-lang="es" lang="es" hidden>
+            <h1 class="lgl__h1">Política de Juego Responsable</h1>
+            <dl class="lgl__meta">
+              <div><dt>Versión</dt><dd>1.0</dd></div>
+              <div><dt>Fecha de entrada en vigor</dt><dd>27 de agosto de 2026</dd></div>
+              <div><dt>Última actualización</dt><dd>27 de agosto de 2026</dd></div>
+            </dl>
+            <nav class="lgl__toc" aria-label="Política de Juego Responsable">
+              <a href="#legalRg-es-s0">1. Filosofía del Juego Responsable</a>
+              <a href="#legalRg-es-s3">2. Restricción de Edad</a>
+              <a href="#legalRg-es-s9">3. Herramientas de Autocontrol</a>
+              <a href="#legalRg-es-s39">4. Establecimiento de Límites</a>
+              <a href="#legalRg-es-s43">5. Signos de Juego Problemático</a>
+              <a href="#legalRg-es-s47">6. Organizaciones de Ayuda</a>
+              <a href="#legalRg-es-s51">7. Capacitación del Personal</a>
+              <a href="#legalRg-es-s54">8. Interacción con Jugadores Autoexcluidos</a>
+              <a href="#legalRg-es-s57">9. Cambios a esta Política</a>
+              <a href="#legalRg-es-s60">10. Información de Contacto</a>
+            </nav>
+            <div class="lgl__body">
+              <h2 class="lgl__h2" id="legalRg-es-s0">1. Filosofía del Juego Responsable</h2>
+              <p>Warwin (en adelante&nbsp;— "Compañía", "nosotros", "nos") proporciona servicios de&nbsp;juego en&nbsp;línea exclusivamente con&nbsp;fines de&nbsp;entretenimiento. El&nbsp;juego de&nbsp;azar no&nbsp;es una&nbsp;fuente de&nbsp;ingresos, un&nbsp;medio de&nbsp;inversión ni&nbsp;una solución a&nbsp;problemas financieros.</p>
+              <p>Estamos comprometidos con&nbsp;la protección de&nbsp;nuestros jugadores, la&nbsp;prevención de&nbsp;la adicción al&nbsp;juego y&nbsp;la garantía de&nbsp;un entorno seguro para&nbsp;todos los&nbsp;usuarios. Esta Política es&nbsp;parte integral de&nbsp;los Términos y&nbsp;Condiciones y&nbsp;es obligatoria para&nbsp;todos los&nbsp;jugadores, empleados, agentes y&nbsp;socios de&nbsp;Warwin.</p>
+              <h2 class="lgl__h2" id="legalRg-es-s3">2. Restricción de Edad</h2>
+              <p>El&nbsp;uso de&nbsp;los Servicios de&nbsp;Warwin está permitido exclusivamente a&nbsp;personas que&nbsp;hayan cumplido 18 (dieciocho) años o&nbsp;la edad mínima más&nbsp;alta establecida por&nbsp;las leyes del&nbsp;país de&nbsp;residencia real.</p>
+              <p>Tomamos las&nbsp;siguientes medidas para&nbsp;prevenir el&nbsp;acceso de&nbsp;menores de&nbsp;edad:</p>
+              <ul class="lgl__ul">
+                <li>Verificación de edad&nbsp;— control obligatorio al&nbsp;registrarse y&nbsp;antes del&nbsp;primer retiro;</li>
+                <li>Procedimientos KYC&nbsp;— solicitud de&nbsp;documentos de&nbsp;identidad que&nbsp;confirmen la&nbsp;edad;</li>
+                <li>Medios técnicos&nbsp;— análisis de&nbsp;comportamiento para&nbsp;detectar signos de&nbsp;usuarios menores de&nbsp;edad;</li>
+              </ul>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Consejos para padres&nbsp;— recomendaciones para&nbsp;proteger los&nbsp;dispositivos del&nbsp;acceso de&nbsp;los niños:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Establecer una&nbsp;contraseña en&nbsp;la computadora, smartphone y&nbsp;tablet;</li>
+                  <li>No&nbsp;dejar el&nbsp;dispositivo desatendido con&nbsp;la cuenta abierta;</li>
+                  <li>Mantener los&nbsp;datos de&nbsp;las tarjetas bancarias en&nbsp;un lugar inaccesible para&nbsp;los niños;</li>
+                  <li>No&nbsp;guardar contraseñas en&nbsp;los dispositivos;</li>
+                  <li>Instalar software de&nbsp;filtrado (por&nbsp;ejemplo, Net Nanny, Qustodio, Covenant Eyes) para&nbsp;bloquear el&nbsp;acceso a&nbsp;sitios de&nbsp;juego de&nbsp;azar.</li>
+                </ul>
+              </div>
+              <p>Si se&nbsp;detecta un&nbsp;usuario menor de&nbsp;edad, la&nbsp;cuenta se&nbsp;bloquea inmediatamente, los&nbsp;depósitos se&nbsp;devuelven (sin&nbsp;ganancias) y&nbsp;la información sobre la&nbsp;infracción puede ser reportada a&nbsp;las autoridades competentes.</p>
+              <h2 class="lgl__h2" id="legalRg-es-s9">3. Herramientas de Autocontrol</h2>
+              <p>Warwin proporciona a&nbsp;los jugadores las&nbsp;siguientes herramientas para&nbsp;gestionar su&nbsp;actividad de&nbsp;juego (sujeto a&nbsp;disponibilidad técnica):</p>
+              <h3 class="lgl__h3">3.1. Límites de Depósito</h3>
+              <p>Los&nbsp;jugadores pueden establecer un&nbsp;monto máximo de&nbsp;depósito:</p>
+              <ul class="lgl__ul">
+                <li>Límite diario</li>
+                <li>Límite semanal</li>
+                <li>Límite mensual</li>
+              </ul>
+              <p>Procedimiento de&nbsp;aplicación:</p>
+              <ul class="lgl__ul">
+                <li>Reducción del límite&nbsp;— se&nbsp;aplica inmediatamente.</li>
+                <li>Aumento o&nbsp;cancelación del límite&nbsp;— entra en&nbsp;vigor después de&nbsp;24–72 horas (período de&nbsp;reflexión).</li>
+              </ul>
+              <h3 class="lgl__h3">3.2. Límites de Apuesta y Pérdida</h3>
+              <ul class="lgl__ul">
+                <li>Límite de apuesta&nbsp;— el&nbsp;monto máximo que&nbsp;se puede apostar durante un&nbsp;período determinado.</li>
+                <li>Límite de pérdida&nbsp;— el&nbsp;monto máximo de&nbsp;pérdidas, tras alcanzar el&nbsp;cual las&nbsp;apuestas se&nbsp;bloquean.</li>
+              </ul>
+              <h3 class="lgl__h3">3.3. Límites de Duración de la Sesión</h3>
+              <p>Los&nbsp;jugadores pueden establecer una&nbsp;duración máxima de&nbsp;una sesión de&nbsp;juego continua. Al&nbsp;vencer el&nbsp;tiempo establecido, el&nbsp;sistema finaliza automáticamente la&nbsp;sesión o&nbsp;sugiere un&nbsp;descanso.</p>
+              <h3 class="lgl__h3">3.4. Pausa Temporal (Cooling-off)</h3>
+              <p>Los&nbsp;jugadores pueden solicitar la&nbsp;suspensión temporal del&nbsp;acceso a&nbsp;la cuenta por&nbsp;un período de&nbsp;24 horas a&nbsp;30 días.</p>
+              <p>Durante el&nbsp;período de&nbsp;cooling-off:</p>
+              <ul class="lgl__ul">
+                <li>El&nbsp;inicio de&nbsp;sesión en&nbsp;la cuenta no&nbsp;es posible;</li>
+                <li>Los&nbsp;depósitos y&nbsp;las apuestas están prohibidos;</li>
+                <li>El&nbsp;retiro de&nbsp;fondos disponibles es&nbsp;posible a&nbsp;través del&nbsp;servicio de&nbsp;atención al&nbsp;cliente;</li>
+                <li>Las&nbsp;comunicaciones de&nbsp;marketing se&nbsp;suspenden.</li>
+              </ul>
+              <h3 class="lgl__h3">3.5. Autoexclusión</h3>
+              <p>Los&nbsp;jugadores pueden solicitar la&nbsp;autoexclusión completa por&nbsp;un período de:</p>
+              <ul class="lgl__ul">
+                <li>6 meses;</li>
+                <li>1 año;</li>
+                <li>3 años;</li>
+                <li>Tiempo indeterminado.</li>
+              </ul>
+              <p>Procedimiento de&nbsp;autoexclusión:</p>
+              <ul class="lgl__ul">
+                <li>La&nbsp;solicitud se&nbsp;envía al&nbsp;servicio de&nbsp;atención al&nbsp;cliente en&nbsp;<a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a> o&nbsp;a través del&nbsp;panel personal.</li>
+                <li>La&nbsp;solicitud se&nbsp;aplica tan pronto como sea razonablemente posible después de&nbsp;la confirmación de&nbsp;identidad.</li>
+              </ul>
+              <div class="lgl__group">
+                <p class="lgl__group-t">Durante el&nbsp;período de&nbsp;autoexclusión, el&nbsp;jugador no&nbsp;puede:</p>
+                <ul class="lgl__ul lgl__ul--sub">
+                  <li>Iniciar sesión en&nbsp;la cuenta;</li>
+                  <li>Crear una&nbsp;nueva cuenta;</li>
+                  <li>Realizar un&nbsp;depósito o&nbsp;una apuesta;</li>
+                  <li>Solicitar un&nbsp;retiro (excepto cuando el&nbsp;saldo se&nbsp;retira antes del&nbsp;inicio de&nbsp;la autoexclusión).</li>
+                </ul>
+              </div>
+              <ul class="lgl__ul">
+                <li>La&nbsp;autoexclusión no&nbsp;puede cancelarse anticipadamente. Al&nbsp;vencer el&nbsp;plazo, el&nbsp;jugador puede solicitar la&nbsp;reactivación del&nbsp;acceso mediante una&nbsp;re-verificación.</li>
+                <li>Warwin toma medidas razonables para&nbsp;cesar las&nbsp;comunicaciones de&nbsp;marketing directo durante la&nbsp;autoexclusión.</li>
+              </ul>
+              <p>Está prohibido eludir la&nbsp;autoexclusión creando una&nbsp;nueva cuenta, utilizando datos personales diferentes, VPN u&nbsp;otros medios. Si se&nbsp;detecta elusión, todas las&nbsp;cuentas se&nbsp;bloquean y&nbsp;los fondos se&nbsp;confiscan.</p>
+              <h3 class="lgl__h3">3.6. Reality Checks (Alertas de Realidad)</h3>
+              <p>Durante una&nbsp;sesión de&nbsp;juego, el&nbsp;jugador recibe notificaciones emergentes que&nbsp;informan sobre:</p>
+              <ul class="lgl__ul">
+                <li>Duración de&nbsp;la sesión actual;</li>
+                <li>Monto total apostado durante la&nbsp;sesión;</li>
+                <li>Saldo de&nbsp;la cuenta (ganancias/pérdidas).</li>
+              </ul>
+              <p>Los&nbsp;jugadores pueden configurar la&nbsp;frecuencia de&nbsp;las reality checks en&nbsp;el panel personal.</p>
+              <h3 class="lgl__h3">3.7. Acceso al Historial</h3>
+              <p>Los&nbsp;jugadores pueden en&nbsp;cualquier momento ver en&nbsp;el panel personal:</p>
+              <ul class="lgl__ul">
+                <li>Historial de&nbsp;depósitos y&nbsp;retiros;</li>
+                <li>Historial de&nbsp;apuestas y&nbsp;sesiones de&nbsp;juego;</li>
+                <li>Tiempo dedicado al&nbsp;juego.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalRg-es-s39">4. Establecimiento de Límites</h2>
+              <p>Los&nbsp;jugadores pueden establecer o&nbsp;cambiar límites de&nbsp;las siguientes maneras:</p>
+              <ul class="lgl__ul">
+                <li>En&nbsp;el panel personal en&nbsp;la sección "Juego Responsable";</li>
+                <li>Contactando al&nbsp;servicio de&nbsp;atención al&nbsp;cliente en&nbsp;<a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a>;</li>
+                <li>A&nbsp;través del&nbsp;chat de&nbsp;soporte en&nbsp;vivo.</li>
+              </ul>
+              <p>Warwin recomienda a&nbsp;los jugadores establecer límites antes de&nbsp;comenzar a&nbsp;jugar, no&nbsp;durante una&nbsp;sesión.</p>
+              <h2 class="lgl__h2" id="legalRg-es-s43">5. Signos de Juego Problemático</h2>
+              <p>Recomendamos a&nbsp;los jugadores evaluar regularmente su&nbsp;comportamiento. Signos de&nbsp;que el&nbsp;juego de&nbsp;azar puede estar convirtiéndose en&nbsp;un problema:</p>
+              <ul class="lgl__ul">
+                <li>Se&nbsp;dedica más&nbsp;tiempo y&nbsp;dinero al&nbsp;juego de&nbsp;lo planeado;</li>
+                <li>Intentos de&nbsp;ocultar a&nbsp;los seres queridos el&nbsp;tiempo o&nbsp;los montos gastados en&nbsp;el juego;</li>
+                <li>Jugar para&nbsp;recuperar pérdidas (chasing losses);</li>
+                <li>Pedir dinero prestado para&nbsp;jugar o&nbsp;para pagar deudas de&nbsp;juego;</li>
+                <li>Descuido del&nbsp;trabajo, estudios u&nbsp;obligaciones familiares debido al&nbsp;juego;</li>
+                <li>Ansiedad, irritabilidad o&nbsp;depresión al&nbsp;intentar reducir el&nbsp;juego;</li>
+                <li>Sensation de&nbsp;que el&nbsp;juego de&nbsp;azar es&nbsp;la única fuente de&nbsp;placer o&nbsp;ingresos.</li>
+              </ul>
+              <p class="lgl__note">Si reconoce al&nbsp;menos 2–3 signos de&nbsp;esta lista&nbsp;— busque ayuda inmediatamente.</p>
+              <h2 class="lgl__h2" id="legalRg-es-s47">6. Organizaciones de Ayuda</h2>
+              <p>Los&nbsp;jugadores que&nbsp;experimentan problemas para&nbsp;controlar su&nbsp;juego pueden buscar asistencia gratuita y&nbsp;confidencial en:</p>
+              <ul class="lgl__orgs">
+                <li><a href="https://www.gamcare.org.uk" target="_blank" rel="noopener noreferrer">GamCare</a><span>www.gamcare.org.uk</span><i>Reino Unido, soporte internacional</i></li>
+                <li><a href="https://www.gamblersanonymous.org" target="_blank" rel="noopener noreferrer">Gamblers Anonymous</a><span>www.gamblersanonymous.org</span><i>grupos de apoyo para jugadores en todo el mundo</i></li>
+                <li><a href="https://www.gamblingtherapy.org" target="_blank" rel="noopener noreferrer">Gambling Therapy</a><span>www.gamblingtherapy.org</span><i>terapia en línea, soporte multilingüe</i></li>
+                <li><a href="https://www.begambleaware.org" target="_blank" rel="noopener noreferrer">BeGambleAware</a><span>www.begambleaware.org</span><i>información y asesoramiento</i></li>
+              </ul>
+              <p>Warwin no&nbsp;proporciona asistencia médica ni&nbsp;psicológica. Derivamos a&nbsp;los jugadores a&nbsp;especialistas calificados.</p>
+              <h2 class="lgl__h2" id="legalRg-es-s51">7. Capacitación del Personal</h2>
+              <p>Todos los&nbsp;empleados de&nbsp;Warwin que&nbsp;trabajan con&nbsp;jugadores (soporte, verificación, seguridad) reciben capacitación sobre temas de&nbsp;juego responsable:</p>
+              <ul class="lgl__ul">
+                <li>Reconocimiento de&nbsp;signos de&nbsp;juego problemático;</li>
+                <li>Procedimientos de&nbsp;interacción con&nbsp;jugadores que&nbsp;solicitan autoexclusión;</li>
+                <li>Aplicación de&nbsp;herramientas de&nbsp;autocontrol;</li>
+                <li>Derivación a&nbsp;organizaciones especializadas.</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalRg-es-s54">8. Interacción con Jugadores Autoexcluidos</h2>
+              <p>Warwin toma medidas razonables para&nbsp;prevenir que&nbsp;los jugadores autoexcluidos accedan a&nbsp;los Servicios:</p>
+              <ul class="lgl__ul">
+                <li>Bloqueo de&nbsp;la cuenta y&nbsp;todos los&nbsp;datos asociados;</li>
+                <li>Suspensión de&nbsp;las comunicaciones de&nbsp;marketing;</li>
+                <li>Verificación de&nbsp;nuevos registros contra la&nbsp;base de&nbsp;datos de&nbsp;autoexclusión;</li>
+                <li>Cooperación con&nbsp;otros operadores (donde existan listas de&nbsp;exclusión compartidas).</li>
+              </ul>
+              <h2 class="lgl__h2" id="legalRg-es-s57">9. Cambios a esta Política</h2>
+              <p>Warwin puede actualizar esta Política en&nbsp;relación con&nbsp;cambios en&nbsp;la legislación, los&nbsp;requisitos de&nbsp;la licencia o&nbsp;las mejores prácticas de&nbsp;la industria. La&nbsp;versión actualizada se&nbsp;publica en&nbsp;el sitio web warwin.casino.</p>
+              <p>El&nbsp;uso continuado de&nbsp;los Servicios después de&nbsp;la publicación de&nbsp;los cambios constituye la&nbsp;aceptación de&nbsp;la nueva versión de&nbsp;la Política.</p>
+              <h2 class="lgl__h2" id="legalRg-es-s60">10. Información de Contacto</h2>
+              <p>Para&nbsp;todas las&nbsp;consultas sobre juego responsable, comuníquese con:</p>
+              <address class="lgl__addr"><b>WarWin Group International Ltd</b><span>San Victor Street, Orange Walk Town, Belize</span></address>
+              <dl class="lgl__contacts">
+                <div><dt>Correo electrónico</dt><dd><a class="hc__mail" href="mailto:rg@warwin.casino">rg@warwin.casino</a></dd></div>
+                <div><dt>Servicio de Atención al Cliente</dt><dd><a class="hc__mail" href="mailto:support@warwin.casino">support@warwin.casino</a></dd></div>
+                <div><dt>Seguridad</dt><dd><a class="hc__mail" href="mailto:security@warwin.casino">security@warwin.casino</a></dd></div>
+              </dl>
+              <p class="lgl__foot">Esta Política es&nbsp;parte integral de&nbsp;los Términos y&nbsp;Condiciones de&nbsp;Warwin. En&nbsp;caso de&nbsp;discrepancias, prevalecerá la&nbsp;versión en&nbsp;inglés de&nbsp;los documentos.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
       <!-- Центр помощи, страница «Help Center / FAQ». Текст заказчика на трёх языках;
            показывается тот, на котором сейчас сайт. -->
       <div class="view view--help" id="view-help-faq" hidden>
@@ -8992,8 +10098,8 @@ body.br-open .bnav { z-index: 66; }
                 <li><button class="fnav__link" type="button">Terms &amp; Conditions</button></li>
                 <li><button class="fnav__link" type="button">Privacy Policy</button></li>
                 <li><button class="fnav__link" type="button">Cookie Policy</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="tab:responsible">Responsible Gaming</button></li>
-                <li><button class="fnav__link" type="button">AML / KYC Policy</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:legalRg">Responsible Gaming</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:legalAml">AML / KYC Policy</button></li>
               </ul>
             </div>
           </nav>
@@ -10611,7 +11717,9 @@ body.br-open .bnav { z-index: 66; }
                     helpFaq: document.getElementById('view-help-faq'),
                     helpPay: document.getElementById('view-help-pay'),
                     helpKyc: document.getElementById('view-help-kyc'),
-                    helpSup: document.getElementById('view-help-sup') };
+                    helpSup: document.getElementById('view-help-sup'),
+                    legalAml: document.getElementById('view-legal-aml'),
+                    legalRg: document.getElementById('view-legal-rg') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
