@@ -3258,6 +3258,13 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
    поэтому страницы всегда прижаты к нижней кромке. */
 .view--history .hist__card { flex: 1 1 auto; }
 .view--history .hist__table { flex: 1 1 auto; }
+/* Кроме бонусов: страниц у них нет, прижимать к нижней кромке нечего, и
+   растянутая карточка дала бы 500 пустых пикселей внутри рамки под тремя
+   строками. Пустое состояние тянется по-прежнему — ему центр нужен. */
+.view--history .hist__card--bonus,
+.view--history .hist__card--bonus .hist__table { flex: none; }
+/* Когда строк нет, карточка снова во весь экран: пустому экрану нужен центр */
+.view--history .hist__card--bonus:has(.hist__table[hidden]) { flex: 1 1 auto; }
 .hist__head { display: flex; flex-direction: column; gap: 16px; }
 .hist__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
             font-size: 32px; line-height: 40px; color: var(--white); }
@@ -3350,6 +3357,25 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 /* У выигранной ставки в колонке стоит сумма — слово «Won» дублировало бы её */
 .hist__result--won .hist__status { display: none; }
 
+/* 1496:15893 — бонусы. Три колонки вместо четырёх: значок исхода прижат
+   к дате, поэтому колонка под него фиксированная — иначе значки в строках
+   разной длины встали бы уступом. */
+.hist__table--bonus .hist__row { grid-template-columns: minmax(0, 1fr) 100px 70px; padding: 16px 0;
+                                 border-bottom-color: rgba(255, 255, 255, .07); }
+.hist__table--bonus .hist__row--head { padding: 0 0 12px; }
+.hist__bonus { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+               font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 15px; line-height: 22px; color: var(--white); }
+.hist__bst { display: flex; justify-content: flex-end; }
+.hist__row--head .hist__bst { font-weight: 500; font-size: 12px; line-height: 16px;
+                              color: var(--dp-label); }
+.hist__pill { padding: 4px 10px; border-radius: 999px; white-space: nowrap; font-style: normal;
+              font-family: 'Work Sans', sans-serif; font-weight: 600;
+              font-size: 12px; line-height: 17px; }
+.hist__pill--done { background: rgba(0, 201, 40, .15);   color: #00c928; }
+.hist__pill--gone { background: rgba(233, 178, 69, .15); color: #e9b245; }
+.hist__pill--off  { background: rgba(216, 0, 39, .15);   color: #d80027; }
+
 /* Загрузка: пять полос вместо строк, чтобы не прыгала высота карточки */
 .hist__skel { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; }
 .hist__skel[hidden] { display: none; }
@@ -3412,6 +3438,13 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .hist__bet { grid-row: 2; grid-column: 2; font-size: 13px; line-height: 18px; }
   .hist__bet::before { content: 'Bet '; }
   .hist__date { display: none; }
+  /* Бонусы: у строки нет второй даты внутри названия, как у ставок, —
+     поэтому дату не прячем, а уводим под название. */
+  .hist__table--bonus .hist__row { grid-template-columns: minmax(0, 1fr) auto; padding: 14px 0; }
+  .hist__bonus { grid-row: 1; grid-column: 1; white-space: normal; }
+  .hist__bst { grid-row: 1 / span 2; grid-column: 2; align-items: center; }
+  .hist__table--bonus .hist__date { display: block; grid-row: 2; grid-column: 1;
+                                    text-align: left; font-size: 13px; line-height: 18px; }
   /* Спортсбук: сверху статус, снизу ставка */
   .hist__row--bet { grid-template-columns: 1fr auto; row-gap: 10px; }
   .hist__row--bet .hist__game { grid-row: 2; grid-column: 1 / -1; }
@@ -6597,11 +6630,36 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         </div>
         </div>
 
-        <!-- Макета для бонусов нет: пока пустое состояние, а не выдуманные строки -->
-        <div class="hist__card" id="hist-bonus" role="tabpanel" hidden>
-          <div class="hist__empty">
+        <!-- 1496:15893 — бонусы в истории: название, значок исхода, дата.
+             Колонок три, как в макете: сумма награды там не показана. -->
+        <div class="hist__card hist__card--bonus" id="hist-bonus" role="tabpanel" hidden>
+          <div class="hist__table hist__table--bonus">
+            <div class="hist__row hist__row--head">
+              <span>Bonus</span><span class="hist__bst">Status</span><span class="hist__date">Date</span>
+            </div>
+            <div class="hist__row">
+              <span class="hist__bonus">Weekly Loss Cashback</span>
+              <span class="hist__bst"><em class="hist__pill hist__pill--done">completed</em></span>
+              <span class="hist__date">12.08.26</span>
+            </div>
+            <div class="hist__row">
+              <span class="hist__bonus">Zeus Friday</span>
+              <span class="hist__bst"><em class="hist__pill hist__pill--gone">expired</em></span>
+              <span class="hist__date">05.08.26</span>
+            </div>
+            <div class="hist__row">
+              <span class="hist__bonus">Reload 50%</span>
+              <span class="hist__bst"><em class="hist__pill hist__pill--off">cancelled</em></span>
+              <span class="hist__date">29.07.26</span>
+            </div>
+          </div>
+          <div class="hist__skel" hidden aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="hist__empty" hidden>
             <b>No bonus history yet</b>
             <span>Granted and used bonuses will appear here.</span>
+            <button type="button" hidden>Try again</button>
           </div>
         </div>
       </div>
@@ -10341,11 +10399,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var table = c.querySelector('.hist__table');
         var pager = c.querySelector('.hist__pager');
         var empty = c.querySelector('.hist__empty');
-        skel.hidden = what !== 'load';
-        table.hidden = what !== 'rows';
-        pager.hidden = what !== 'rows';
-        empty.hidden = what !== 'text';
-        if (what === 'text') {
+        /* У бонусов нет постраничной навигации: строк три, делить нечего */
+        if (skel) skel.hidden = what !== 'load';
+        if (table) table.hidden = what !== 'rows';
+        if (pager) pager.hidden = what !== 'rows';
+        if (empty) empty.hidden = what !== 'text';
+        if (what === 'text' && empty) {
           empty.querySelector('b').textContent = title;
           empty.querySelector('span').textContent = text;
           empty.querySelector('button').hidden = !cta;
@@ -10496,13 +10555,25 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       ]]);
 
 
+      /* Вкладку выбираем до состояния: histShow работает с той карточкой,
+         что открыта, иначе «пусто» досталось бы казино вместо бонусов. */
+      var histTab = function (key) {
+        var v = document.getElementById('view-history');
+        if (!v) return;
+        histPanel();
+        var t = v.querySelector('.hist__tab[data-hist="' + key + '"]');
+        if (t && !t.classList.contains('is-active')) t.click();
+      };
       STATES.push(['История', [
         ['Загрузка', function () { histShow('load'); }],
         ['Ставок ещё не было', function () { histShow('text', 'No bets yet',
           'Your casino bets will show up here right after the first spin.'); }],
         ['Ошибка загрузки', function () { histShow('text', 'Could not load history',
           'Check the connection and try again — your bets are safe.', true); }],
-        ['Обычный список', function () { histShow('rows'); }]
+        ['Обычный список', function () { histShow('rows'); }],
+        ['Бонусы: список', function () { histTab('bonus'); histShow('rows'); }],
+        ['Бонусы: пусто', function () { histTab('bonus'); histShow('text', 'No bonus history yet',
+          'Granted and used bonuses will appear here.'); }]
       ]]);
 
       /* ── панель ── */
