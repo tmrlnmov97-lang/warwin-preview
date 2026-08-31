@@ -2746,6 +2746,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnact__art { display: block; width: 116px; height: 72px; flex: none;
               border-radius: 12px; object-fit: cover; background: #07173d; }
 .bnact__title { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+/* Отметка стоит у названия: раньше она улетала в правый угол карточки,
+   за тысячу пикселей от того, к чему относится */
+.bnact__name { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .bnact__title h2 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
                    font-size: 20px; line-height: 28px; color: var(--white); }
 .bnact__when { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
@@ -2785,8 +2788,13 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnact__ask[hidden] { display: none; }
 .bnact__ask-btns { display: flex; gap: 10px; flex: none; }
 
-.bnact__side { box-sizing: border-box; display: flex; flex-direction: column;
-               align-items: flex-start; gap: 16px; padding: 18px; border-radius: 12px;
+/* Панель про деньги: сверху сам бонус, под ним сколько ещё отыграть.
+   Не растягиваем на всю высоту — в ней два блока против пяти строк слева,
+   и растянутая плита читалась как наполовину пустая коробка. */
+.bnact__side { box-sizing: border-box; align-self: center;
+               display: flex; flex-direction: column;
+               align-items: flex-start; gap: 20px;
+               padding: 20px; border-radius: 12px;
                background: var(--bg, #0e132a); border: 1px solid rgba(255, 255, 255, .05); }
 .bnact__cell { display: flex; flex-direction: column; gap: 2px; }
 .bnact__cell span { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
@@ -2794,6 +2802,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnact__cell b { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
                  font-size: 18px; line-height: 26px; color: var(--white);
                  font-variant-numeric: tabular-nums; }
+/* Сам бонус — главное число карточки: до него самым крупным был процент,
+   то есть наименее полезное из всего, что здесь написано */
+.bnact__cell--hero b { font-size: 28px; line-height: 36px; }
 
 /* ── история ── */
 .bnhist { display: flex; flex-direction: column; border-radius: 16px; overflow: hidden;
@@ -2818,11 +2829,10 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .bn__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* 300 на панель из узкой колонки уже не выкроить */
   .bnact { grid-template-columns: 1fr; gap: 18px; }
-  /* Панель ложится строкой: отметка отдельной строкой сверху, под ней числа */
-  .bnact__side { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-                 align-items: start; gap: 14px 24px; }
-  /* justify-self, иначе плашка растягивается на всю строку сетки */
-  .bnact__side > .bn__tag { grid-column: 1 / -1; justify-self: start; }
+  /* Панель ложится строкой: два денежных блока рядом */
+  .bnact__side { align-self: stretch; display: grid;
+                 grid-template-columns: repeat(2, minmax(0, 1fr));
+                 align-items: center; gap: 14px 24px; }
 }
 @media (max-width: 767px) {
   .bn__h1 { font-size: 26px; line-height: 32px; }
@@ -2841,7 +2851,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .bnact__acts { flex-wrap: wrap; gap: 12px 16px; }
   .bnact__acts .bn__btn--primary { flex: 1 1 100%; }
   .bnact__drop { margin-left: auto; }
-  .bnact__side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 28 в узкой колонке рвало «50.00 USDT» на две строки */
+  .bnact__cell--hero b { font-size: 22px; line-height: 30px; }
   .bnact__ask { flex-direction: column; align-items: stretch; }
   .bnact__ask-btns { flex: 1 1 auto; }
   .bnact__ask-btns .bn__btn { flex: 1 1 0; padding: 0; }
@@ -6035,7 +6046,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <div class="bnact__head">
                   <img loading="lazy" decoding="async" class="bnact__art" src="a/824508be9a.webp" alt="" width="116" height="72">
                   <div class="bnact__title">
-                    <h2>Welcome Free Spins</h2>
+                    <div class="bnact__name">
+                      <h2>Welcome Free Spins</h2>
+                      <span class="bn__tag bn__tag--live">In progress</span>
+                    </div>
                     <span class="bnact__when"></span>
                   </div>
                 </div>
@@ -6068,11 +6082,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 </div>
               </div>
 
+              <!-- Панель говорит только о деньгах. Срок стоит в шапке, процент и
+                   отыгранное — под полосой: каждое число названо ровно один раз. -->
               <aside class="bnact__side">
-                <span class="bn__tag bn__tag--live">In progress</span>
-                <div class="bnact__cell"><span>Bonus balance</span><b>50.00 USDT</b></div>
+                <div class="bnact__cell bnact__cell--hero">
+                  <span>Bonus balance</span><b>50.00 USDT</b>
+                </div>
                 <div class="bnact__cell"><span>Left to wager</span><b class="bnact__left"></b></div>
-                <div class="bnact__cell"><span>Expires</span><b class="bnact__till"></b></div>
               </aside>
             </section>
             <div class="bn__empty" hidden>
@@ -9982,8 +9998,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var pct = goal ? Math.min(100, Math.round(done / goal * 100)) : 0;
         a.querySelector('.bnact__pct').textContent = pct + '%';
         a.querySelector('.bnact__track i').style.width = pct + '%';
+        var bal = parseFloat((a.querySelector('.bnact__cell--hero b').textContent
+                              .match(/[\d.]+/) || ['0'])[0]) || 0;
+        var mult = bal ? Math.round(goal / bal) : 0;
         a.querySelector('.bnact__nums').textContent =
-          bnMoney(done) + ' of ' + bnMoney(goal) + ' ' + cur + ' \u00B7 ' + bnMoney(left) + ' left';
+          bnMoney(done) + ' of ' + bnMoney(goal) + ' ' + cur + (mult ? ' \u00B7 wagering x' + mult : '');
         a.querySelector('.bnact__left').textContent = bnMoney(left) + ' ' + cur;
 
         var days = parseInt(a.dataset.days, 10);
@@ -9992,7 +10011,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var short = till.getDate() + ' ' + MON[till.getMonth()];
-        a.querySelector('.bnact__till').textContent = short;
         var when = a.querySelector('.bnact__when');
         when.textContent = 'Expires ' + short + ' \u00B7 ' + days + (days === 1 ? ' day left' : ' days left');
         when.classList.toggle('is-soon', days <= 1);
