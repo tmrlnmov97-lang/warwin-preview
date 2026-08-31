@@ -3891,8 +3891,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .dp__copy { margin-top: 8px; }
   /* Ряд валюты 75 на обеих вкладках: подпись 15, зазор 12, поле 48.
      У вывода свои правила подписи и зазора, поэтому перекрываем и их. */
-  .dp__field, .dp.is-withdraw .dp__field { gap: 12px; }
+  .dp__field, .dp.is-withdraw .dp__field,
+  .dp__fd .dp__field, .dp__fw .dp__field { gap: 12px; }
   .dp__label, .dp.is-withdraw .dp__label { line-height: 15px; }
+  /* Пары колонок по 151 — зазор 20; ряд адреса по 99.33 — зазор 12.
+     У фиатных блоков свой зазор 12 на все ряды, поэтому перекрываем оба. */
+  .dp__fd .dp__row, .dp__fw .dp__row { gap: 20px; }
+  .dp__fd .dp__row--three, .dp__fw .dp__row--three { gap: 12px; }
   /* 12, а не 13: подсказка адреса «Fill in carefully according to the
      specific currency» при 13 не влезала в поле и обрезалась на полуслове */
   .dp__input input { font-size: 12px; }
@@ -7743,6 +7748,28 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="dp__hint">First Name*</span>
               <label class="dp__input">
                 <input class="dp__fd-first" type="text" placeholder="Gabriel" aria-label="First name">
+              </label>
+            </div>
+          </div>
+
+          <!-- 1180:51632 — адрес получателя: три колонки по 99.33 с зазором 12 -->
+          <div class="dp__row dp__row--three">
+            <div class="dp__field">
+              <span class="dp__hint">Country*</span>
+              <label class="dp__input">
+                <input class="dp__fd-country" type="text" placeholder="Country" aria-label="Country">
+              </label>
+            </div>
+            <div class="dp__field">
+              <span class="dp__hint">Street*</span>
+              <label class="dp__input">
+                <input class="dp__fd-street" type="text" placeholder="Street" aria-label="Street">
+              </label>
+            </div>
+            <div class="dp__field">
+              <span class="dp__hint">City*</span>
+              <label class="dp__input">
+                <input class="dp__fd-city" type="text" placeholder="City" aria-label="City">
               </label>
             </div>
           </div>
