@@ -748,6 +748,66 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .fbot__co { max-width: 32em; font-size: 12px; line-height: 18px; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   «About Us». Страница целиком текстовая, поэтому вся работа здесь —
+   набор: колонка на ~70 знаков, три кегля и одна плита-акцент.
+   Ни врезок, ни кнопок: в присланном тексте их нет.
+   ═══════════════════════════════════════════════════════════════════ */
+.ab { box-sizing: border-box; width: 100%; max-width: 760px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 28px; }
+.ab__langs { display: flex; gap: 8px; flex-wrap: wrap; }
+.ab__lang { display: flex; align-items: center; height: 38px; padding: 0 16px; cursor: pointer;
+            border: 0; border-radius: 999px; background: #272b40; color: var(--muted);
+            font-family: 'Work Sans', sans-serif; font-weight: 600;
+            font-size: 14px; line-height: 20px;
+            transition: background .15s ease, color .15s ease; }
+.ab__lang:hover { background: #30354e; color: var(--white); }
+.ab__lang.is-active { background: #00c1ff; color: #000; }
+.ab__lang.is-active:hover { background: #33cfff; color: #000; }
+
+.ab__doc[hidden] { display: none; }
+/* Подпись версии — та самая строка из текста заказчика, набрана меткой */
+.ab__note { margin: 0 0 10px; font-family: 'Work Sans', sans-serif; font-weight: 600;
+            font-size: 12px; line-height: 16px; letter-spacing: .06em;
+            text-transform: uppercase; color: var(--dp-label); }
+.ab__h1 { margin: 0 0 20px; font-family: 'Cora', 'Instrument Sans', sans-serif;
+          font-weight: 700; font-size: 40px; line-height: 48px;
+          color: var(--white); text-wrap: balance; }
+/* Первый абзац крупнее прочих: он несёт всё обещание страницы */
+.ab__lead { margin: 0 0 22px; font-family: 'Work Sans', sans-serif; font-weight: 400;
+            font-size: 18px; line-height: 30px; color: var(--white); }
+.ab__p { margin: 0 0 22px; font-family: 'Work Sans', sans-serif; font-weight: 400;
+         font-size: 16px; line-height: 28px; color: var(--modal-text-1, #bbc6cd); }
+/* Абзацы страницы длинные, и одинокое слово на последней строке заметно:
+   pretty подбирает разбивку так, чтобы хвост не оставался один */
+.ab__lead, .ab__p { text-wrap: pretty; }
+/* Абзац о скорости выплат — тот же текст, но на плите: им платформа и
+   объявляет своё отличие, а третьим сверху в общем потоке он терялся. */
+.ab__p--key { box-sizing: border-box; margin: 28px 0; padding: 24px 28px;
+              border-radius: 18px; color: var(--white);
+              font-size: 17px; line-height: 29px;
+              background: linear-gradient(180deg, rgba(7, 148, 255, .10), rgba(7, 148, 255, .03));
+              border: 1px solid rgba(7, 148, 255, .18); }
+/* Заключительная строка отбита волоском и набрана как подпись */
+.ab__sign { margin: 32px 0 0; padding-top: 28px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 26px; line-height: 34px; color: var(--white); text-wrap: balance; }
+.ab__doc > :last-child { margin-bottom: 0; }
+
+@media (max-width: 1023px) {
+  .ab__h1 { font-size: 32px; line-height: 40px; }
+}
+@media (max-width: 767px) {
+  .ab { gap: 20px; }
+  .ab__h1 { font-size: 26px; line-height: 34px; margin-bottom: 16px; }
+  .ab__lead { font-size: 16px; line-height: 26px; margin-bottom: 18px; }
+  .ab__p { font-size: 15px; line-height: 25px; margin-bottom: 18px; }
+  .ab__p--key { margin: 22px 0; padding: 18px; border-radius: 16px;
+                font-size: 15px; line-height: 26px; }
+  .ab__sign { margin-top: 26px; padding-top: 22px; font-size: 20px; line-height: 28px; }
+}
+
 .footer-block { display: flex; flex-direction: column; gap: 24px; }
 
 /* ─────────────── Live Casino ─────────────── */
@@ -6435,6 +6495,53 @@ body.br-open .bnav { z-index: 66; }
         <button class="pone__cta" type="button">Activate bonus</button>
       </div>
 
+      <!-- «About Us» — текст заказчика на трёх языках, переключаются чипами.
+           Своих заголовков, врезок и кнопок не добавлено: разбивка ровно по
+           присланным абзацам. Абзац о скорости выплат вынесен на плиту —
+           это то, чем текст и объявляет отличие платформы. -->
+      <div class="view view--about" id="view-about" hidden>
+        <div class="ab">
+          <div class="ab__langs" role="tablist" aria-label="Language">
+            <button class="ab__lang is-active" type="button" role="tab" aria-selected="true"
+                    aria-controls="ab-en" data-lang="en">English</button>
+            <button class="ab__lang" type="button" role="tab" aria-selected="false"
+                    aria-controls="ab-ru" data-lang="ru">Русский</button>
+            <button class="ab__lang" type="button" role="tab" aria-selected="false"
+                    aria-controls="ab-es" data-lang="es">Español</button>
+          </div>
+
+          <article class="ab__doc" id="ab-en" role="tabpanel" lang="en">
+            <p class="ab__note">International English</p>
+            <h1 class="ab__h1">Online Casino &amp; Sports Betting with Warwin</h1>
+            <p class="ab__lead">Warwin is&nbsp;a modern gaming platform created for&nbsp;players who value speed, convenience, and&nbsp;fairness. We&nbsp;combine cutting-edge technology, a&nbsp;wide selection of&nbsp;entertainment, and, most importantly, the&nbsp;fastest payouts in&nbsp;the industry.</p>
+            <p class="ab__p">On&nbsp;our platform, you&rsquo;ll find everything in&nbsp;one place: top slots, live casino games, table games, crash games, sports betting, and&nbsp;much more. Everything runs quickly, smoothly, and&nbsp;securely.</p>
+            <p class="ab__p ab__p--key">What truly sets us apart is&nbsp;the speed of&nbsp;our payouts. We&nbsp;have designed our&nbsp;processes so that most withdrawal requests are handled as&nbsp;quickly as&nbsp;possible. Once you&nbsp;complete your initial identity verification (KYC), future withdrawals are processed without lengthy delays. We&nbsp;believe your winnings should reach you&nbsp;quickly&mdash;not several days later.</p>
+            <p class="ab__p">Warwin is&nbsp;powered by&nbsp;a team of&nbsp;professionals with extensive experience in&nbsp;iGaming and&nbsp;payment technologies. We&nbsp;understand what players expect and&nbsp;continuously improve our&nbsp;platform to&nbsp;make it&nbsp;more convenient, reliable, and&nbsp;fast.</p>
+            <p class="ab__sign">Warwin. Play. Win. Get paid fast.</p>
+          </article>
+
+          <article class="ab__doc" id="ab-ru" role="tabpanel" lang="ru" hidden>
+            <p class="ab__note">Русская версия</p>
+            <h1 class="ab__h1">Онлайн-казино и ставки с Warwin</h1>
+            <p class="ab__lead">Warwin&nbsp;&mdash; современная игровая платформа, созданная для&nbsp;тех, кто ценит скорость, удобство и&nbsp;честность. Мы&nbsp;объединили передовые технологии, широкий выбор развлечений и главное&nbsp;&mdash; самые быстрые выплаты в&nbsp;индустрии.</p>
+            <p class="ab__p">На&nbsp;нашей платформе вы&nbsp;найдёте всё в&nbsp;одном месте: топовые слоты, live-казино, настольные игры, crash-игры, ставки на&nbsp;спорт и&nbsp;многое другое. Всё работает быстро, стабильно и&nbsp;безопасно.</p>
+            <p class="ab__p ab__p--key">Главное, чем&nbsp;мы отличаемся,&nbsp;&mdash; это скорость выплат. Мы&nbsp;специально выстроили процессы так, чтобы большинство заявок обрабатывались максимально быстро. После прохождения первой верификации (KYC) последующие выводы происходят без&nbsp;долгих ожиданий. Мы&nbsp;считаем, что&nbsp;выигрыш должен приходить к&nbsp;игроку сразу, а&nbsp;не через несколько дней.</p>
+            <p class="ab__p">За&nbsp;Warwin стоит команда профессионалов с&nbsp;опытом в&nbsp;iGaming и&nbsp;платёжных технологиях. Мы&nbsp;хорошо понимаем, чего ждут игроки, и&nbsp;постоянно улучшаем платформу, чтобы она была удобной, надёжной и&nbsp;быстрой.</p>
+            <p class="ab__sign">Warwin. Играй. Выигрывай. Получай деньги быстро.</p>
+          </article>
+
+          <article class="ab__doc" id="ab-es" role="tabpanel" lang="es" hidden>
+            <p class="ab__note">Español rioplatense &middot; Argentina</p>
+            <h1 class="ab__h1">Casino online y apuestas deportivas con Warwin</h1>
+            <p class="ab__lead">Warwin es&nbsp;una plataforma de&nbsp;juego moderna, creada para&nbsp;quienes valoran la&nbsp;velocidad, la&nbsp;comodidad y&nbsp;el juego justo. Combinamos tecnología de&nbsp;vanguardia, una&nbsp;amplia variedad de&nbsp;entretenimiento y, lo&nbsp;más importante, los&nbsp;pagos más&nbsp;rápidos de&nbsp;la industria.</p>
+            <p class="ab__p">En&nbsp;nuestra plataforma encontrás todo en&nbsp;un solo lugar: los&nbsp;mejores slots, casino en&nbsp;vivo, juegos de&nbsp;mesa, crash games, apuestas deportivas y&nbsp;mucho más. Todo funciona de&nbsp;manera rápida, estable y&nbsp;segura.</p>
+            <p class="ab__p ab__p--key">Lo&nbsp;que realmente nos diferencia es&nbsp;la rapidez de&nbsp;los pagos. Diseñamos nuestros procesos para&nbsp;que la&nbsp;mayoría de&nbsp;las solicitudes de&nbsp;retiro se&nbsp;procesen lo&nbsp;antes posible. Una&nbsp;vez que&nbsp;completes la&nbsp;primera verificación de&nbsp;identidad (KYC), los&nbsp;retiros posteriores se&nbsp;procesan sin&nbsp;largas esperas. Creemos que&nbsp;tus ganancias deben llegar rápido, no&nbsp;varios días después.</p>
+            <p class="ab__p">Detrás de&nbsp;Warwin hay un&nbsp;equipo de&nbsp;profesionales con&nbsp;experiencia en&nbsp;iGaming y&nbsp;tecnologías de&nbsp;pago. Sabemos lo&nbsp;que esperan los&nbsp;jugadores y&nbsp;mejoramos la&nbsp;plataforma constantemente para&nbsp;que sea más&nbsp;cómoda, confiable y&nbsp;rápida.</p>
+            <p class="ab__sign">Warwin. Jugá. Ganá. Cobrá rápido.</p>
+          </article>
+        </div>
+      </div>
+
       <!-- Страница игры: открывается нажатием на любую карточку.
            Клиента провайдера у нас нет, поэтому кадр — экран запуска:
            размытая подложка из обложки, сама обложка по центру и выбор
@@ -7343,7 +7450,7 @@ body.br-open .bnav { z-index: 66; }
                 <li><button class="fnav__link" type="button" data-fgo="view:promo">Promotions</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:vip">VIP Club</button></li>
                 <li><button class="fnav__link" type="button">Affiliate Program</button></li>
-                <li><button class="fnav__link" type="button">About Us</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:about">About Us</button></li>
               </ul>
             </div>
             <div class="fnav__col">
@@ -8981,7 +9088,8 @@ body.br-open .bnav { z-index: 66; }
                     promoOne: document.getElementById('view-promo-one'),
                     game: document.getElementById('view-game'),
                     vip: document.getElementById('view-vip'),
-                    bonuses: document.getElementById('view-bonuses') };
+                    bonuses: document.getElementById('view-bonuses'),
+                    about: document.getElementById('view-about') };
     var banner = document.querySelector('.banner');
     var hero = document.querySelector('.hero');
     var tabs = document.querySelectorAll('.cat-tab');
@@ -9775,6 +9883,21 @@ body.br-open .bnav { z-index: 66; }
             o.setAttribute('aria-expanded', 'false');
           });
           h.setAttribute('aria-expanded', open ? 'false' : 'true');
+        });
+      });
+
+      /* ── About Us: три языковые версии одного текста ── */
+      var abLangs = [].slice.call(document.querySelectorAll('.ab__lang'));
+      abLangs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          abLangs.forEach(function (o) {
+            var on = o === t;
+            o.classList.toggle('is-active', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          document.querySelectorAll('.ab__doc').forEach(function (d) {
+            d.hidden = d.id !== 'ab-' + t.dataset.lang;
+          });
         });
       });
 
