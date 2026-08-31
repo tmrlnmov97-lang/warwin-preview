@@ -4585,6 +4585,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
              transition: background-color .16s ease, color .16s ease; }
 .nt__clear:hover { background: rgba(255, 255, 255, .08); color: var(--white); }
 .nt__clear[hidden] { display: none; }
+/* Значок у заголовка и крестик — только на листе во весь экран */
+.nt__h2-ico, .nt__x { display: none; }
 .nt__empty[hidden] { display: none; }
 .nt__empty { margin: 0; padding: 40px 0; text-align: center;
              font-family: 'Work Sans', sans-serif; font-size: 13px; color: var(--dp-label); }
@@ -4618,10 +4620,40 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   /* Кант рисовали слоем ради точной ширины по макету; в прокручиваемом окне
      он растянулся бы на всю прокрутку, поэтому здесь обычная рамка. */
   .pm__pop::after { display: none; }
-  .nt__head { flex: none; }
-  .nt__list { max-height: none; flex: 1 1 auto;
+
+  /* Уведомления — не висящее окошко, а лист во весь экран под шапкой:
+     заголовок со значком и крестиком, список во всю высоту, пустой экран
+     по центру. Верх ставит скрипт по замеру шапки. */
+  .nt__pop { left: 0; right: 0; bottom: 0; width: auto; max-width: none; max-height: none;
+             padding-bottom: calc(107px + env(safe-area-inset-bottom, 0px));
+             background: var(--page); border: 0; border-radius: 0; box-shadow: none;
+             -webkit-backdrop-filter: none; backdrop-filter: none;
+             transform-origin: center top;
+             animation: nt-sheet-in .22s cubic-bezier(.22, .61, .36, 1) both; }
+  .nt__head { flex: none; padding: 14px 16px 12px;
+              border-bottom: 1px solid rgba(255, 255, 255, .07); }
+  .nt__h2-ico { display: block; flex: none; opacity: .85; }
+  .nt__h2 { font-size: 17px; line-height: 24px; }
+  .nt__x { display: grid; place-items: center; flex: none;
+           width: 32px; height: 32px; padding: 0; margin-right: -6px;
+           background: none; border: 0; border-radius: 8px; cursor: pointer;
+           color: var(--dp-label); font-family: 'Work Sans', sans-serif;
+           font-size: 22px; line-height: 1; }
+  .nt__x:active { background: var(--white-06); color: var(--white); }
+  .nt__list { max-height: none; flex: 1 1 auto; min-height: 0; padding: 6px 8px 10px;
               overflow-y: auto; overscroll-behavior: contain; }
+  /* Пустой экран стоит по центру списка, а не под самым заголовком.
+     Приглушённый колокольчик над строкой: одна серая фраза посреди
+     пустого листа читалась как недогруженный экран. */
+  .nt__empty { margin: auto 0; padding: 0; font-size: 14px;
+               display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .nt__empty[hidden] { display: none; }
+  .nt__empty::before { content: ''; width: 44px; height: 44px; opacity: .2;
+                       background: url(a/ea0673126f.svg) center / contain no-repeat; }
+  /* Панель поверх листа — иначе он её накроет */
+  body.nt-open .bnav { z-index: 73; }
 }
+@keyframes nt-sheet-in { from { opacity: 0; transform: translateY(10px); } }
 
 /* Страница под открытым окном стоит на месте */
 @media (max-width: 767px) {
@@ -4724,6 +4756,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    Второе правило обязательно: pointer-events наследуется. */
 #browse-menu { pointer-events: none; }
 #browse-menu .br__sheet { pointer-events: auto; }
+/* Лист накрыл бы панель: пока Browse открыт, панель идёт слоем выше */
+body.br-open .bnav { z-index: 66; }
 
 
 </style>
@@ -7582,8 +7616,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   <div class="nt__pop" role="dialog" aria-modal="true" aria-label="Notifications">
     <div class="nt__head" data-node-id="1226:31702">
       <div class="nt__head-row">
+        <img loading="lazy" decoding="async" class="nt__h2-ico" src="a/ea0673126f.svg" alt="" width="20" height="20">
         <h2 class="nt__h2">Notifications</h2>
         <button class="nt__clear" type="button">Clear all</button>
+        <!-- Крестик нужен только листу во весь экран: на десктопе окно
+             закрывается щелчком мимо, а лист занимает весь экран -->
+        <button class="nt__x" type="button" aria-label="Закрыть" data-close>&#215;</button>
       </div>
       <div class="nt__tabs" role="tablist" data-node-id="1226:31708">
         <button class="nt__tab is-active" type="button" role="tab" aria-selected="true" data-nt="promo">Promotions</button>
@@ -9141,9 +9179,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       if (!n || getComputedStyle(n).display === 'none') return 0;
       return Math.round(n.getBoundingClientRect().height);
     };
-    var popFit = function (pop) {
+    var popFit = function (pop, sheet) {
       if (!pop) return;
       if (innerWidth > 767) { pop.style.top = ''; pop.style.maxHeight = ''; return; }
+      /* Лист во весь экран прижат к низу через CSS — высоту ему не считаем,
+         нужен только верх под шапкой */
+      if (sheet) { pop.style.top = headBottom() + 'px'; pop.style.maxHeight = ''; return; }
       var top = headBottom() + 8;
       pop.style.top = top + 'px';
       /* Обычно окно заканчивается над нижней панелью. В альбомной ориентации
@@ -9175,12 +9216,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         pop.style.right = Math.max(12, 20 + diff) + 'px';
       };
       var ntClose = function () {
-        ntPop.hidden = true; ntBtn.setAttribute('aria-expanded', 'false'); popLock(false);
+        ntPop.hidden = true; ntBtn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nt-open'); popLock(false);
       };
       ntBtn.setAttribute('aria-haspopup', 'dialog');
       addEventListener('resize', function () {
         if (ntPop.hidden) return;
-        ntAlign(); popFit(ntPop.querySelector('.nt__pop'));
+        ntAlign(); popFit(ntPop.querySelector('.nt__pop'), true);
       });
       ntBtn.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -9190,7 +9232,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         if (open && typeof pmClose === 'function') pmClose();
         ntPop.hidden = !open;
         ntBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) { ntAlign(); popFit(ntPop.querySelector('.nt__pop'));
+        document.body.classList.toggle('nt-open', open);
+        if (open) { ntAlign(); popFit(ntPop.querySelector('.nt__pop'), true);
                     ntBtn.classList.add('is-read'); popLock(true); }
         else popLock(false);
       });
@@ -10725,7 +10768,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     var brMenu = document.getElementById('browse-menu');
     var brBtn = document.querySelector('.bnav__item');
     if (brMenu && brBtn) {
-      var brClose = function () { brMenu.hidden = true; document.body.style.overflow = ''; };
+      var brClose = function () {
+        brMenu.hidden = true;
+        document.body.classList.remove('br-open');
+        document.body.style.overflow = '';
+      };
       /* Лист стоял на постоянных 74px от верха — это высота шапки до входа.
          После входа шапка 122, и верхние 48px листа вместе с краем поиска
          прятались под полосой кошелька. Меряем шапку и панель. */
@@ -10733,7 +10780,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var s = brMenu.querySelector('.br__sheet');
         if (!s) return;
         s.style.top = headBottom() + 'px';
-        s.style.bottom = navHeight() + 'px';
+        /* Лист доходит до самого низа, а не до верха панели: у панели верхние
+           32px прозрачные под выступ, и в эту щель просвечивали карточки игр.
+           Содержимое от панели отбито полем — оно же и прокручивается. */
+        s.style.bottom = '0px';
+        s.style.paddingBottom = (navHeight() + 8) + 'px';
       };
       addEventListener('resize', function () { if (!brMenu.hidden) brFit(); });
       brBtn.addEventListener('click', function (e) {
@@ -10741,6 +10792,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var open = brMenu.hidden;
         brMenu.hidden = !open;
         if (open) brFit();
+        /* Панель поднимаем над листом, иначе он её накроет и закрыть меню
+           будет нечем */
+        document.body.classList.toggle('br-open', open);
         document.body.style.overflow = open ? 'hidden' : '';
       });
       brMenu.addEventListener('click', function (e) {
