@@ -2417,9 +2417,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                 font-size: 18px; line-height: 28px; color: var(--white); }
 /* Знак уровня подкрашен металлом самого уровня — так строка читается
    без второй подписи «твой уровень» */
-.vipro__lvl, .vlvl__chip { display: inline-flex; align-items: center; height: 26px; padding: 0 12px;
+.vipro__lvl, .vlvl__chip { display: inline-flex; align-items: center; height: 30px; padding: 0 14px;
                            border-radius: 999px; font-family: 'Work Sans', sans-serif;
-                           font-weight: 600; font-size: 14px; line-height: 20px; white-space: nowrap; }
+                           font-weight: 600; font-size: 16px; line-height: 24px; white-space: nowrap; }
 .vipro__lvl, .vlvl__i--soldier .vlvl__chip { background: rgba(214, 124, 66, .16); color: #e0a172; }
 .vlvl__i--captain .vlvl__chip { background: rgba(159, 182, 217, .16); color: #c8d6ea; }
 .vlvl__i--general .vlvl__chip { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
@@ -2429,7 +2429,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
               font-variant-numeric: tabular-nums; }
 .vipro__track { display: block; height: 6px; border-radius: 999px; background: var(--white-10); }
 .vipro__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
-.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
+.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 24px;
                color: var(--dp-label); }
 
 .vipro__car { flex: none; display: grid; grid-template-columns: auto auto auto;
@@ -2462,29 +2462,29 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
               border: 1px solid rgba(255, 255, 255, .05); }
 .vlvl__i.is-now .vlvl__card { border-color: rgba(7, 148, 255, .38); }
 .vlvl__chip { align-self: flex-start; }
-.vlvl__mark { display: block; width: 44px; height: 44px; }
+.vlvl__mark { display: block; width: 56px; height: 56px; }
 .vlvl__sum { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
              font-size: 24px; line-height: 32px; color: var(--white); }
-.vlvl__cap { margin-top: -6px; font-family: 'Work Sans', sans-serif; font-size: 14px;
-             line-height: 20px; color: var(--dp-label); }
+.vlvl__cap { margin-top: -6px; font-family: 'Work Sans', sans-serif; font-size: 16px;
+             line-height: 24px; color: var(--dp-label); }
 .vlvl__perks { list-style: none; margin: 0; padding: 0;
                display: flex; flex-direction: column; gap: 8px; }
-.vlvl__perks li { position: relative; padding-left: 18px; font-family: 'Work Sans', sans-serif;
-                  font-size: 14px; line-height: 20px; color: var(--muted); }
-.vlvl__perks li::before { content: ''; position: absolute; left: 0; top: 8px;
-                          width: 5px; height: 5px; border-radius: 50%; background: var(--primary); }
-.vlvl__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
-              line-height: 20px; color: var(--dp-label); }
+.vlvl__perks li { position: relative; padding-left: 20px; font-family: 'Work Sans', sans-serif;
+                  font-size: 16px; line-height: 24px; color: var(--muted); }
+.vlvl__perks li::before { content: ''; position: absolute; left: 0; top: 9px;
+                          width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+.vlvl__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
+              line-height: 24px; color: var(--dp-label); }
 
 /* ── привилегии ── */
 .vprv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .vprv__i { box-sizing: border-box; display: flex; align-items: center; gap: 14px;
-           padding: 16px 18px; border-radius: 16px; background: var(--card, #181e3b); }
-.vprv__i img { display: block; width: 44px; height: 44px; flex: none; }
+           padding: 16px 20px; border-radius: 16px; background: var(--card, #181e3b); }
+.vprv__i img { display: block; width: 64px; height: 64px; flex: none; }
 .vprv__i h3 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
               font-size: 16px; line-height: 24px; color: var(--white); }
-.vprv__i p { margin: 4px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
-             line-height: 20px; color: var(--dp-label); }
+.vprv__i p { margin: 4px 0 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
+             line-height: 24px; color: var(--dp-label); }
 
 /* ── вопросы ── */
 .vfaq { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 24px; align-items: start; }
@@ -2512,16 +2512,16 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   background: var(--muted); transition: transform .18s ease, opacity .18s ease; }
 .vfaq__q summary::after { transform: rotate(90deg); }
 .vfaq__q[open] summary::after { transform: rotate(0); opacity: 0; }
-.vfaq__q p { margin: 10px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
-             line-height: 20px; color: var(--dp-label); }
+.vfaq__q p { margin: 10px 0 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
+             line-height: 24px; color: var(--dp-label); }
 
 /* ── поддержка и условия ── */
 .vsup { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
         gap: 24px; padding: 24px; border-radius: 16px; background: var(--card, #181e3b); }
 .vsup__text h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
                  font-size: 24px; line-height: 32px; color: var(--white); }
-.vsup__text p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
-                line-height: 20px; color: var(--dp-label); }
+.vsup__text p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
+                line-height: 24px; color: var(--dp-label); }
 .vsup__btns { display: flex; gap: 12px; flex: none; }
 .vsup__btn { display: grid; place-items: center; height: 48px; padding: 0 28px; flex: none;
              border: 1px solid var(--white-10); border-radius: 10px; cursor: pointer;
@@ -2532,7 +2532,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .vsup__btn--primary { background: var(--primary); border-color: transparent; }
 .vsup__btn--primary:hover { background: var(--primary-hover); }
 .vip__terms { align-self: center; padding: 6px 8px; border: 0; background: none; cursor: pointer;
-              font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
+              font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 24px;
               color: var(--dp-label); transition: color .15s ease; }
 .vip__terms:hover { color: var(--white); text-decoration: underline; }
 
@@ -5499,7 +5499,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <li class="vlvl__i vlvl__i--soldier is-now">
               <div class="vlvl__card">
                 <span class="vlvl__chip">Soldier</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/274357f383.webp" alt="" width="44" height="44">
+                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/274357f383.webp" alt="">
                 <b class="vlvl__sum">10,000 USDT</b>
                 <span class="vlvl__cap">Wagered</span>
                 <ul class="vlvl__perks">
@@ -5510,7 +5510,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <li class="vlvl__i vlvl__i--captain">
               <div class="vlvl__card">
                 <span class="vlvl__chip">Captain</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/3c38490295.webp" alt="" width="44" height="44">
+                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/3c38490295.webp" alt="">
                 <b class="vlvl__sum">50,000 USDT</b>
                 <span class="vlvl__cap">Wagered</span>
                 <ul class="vlvl__perks">
@@ -5521,7 +5521,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <li class="vlvl__i vlvl__i--general">
               <div class="vlvl__card">
                 <span class="vlvl__chip">General</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/ab8492bd00.webp" alt="" width="44" height="44">
+                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/ab8492bd00.webp" alt="">
                 <b class="vlvl__sum">250,000 USDT</b>
                 <span class="vlvl__cap">Wagered</span>
                 <ul class="vlvl__perks">
@@ -5532,7 +5532,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <li class="vlvl__i vlvl__i--warlord">
               <div class="vlvl__card">
                 <span class="vlvl__chip">Warlord I&ndash;III</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" src="a/aba35aeabd.webp" alt="" width="44" height="44">
+                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/aba35aeabd.webp" alt="">
                 <b class="vlvl__sum">1,000,000 USDT+</b>
                 <span class="vlvl__cap">Wagered</span>
                 <ul class="vlvl__perks">
@@ -5548,23 +5548,23 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <div class="section__head"><div class="section__title"><h2>Privileges</h2></div></div>
           <div class="vprv">
             <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/cdf135e524.webp" alt="" width="44" height="44">
+              <img loading="lazy" decoding="async" src="a/cdf135e524.webp" alt="" width="64" height="64">
               <div><h3>Boost</h3><p>Bonus for your activity every week and month</p></div>
             </article>
             <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/897608697f.webp" alt="" width="44" height="44">
+              <img loading="lazy" decoding="async" src="a/897608697f.webp" alt="" width="64" height="64">
               <div><h3>Personal manager</h3><p>Handles your questions outside the general queue</p></div>
             </article>
             <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/8b17613478.webp" alt="" width="44" height="44">
+              <img loading="lazy" decoding="async" src="a/8b17613478.webp" alt="" width="64" height="64">
               <div><h3>Play bonus</h3><p>Part of the losses back when you move up a level</p></div>
             </article>
             <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/db20a74fb1.webp" alt="" width="44" height="44">
+              <img loading="lazy" decoding="async" src="a/db20a74fb1.webp" alt="" width="64" height="64">
               <div><h3>Level-up bonus</h3><p>The higher the level, the bigger the payout</p></div>
             </article>
             <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/3e6874f40e.webp" alt="" width="44" height="44">
+              <img loading="lazy" decoding="async" src="a/3e6874f40e.webp" alt="" width="64" height="64">
               <div><h3>Custom terms</h3><p>Privileges tuned through your manager</p></div>
             </article>
           </div>
