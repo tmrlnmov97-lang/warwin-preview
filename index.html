@@ -3869,12 +3869,24 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp__corner--r { right: 0; }
 
 @media (prefers-reduced-motion: reduce) { .dp__wrap { animation: none; } }
+/* 1180:32851 — мобильное окно 370x549. Ряды здесь НЕ складываются в столбик:
+   в макете валюта и сеть стоят рядом, а адрес с кнопкой — справа от QR.
+   Числа ниже дают ту же вертикаль, что в кадре: шапка 24..64, вкладки 84..178,
+   валюта 198..273, QR 293..433, сноска 453..525, поле снизу 24. */
 @media (max-width: 640px) {
-  .dp__modal { gap: 20px; padding: 0 20px 20px; }
-  .dp__title { left: 20px; }
-  .dp__close { left: auto; right: 16px; }
-  .dp__row, .dp__qr-row { flex-direction: column; }
-  .dp__qr-info { padding: 0; }
+  .dp__modal { gap: 20px; padding: 0 24px 24px; }
+  /* распорка под абсолютной шапкой: 44 + зазор 20 + поле блока 20 = вкладки на 84 */
+  .dp__gap { height: 44px; }
+  /* ширина 480 из десктопа вылезала за окно на 370 — держим до крестика */
+  .dp__title { left: 24px; top: 38px; width: auto; right: 76px; }
+  .dp__close { left: auto; right: 24px; top: 24px; }
+  .dp__switches { gap: 12px; }
+  .dp__seg { height: 38px; }
+  /* Колонка адреса: ширина 162 = 322 - QR 140 - зазор 20, высота 104 —
+     подпись 16, через 4 адрес в две строки по 16, через 12 кнопка 40. */
+  .dp__qr-info { padding: 0; gap: 4px; }
+  .dp__addr { line-height: 16px; }
+  .dp__copy { margin-top: 8px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
