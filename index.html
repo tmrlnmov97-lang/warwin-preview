@@ -2731,30 +2731,51 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bncard__foot .bn__btn { flex: 1 1 0; height: 40px; padding: 0; }
 .bncard__foot .bn__btn:not(.bn__btn--primary) { border-color: #202642; }
 
-/* ── отыгрыш ── */
-.bnact { box-sizing: border-box; display: flex; flex-direction: column; gap: 16px;
+/* ── отыгрыш ──
+   Две колонки: слева прогресс и действия, справа сводка. Одной колонкой на
+   1104 карточка стояла почти пустой, а числа жались к левому краю. */
+.bnact { box-sizing: border-box; display: grid;
+         grid-template-columns: minmax(0, 1fr) 300px; gap: 24px;
          padding: 24px; border-radius: 16px; background: var(--card, #181e3b);
          border: 1px solid rgba(255, 255, 255, .05); }
 .bnact[hidden] { display: none; }
-.bnact__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-.bnact__title { display: flex; flex-direction: column; gap: 4px; }
+.bnact__main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.bnact__head { display: flex; align-items: center; gap: 14px; }
+/* Обложка в квадрате обрезалась до тёмного пятна — держим пропорцию исходной */
+.bnact__art { display: block; width: 116px; height: 72px; flex: none;
+              border-radius: 12px; object-fit: cover; background: #07173d; }
+.bnact__title { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .bnact__title h2 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-                   font-size: 18px; line-height: 26px; color: var(--white); }
-.bnact__title span { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
-                     color: var(--dp-label); }
-.bnact__sum { display: flex; gap: 32px; flex-wrap: wrap; }
-.bnact__cell { display: flex; flex-direction: column; gap: 4px; }
-.bnact__cell span { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
-                    letter-spacing: .05em; text-transform: uppercase; color: var(--dp-label); }
-.bnact__cell b { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-                 font-size: 20px; line-height: 28px; color: var(--white);
-                 font-variant-numeric: tabular-nums; }
-.bnact__track { display: block; height: 8px; border-radius: 999px; background: #2d324d; }
-.bnact__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
+                   font-size: 20px; line-height: 28px; color: var(--white); }
+.bnact__when { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
+               color: var(--dp-label); }
+/* последний день — это уже предупреждение, а не справка */
+.bnact__when.is-soon { color: #eaa640; }
+
+.bnact__prog { display: flex; flex-direction: column; gap: 8px; }
+.bnact__prog-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.bnact__prog-head span { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+                         letter-spacing: .05em; text-transform: uppercase; color: var(--dp-label); }
+.bnact__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+              font-size: 20px; line-height: 28px; color: var(--white);
+              font-variant-numeric: tabular-nums; }
+.bnact__track { display: block; height: 10px; border-radius: 999px; background: #2d324d; }
+.bnact__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary);
+                  transition: width .3s ease; }
+.bnact__nums { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
+               color: var(--muted); font-variant-numeric: tabular-nums; }
 .bnact__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
                line-height: 20px; color: var(--dp-label); }
-.bnact__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.bnact__foot[hidden] { display: none; }
+
+.bnact__acts { display: flex; align-items: center; gap: 16px; }
+.bnact__acts[hidden] { display: none; }
+/* Снятие бонуса стоит последним и набрано текстом: раньше это была самая
+   заметная кнопка карточки, хотя действие необратимое */
+.bnact__drop { margin-left: auto; padding: 0 4px; border: 0; background: none; cursor: pointer;
+               font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+               line-height: 20px; color: var(--dp-label); transition: color .15s ease; }
+.bnact__drop:hover { color: #e5484d; }
+
 .bnact__ask { display: flex; align-items: center; justify-content: space-between; gap: 16px;
               padding: 14px 16px; border-radius: 12px;
               background: rgba(229, 72, 77, .08); border: 1px solid rgba(229, 72, 77, .3);
@@ -2762,6 +2783,16 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
               color: var(--muted); }
 .bnact__ask[hidden] { display: none; }
 .bnact__ask-btns { display: flex; gap: 10px; flex: none; }
+
+.bnact__side { box-sizing: border-box; display: flex; flex-direction: column;
+               align-items: flex-start; gap: 16px; padding: 18px; border-radius: 12px;
+               background: var(--bg, #0e132a); border: 1px solid rgba(255, 255, 255, .05); }
+.bnact__cell { display: flex; flex-direction: column; gap: 2px; }
+.bnact__cell span { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+                    letter-spacing: .05em; text-transform: uppercase; color: var(--dp-label); }
+.bnact__cell b { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+                 font-size: 18px; line-height: 26px; color: var(--white);
+                 font-variant-numeric: tabular-nums; }
 
 /* ── история ── */
 .bnhist { display: flex; flex-direction: column; border-radius: 16px; overflow: hidden;
@@ -2784,6 +2815,13 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 
 @media (max-width: 1279px) {
   .bn__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 300 на панель из узкой колонки уже не выкроить */
+  .bnact { grid-template-columns: 1fr; gap: 18px; }
+  /* Панель ложится строкой: отметка отдельной строкой сверху, под ней числа */
+  .bnact__side { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+                 align-items: start; gap: 14px 24px; }
+  /* justify-self, иначе плашка растягивается на всю строку сетки */
+  .bnact__side > .bn__tag { grid-column: 1 / -1; justify-self: start; }
 }
 @media (max-width: 767px) {
   .bn__h1 { font-size: 26px; line-height: 32px; }
@@ -2795,10 +2833,15 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .bn__guest { padding: 36px 20px; }
   .bn__guest-btns { width: 100%; }
   .bn__guest-btns .bn__btn { flex: 1 1 0; padding: 0; }
-  .bnact { padding: 18px; }
-  .bnact__head { flex-direction: column; gap: 10px; }
-  .bnact__sum { gap: 16px 32px; }
-  .bnact__foot, .bnact__ask { flex-direction: column; align-items: stretch; }
+  .bnact { padding: 18px; gap: 16px; }
+  .bnact__art { width: 92px; height: 58px; }
+  .bnact__title h2 { font-size: 18px; line-height: 24px; }
+  /* Играть — во всю ширину, снятие бонуса строкой под ней */
+  .bnact__acts { flex-wrap: wrap; gap: 12px 16px; }
+  .bnact__acts .bn__btn--primary { flex: 1 1 100%; }
+  .bnact__drop { margin-left: auto; }
+  .bnact__side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bnact__ask { flex-direction: column; align-items: stretch; }
   .bnact__ask-btns { flex: 1 1 auto; }
   .bnact__ask-btns .bn__btn { flex: 1 1 0; padding: 0; }
   /* Ряд истории в четыре колонки на 370 не читается: имя и статус в строку,
@@ -5908,7 +5951,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               </div>
               <p class="bnpromo__note" hidden role="status"></p>
             </div>
-            <article class="bncard" data-key="deposit">
+            <article class="bncard" data-key="deposit" data-days="3">
               <img loading="lazy" decoding="async" class="bncard__art" src="a/152e20205a.webp" alt="" width="354" height="150">
               <div class="bncard__body">
                 <div class="bncard__tags">
@@ -5922,7 +5965,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 </div>
               </div>
             </article>
-            <article class="bncard" data-key="welcome">
+            <article class="bncard" data-key="welcome" data-days="3">
               <img loading="lazy" decoding="async" class="bncard__art" src="a/824508be9a.webp" alt="" width="354" height="150">
               <div class="bncard__body">
                 <div class="bncard__tags">
@@ -5936,7 +5979,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 </div>
               </div>
             </article>
-            <article class="bncard" data-key="cash">
+            <article class="bncard" data-key="cash" data-days="7">
               <img loading="lazy" decoding="async" class="bncard__art" src="a/87dce3340a.webp" alt="" width="354" height="150">
               <div class="bncard__body">
                 <div class="bncard__tags">
@@ -5958,33 +6001,53 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           </div>
 
           <div class="bn__list" id="bn-active" role="tabpanel" tabindex="0" data-bnset="active" hidden>
-            <section class="bnact" hidden>
-              <div class="bnact__head">
-                <div class="bnact__title">
-                  <h2>Welcome Free Spins</h2>
-                  <span>Activated 30 August &middot; expires in 2 days</span>
+            <!-- Отыгрыш. Числа живут в атрибутах, а процент, ширину полосы,
+                 остаток и правую панель считает bnActPaint — иначе полоса и
+                 подпись под ней могут молча разойтись. -->
+            <section class="bnact" hidden data-done="150" data-goal="1000" data-cur="USDT" data-days="3">
+              <div class="bnact__main">
+                <div class="bnact__head">
+                  <img loading="lazy" decoding="async" class="bnact__art" src="a/824508be9a.webp" alt="" width="116" height="72">
+                  <div class="bnact__title">
+                    <h2>Welcome Free Spins</h2>
+                    <span class="bnact__when"></span>
+                  </div>
                 </div>
+
+                <div class="bnact__prog">
+                  <div class="bnact__prog-head">
+                    <span>Wagering progress</span>
+                    <b class="bnact__pct"></b>
+                  </div>
+                  <span class="bnact__track"><i></i></span>
+                  <span class="bnact__nums"></span>
+                </div>
+
+                <p class="bnact__note">Winnings move to the real balance once wagering is complete.</p>
+
+                <div class="bnact__acts">
+                  <button class="bn__btn bn__btn--primary" type="button" data-bn-play>Play now</button>
+                  <button class="bn__link" type="button" data-bn-terms="welcome">Terms</button>
+                  <!-- Отмена необратима и не должна выглядеть главной кнопкой -->
+                  <button class="bnact__drop" type="button" data-bn-cancel>Cancel bonus</button>
+                </div>
+
+                <!-- Спрашиваем прямо в карточке: терять отыгранное вслепую нельзя -->
+                <div class="bnact__ask" hidden>
+                  <span>Cancelling drops the bonus balance and the wagering done so far.</span>
+                  <div class="bnact__ask-btns">
+                    <button class="bn__btn" type="button" data-bn-keep>Keep bonus</button>
+                    <button class="bn__btn bn__btn--bad" type="button" data-bn-drop>Yes, cancel</button>
+                  </div>
+                </div>
+              </div>
+
+              <aside class="bnact__side">
                 <span class="bn__tag bn__tag--live">In progress</span>
-              </div>
-              <div class="bnact__sum">
                 <div class="bnact__cell"><span>Bonus balance</span><b>50.00 USDT</b></div>
-                <div class="bnact__cell"><span>Wagered</span><b>150.00 / 1,000.00 USDT</b></div>
-              </div>
-              <span class="bnact__track"><i style="width:15%"></i></span>
-              <p class="bnact__note">Winnings move to the real balance once wagering is complete. Bets in bonus money do not count towards VIP levels.</p>
-              <div class="bnact__foot">
-                <button class="bn__link" type="button" data-bn-terms="welcome">Terms</button>
-                <button class="bn__btn bn__btn--ghost" type="button" data-bn-cancel>Cancel bonus</button>
-              </div>
-              <!-- Отмена необратима, поэтому спрашиваем прямо в карточке, а не
-                   отдельным окном: терять отыгранное вслепую нельзя -->
-              <div class="bnact__ask" hidden>
-                <span>Cancelling drops the bonus balance and the wagering done so far.</span>
-                <div class="bnact__ask-btns">
-                  <button class="bn__btn" type="button" data-bn-keep>Keep bonus</button>
-                  <button class="bn__btn bn__btn--bad" type="button" data-bn-drop>Yes, cancel</button>
-                </div>
-              </div>
+                <div class="bnact__cell"><span>Left to wager</span><b class="bnact__left"></b></div>
+                <div class="bnact__cell"><span>Expires</span><b class="bnact__till"></b></div>
+              </aside>
             </section>
             <div class="bn__empty" hidden>
               <b>No bonus in progress</b>
@@ -9792,6 +9855,50 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         c.addEventListener('click', function () { bnShow(c.dataset.bn); });
       });
 
+      /* Прогресс, остаток и срок считаем в одном месте: раньше ширина полосы
+         была зашита в разметку рядом с числами и могла с ними разойтись. */
+      var bnMoney = function (n) {
+        return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      };
+      var bnActPaint = function () {
+        var a = bnView.querySelector('.bnact');
+        if (!a) return;
+        var done = parseFloat(a.dataset.done) || 0;
+        var goal = parseFloat(a.dataset.goal) || 0;
+        var cur = a.dataset.cur || 'USDT';
+        var left = Math.max(0, goal - done);
+        var pct = goal ? Math.min(100, Math.round(done / goal * 100)) : 0;
+        a.querySelector('.bnact__pct').textContent = pct + '%';
+        a.querySelector('.bnact__track i').style.width = pct + '%';
+        a.querySelector('.bnact__nums').textContent =
+          bnMoney(done) + ' of ' + bnMoney(goal) + ' ' + cur + ' \u00B7 ' + bnMoney(left) + ' left';
+        a.querySelector('.bnact__left').textContent = bnMoney(left) + ' ' + cur;
+
+        var days = parseInt(a.dataset.days, 10);
+        if (!isFinite(days)) days = 0;
+        var till = new Date(Date.now() + days * 864e5);
+        var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var short = till.getDate() + ' ' + MON[till.getMonth()];
+        a.querySelector('.bnact__till').textContent = short;
+        var when = a.querySelector('.bnact__when');
+        when.textContent = 'Expires ' + short + ' \u00B7 ' + days + (days === 1 ? ' day left' : ' days left');
+        when.classList.toggle('is-soon', days <= 1);
+      };
+      /* Перенос бонуса в отыгрыш: имя, обложка, условия и срок — из карточки */
+      var bnActFill = function (c) {
+        var a = bnView.querySelector('.bnact');
+        a.querySelector('h2').textContent = c.querySelector('h2').textContent;
+        var art = c.querySelector('.bncard__art');
+        var slot = a.querySelector('.bnact__art');
+        if (art && slot) slot.src = art.currentSrc || art.src;
+        var terms = a.querySelector('[data-bn-terms]');
+        if (terms) terms.dataset.bnTerms = c.dataset.key;
+        a.dataset.from = c.dataset.key;
+        a.dataset.days = c.dataset.days || '3';
+        bnActPaint();
+      };
+
       /* Карточка полученного бонуса остаётся в списке, но меняет вид: тег
          становится зелёным, а кнопка вместо повторного получения ведёт
          на вкладку, где бонус отыгрывается. */
@@ -9867,33 +9974,28 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            бонус теперь искать — кнопка ведёт на вкладку Active. */
         if (t.hasAttribute('data-bn-act')) {
           var c = t.closest('.bncard');
-          var act = bnView.querySelector('.bnact');
-          var tags = c.querySelectorAll('.bn__tag');
-          act.querySelector('h2').textContent = c.querySelector('h2').textContent;
-          act.querySelector('.bnact__title span').textContent =
-            'Activated today \u00B7 ' + (tags[1] ? tags[1].textContent : 'see terms');
-          var actTerms = act.querySelector('[data-bn-terms]');
-          if (actTerms) actTerms.dataset.bnTerms = c.dataset.key;
-          act.dataset.from = c.dataset.key;
-          act.hidden = false;
+          bnActFill(c);
+          bnView.querySelector('.bnact').hidden = false;
           bnView.querySelector('.bnact__ask').hidden = true;
-          bnView.querySelector('.bnact__foot').hidden = false;
+          bnView.querySelector('.bnact__acts').hidden = false;
           bnTake(c, true);
           bnSync();
           return;
         }
         /* С активной карточки уходим туда, где бонус отыгрывается */
         if (t.hasAttribute('data-bn-goactive')) { bnShow('active'); return; }
+        /* Отыгрывают ставками, поэтому главное действие ведёт в лобби */
+        if (t.hasAttribute('data-bn-play')) { showView('casino'); return; }
 
         /* Отмена необратима — спрашиваем в самой карточке */
         if (t.hasAttribute('data-bn-cancel')) {
-          bnView.querySelector('.bnact__foot').hidden = true;
+          bnView.querySelector('.bnact__acts').hidden = true;
           bnView.querySelector('.bnact__ask').hidden = false;
           return;
         }
         if (t.hasAttribute('data-bn-keep')) {
           bnView.querySelector('.bnact__ask').hidden = true;
-          bnView.querySelector('.bnact__foot').hidden = false;
+          bnView.querySelector('.bnact__acts').hidden = false;
           return;
         }
         if (t.hasAttribute('data-bn-drop')) {
@@ -9904,7 +10006,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           if (back) bnTake(back, false);
           dropped.hidden = true;
           bnView.querySelector('.bnact__ask').hidden = true;
-          bnView.querySelector('.bnact__foot').hidden = false;
+          bnView.querySelector('.bnact__acts').hidden = false;
           bnSync();
           bnShow('available');
         }
@@ -9921,7 +10023,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       var bnActCard = bnView.querySelector('.bnact');
       if (bnActCard) {
         bnActCard.dataset.baseTitle = bnActCard.querySelector('h2').textContent;
-        bnActCard.dataset.baseWhen = bnActCard.querySelector('.bnact__title span').textContent;
       }
 
       bnSync();
@@ -10221,10 +10322,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         /* Карточку отыгрыша тоже возвращаем к исходной: её мог переписать
            Receive, и следующее состояние показало бы чужой бонус */
         act.querySelector('h2').textContent = act.dataset.baseTitle;
-        act.querySelector('.bnact__title span').textContent = act.dataset.baseWhen;
         act.removeAttribute('data-from');
+        bnActPaint();
         bnView.querySelector('.bnact__ask').hidden = true;
-        bnView.querySelector('.bnact__foot').hidden = false;
+        bnView.querySelector('.bnact__acts').hidden = false;
         bnView.querySelectorAll('.bnhist__row:not(.bnhist__row--head)').forEach(function (r) {
           r.hidden = empty;
         });
