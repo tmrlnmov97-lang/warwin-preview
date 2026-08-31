@@ -8266,6 +8266,22 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            дальше держим этот верх: рост уходит только вниз. */
         var dpPin = function () {
           dpWrap.style.marginTop = '';
+          dp.style.paddingTop = '';
+          dp.style.paddingBottom = '';
+          /* На узком экране окно не центрируем: между шапкой и ним оставалась
+             пустая полоса, а низ налезал на нижнюю панель. Прижимаем под шапку
+             и оставляем панели её высоту — обе меряем, а не зашиваем числами. */
+          if (innerWidth <= 767) {
+            var head = document.querySelector('.topbar');
+            var nav = document.querySelector('.bnav');
+            var below = head ? Math.round(head.getBoundingClientRect().bottom) : 8;
+            var navH = nav && getComputedStyle(nav).display !== 'none'
+                     ? Math.round(nav.getBoundingClientRect().height) : 8;
+            dp.style.paddingTop = (below + 16) + 'px';
+            dp.style.paddingBottom = (navH + 16) + 'px';
+            dpWrap.style.marginTop = '0px';
+            return;
+          }
           var avail = dp.clientHeight - 48;                 /* паддинги 24 сверху и снизу */
           var top = Math.max(0, Math.round((avail - dpModal.offsetHeight) / 2));
           dpWrap.style.marginTop = top + 'px';
@@ -8298,9 +8314,34 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           e.preventDefault(); dp.hidden = false; document.body.classList.add('dp-open');
           document.body.style.overflow = 'hidden';
           dpPin();
+          /* фокус переносим в окно: иначе он оставался на кнопке под затемнением,
+             и с клавиатуры первый Tab уходил на страницу за окном */
+          var first = dp.querySelector('.dp__close');
+          if (first) first.focus();
         });
         dp.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeDep(); });
         addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dp.hidden) closeDep(); });
+        /* Пока окно открыто, Tab ходит по нему кругом: раньше он уводил на
+           страницу под затемнением, и человек «терял» окно, не закрыв его. */
+        /* Слушаем на документе, а не на окне: в WebKit первый Tab переводит
+           фокус на body, и обработчик на самом окне до него уже не доходит. */
+        addEventListener('keydown', function (e) {
+          if (e.key !== 'Tab' || dp.hidden) return;
+          var able = [].slice.call(dp.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )).filter(function (n) { return !n.disabled && n.offsetParent !== null; });
+          if (!able.length) return;
+          /* Ведём Tab сами по списку в порядке разметки: WebKit по умолчанию
+             перескакивает кнопки и ссылки, и опора на его порядок оставляла
+             фокус снаружи через раз. */
+          e.preventDefault();
+          var i = able.indexOf(document.activeElement);
+          var next = i < 0 ? (e.shiftKey ? able.length - 1 : 0)
+                           : (e.shiftKey ? i - 1 : i + 1);
+          if (next < 0) next = able.length - 1;
+          if (next >= able.length) next = 0;
+          able[next].focus();
+        });
 
         /* Оба ряда вкладок переключаются одинаково: активна ровно одна */
         [['.dp__seg-btn', '.dp__seg'], ['.dp__method-btn', '.dp__method']].forEach(function (pair) {
