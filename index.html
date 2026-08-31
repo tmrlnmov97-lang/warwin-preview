@@ -3439,7 +3439,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 /* Пополнение — про деньги, поэтому шапка с балансом остаётся читаемой:
    затемнение мягче обычного, а сама шапка поднята над ним. Ниже ещё и
    лёгкий подсвет от кнопки DEPOSIT, чтобы видно было, откуда пришло окно. */
-.dp__scrim { position: absolute; inset: 0;
+/* fixed, а не absolute: внутри прокручиваемого .dp затемнение было ростом
+   в один экран и уезжало вместе с содержимым, оголяя страницу снизу */
+.dp__scrim { position: fixed; inset: 0;
              background:
                radial-gradient(120% 90% at 50% 0%,
                                rgba(7, 148, 255, .10) 0%, rgba(0, 9, 16, 0) 55%),
@@ -3449,11 +3451,12 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 /* 20 у шапки против 70 у окна — при открытом депозите поднимаем её выше
    затемнения. Класс ставит скрипт, чтобы у остальных окон осталось как было. */
 body.dp-open .topbar { z-index: 71; }
+/* На телефоне окно — лист во весь экран, и шапка должна уйти под него */
+@media (max-width: 767px) { body.dp-open .topbar { z-index: 20; } }
 /* На мобильной окно занимает почти весь экран, и поднятая шапка накрывала его
    верх: кнопки кошелька перехватывали нажатия по крестику и вкладкам.
    Правило стоит здесь, а не в мобильном блоке выше: при равной силе
    побеждает то, что записано позже. */
-@media (max-width: 767px) { body.dp-open .topbar { z-index: 20; } }
 /* Кнопка, из которой пришло окно, остаётся подсвеченной */
 body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                                             0 8px 24px -8px rgba(205, 250, 80, .5); }
@@ -3470,6 +3473,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
   border: 1px solid rgba(255, 255, 255, .08); border-radius: 20px;
 }
+/* Обёртка над прокручиваемой частью. На десктопе повторяет колонку модалки,
+   чтобы отступы остались прежними; на телефоне становится единственным
+   местом, которое едет под пальцем. */
+.dp__scroll { display: flex; flex-direction: column; align-items: center;
+              gap: 32px; width: 100%; }
+.dp.is-withdraw .dp__scroll { gap: 20px; }
 /* Появление блоков при смене вкладки: display переключается мгновенно, и
    opacity по нему не анимируется — поэтому короткий проявляющий кадр. */
 @keyframes dp-in { from { opacity: 0; transform: translateY(4px); } }
@@ -3888,8 +3897,47 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    в макете валюта и сеть стоят рядом, а адрес с кнопкой — справа от QR.
    Числа ниже дают ту же вертикаль, что в кадре: шапка 24..64, вкладки 84..178,
    валюта 198..273, QR 293..433, сноска 453..525, поле снизу 24. */
+/* ── 767 и уже: окно превращается в лист во весь экран ──
+   Между шапкой (122) и нижней панелью (107) окну оставалось 403px из 664 —
+   не помещалась ни одна вкладка, и прокручивать приходилось всегда. Лист
+   закрывает и шапку, и панель: под содержимое становится 486 вместо 403,
+   а заголовок, вкладки и кнопка действия при этом не едут. */
+@media (max-width: 767px) {
+  .dp { padding: 0; overflow: hidden; }
+  .dp__scrim { display: none; }          /* лист непрозрачный, закрывает всё */
+  .dp__wrap { width: 100%; max-width: none; height: 100%; margin: 0; }
+  .dp__modal { height: 100%; padding: 0; border-radius: 0; overflow: hidden; }
+  .dp__modal::after { display: none; }   /* канта у листа нет — он во весь экран */
+  /* Уголки рисовались по скруглению окна; у листа скругления нет, и они
+     повисали цветными дугами в углах экрана */
+  .dp__corner { display: none; }
+  .dp__gap, .dp__switches { flex: none; }
+  .dp__switches { box-sizing: border-box; padding: 20px 24px 0; }
+  /* Поля уехали из модалки сюда: прокручивается только эта часть */
+  .dp__scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto;
+                -webkit-overflow-scrolling: touch; align-items: stretch;
+                padding: 0 24px calc(24px + env(safe-area-inset-bottom, 0px));
+                gap: 20px; }
+  /* Экран результата занимает лист целиком и стоит по центру: иначе он
+     оказывался прижат к низу под пустой прокручиваемой частью */
+  .dp.is-state .dp__scroll { display: none; }
+  .dp.is-state .dp__state { flex: 1 1 auto; justify-content: center;
+                            padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px)); }
+  /* Фиатные блоки на листе растворяются: их дети становятся прямыми детьми
+     прокручиваемой части, иначе липкий подвал цеплялся за край своего блока,
+     а не за край экрана, и всё равно уезжал */
+  .dp:not(.is-withdraw).is-fiat .dp__fd,
+  .dp.is-withdraw.is-fiat .dp__fw { display: contents; }
+  /* Кнопка действия закреплена у нижнего края: докручивать до неё не нужно */
+  .dp__wd-foot, .dp__fd-foot {
+    position: sticky; bottom: calc(-24px - env(safe-area-inset-bottom, 0px));
+    z-index: 2; margin-top: auto; background: #181e3b;
+    padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -12px 16px -8px #181e3b; }
+}
+
 @media (max-width: 640px) {
-  .dp__modal { gap: 20px; padding: 0 24px 24px; }
+  .dp__modal { gap: 20px; }
   /* распорка под абсолютной шапкой: 44 + зазор 20 + поле блока 20 = вкладки на 84 */
   .dp__gap { height: 44px; }
   /* ширина 480 из десктопа вылезала за окно на 370 — держим до крестика */
@@ -7558,272 +7606,277 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         </div>
       </div>
 
-      <div class="dp__body" data-node-id="1180:32139">
-        <div class="dp__row" data-node-id="1180:32140">
-          <div class="dp__field" data-node-id="1180:32141">
-            <span class="dp__label">Deposit Currency</span>
-            <!-- Валюта выбирается: список открывается по клику, отметка у текущей -->
-            <div class="dp__picker">
-              <button class="dp__select" type="button" data-node-id="1180:32144"
-                      aria-haspopup="listbox" aria-expanded="false">
-                <img loading="lazy" decoding="async" class="dp__select-coin" src="a/6d00671b5d.svg" alt="" width="24" height="24">
-                <span class="dp__select-value">ETH</span>
-                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
-              </button>
-              <div class="dp__list" role="listbox" aria-label="Валюта пополнения" hidden>
-              <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="ADA">
-                <img loading="lazy" decoding="async" src="a/515a3a12ca.svg" alt="" width="32" height="32">
-                <span>ADA</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
-              <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="BNB">
-                <img loading="lazy" decoding="async" src="a/118f10ae22.svg" alt="" width="32" height="32">
-                <span>BNB</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
-              <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="BTC">
-                <img loading="lazy" decoding="async" src="a/7a93c639e6.svg" alt="" width="32" height="32">
-                <span>BTC</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
-              <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="DAI">
-                <img loading="lazy" decoding="async" src="a/2508b3df6e.svg" alt="" width="32" height="32">
-                <span>DAI</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
-              <button class="dp__opt is-current" type="button" role="option" aria-selected="true" data-coin="ETH">
-                <img loading="lazy" decoding="async" src="a/6d00671b5d.svg" alt="" width="32" height="32">
-                <span>ETH</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
-              <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="LTC">
-                <img loading="lazy" decoding="async" src="a/681a7e142f.svg" alt="" width="32" height="32">
-                <span>LTC</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
-              <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="SOL">
-                <img loading="lazy" decoding="async" src="a/291e4c1f95.svg" alt="" width="32" height="32">
-                <span>SOL</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
-              <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="TRX">
-                <img loading="lazy" decoding="async" src="a/d37e5c4689.svg" alt="" width="32" height="32">
-                <span>TRX</span><i class="dp__radio" aria-hidden="true"></i>
-              </button>
+      <!-- Прокручивается только эта часть: заголовок, крестик и вкладки
+           лежат выше и на телефоне остаются на месте. -->
+      <div class="dp__scroll">
+        <div class="dp__body" data-node-id="1180:32139">
+          <div class="dp__row" data-node-id="1180:32140">
+            <div class="dp__field" data-node-id="1180:32141">
+              <span class="dp__label">Deposit Currency</span>
+              <!-- Валюта выбирается: список открывается по клику, отметка у текущей -->
+              <div class="dp__picker">
+                <button class="dp__select" type="button" data-node-id="1180:32144"
+                        aria-haspopup="listbox" aria-expanded="false">
+                  <img loading="lazy" decoding="async" class="dp__select-coin" src="a/6d00671b5d.svg" alt="" width="24" height="24">
+                  <span class="dp__select-value">ETH</span>
+                  <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+                </button>
+                <div class="dp__list" role="listbox" aria-label="Валюта пополнения" hidden>
+                <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="ADA">
+                  <img loading="lazy" decoding="async" src="a/515a3a12ca.svg" alt="" width="32" height="32">
+                  <span>ADA</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="BNB">
+                  <img loading="lazy" decoding="async" src="a/118f10ae22.svg" alt="" width="32" height="32">
+                  <span>BNB</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="BTC">
+                  <img loading="lazy" decoding="async" src="a/7a93c639e6.svg" alt="" width="32" height="32">
+                  <span>BTC</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="DAI">
+                  <img loading="lazy" decoding="async" src="a/2508b3df6e.svg" alt="" width="32" height="32">
+                  <span>DAI</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                <button class="dp__opt is-current" type="button" role="option" aria-selected="true" data-coin="ETH">
+                  <img loading="lazy" decoding="async" src="a/6d00671b5d.svg" alt="" width="32" height="32">
+                  <span>ETH</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="LTC">
+                  <img loading="lazy" decoding="async" src="a/681a7e142f.svg" alt="" width="32" height="32">
+                  <span>LTC</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="SOL">
+                  <img loading="lazy" decoding="async" src="a/291e4c1f95.svg" alt="" width="32" height="32">
+                  <span>SOL</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="TRX">
+                  <img loading="lazy" decoding="async" src="a/d37e5c4689.svg" alt="" width="32" height="32">
+                  <span>TRX</span><i class="dp__radio" aria-hidden="true"></i>
+                </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="dp__field" data-node-id="1180:32149">
-            <span class="dp__label dp__label--dim">Network</span>
-            <button class="dp__select" type="button" data-node-id="1180:32152">
-              <span class="dp__select-net">
-                <img loading="lazy" decoding="async" src="a/d2ac0cb32e.svg" alt="" width="24" height="24">
-                <img loading="lazy" decoding="async" class="dp__select-badge" src="a/de144a84b6.svg" alt="" width="10" height="10">
-              </span>
-              <span class="dp__select-value">ERC20</span>
-              <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 1233:37579 — адрес вывода, на всю ширину -->
-        <div class="dp__addr-field" data-node-id="1233:37579">
-          <span class="dp__hint">Withdrawal Address</span>
-          <label class="dp__input">
-            <input class="dp__addr-input" type="text" spellcheck="false"
-                   placeholder="Fill in carefully according to the specific currency"
-                   aria-label="Withdrawal Address">
-          </label>
-        </div>
-        <!-- 1180:47896 — сумма вывода и быстрые значения -->
-        <div class="dp__amount" data-node-id="1180:47896">
-          <div class="dp__amount-box" data-node-id="1180:47898">
-            <div class="dp__amount-head" data-node-id="1180:47899">
-              <span class="dp__hint">Withdrawal Amount</span>
-              <span class="dp__hint">Min <b>20USDT</b></span>
+            <div class="dp__field" data-node-id="1180:32149">
+              <span class="dp__label dp__label--dim">Network</span>
+              <button class="dp__select" type="button" data-node-id="1180:32152">
+                <span class="dp__select-net">
+                  <img loading="lazy" decoding="async" src="a/d2ac0cb32e.svg" alt="" width="24" height="24">
+                  <img loading="lazy" decoding="async" class="dp__select-badge" src="a/de144a84b6.svg" alt="" width="10" height="10">
+                </span>
+                <span class="dp__select-value">ERC20</span>
+                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+              </button>
             </div>
-            <label class="dp__input dp__input--amount" data-node-id="1180:47904">
-              <input class="dp__amount-input" type="text" inputmode="decimal" placeholder="0" aria-label="Withdrawal Amount">
-              <button class="dp__max" type="button">MAX</button>
+          </div>
+
+          <!-- 1233:37579 — адрес вывода, на всю ширину -->
+          <div class="dp__addr-field" data-node-id="1233:37579">
+            <span class="dp__hint">Withdrawal Address</span>
+            <label class="dp__input">
+              <input class="dp__addr-input" type="text" spellcheck="false"
+                     placeholder="Fill in carefully according to the specific currency"
+                     aria-label="Withdrawal Address">
             </label>
           </div>
-          <!-- 1180:38832 — три доли от баланса вместо прежних сумм -->
-          <p class="dp__error dp__error--crypto" hidden></p>
-          <div class="dp__chips" data-node-id="1180:38832">
-            <button class="dp__chip" type="button" data-part="25">25%</button>
-            <button class="dp__chip" type="button" data-part="50">50%</button>
-            <button class="dp__chip" type="button" data-part="75">75%</button>
-          </div>
-        </div>
-        <!-- 1180:40875 — вывод фиатом: валюта и способ, имя, сумма
-             с быстрыми значениями и кнопка выплаты. -->
-        <div class="dp__fw">
-          <div class="dp__row">
-            <div class="dp__field">
-              <span class="dp__label dp__label--dim">Deposit Currency</span>
-              <button class="dp__select" type="button">
-                <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
-                <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
-                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
-              </button>
-            </div>
-            <div class="dp__field">
-              <span class="dp__label dp__label--dim">Network</span>
-              <button class="dp__select" type="button">
-                <span class="dp__select-value" data-opts="Payphone|Card|Bank transfer">Payphone</span>
-                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
-              </button>
-            </div>
-          </div>
-
-          <div class="dp__row">
-            <div class="dp__field">
-              <span class="dp__hint">Last Name*</span>
-              <label class="dp__input">
-                <input class="dp__fw-last" type="text" placeholder="Rodrigez" aria-label="Last name">
-              </label>
-            </div>
-            <div class="dp__field">
-              <span class="dp__hint">First Name*</span>
-              <label class="dp__input">
-                <input class="dp__fw-first" type="text" placeholder="Gabriel" aria-label="First name">
-              </label>
-            </div>
-          </div>
-
-          <!-- 1180:45844 — адрес получателя: три колонки по 99.33 с зазором 12 -->
-          <div class="dp__row dp__row--three">
-            <div class="dp__field">
-              <span class="dp__hint">Country*</span>
-              <label class="dp__input">
-                <input class="dp__fw-country" type="text" placeholder="Country" aria-label="Country">
-              </label>
-            </div>
-            <div class="dp__field">
-              <span class="dp__hint">Street*</span>
-              <label class="dp__input">
-                <input class="dp__fw-street" type="text" placeholder="Street" aria-label="Street">
-              </label>
-            </div>
-            <div class="dp__field">
-              <span class="dp__hint">City*</span>
-              <label class="dp__input">
-                <input class="dp__fw-city" type="text" placeholder="City" aria-label="City">
-              </label>
-            </div>
-          </div>
-
-          <div class="dp__fd-amount">
-            <div class="dp__amount-box">
-              <div class="dp__amount-head">
+          <!-- 1180:47896 — сумма вывода и быстрые значения -->
+          <div class="dp__amount" data-node-id="1180:47896">
+            <div class="dp__amount-box" data-node-id="1180:47898">
+              <div class="dp__amount-head" data-node-id="1180:47899">
                 <span class="dp__hint">Withdrawal Amount</span>
                 <span class="dp__hint">Min <b>20USDT</b></span>
               </div>
-              <label class="dp__input dp__input--amount">
-                <input class="dp__fw-input" type="text" inputmode="decimal" placeholder="0" aria-label="Withdrawal amount">
-                <button class="dp__max dp__fw-max" type="button">MAX</button>
+              <label class="dp__input dp__input--amount" data-node-id="1180:47904">
+                <input class="dp__amount-input" type="text" inputmode="decimal" placeholder="0" aria-label="Withdrawal Amount">
+                <button class="dp__max" type="button">MAX</button>
               </label>
             </div>
-            <p class="dp__error dp__error--fd" hidden></p>
-            <div class="dp__chips">
-              <button class="dp__chip" type="button" data-amount="100">100</button>
-              <button class="dp__chip" type="button" data-amount="150">150</button>
-              <button class="dp__chip" type="button" data-amount="200">200</button>
-              <button class="dp__chip" type="button" data-amount="250">250</button>
+            <!-- 1180:38832 — три доли от баланса вместо прежних сумм -->
+            <p class="dp__error dp__error--crypto" hidden></p>
+            <div class="dp__chips" data-node-id="1180:38832">
+              <button class="dp__chip" type="button" data-part="25">25%</button>
+              <button class="dp__chip" type="button" data-part="50">50%</button>
+              <button class="dp__chip" type="button" data-part="75">75%</button>
             </div>
           </div>
-
-          <div class="dp__fd-foot">
-            <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fw-sum">0.00 USDT</b></div>
-            <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fw-fee">0.00 USDT</b></div>
-            <button class="dp__submit dp__fw-submit" type="button" disabled>Withdraw with payphone</button>
-          </div>
-        </div>
-
-        <!-- 1180:34805 — депозит фиатом: валюта и способ, имя, сумма
-             с быстрыми значениями и кнопка оплаты. -->
-        <div class="dp__fd">
-          <div class="dp__row">
-            <div class="dp__field">
-              <span class="dp__label dp__label--dim">Deposit Currency</span>
-              <button class="dp__select" type="button">
-                <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
-                <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
-                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
-              </button>
-            </div>
-            <div class="dp__field">
-              <span class="dp__label dp__label--dim">Network</span>
-              <button class="dp__select" type="button">
-                <span class="dp__select-value" data-opts="Payphone|Card|Bank transfer">Payphone</span>
-                <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
-              </button>
-            </div>
-          </div>
-
-          <div class="dp__row">
-            <div class="dp__field">
-              <span class="dp__hint">Last Name*</span>
-              <label class="dp__input">
-                <input class="dp__fd-last" type="text" placeholder="Rodrigez" aria-label="Last name">
-              </label>
-            </div>
-            <div class="dp__field">
-              <span class="dp__hint">First Name*</span>
-              <label class="dp__input">
-                <input class="dp__fd-first" type="text" placeholder="Gabriel" aria-label="First name">
-              </label>
-            </div>
-          </div>
-
-          <div class="dp__fd-amount">
-            <div class="dp__amount-box">
-              <div class="dp__amount-head">
-                <span class="dp__hint">Fiat Amount (50 - 100,000 MXN)</span>
-                <span class="dp__hint">Min <b>20USDT</b></span>
+          <!-- 1180:40875 — вывод фиатом: валюта и способ, имя, сумма
+               с быстрыми значениями и кнопка выплаты. -->
+          <div class="dp__fw">
+            <div class="dp__row">
+              <div class="dp__field">
+                <span class="dp__label dp__label--dim">Deposit Currency</span>
+                <button class="dp__select" type="button">
+                  <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
+                  <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
+                  <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+                </button>
               </div>
-              <label class="dp__input dp__input--amount">
-                <input class="dp__fd-input" type="text" inputmode="decimal" placeholder="0" aria-label="Fiat amount">
-                <button class="dp__max dp__fd-max" type="button">MAX</button>
-              </label>
+              <div class="dp__field">
+                <span class="dp__label dp__label--dim">Network</span>
+                <button class="dp__select" type="button">
+                  <span class="dp__select-value" data-opts="Payphone|Card|Bank transfer">Payphone</span>
+                  <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+                </button>
+              </div>
             </div>
-            <p class="dp__error dp__error--fw" hidden></p>
-            <div class="dp__chips">
-              <button class="dp__chip" type="button" data-amount="100">$100</button>
-              <button class="dp__chip" type="button" data-amount="500">$500</button>
-              <button class="dp__chip" type="button" data-amount="1000">$1000</button>
+
+            <div class="dp__row">
+              <div class="dp__field">
+                <span class="dp__hint">Last Name*</span>
+                <label class="dp__input">
+                  <input class="dp__fw-last" type="text" placeholder="Rodrigez" aria-label="Last name">
+                </label>
+              </div>
+              <div class="dp__field">
+                <span class="dp__hint">First Name*</span>
+                <label class="dp__input">
+                  <input class="dp__fw-first" type="text" placeholder="Gabriel" aria-label="First name">
+                </label>
+              </div>
+            </div>
+
+            <!-- 1180:45844 — адрес получателя: три колонки по 99.33 с зазором 12 -->
+            <div class="dp__row dp__row--three">
+              <div class="dp__field">
+                <span class="dp__hint">Country*</span>
+                <label class="dp__input">
+                  <input class="dp__fw-country" type="text" placeholder="Country" aria-label="Country">
+                </label>
+              </div>
+              <div class="dp__field">
+                <span class="dp__hint">Street*</span>
+                <label class="dp__input">
+                  <input class="dp__fw-street" type="text" placeholder="Street" aria-label="Street">
+                </label>
+              </div>
+              <div class="dp__field">
+                <span class="dp__hint">City*</span>
+                <label class="dp__input">
+                  <input class="dp__fw-city" type="text" placeholder="City" aria-label="City">
+                </label>
+              </div>
+            </div>
+
+            <div class="dp__fd-amount">
+              <div class="dp__amount-box">
+                <div class="dp__amount-head">
+                  <span class="dp__hint">Withdrawal Amount</span>
+                  <span class="dp__hint">Min <b>20USDT</b></span>
+                </div>
+                <label class="dp__input dp__input--amount">
+                  <input class="dp__fw-input" type="text" inputmode="decimal" placeholder="0" aria-label="Withdrawal amount">
+                  <button class="dp__max dp__fw-max" type="button">MAX</button>
+                </label>
+              </div>
+              <p class="dp__error dp__error--fd" hidden></p>
+              <div class="dp__chips">
+                <button class="dp__chip" type="button" data-amount="100">100</button>
+                <button class="dp__chip" type="button" data-amount="150">150</button>
+                <button class="dp__chip" type="button" data-amount="200">200</button>
+                <button class="dp__chip" type="button" data-amount="250">250</button>
+              </div>
+            </div>
+
+            <div class="dp__fd-foot">
+              <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fw-sum">0.00 USDT</b></div>
+              <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fw-fee">0.00 USDT</b></div>
+              <button class="dp__submit dp__fw-submit" type="button" disabled>Withdraw with payphone</button>
             </div>
           </div>
 
-          <div class="dp__fd-foot">
-            <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fd-sum">0.00 USDT</b></div>
-            <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fd-fee">0.00 USDT</b></div>
-            <button class="dp__submit dp__fd-submit" type="button" disabled>Deposit via Payphone</button>
+          <!-- 1180:34805 — депозит фиатом: валюта и способ, имя, сумма
+               с быстрыми значениями и кнопка оплаты. -->
+          <div class="dp__fd">
+            <div class="dp__row">
+              <div class="dp__field">
+                <span class="dp__label dp__label--dim">Deposit Currency</span>
+                <button class="dp__select" type="button">
+                  <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
+                  <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
+                  <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+                </button>
+              </div>
+              <div class="dp__field">
+                <span class="dp__label dp__label--dim">Network</span>
+                <button class="dp__select" type="button">
+                  <span class="dp__select-value" data-opts="Payphone|Card|Bank transfer">Payphone</span>
+                  <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="dp__row">
+              <div class="dp__field">
+                <span class="dp__hint">Last Name*</span>
+                <label class="dp__input">
+                  <input class="dp__fd-last" type="text" placeholder="Rodrigez" aria-label="Last name">
+                </label>
+              </div>
+              <div class="dp__field">
+                <span class="dp__hint">First Name*</span>
+                <label class="dp__input">
+                  <input class="dp__fd-first" type="text" placeholder="Gabriel" aria-label="First name">
+                </label>
+              </div>
+            </div>
+
+            <div class="dp__fd-amount">
+              <div class="dp__amount-box">
+                <div class="dp__amount-head">
+                  <span class="dp__hint">Fiat Amount (50 - 100,000 MXN)</span>
+                  <span class="dp__hint">Min <b>20USDT</b></span>
+                </div>
+                <label class="dp__input dp__input--amount">
+                  <input class="dp__fd-input" type="text" inputmode="decimal" placeholder="0" aria-label="Fiat amount">
+                  <button class="dp__max dp__fd-max" type="button">MAX</button>
+                </label>
+              </div>
+              <p class="dp__error dp__error--fw" hidden></p>
+              <div class="dp__chips">
+                <button class="dp__chip" type="button" data-amount="100">$100</button>
+                <button class="dp__chip" type="button" data-amount="500">$500</button>
+                <button class="dp__chip" type="button" data-amount="1000">$1000</button>
+              </div>
+            </div>
+
+            <div class="dp__fd-foot">
+              <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fd-sum">0.00 USDT</b></div>
+              <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fd-fee">0.00 USDT</b></div>
+              <button class="dp__submit dp__fd-submit" type="button" disabled>Deposit via Payphone</button>
+            </div>
+          </div>
+
+          <div class="dp__qr-row" data-node-id="1180:32158">
+            <!-- 1180:32159 — рамка 140 углами, внутри картинка 114.97 на 12.52 -->
+            <div class="dp__qr" data-node-id="1180:32159">
+              <img loading="lazy" decoding="async" class="dp__qr-code" src="a/eff0520c99.webp" alt="QR-код адреса пополнения" width="115" height="115">
+              <img loading="lazy" decoding="async" class="dp__qr-frame" src="a/553dd8dfb6.svg" alt="" width="140" height="140">
+            </div>
+            <div class="dp__qr-info" data-node-id="1180:32164">
+              <span class="dp__label dp__label--strong">Contract Address</span>
+              <p class="dp__addr" data-node-id="1180:32166">0x42fFe63917a4aa65294563De2c82</p>
+              <button class="dp__copy" type="button" data-node-id="1180:32167">Copy Address</button>
+            </div>
           </div>
         </div>
 
-        <div class="dp__qr-row" data-node-id="1180:32158">
-          <!-- 1180:32159 — рамка 140 углами, внутри картинка 114.97 на 12.52 -->
-          <div class="dp__qr" data-node-id="1180:32159">
-            <img loading="lazy" decoding="async" class="dp__qr-code" src="a/eff0520c99.webp" alt="QR-код адреса пополнения" width="115" height="115">
-            <img loading="lazy" decoding="async" class="dp__qr-frame" src="a/553dd8dfb6.svg" alt="" width="140" height="140">
+        <!-- 1180:47917 — итог и кнопка, только на выводе -->
+        <div class="dp__wd-foot" data-node-id="1180:47918">
+          <div class="dp__sum-row" data-node-id="1180:47919">
+            <span>Amount:</span><b class="dp__sum-amount">0.00 USDT</b>
           </div>
-          <div class="dp__qr-info" data-node-id="1180:32164">
-            <span class="dp__label dp__label--strong">Contract Address</span>
-            <p class="dp__addr" data-node-id="1180:32166">0x42fFe63917a4aa65294563De2c82</p>
-            <button class="dp__copy" type="button" data-node-id="1180:32167">Copy Address</button>
+          <div class="dp__sum-row" data-node-id="1180:47922">
+            <span>Withdrawal Fee</span><b class="dp__sum-fee">0.00 USDT</b>
           </div>
+          <button class="dp__submit" type="button" disabled data-node-id="1180:47925">Withdraw 0 USDT</button>
         </div>
-      </div>
 
-      <!-- 1180:47917 — итог и кнопка, только на выводе -->
-      <div class="dp__wd-foot" data-node-id="1180:47918">
-        <div class="dp__sum-row" data-node-id="1180:47919">
-          <span>Amount:</span><b class="dp__sum-amount">0.00 USDT</b>
+        <!-- 1180:32169 — сноска в рамке #747889 -->
+        <div class="dp__note" data-node-id="1180:32169">
+          <span class="dp__ico"><img loading="lazy" decoding="async" class="dp__ico--warn" src="a/c83fe98c9e.svg" alt=""></span>
+          <p>Send only ETH to this deposit address. Transfers below 0.0003 ETH will not be credited.</p>
         </div>
-        <div class="dp__sum-row" data-node-id="1180:47922">
-          <span>Withdrawal Fee</span><b class="dp__sum-fee">0.00 USDT</b>
-        </div>
-        <button class="dp__submit" type="button" disabled data-node-id="1180:47925">Withdraw 0 USDT</button>
-      </div>
 
-      <!-- 1180:32169 — сноска в рамке #747889 -->
-      <div class="dp__note" data-node-id="1180:32169">
-        <span class="dp__ico"><img loading="lazy" decoding="async" class="dp__ico--warn" src="a/c83fe98c9e.svg" alt=""></span>
-        <p>Send only ETH to this deposit address. Transfers below 0.0003 ETH will not be credited.</p>
       </div>
 
       <!-- Экран состояния: блокировки, отправка, успех и ошибка показываются
@@ -8266,17 +8319,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           /* На узком экране окно не центрируем: между шапкой и ним оставалась
              пустая полоса, а низ налезал на нижнюю панель. Прижимаем под шапку
              и оставляем панели её высоту — обе меряем, а не зашиваем числами. */
-          if (innerWidth <= 767) {
-            var head = document.querySelector('.topbar');
-            var nav = document.querySelector('.bnav');
-            var below = head ? Math.round(head.getBoundingClientRect().bottom) : 8;
-            var navH = nav && getComputedStyle(nav).display !== 'none'
-                     ? Math.round(nav.getBoundingClientRect().height) : 8;
-            dp.style.paddingTop = (below + 16) + 'px';
-            dp.style.paddingBottom = (navH + 16) + 'px';
-            dpWrap.style.marginTop = '0px';
-            return;
-          }
+          /* Лист занимает весь экран, поля и центрирование ему не нужны */
+          if (innerWidth <= 767) return;
           var avail = dp.clientHeight - 48;                 /* паддинги 24 сверху и снизу */
           var top = Math.max(0, Math.round((avail - dpModal.offsetHeight) / 2));
           dpWrap.style.marginTop = top + 'px';
@@ -8284,7 +8328,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         addEventListener('resize', function () { if (!dp.hidden) dpPin(); });
         var dpCalm = matchMedia('(prefers-reduced-motion: reduce)').matches;
         var dpMorph = function (apply) {
-          if (dpCalm) { apply(); return; }
+          /* На листе высота постоянна — анимировать её нечему, а попытка
+             задать height на элементе с height:100% ломала раскладку */
+          if (dpCalm || innerWidth <= 767) { apply(); return; }
           var from = dpModal.getBoundingClientRect().height;
           apply();
           dpModal.style.height = '';
@@ -8304,10 +8350,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         };
         var closeDep = function () { dp.hidden = true; document.body.classList.remove('dp-open');
                                     dpWrap.style.marginTop = '';
-                                    document.body.style.overflow = ''; depBtn.focus(); };
+                                    document.body.style.overflow = '';
+                                    document.documentElement.style.overflow = '';
+                                    depBtn.focus(); };
         depBtn.addEventListener('click', function (e) {
           e.preventDefault(); dp.hidden = false; document.body.classList.add('dp-open');
           document.body.style.overflow = 'hidden';
+          /* Прокручивается html, а не body: без этого страница за листом
+             продолжала ехать под пальцем */
+          document.documentElement.style.overflow = 'hidden';
           dpPin();
           /* фокус переносим в окно: иначе он оставался на кнопке под затемнением,
              и с клавиатуры первый Tab уходил на страницу за окном */
