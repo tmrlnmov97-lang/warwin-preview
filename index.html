@@ -4054,7 +4054,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__pop {
   /* шапка 74, зазор 16 — раньше стояло 78, окно почти касалось шапки */
   position: absolute; right: 20px; top: 90px; box-sizing: border-box;
-  display: flex; gap: 16px; width: 664px; max-width: calc(100vw - 32px); padding: 16px;
+  /* Шкала окна, от внешнего к внутреннему: 24 между колонками > 16 поле
+     окна > 12 поле плиты > 8 между блоками > 4 внутри блока. Раньше зазор
+     между колонками равнялся полю окна, и колонки не читались группами. */
+  display: flex; gap: 24px; width: 664px; max-width: calc(100vw - 32px); padding: 16px;
   background: #181e3b; border: 0; border-radius: 20px;
   /* Две тени: широкая тёмная отрывает окно от страницы, короткая держит
      край; плюс светлый кант — на тёмном фоне он и есть граница. */
@@ -4071,7 +4074,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
 /* 1226:35559 — сводка: своя плита темнее окна */
 .pm__sum { position: relative; box-sizing: border-box; width: 340px; flex: none;
-           display: flex; flex-direction: column; gap: 10px; padding: 12px;
+           display: flex; flex-direction: column; gap: 8px; padding: 12px;
            background: #0e132a; border: 0; border-radius: 12px; }
 /* кант слоем: внутри Figma он не занимает место, а border забирал по 1px */
 .pm__sum::after { content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -4079,9 +4082,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* Иерархия окна: главное здесь — сумма, поэтому заголовок раздела ужат до
    подписи, а баланс поднят до 24. Раньше весь текст лежал в 12–18 и ничто
    не вело взгляд, а сам баланс был мельче тикера рядом. */
-.pm__title { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-             font-size: 12px; line-height: 16px; letter-spacing: .06em;
-             text-transform: uppercase; color: var(--modal-text-1, #bbc6cd); }
 .pm__cap { font-family: 'Work Sans', sans-serif; font-weight: 500;
            font-size: 11px; line-height: 16px; letter-spacing: .05em;
            text-transform: uppercase; color: var(--dp-label); }
@@ -4102,9 +4102,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     font-variant-numeric: tabular-nums; }
 .pm__coin-right i { font-style: normal; font-family: 'Instrument Sans', sans-serif;
                     font-size: 13px; line-height: 17px; color: var(--dp-label); }
-/* 1226:35571 — две колонки, между ними зазор: без него подписи сливались */
-.pm__stats { display: flex; gap: 20px; }
-.pm__stat { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+/* 1226:35571 — две колонки. Зазор тот же, что между блоками плиты (8), и
+   вдвое больше зазора внутри колонки (4): подпись держится своего значения.
+   Колонки всё равно тянутся поровну, так что видимое расстояние задаёт
+   их ширина, а не это число. */
+.pm__stats { display: flex; gap: 8px; }
+.pm__stat { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 /* Крупное число в окне одно — баланс. Bonus и Withdrawable ушли с 20 на 16,
    иначе три одинаково больших числа спорили друг с другом. */
 .pm__stat b { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
@@ -4122,8 +4125,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    space-between пункты разъезжались, разделитель на верхней кромке пункта
    оказывался в 11px от подписи под ним и в 33 от подписи над ним. И высоту
    пункта тянуть под сводку нельзя — подсветка выходила втрое выше строки. */
+/* Высота меню теперь совпадает с высотой плиты, поэтому вертикального поля
+   и центрирования не нужно: первый пункт встаёт вровень с верхом плиты. */
 .pm__menu { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column;
-            justify-content: center; padding: 12px 8px; }
+            justify-content: flex-start; padding: 0 8px; }
 .pm__item { box-sizing: border-box; display: flex; align-items: center; gap: 8px;
             flex: 0 0 auto; height: 44px; min-height: 0; padding: 0 8px; width: 100%;
             background: none; border: 0; border-radius: 12px; cursor: pointer; text-align: left; }
@@ -7428,8 +7433,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   <div class="pm__scrim" data-close></div>
   <div class="pm__pop" role="dialog" aria-modal="true" aria-label="Account">
     <!-- 1226:35559 — сводка -->
+    <!-- Заголовка у плиты нет намеренно: попап открывается по иконке профиля,
+         и «Account Summary» капсом повторял то, что и так очевидно. Без него
+         высота плиты сходится с высотой меню — колонки стоят вровень. -->
     <div class="pm__sum" data-node-id="1226:35559">
-      <h2 class="pm__title">Account Summary</h2>
       <div class="pm__balance">
         <div class="pm__coin" data-node-id="1226:35563">
           <span class="pm__coin-left">
