@@ -2660,12 +2660,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bn__btn--bad { border-color: rgba(229, 72, 77, .5); color: #e5484d; }
 .bn__btn--bad:hover { background: rgba(229, 72, 77, .1); }
 .bn__btn[disabled] { opacity: .5; cursor: default; }
-.bn__link { padding: 0 4px; border: 0; background: none; cursor: pointer;
-            font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
-            line-height: 20px; color: var(--dp-label); transition: color .15s ease; }
-.bn__link:hover { color: var(--white); text-decoration: underline; }
 /* Фокус с клавиатуры видно на всех органах управления страницы */
-.bn__btn:focus-visible, .bn__chip:focus-visible, .bn__link:focus-visible,
+.bn__btn:focus-visible, .bn__chip:focus-visible,
 .bnpromo__input:focus-visible, .bn__list:focus-visible {
   outline: 2px solid #00c1ff; outline-offset: 2px; }
 
@@ -6073,7 +6069,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
                 <div class="bnact__acts">
                   <button class="bn__btn bn__btn--primary" type="button" data-bn-play>Play now</button>
-                  <button class="bn__link" type="button" data-bn-terms="welcome">Terms</button>
                   <!-- Отмена необратима и не должна выглядеть главной кнопкой -->
                   <button class="bnact__drop" type="button" data-bn-cancel>Cancel bonus</button>
                 </div>
