@@ -4240,6 +4240,25 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   Мобильная типографика: одинокое слово на последней строке и висячий
+   предлог — самое заметное, что портит вид на узкой колонке. Просим
+   браузер подбирать перенос так, чтобы хвост не оставался один, а
+   короткие заголовки делить поровну.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  p, li, dd, summary, .vf__desc, .bncard__body p, .prof__card-head p {
+    text-wrap: pretty; }
+  h1, h2, h3, .vf__title, .bncard__body h2, .bnact__title h2 {
+    text-wrap: balance; }
+  /* Вкладки профиля переносились, и «Responsible Gambling» уезжала вниз
+     отдельной строкой. Теперь это лента с прокруткой, как чипы на сайте. */
+  .prof__tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+                margin: 0 -16px; padding: 0 16px; }
+  .prof__tabs::-webkit-scrollbar { display: none; }
+  .prof__tab { flex: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    Вкладка Verification. Раньше это была сетка из четырёх одинаковых карточек
    с пунктирными зонами загрузки во всю ширину: обязательные и необязательные
    документы весили одинаково, а панель занимала 682px ради двух файлов.
@@ -4920,7 +4939,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="hero__copy hero__copy--authed" data-node-id="1187:15583">
               <div class="hero__text">
                 <h1 class="hero__title" data-node-id="1187:15585">20 FREE SPINS WAITING FOR YOU</h1>
-                <p class="hero__sub" data-node-id="1187:15586">20 free spins on Gates of Olympus 1000</p>
+                <p class="hero__sub" data-node-id="1187:15586">20 free spins on&nbsp;Gates of&nbsp;Olympus 1000</p>
               </div>
               <div class="hero__row">
                 <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15587">Join now</button>
@@ -4933,7 +4952,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="hero__copy hero__copy--authed" data-node-id="1187:15705">
               <div class="hero__text">
                 <h1 class="hero__title" data-node-id="1187:15707">WAR ARENA TOURNAMENT</h1>
-                <p class="hero__sub" data-node-id="1187:15708">UP TO 20.000$ PRIZE now!</p>
+                <p class="hero__sub" data-node-id="1187:15708">UP&nbsp;TO&nbsp;20.000$ PRIZE now!</p>
               </div>
               <div class="hero__row">
                 <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15709">Join now</button>
@@ -4946,7 +4965,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="hero__copy hero__copy--authed hero__copy--narrow" data-node-id="1186:15020">
               <div class="hero__text">
                 <h1 class="hero__title" data-node-id="1186:15022">SOCCER PARTY BET&amp;WIN</h1>
-                <p class="hero__sub" data-node-id="1186:15023">WIN UP TO $500</p>
+                <p class="hero__sub" data-node-id="1186:15023">WIN UP&nbsp;TO $500</p>
               </div>
               <div class="hero__row">
                 <button class="hero__cta hero__cta--join" type="button" data-node-id="1186:15024">Join now</button>
@@ -4962,7 +4981,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <div class="hero__copy hero__copy--guest" data-node-id="1126:15051">
           <div class="hero__text">
             <h1 class="hero__title">Discover betting without borders</h1>
-            <p class="hero__sub" data-node-id="1118:14912">+100% up to $500 and 200 free spins</p>
+            <p class="hero__sub" data-node-id="1118:14912">+100% up&nbsp;to $500 and&nbsp;200 free spins</p>
           </div>
           <div class="hero__row" data-node-id="1118:14902">
             <button class="hero__cta" type="button" data-node-id="1125:15043">REGISTER</button>
@@ -4984,7 +5003,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <div class="hero__copy hero__copy--mob-authed">
             <div class="hero__text">
               <h2 class="hero__title">FREE SPINS GIVEAWAY</h2>
-              <p class="hero__sub">20 FREE SPINS ON FIRE IN GET OF OLYMPUS</p>
+              <p class="hero__sub">20 FREE SPINS ON&nbsp;FIRE IN&nbsp;GET OF&nbsp;OLYMPUS</p>
             </div>
             <button class="hero__cta hero__cta--join" type="button">Join now</button>
           </div>
@@ -4994,7 +5013,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <div class="hero__copy hero__copy--mob-authed">
             <div class="hero__text">
               <h2 class="hero__title">WAR ARENA TOURNAMENT</h2>
-              <p class="hero__sub">UP TO 20.000$ PRIZE now!</p>
+              <p class="hero__sub">UP&nbsp;TO&nbsp;20.000$ PRIZE now!</p>
             </div>
             <button class="hero__cta hero__cta--join" type="button">Join now</button>
           </div>
@@ -5004,7 +5023,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <div class="hero__copy hero__copy--mob-authed">
             <div class="hero__text">
               <h2 class="hero__title">SOCCER PARTY BET&amp;WIN</h2>
-              <p class="hero__sub">WIN UP TO $500</p>
+              <p class="hero__sub">WIN UP&nbsp;TO $500</p>
             </div>
             <button class="hero__cta hero__cta--join" type="button">Join now</button>
           </div>
@@ -5040,7 +5059,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <div class="banner__inner">
           <h1 class="banner__title">Discover betting without borders</h1>
           <button class="banner__cta">REGISTER</button>
-          <p class="banner__or">or register via</p>
+          <p class="banner__or">or&nbsp;register via</p>
         </div>
         <div class="socials">
           <a class="social social--google" href="#">
@@ -5521,7 +5540,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <section class="prof__card">
           <div class="prof__card-head">
             <h2>Contacts and login</h2>
-            <p>Confirmation codes and withdrawal notices come here.</p>
+            <p>Confirmation codes and&nbsp;withdrawal notices come here.</p>
           </div>
           <div class="prof__grid">
             <div class="prof__cell">
@@ -5548,7 +5567,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                  проверке». Проверенные данные и так заперты замками, отметка
                  повторяла подпись под заголовком. -->
             <h2>Personal data <em class="prof__badge prof__badge--ok" hidden>checked</em></h2>
-            <p>They match the document. Locked after verification — write to support if something needs fixing.</p>
+            <p>They match the&nbsp;document. Locked after verification — write to&nbsp;support if&nbsp;something needs fixing.</p>
           </div>
           <div class="prof__grid">
             <div class="prof__cell">
@@ -5573,7 +5592,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <section class="prof__card">
           <div class="prof__card-head">
             <h2>Address</h2>
-            <p>Needed only for card withdrawals. Can be filled in later.</p>
+            <p>Needed only for&nbsp;card withdrawals. Can be filled in&nbsp;later.</p>
           </div>
           <div class="prof__grid">
             <div class="prof__cell">
@@ -5600,7 +5619,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <section class="prof__card">
           <div class="prof__card-head">
             <h2>Password</h2>
-            <p>Choose a password you do not use anywhere else. Minimum 8 characters.</p>
+            <p>Choose a&nbsp;password you do not use anywhere else. Minimum 8 characters.</p>
           </div>
           <div class="sec__pass">
             <div class="prof__cell">
@@ -5649,7 +5668,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               <span class="vf__steps-text"><b class="vf__done">0</b> of <b>2</b> uploaded</span>
             </div>
             <h2 class="vf__h2">Verification</h2>
-            <p class="vf__lead">Needed once before your first withdrawal. The check takes up to 15 minutes &mdash; you can play and deposit right now.</p>
+            <p class="vf__lead">Needed once before your first withdrawal. The&nbsp;check takes up&nbsp;to&nbsp;15 minutes &mdash; you can play and&nbsp;deposit right now.</p>
             <span class="vf__track"><i></i></span>
           </div>
 
@@ -5660,7 +5679,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <span class="vf__tile"><img loading="lazy" decoding="async" src="a/4f8ff11129.svg" alt="" width="20" height="20"></span>
                 <div class="vf__text">
                   <h3 class="vf__title">Proof of identity (front)</h3>
-                  <p class="vf__desc">Passport, ID card or driver&rsquo;s licence &mdash; the side with your photo.</p>
+                  <p class="vf__desc">Passport, ID card or&nbsp;driver&rsquo;s licence &mdash; the&nbsp;side with your photo.</p>
                 </div>
                 <label class="vf__drop">
                   <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
@@ -5678,7 +5697,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <span class="vf__tile"><img loading="lazy" decoding="async" src="a/68da4afb63.svg" alt="" width="20" height="20"></span>
                 <div class="vf__text">
                   <h3 class="vf__title">Proof of identity (back)</h3>
-                  <p class="vf__desc">The reverse side of the same document.</p>
+                  <p class="vf__desc">The&nbsp;reverse side of&nbsp;the&nbsp;same document.</p>
                 </div>
                 <label class="vf__drop">
                   <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
@@ -5702,7 +5721,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <span class="vf__tile"><img loading="lazy" decoding="async" src="a/8014eb7df6.svg" alt="" width="20" height="20"></span>
                 <div class="vf__text">
                   <h3 class="vf__title">Proof of address</h3>
-                  <p class="vf__desc">A utility bill or a bank statement no older than 3 months.</p>
+                  <p class="vf__desc">A&nbsp;utility bill or&nbsp;a&nbsp;bank statement no&nbsp;older than 3 months.</p>
                 </div>
                 <label class="vf__drop">
                   <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
@@ -5720,7 +5739,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <span class="vf__tile"><img loading="lazy" decoding="async" src="a/217c9cbb02.svg" alt="" width="20" height="20"></span>
                 <div class="vf__text">
                   <h3 class="vf__title">Source of funds</h3>
-                  <p class="vf__desc">We ask separately if needed &mdash; you will get an e-mail.</p>
+                  <p class="vf__desc">We ask separately if&nbsp;needed &mdash; you will get an&nbsp;e-mail.</p>
                 </div>
                 <label class="vf__drop">
                   <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
@@ -5737,7 +5756,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             </div>
           </div>
 
-          <p class="vf__foot">PNG, JPG or PDF &middot; up to 5 MB. Documents are encrypted and visible only to the review team.</p>
+          <p class="vf__foot">PNG, JPG or&nbsp;PDF &middot; up&nbsp;to&nbsp;5 MB. Documents are encrypted and&nbsp;visible only to&nbsp;the&nbsp;review team.</p>
         </div>
         <!-- 1335:18127 — Responsible Gambling: шесть карточек лимитов -->
         <div class="prof__panel prof__panel--rg" id="prof-responsible" role="tabpanel" hidden>
@@ -5745,7 +5764,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <section class="prof__card rg__card">
             <div class="prof__card-head">
               <h2>Deposit limit</h2>
-              <p>Your account can be set with deposit limits. This setting limits the amount you can deposit per day, week or month.</p>
+              <p>Your account can be set with deposit limits. This setting limits the&nbsp;amount you can deposit per day, week or&nbsp;month.</p>
             </div>
             <div class="rg__limit">
               <div class="rg__limit-head">
@@ -5766,7 +5785,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <section class="prof__card rg__card">
             <div class="prof__card-head">
               <h2>Loss limit</h2>
-              <p>Your account can be set with loss limits. This setting limits the amount you can lose per day, week or month.</p>
+              <p>Your account can be set with loss limits. This setting limits the&nbsp;amount you can lose per day, week or&nbsp;month.</p>
             </div>
             <div class="rg__limit">
               <div class="rg__limit-head">
@@ -5789,7 +5808,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <section class="prof__card rg__card">
             <div class="prof__card-head">
               <h2>Wager limit</h2>
-              <p>Your account can be set with wager limits. This setting controls the amount of money you can wager per day, week or month.</p>
+              <p>Your account can be set with wager limits. This setting controls the&nbsp;amount of&nbsp;money you can wager per day, week or&nbsp;month.</p>
             </div>
             <div class="rg__limit">
               <div class="rg__limit-head">
@@ -5810,7 +5829,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <section class="prof__card rg__card">
             <div class="prof__card-head">
               <h2>Session limit</h2>
-              <p>You can limit the amount of time spent gambling. The restriction takes effect instantly. If you hit the limit, you will be automatically logged out of your account.</p>
+              <p>You can limit the&nbsp;amount of&nbsp;time spent gambling. The&nbsp;restriction takes effect instantly. If&nbsp;you hit the&nbsp;limit, you will be automatically logged out of&nbsp;your account.</p>
             </div>
             <div class="rg__limit">
               <div class="rg__limit-head">
@@ -5832,7 +5851,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <section class="prof__card rg__card">
             <div class="prof__card-head">
               <h2>Cooling off</h2>
-              <p>Feel the need to stay away from the casino for some time? You can set a cooling-off limit for a certain period of time. The restriction takes effect instantly. You won't be able to make deposits and play during the specified period, also you will be excluded from all advertising offers. After the set period expires, you'll receive a notification email saying your account is active again.</p>
+              <p>Feel the&nbsp;need to&nbsp;stay away from the&nbsp;casino for&nbsp;some time? You can set a&nbsp;cooling-off limit for&nbsp;a&nbsp;certain period of&nbsp;time. The&nbsp;restriction takes effect instantly. You won't be able to&nbsp;make deposits and&nbsp;play during the&nbsp;specified period, also you will be excluded from all advertising offers. After the&nbsp;set period expires, you'll receive a&nbsp;notification email saying your account is&nbsp;active again.</p>
             </div>
             <div class="rg__row rg__row--wide">
               <button class="rg__select" type="button" data-opts="None|24 hours|7 days|30 days|90 days">None<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
@@ -5842,7 +5861,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <section class="prof__card rg__card">
             <div class="prof__card-head">
               <h2>Self exclusion</h2>
-              <p>Feel the need to block access to your account? You can set a self-exclusion limit for a definite or an indefinite period of time. The restriction takes effect instantly. During the set period you will not be able to log into your account. To be excluded from gambling on our site for an indefinite period of time, please, contact our support team via Live Chat.</p>
+              <p>Feel the&nbsp;need to&nbsp;block access to&nbsp;your account? You can set a&nbsp;self-exclusion limit for&nbsp;a&nbsp;definite or&nbsp;an&nbsp;indefinite period of&nbsp;time. The&nbsp;restriction takes effect instantly. During the&nbsp;set period you will not be able to&nbsp;log into your account. To&nbsp;be excluded from gambling on&nbsp;our site for&nbsp;an&nbsp;indefinite period of&nbsp;time, please, contact our support team via Live Chat.</p>
             </div>
             <div class="rg__row rg__row--wide">
               <label class="rg__input"><input type="text" placeholder="Enter day" aria-label="Days"></label>
@@ -5892,7 +5911,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <b class="vlvl__sum">10,000 USDT</b>
                 <span class="vlvl__cap">Wagered</span>
                 <ul class="vlvl__perks">
-                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up bonus</li>
+                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up&nbsp;bonus</li>
                 </ul>
               </div>
             </li>
@@ -5903,7 +5922,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                 <b class="vlvl__sum">50,000 USDT</b>
                 <span class="vlvl__cap">Wagered</span>
                 <ul class="vlvl__perks">
-                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up bonus</li><li>Higher bonuses</li>
+                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up&nbsp;bonus</li><li>Higher bonuses</li>
                 </ul>
               </div>
             </li>
@@ -5930,7 +5949,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
               </div>
             </li>
           </ol>
-          <p class="vlvl__note">No percentages on this page on purpose &mdash; the numbers live in your account.</p>
+          <p class="vlvl__note">No&nbsp;percentages on&nbsp;this page on&nbsp;purpose &mdash; the&nbsp;numbers live in&nbsp;your account.</p>
         </section>
 
         <section class="section">
@@ -5938,19 +5957,19 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <div class="vprv">
             <article class="vprv__i">
               <img loading="lazy" decoding="async" src="a/cdf135e524.webp" alt="" width="64" height="64">
-              <div><h3>Boost</h3><p>Bonus for your activity every week and month</p></div>
+              <div><h3>Boost</h3><p>Bonus for&nbsp;your activity every week and&nbsp;month</p></div>
             </article>
             <article class="vprv__i">
               <img loading="lazy" decoding="async" src="a/897608697f.webp" alt="" width="64" height="64">
-              <div><h3>Personal manager</h3><p>Handles your questions outside the general queue</p></div>
+              <div><h3>Personal manager</h3><p>Handles your questions outside the&nbsp;general queue</p></div>
             </article>
             <article class="vprv__i">
               <img loading="lazy" decoding="async" src="a/8b17613478.webp" alt="" width="64" height="64">
-              <div><h3>Play bonus</h3><p>Part of the losses back when you move up a level</p></div>
+              <div><h3>Play bonus</h3><p>Part of&nbsp;the&nbsp;losses back when you move up&nbsp;a&nbsp;level</p></div>
             </article>
             <article class="vprv__i">
               <img loading="lazy" decoding="async" src="a/db20a74fb1.webp" alt="" width="64" height="64">
-              <div><h3>Level-up bonus</h3><p>The higher the level, the bigger the payout</p></div>
+              <div><h3>Level-up bonus</h3><p>The&nbsp;higher the&nbsp;level, the&nbsp;bigger the&nbsp;payout</p></div>
             </article>
             <article class="vprv__i">
               <img loading="lazy" decoding="async" src="a/3e6874f40e.webp" alt="" width="64" height="64">
@@ -5970,36 +5989,36 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="vfaq__lists">
               <div class="vfaq__list" data-vipset="general">
                 <details class="vfaq__q" open>
-                  <summary>How to join the club</summary>
-                  <p>The club opens automatically once your wagering reaches the Soldier threshold. No application needed &mdash; the level and its perks turn on the same day.</p>
+                  <summary>How to&nbsp;join the&nbsp;club</summary>
+                  <p>The&nbsp;club opens automatically once your wagering reaches the&nbsp;Soldier threshold. No&nbsp;application needed &mdash; the&nbsp;level and&nbsp;its perks turn on&nbsp;the&nbsp;same day.</p>
                 </details>
                 <details class="vfaq__q">
-                  <summary>How wagering is counted</summary>
-                  <p>Only real money counts, in casino and sportsbook alike. Bets placed with bonus funds and cancelled bets stay out of the total.</p>
+                  <summary>How wagering is&nbsp;counted</summary>
+                  <p>Only real money counts, in&nbsp;casino and&nbsp;sportsbook alike. Bets placed with bonus funds and&nbsp;cancelled bets stay out of&nbsp;the&nbsp;total.</p>
                 </details>
                 <details class="vfaq__q">
-                  <summary>Does the level expire</summary>
-                  <p>The level stays as long as the wagering behind it does. It is recalculated once a month, and the drop is never more than one step at a time.</p>
+                  <summary>Does the&nbsp;level expire</summary>
+                  <p>The&nbsp;level stays as&nbsp;long as&nbsp;the&nbsp;wagering behind it&nbsp;does. It&nbsp;is&nbsp;recalculated once a&nbsp;month, and&nbsp;the&nbsp;drop is&nbsp;never more than one step at&nbsp;a&nbsp;time.</p>
                 </details>
               </div>
               <div class="vfaq__list" data-vipset="privileges" hidden>
                 <details class="vfaq__q" open>
                   <summary>When bonuses are credited</summary>
-                  <p>The weekly bonus lands on Monday, the monthly one on the first day of the month. Both go straight to the balance &mdash; nothing to claim.</p>
+                  <p>The&nbsp;weekly bonus lands on&nbsp;Monday, the&nbsp;monthly one on&nbsp;the&nbsp;first day of&nbsp;the&nbsp;month. Both go straight to&nbsp;the&nbsp;balance &mdash; nothing to&nbsp;claim.</p>
                 </details>
                 <details class="vfaq__q">
                   <summary>Do privileges stack</summary>
-                  <p>Every level keeps everything from the one below it and adds its own. Nothing is taken away when you move up.</p>
+                  <p>Every level keeps everything from the&nbsp;one below it&nbsp;and&nbsp;adds its own. Nothing is&nbsp;taken away when you move up.</p>
                 </details>
               </div>
               <div class="vfaq__list" data-vipset="managers" hidden>
                 <details class="vfaq__q" open>
-                  <summary>Who gets a manager</summary>
-                  <p>From General up. The manager writes first the day the level turns on.</p>
+                  <summary>Who gets a&nbsp;manager</summary>
+                  <p>From General up. The&nbsp;manager writes first the&nbsp;day the&nbsp;level turns on.</p>
                 </details>
                 <details class="vfaq__q">
-                  <summary>How to reach the manager</summary>
-                  <p>In the same chat you already use. Messages from club players are answered outside the general queue.</p>
+                  <summary>How to&nbsp;reach the&nbsp;manager</summary>
+                  <p>In&nbsp;the&nbsp;same chat you already use. Messages from club players are answered outside the&nbsp;general queue.</p>
                 </details>
               </div>
             </div>
@@ -6009,7 +6028,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <section class="vsup">
           <div class="vsup__text">
             <h2>Support 24/7</h2>
-            <p>Live chat and email. Spanish and Portuguese planned from October</p>
+            <p>Live chat and&nbsp;email. Spanish and&nbsp;Portuguese planned from October</p>
           </div>
           <div class="vsup__btns">
             <button class="vsup__btn" type="button">Espa&ntilde;ol</button>
@@ -6071,7 +6090,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                   <span class="bn__tag">Deposit</span><span class="bn__tag">up to 3 days</span>
                 </div>
                 <h2>First Deposit Bonus</h2>
-                <p>100% on your first deposit, up to 500 USDT</p>
+                <p>100% on&nbsp;your first deposit, up&nbsp;to&nbsp;500 USDT</p>
                 <div class="bncard__foot">
                   <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
                   <button class="bn__btn" type="button" data-bn-terms="deposit">View Details</button>
@@ -6085,7 +6104,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                   <span class="bn__tag">Free Spins</span><span class="bn__tag">3 days</span>
                 </div>
                 <h2>Welcome Free Spins</h2>
-                <p>100 Free Spins right after registration, no deposit needed.</p>
+                <p>100 Free Spins right after registration, no&nbsp;deposit needed.</p>
                 <div class="bncard__foot">
                   <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
                   <button class="bn__btn" type="button" data-bn-terms="welcome">View Details</button>
@@ -6099,7 +6118,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                   <span class="bn__tag">Cashback</span><span class="bn__tag">Every Monday</span>
                 </div>
                 <h2>Weekly Cashback</h2>
-                <p>Part of the week&rsquo;s net loss comes back every Monday.</p>
+                <p>Part of&nbsp;the&nbsp;week&rsquo;s net loss comes back every Monday.</p>
                 <div class="bncard__foot">
                   <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
                   <button class="bn__btn" type="button" data-bn-terms="cash">View Details</button>
@@ -6139,7 +6158,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                   <span class="bnact__nums"></span>
                 </div>
 
-                <p class="bnact__note">Winnings move to the real balance once wagering is complete.</p>
+                <p class="bnact__note">Winnings move to&nbsp;the&nbsp;real balance once wagering is&nbsp;complete.</p>
 
                 <div class="bnact__acts">
                   <button class="bn__btn bn__btn--primary" type="button" data-bn-play>Play now</button>
@@ -6228,7 +6247,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="promo__body">
               <div class="promo__head">
                 <h2>Welcome Free Spins</h2>
-                <p>100 Free Spins for new players, valid 3 days after issue.</p>
+                <p>100 Free Spins for&nbsp;new players, valid 3 days after issue.</p>
               </div>
               <div class="promo__meta">
                 <span>Availability</span>
@@ -6241,7 +6260,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="promo__body">
               <div class="promo__head">
                 <h2>Zeus Friday</h2>
-                <p>Play 50 spins of 1.00 AZN on Gates of Olympus — get 20 Free Spins.</p>
+                <p>Play 50 spins of&nbsp;1.00 AZN on&nbsp;Gates of&nbsp;Olympus — get 20 Free Spins.</p>
               </div>
               <div class="promo__meta">
                 <span>Availability</span>
@@ -6254,7 +6273,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="promo__body">
               <div class="promo__head">
                 <h2>First Deposit Bonus</h2>
-                <p>100% bonus up to 150 AZN on your first successful deposit.</p>
+                <p>100% bonus up&nbsp;to&nbsp;150 AZN on&nbsp;your first successful deposit.</p>
               </div>
               <div class="promo__meta">
                 <span>Availability</span>
@@ -6267,7 +6286,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="promo__body">
               <div class="promo__head">
                 <h2>5% Bonus Unlock</h2>
-                <p>From the second deposit, move 5% of it to the main balance.</p>
+                <p>From the&nbsp;second deposit, move 5% of&nbsp;it&nbsp;to&nbsp;the&nbsp;main balance.</p>
               </div>
               <div class="promo__meta">
                 <span>Availability</span>
@@ -6279,7 +6298,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <img loading="lazy" decoding="async" class="promo__art" src="a/87dce3340a.webp" alt="">
             <div class="promo__body">
               <div class="promo__head">
-                <h2>Weekly Loss Cashback</h2>
+                <h2>Weekly Loss&nbsp;Cashback</h2>
                 <p>10% back from last week’s deposit-funded net loss.</p>
               </div>
               <div class="promo__meta">
@@ -6293,7 +6312,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <div class="promo__body">
               <div class="promo__head">
                 <h2>Invite a Friend</h2>
-                <p>5% of each invited friend’s net loss for 30 days.</p>
+                <p>5% of&nbsp;each invited friend’s net loss for&nbsp;30 days.</p>
               </div>
               <div class="promo__meta">
                 <span>Availability</span>
@@ -7256,7 +7275,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             <span class="fbot__age" aria-label="Только для совершеннолетних">18+</span>
             <div class="fbot__text">
               <p class="fbot__copy">&#169; 2026 WarWin. All rights reserved</p>
-              <p class="fbot__co">Owned and operated by WarWin Group International Ltd (Registration No.&nbsp;000054736), registered at San Victor Street, Orange Walk Town, Belize.</p>
+              <p class="fbot__co">Owned and&nbsp;operated by&nbsp;WarWin Group International Ltd (Registration No.&nbsp;000054736), registered at&nbsp;San Victor Street, Orange Walk Town, Belize.</p>
               <div class="footer__partners" data-node-id="904:2788">
                 <img loading="lazy" decoding="async" class="footer__badges" src="a/53796263d7.webp" alt="Responsible Gambling, 18+, Gambling Therapy, BeGambleAware">
                 <img loading="lazy" decoding="async" class="footer__badges--mob" src="a/ee07665fa8.webp" alt="">
@@ -7424,7 +7443,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       <div class="lg__head" data-node-id="973:19566">
         <div class="lg__heading">
           <h2 class="lg__title">Continue to Warwin</h2>
-          <p class="lg__sub">Secure access with your email and password.</p>
+          <p class="lg__sub">Secure access with your email and&nbsp;password.</p>
         </div>
         <button class="lg__close" type="button" aria-label="Закрыть" data-close>
           <img loading="lazy" decoding="async" src="a/2f90aff24b.svg" alt="" width="16" height="16">
@@ -7452,7 +7471,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <div class="lg__forgot" data-node-id="4:14365"><a href="#">Forgot Password?</a></div>
         </div>
         <div class="lg__alt" data-node-id="973:19573">
-          <p class="lg__or">or enter via</p>
+          <p class="lg__or">or&nbsp;enter via</p>
           <div class="lg__socials" data-node-id="973:19576">
             <button class="lg__soc" type="button"><img loading="lazy" decoding="async" src="a/93b28ea74e.svg" alt="" width="20" height="20"><span>Google</span></button>
             <button class="lg__soc" type="button"><img loading="lazy" decoding="async" src="a/344221bbb4.svg" alt="" width="20" height="20"><span>Telegram</span></button>
@@ -7460,13 +7479,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           <!-- Пробел перед переносом нужен мобильной вёрстке: там <br> скрыт,
              и без него «old» слипается со следующим словом. На десктопе
              пробел в конце строки схлопывается и ничего не сдвигает. -->
-        <p class="lg__terms" data-node-id="973:19584">By accessing you confirm that you are at least 18 years old <br>and agree to the <a href="#">Terms and Conditions</a></p>
+        <p class="lg__terms" data-node-id="973:19584">By&nbsp;accessing you confirm that you are at&nbsp;least 18 years old <br>and&nbsp;agree to&nbsp;the <a href="#">Terms and&nbsp;Conditions</a></p>
         </div>
       </div>
       <div class="lg__foot" data-node-id="973:19585">
         <button class="lg__submit" type="button"><span class="lg__submit-label">Login</span></button>
           <p class="lg__alert" role="alert" hidden></p>
-        <p class="lg__switch">New to Warwin? <a href="#">Create account</a></p>
+        <p class="lg__switch">New to&nbsp;Warwin? <a href="#">Create account</a></p>
       </div>
     </div>
   </div>
@@ -7490,7 +7509,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       </div>
     </div>
     <div class="nt__list" id="nt-promo" role="tabpanel" data-node-id="1226:31711">
-      <p class="nt__empty" hidden>No notifications yet.</p>
+      <p class="nt__empty" hidden>No&nbsp;notifications yet.</p>
       <div class="nt__item">
         <span class="nt__ico nt__ico--gift" aria-hidden="true"></span>
         <span class="nt__main">
@@ -7522,7 +7541,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <!-- 1226:33629 — вкладка Activities: тип события, дата и текст.
          Точка справа — непрочитанное. -->
     <div class="nt__list" id="nt-activity" role="tabpanel" hidden>
-      <p class="nt__empty" hidden>No activity yet.</p>
+      <p class="nt__empty" hidden>No&nbsp;activity yet.</p>
       <div class="nt__item nt__item--act">
         <span class="nt__ico nt__ico--in" aria-hidden="true"></span>
         <span class="nt__main">
@@ -7573,7 +7592,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       </div>
       <div class="pm__note" data-node-id="1226:35580">
         <img loading="lazy" decoding="async" src="a/1d015c4521.svg" alt="" width="18" height="18">
-        <p>Deposit and withdraw in the Wallet section.</p>
+        <p>Deposit and&nbsp;withdraw in&nbsp;the&nbsp;Wallet section.</p>
       </div>
     </div>
     <!-- 1226:35583 — меню, пункты 44 высотой с разделителями -->
@@ -7878,7 +7897,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         <!-- 1180:32169 — сноска в рамке #747889 -->
         <div class="dp__note" data-node-id="1180:32169">
           <span class="dp__ico"><img loading="lazy" decoding="async" class="dp__ico--warn" src="a/c83fe98c9e.svg" alt=""></span>
-          <p>Send only ETH to this deposit address. Transfers below 0.0003 ETH will not be credited.</p>
+          <p>Send only ETH to&nbsp;this deposit address. Transfers below 0.0003 ETH will not be credited.</p>
         </div>
 
       </div>
@@ -8038,7 +8057,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     <!-- 940:4707 — состояние «ничего не нашлось» -->
     <div class="srch__empty" hidden data-node-id="940:4707">
       <img loading="lazy" decoding="async" src="a/41d0ae1d94.webp" alt="" width="170" height="176">
-      <p>Oops! There is no data yet!</p>
+      <p>Oops! There is&nbsp;no&nbsp;data yet!</p>
     </div>
 
     <div class="srch__pager" data-node-id="932:43003">
