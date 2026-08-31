@@ -2563,11 +2563,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .vip__h1 { font-size: 30px; line-height: 36px; }
   .vipro { align-items: stretch; padding: 20px; }
   .vipro__card { width: auto; max-width: none; padding: 18px; }
-  /* Знак не влезает в правый край — уводим его под карточку. Именно
-     relative, а не static: водяной знак нарисован абсолютным ::before и
-     перекрывал бы непозиционированную картинку. */
-  .vipro__badge { position: relative; align-self: center; width: 130px; height: 132px;
-                  margin-top: 8px; }
+  /* Знак не показываем: в правый край он не влезает, а под карточкой
+     оставлял полбаннера пустым */
+  .vipro__badge { display: none; }
   /* Лента уровней: карточка 300, следующая выглядывает — видно, что
      список листается вбок */
   .vlvl { display: flex; padding-top: 0; margin: 0 -16px;
