@@ -1681,12 +1681,14 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .view--casino .section:nth-child(n+5) { animation-delay: .19s; }
 .banner[hidden] { display: none; }
 
-@keyframes cas-card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cas-card-in {
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  }
+  .view--casino .section { animation: none; }
+}
 
 @media (max-width: 1023px) { .cas-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 767px) {
@@ -2595,16 +2597,36 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
    ═══════════════════════════════════════════════════════════════════ */
 .view--bonus { gap: 20px; }
 .bn__head { display: flex; flex-direction: column; gap: 16px; }
+/* Заголовок и промокод в одну строку: поле прижато к правому краю колонки */
+.bn__head-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.bn__promo { display: flex; gap: 10px; flex: none; }
+.bn__promo-input { box-sizing: border-box; width: 218px; height: 44px; padding: 0 16px;
+                   border: 1px solid #1f2742; border-radius: 10px; background: #222a45;
+                   color: var(--white); font-family: 'Work Sans', sans-serif;
+                   font-size: 14px; line-height: 20px; outline: none; }
+.bn__promo-input::placeholder { color: var(--dp-label); }
+.bn__promo-input:focus { border-color: rgba(0, 193, 255, .6); }
+.bn__promo-btn { display: grid; place-items: center; width: 80px; height: 44px; flex: none;
+                 border: 0; border-radius: 10px; cursor: pointer; background: #00c1ff; color: #000;
+                 font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px;
+                 line-height: 20px; transition: background .15s ease; }
+.bn__promo-btn:hover { background: #33cfff; }
+.bn__promo-note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+                  line-height: 20px; color: var(--dp-label); }
+.bn__promo-note[hidden] { display: none; }
+.bn__promo-note.is-bad { color: #e5484d; }
+.bn__promo-note.is-ok { color: #3ddc66; }
 .bn__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
           font-size: 32px; line-height: 40px; color: var(--white); }
 .bn__chips { display: flex; gap: 8px; flex-wrap: wrap; }
 .bn__chips[hidden], .bn__body[hidden] { display: none; }
 .bn__chip { display: flex; align-items: center; height: 40px; padding: 0 18px; cursor: pointer;
-            border: 0; border-radius: 999px; background: var(--white-06); color: var(--muted);
+            border: 0; border-radius: 999px; background: #272b40; color: var(--muted);
             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
             line-height: 20px; transition: background .15s ease, color .15s ease; }
-.bn__chip:hover { background: var(--white-10); color: var(--white); }
-.bn__chip.is-active { background: var(--white-16); color: var(--white); }
+.bn__chip:hover { background: #30354e; color: var(--white); }
+.bn__chip.is-active { background: #00c1ff; color: #000; }
+.bn__chip.is-active:hover { background: #33cfff; color: #000; }
 
 /* ── кнопки страницы ── */
 .bn__btn { display: inline-grid; place-items: center; height: 44px; padding: 0 20px; flex: none;
@@ -2643,8 +2665,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bn__guest-btns { display: flex; gap: 10px; margin-top: 20px; }
 
 /* ── списки вкладок ── */
-.bn__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
-            align-items: start; }
+.bn__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;
+            align-items: stretch; }
 .bn__list[hidden] { display: none; }
 .bn__list[data-bnset="active"], .bn__list[data-bnset="history"] { grid-template-columns: 1fr; }
 .bn__empty { grid-column: 1 / -1; box-sizing: border-box; display: flex; flex-direction: column;
@@ -2658,32 +2680,29 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bn__empty .bn__btn { margin-top: 8px; }
 
 /* ── карточка доступного бонуса ── */
-.bncard { box-sizing: border-box; height: 100%; display: flex; flex-direction: column; gap: 12px;
-          padding: 20px; border-radius: 16px; background: var(--card, #181e3b);
-          border: 1px solid rgba(255, 255, 255, .05); }
+.bncard { box-sizing: border-box; height: 100%; display: flex; flex-direction: column;
+          border-radius: 16px; overflow: hidden; background: var(--card, #181e3b);
+          border: 1px solid rgba(255, 255, 255, .05);
+          /* WebKit не обрезает содержимое по радиусу без явного clip-path */
+          clip-path: inset(0 round 16px); }
 .bncard[hidden] { display: none; }
-.bncard__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-.bncard__top h2 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-                  font-size: 16px; line-height: 24px; color: var(--white); }
+.bncard__art { display: block; width: 100%; height: 150px; flex: none;
+               object-fit: cover; background: #07173d; }
+.bncard__body { flex: 1 0 auto; display: flex; flex-direction: column; gap: 12px; padding: 20px; }
+.bncard__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.bncard__body h2 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                   font-size: 18px; line-height: 24px; color: var(--white); }
 .bn__tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; flex: none;
-           border-radius: 999px; background: rgba(255, 255, 255, .07); color: var(--muted);
+           border-radius: 999px; background: #282e49; color: var(--muted);
            font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 12px;
            line-height: 16px; white-space: nowrap; }
 .bn__tag--live { background: rgba(0, 201, 40, .14); color: #3ddc66; }
-.bncard__lead { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
-                line-height: 20px; color: var(--dp-label); }
-.bncard__rows { margin: 0; display: flex; flex-direction: column; gap: 8px;
-                padding-top: 4px; border-top: 1px solid rgba(255, 255, 255, .06); }
-.bncard__rows > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-.bncard__rows dt { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
-                   color: var(--dp-label); }
-.bncard__rows dd { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-                   font-size: 14px; line-height: 20px; color: var(--white); }
-/* Подвал прижат к низу: у карточек в ряду кнопки на одной линии.
-   Кнопку не растягиваем — три синих полосы во всю ширину подряд читаются
-   как сплошная заливка, а не как три отдельных действия. */
-.bncard__foot { margin-top: auto; display: flex; align-items: center;
-                justify-content: space-between; gap: 10px; padding-top: 4px; }
+.bncard__body p { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+                  line-height: 20px; color: var(--dp-label); }
+/* Подвал прижат к низу: у карточек в ряду кнопки на одной линии */
+.bncard__foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding-top: 4px; }
+.bncard__foot .bn__btn { flex: 1 1 0; height: 40px; padding: 0; }
+.bncard__foot .bn__btn:not(.bn__btn--primary) { border-color: #202642; }
 
 /* ── отыгрыш ── */
 .bnact { box-sizing: border-box; display: flex; flex-direction: column; gap: 16px;
@@ -2742,6 +2761,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 @media (max-width: 767px) {
   .bn__h1 { font-size: 26px; line-height: 32px; }
   .bn__list { grid-template-columns: 1fr; gap: 12px; }
+  .bn__head-row { flex-direction: column; align-items: stretch; gap: 14px; }
+  .bn__promo { width: 100%; }
+  .bn__promo-input { flex: 1 1 auto; width: auto; }
   .bn__guest { padding: 36px 20px; }
   .bn__guest-btns { width: 100%; }
   .bn__guest-btns .bn__btn { flex: 1 1 0; padding: 0; }
@@ -5819,7 +5841,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            со своим пустым состоянием. -->
       <div class="view view--bonus" id="view-bonuses" hidden data-node-id="1471:13191">
         <div class="bn__head">
-          <h1 class="bn__h1">Bonuses</h1>
+          <div class="bn__head-row">
+            <h1 class="bn__h1">Bonuses</h1>
+            <div class="bn__promo">
+              <input class="bn__promo-input" type="text" placeholder="Promo code" aria-label="Promo code" autocomplete="off">
+              <button class="bn__promo-btn" type="button" data-bn-apply>Apply</button>
+            </div>
+          </div>
+          <p class="bn__promo-note" hidden role="status"></p>
           <div class="bn__chips" role="tablist">
             <button class="bn__chip is-active" type="button" role="tab" aria-selected="true" data-bn="available">Available</button>
             <button class="bn__chip" type="button" role="tab" aria-selected="false" data-bn="active">Active</button>
@@ -5840,52 +5869,46 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
         <div class="bn__body">
           <div class="bn__list" data-bnset="available">
-            <article class="bncard" data-key="welcome">
-              <div class="bncard__top">
-                <h2>Welcome Free Spins</h2>
-                <span class="bn__tag">Free Spins</span>
-              </div>
-              <p class="bncard__lead">100 Free Spins for new players &mdash; issued right after registration, no deposit needed.</p>
-              <dl class="bncard__rows">
-                <div><dt>Reward</dt><dd>100 FS</dd></div>
-                <div><dt>Wagering</dt><dd>x30</dd></div>
-                <div><dt>Valid</dt><dd>3 days</dd></div>
-              </dl>
-              <div class="bncard__foot">
-                <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Activate</button>
-                <button class="bn__link" type="button" data-bn-terms="welcome">Terms</button>
+            <article class="bncard" data-key="deposit">
+              <img loading="lazy" decoding="async" class="bncard__art" src="a/152e20205a.webp" alt="" width="354" height="150">
+              <div class="bncard__body">
+                <div class="bncard__tags">
+                  <span class="bn__tag">Deposit</span><span class="bn__tag">up to 3 days</span>
+                </div>
+                <h2>First Deposit Bonus</h2>
+                <p>100% on your first deposit, up to 500 USDT</p>
+                <div class="bncard__foot">
+                  <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
+                  <button class="bn__btn" type="button" data-bn-terms="deposit">View Details</button>
+                </div>
               </div>
             </article>
-            <article class="bncard" data-key="zeus">
-              <div class="bncard__top">
-                <h2>Zeus Friday</h2>
-                <span class="bn__tag">Free Spins</span>
-              </div>
-              <p class="bncard__lead">Every Friday, Gates of Olympus pays back: play paid spins and collect Free Spins on top.</p>
-              <dl class="bncard__rows">
-                <div><dt>Reward</dt><dd>up to 150 FS</dd></div>
-                <div><dt>Wagering</dt><dd>x30</dd></div>
-                <div><dt>Valid</dt><dd>Friday, UTC</dd></div>
-              </dl>
-              <div class="bncard__foot">
-                <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Activate</button>
-                <button class="bn__link" type="button" data-bn-terms="zeus">Terms</button>
+            <article class="bncard" data-key="welcome">
+              <img loading="lazy" decoding="async" class="bncard__art" src="a/824508be9a.webp" alt="" width="354" height="150">
+              <div class="bncard__body">
+                <div class="bncard__tags">
+                  <span class="bn__tag">Free Spins</span><span class="bn__tag">3 days</span>
+                </div>
+                <h2>Welcome Free Spins</h2>
+                <p>100 Free Spins right after registration, no deposit needed.</p>
+                <div class="bncard__foot">
+                  <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
+                  <button class="bn__btn" type="button" data-bn-terms="welcome">View Details</button>
+                </div>
               </div>
             </article>
             <article class="bncard" data-key="cash">
-              <div class="bncard__top">
+              <img loading="lazy" decoding="async" class="bncard__art" src="a/87dce3340a.webp" alt="" width="354" height="150">
+              <div class="bncard__body">
+                <div class="bncard__tags">
+                  <span class="bn__tag">Cashback</span><span class="bn__tag">Every Monday</span>
+                </div>
                 <h2>Weekly Cashback</h2>
-                <span class="bn__tag">Cashback</span>
-              </div>
-              <p class="bncard__lead">Part of the week&rsquo;s net loss comes back every Monday, straight to the real balance.</p>
-              <dl class="bncard__rows">
-                <div><dt>Reward</dt><dd>up to 10%</dd></div>
-                <div><dt>Wagering</dt><dd>none</dd></div>
-                <div><dt>Valid</dt><dd>Every Monday</dd></div>
-              </dl>
-              <div class="bncard__foot">
-                <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Activate</button>
-                <button class="bn__link" type="button" data-bn-terms="cash">Terms</button>
+                <p>Part of the week&rsquo;s net loss comes back every Monday.</p>
+                <div class="bncard__foot">
+                  <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
+                  <button class="bn__btn" type="button" data-bn-terms="cash">View Details</button>
+                </div>
               </div>
             </article>
             <div class="bn__empty" hidden>
@@ -9745,6 +9768,32 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           return;
         }
         if (t.dataset.bnGo === 'promo') { showView('promo'); return; }
+
+        /* Промокод: пустое поле и неизвестный код — разные ответы, иначе
+           кнопка выглядит сломанной */
+        if (t.hasAttribute('data-bn-apply')) {
+          var inp = bnView.querySelector('.bn__promo-input');
+          var note = bnView.querySelector('.bn__promo-note');
+          var code = inp.value.trim().toUpperCase();
+          note.hidden = false;
+          note.className = 'bn__promo-note';
+          if (!code) {
+            note.classList.add('is-bad');
+            note.textContent = 'Enter a promo code.';
+            inp.focus();
+            return;
+          }
+          var mine = bnView.querySelector('.bncard[data-key="welcome"]');
+          if (code === 'WELCOME' && mine && !mine.hidden) {
+            note.classList.add('is-ok');
+            note.textContent = 'Code applied \u2014 Welcome Free Spins is ready to receive.';
+            inp.value = '';
+          } else {
+            note.classList.add('is-bad');
+            note.textContent = 'We do not know this code. Check the spelling.';
+          }
+          return;
+        }
         if (t.dataset.bnGo === 'available') { bnShow('available'); return; }
 
         /* Активация: бонус уходит в отыгрыш, кнопка больше не зовёт */
@@ -9776,6 +9825,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           bnView.querySelector('.bnact__foot').hidden = false;
           bnSync();
         }
+      });
+
+      /* Исходные подписи запоминаем на старте: если снять их позже,
+         в память попадёт уже изменённое «In progress» */
+      bnView.querySelectorAll('.bncard').forEach(function (c) {
+        var tag = c.querySelector('.bn__tag');
+        var act = c.querySelector('[data-bn-act]');
+        if (tag) tag.dataset.base = tag.textContent;
+        if (act) act.dataset.base = act.textContent;
       });
 
       bnSync();
@@ -10057,24 +10115,20 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
       /* ── Состояния страницы бонусов ──
          Каждое собирается от исходной разметки, поэтому переключать их
          можно в любом порядке: подписи тегов и кнопок возвращаются. */
-      var bnTagBase = null;
       var bnState = function (what) {
         if (!bnView) return;
         var cards = [].slice.call(bnView.querySelectorAll('.bncard'));
-        if (!bnTagBase) bnTagBase = cards.map(function (c) {
-          return c.querySelector('.bn__tag').textContent;
-        });
         document.body.classList.toggle('is-authed', what !== 'guest');
         showView('bonuses');
 
         var empty = what === 'empty';
-        cards.forEach(function (c, k) {
+        cards.forEach(function (c) {
           c.hidden = empty;
           var b = c.querySelector('[data-bn-act]');
           b.disabled = false;
-          b.textContent = 'Activate';
+          b.textContent = b.dataset.base || 'Receive';
           var tag = c.querySelector('.bn__tag');
-          tag.textContent = bnTagBase[k];
+          tag.textContent = tag.dataset.base || tag.textContent;
           tag.classList.remove('bn__tag--live');
         });
         var act = bnView.querySelector('.bnact');
