@@ -4544,6 +4544,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .nt__item:hover .nt__del,
 .nt__del:focus-visible { opacity: 1; transform: none; }
 .nt__del:hover { background: rgba(229, 72, 77, .2); color: #e5484d; }
+/* На сенсорном экране наводить нечем, и крестик не показывался никогда —
+   удалить уведомление с телефона было нельзя. Место под него уже отведено
+   отступом в .nt__main, поэтому текст он не задевает. */
+@media (hover: none) {
+  .nt__del { opacity: 1; transform: none; }
+}
 
 /* Clear all — тихая кнопка в шапке */
 .nt__clear { flex: none; height: 28px; padding: 0 10px; border: 0; border-radius: 8px;
@@ -4572,6 +4578,28 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 @media (max-width: 767px) {
   body.is-authed .pm__pop,
   body.is-authed .nt__pop { top: 130px; }
+
+  /* Затемнение снова ловит нажатие. Сквозное оно было ради десктопа: там
+     клик по соседней иконке в шапке сразу переключал окно. На телефоне это
+     выходило боком — тап мимо меню закрывал его и заодно нажимал кнопку под
+     пальцем, чаще всего «Home» в нижней панели, и уводил на другую страницу. */
+  .pm__scrim, .nt__scrim { pointer-events: auto; }
+
+  /* Высоту окон задаёт скрипт по замеру шапки и панели; что не поместилось,
+     прокручивается внутри, а не уходит за нижний край экрана. */
+  .pm__pop { overflow-y: auto; overscroll-behavior: contain;
+             border: 1px solid rgba(255, 255, 255, .14); }
+  /* Кант рисовали слоем ради точной ширины по макету; в прокручиваемом окне
+     он растянулся бы на всю прокрутку, поэтому здесь обычная рамка. */
+  .pm__pop::after { display: none; }
+  .nt__head { flex: none; }
+  .nt__list { max-height: none; flex: 1 1 auto;
+              overflow-y: auto; overscroll-behavior: contain; }
+}
+
+/* Страница под открытым окном стоит на месте */
+@media (max-width: 767px) {
+  html.pop-open, html.pop-open body { overflow: hidden; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -9072,6 +9100,40 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
        prof: весь скрипт страницы — одна функция, и общий var уже ломал вход. */
     var profView = document.getElementById('view-profile');
     var profBtn = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+
+    /* ── Геометрия всплывающих окон на телефоне ──
+       Шапка после входа вырастает с 62 до 122, снизу стоит панель на 107.
+       Окна были привязаны к постоянным числам и уезжали: меню лезло под
+       панель, а в альбомной ориентации уходило за нижний край без всякой
+       прокрутки. Меряем шапку и панель перед каждым показом. */
+    var headBottom = function () {
+      var t = document.querySelector('.topbar');
+      return t ? Math.round(t.getBoundingClientRect().bottom) : 74;
+    };
+    var navHeight = function () {
+      var n = document.querySelector('.bnav');
+      if (!n || getComputedStyle(n).display === 'none') return 0;
+      return Math.round(n.getBoundingClientRect().height);
+    };
+    var popFit = function (pop) {
+      if (!pop) return;
+      if (innerWidth > 767) { pop.style.top = ''; pop.style.maxHeight = ''; return; }
+      var top = headBottom() + 8;
+      pop.style.top = top + 'px';
+      /* Обычно окно заканчивается над нижней панелью. В альбомной ориентации
+         шапка и панель съедают 229 из 360, и такого места нет вовсе — тогда
+         окно доходит до края экрана: оно всё равно поверх панели, а на экране
+         остаётся целиком и прокручивается внутри. */
+      var room = Math.max(160, innerHeight - top - 12);
+      var fit = innerHeight - top - navHeight() - 12;
+      pop.style.maxHeight = Math.min(room, Math.max(fit, 200)) + 'px';
+    };
+    /* Пока окно открыто, страница под ним стоит: иначе палец прокручивал её,
+       а окно висело на месте — выглядело как оторвавшийся кусок интерфейса. */
+    var popLock = function (on) {
+      document.documentElement.classList.toggle('pop-open', !!on);
+    };
+
     /* 1226:31701 — поп-ап уведомлений по колокольчику. Выравниваем так же,
        как поп-ап профиля: правый край по колонке контента. */
     var ntPop = document.getElementById('notif-menu');
@@ -9086,17 +9148,25 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var diff = pop.getBoundingClientRect().right - col.getBoundingClientRect().right;
         pop.style.right = Math.max(12, 20 + diff) + 'px';
       };
-      var ntClose = function () { ntPop.hidden = true; ntBtn.setAttribute('aria-expanded', 'false'); };
+      var ntClose = function () {
+        ntPop.hidden = true; ntBtn.setAttribute('aria-expanded', 'false'); popLock(false);
+      };
       ntBtn.setAttribute('aria-haspopup', 'dialog');
-      addEventListener('resize', function () { if (!ntPop.hidden) ntAlign(); });
+      addEventListener('resize', function () {
+        if (ntPop.hidden) return;
+        ntAlign(); popFit(ntPop.querySelector('.nt__pop'));
+      });
       ntBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         var open = ntPop.hidden;
+        /* Соседнее окно закрываем его же функцией: раньше ему просто ставили
+           hidden, и кнопка профиля навсегда оставалась с aria-expanded=true */
+        if (open && typeof pmClose === 'function') pmClose();
         ntPop.hidden = !open;
         ntBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) { ntAlign(); ntBtn.classList.add('is-read');
-                    var other = document.getElementById('profile-menu');
-                    if (other) other.hidden = true; }
+        if (open) { ntAlign(); popFit(ntPop.querySelector('.nt__pop'));
+                    ntBtn.classList.add('is-read'); popLock(true); }
+        else popLock(false);
       });
       ntPop.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) ntClose(); });
       addEventListener('click', function (e) {
@@ -9157,7 +9227,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
        теперь открывается из него пунктом Profile. */
     var pmPop = document.getElementById('profile-menu');
     if (profBtn && pmPop) {
-      var pmClose = function () { pmPop.hidden = true; profBtn.setAttribute('aria-expanded', 'false'); };
+      var pmClose = function () {
+        pmPop.hidden = true; profBtn.setAttribute('aria-expanded', 'false'); popLock(false);
+      };
       profBtn.setAttribute('aria-haspopup', 'dialog');
       /* Правый край окна ставим по колонке контента, а не по краю экрана.
          Считаем поправку замером: у страницы бывает zoom, и арифметика по
@@ -9173,15 +9245,18 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
         var diff = pop.getBoundingClientRect().right - col.getBoundingClientRect().right;
         pop.style.right = Math.max(12, 20 + diff) + 'px';
       };
-      addEventListener('resize', function () { if (!pmPop.hidden) pmAlign(); });
+      addEventListener('resize', function () {
+        if (pmPop.hidden) return;
+        pmAlign(); popFit(pmPop.querySelector('.pm__pop'));
+      });
       profBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         var open = pmPop.hidden;
+        if (open && typeof ntClose === 'function') ntClose();
         pmPop.hidden = !open;
         profBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) { pmAlign();
-                    var otherNt = document.getElementById('notif-menu');
-                    if (otherNt) otherNt.hidden = true; }
+        if (open) { pmAlign(); popFit(pmPop.querySelector('.pm__pop')); popLock(true); }
+        else popLock(false);
       });
       pmPop.addEventListener('click', function (e) {
         if (e.target.closest('[data-close]')) pmClose();
@@ -10625,10 +10700,21 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
     var brBtn = document.querySelector('.bnav__item');
     if (brMenu && brBtn) {
       var brClose = function () { brMenu.hidden = true; document.body.style.overflow = ''; };
+      /* Лист стоял на постоянных 74px от верха — это высота шапки до входа.
+         После входа шапка 122, и верхние 48px листа вместе с краем поиска
+         прятались под полосой кошелька. Меряем шапку и панель. */
+      var brFit = function () {
+        var s = brMenu.querySelector('.br__sheet');
+        if (!s) return;
+        s.style.top = headBottom() + 'px';
+        s.style.bottom = navHeight() + 'px';
+      };
+      addEventListener('resize', function () { if (!brMenu.hidden) brFit(); });
       brBtn.addEventListener('click', function (e) {
         e.preventDefault();
         var open = brMenu.hidden;
         brMenu.hidden = !open;
+        if (open) brFit();
         document.body.style.overflow = open ? 'hidden' : '';
       });
       brMenu.addEventListener('click', function (e) {
