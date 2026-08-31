@@ -679,22 +679,30 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 
 @media (max-width: 1023px) { .fnav { grid-template-columns: repeat(3, 1fr); gap: 28px 20px; } }
 @media (max-width: 767px) {
-  .footer { margin-top: 40px; padding: 28px 16px 20px; border-radius: 16px 16px 0 0; }
   .footer::before { width: 420px; height: 100px; top: -50px; }
-  /* Аккордеоны: заголовок — плита во всю ширину, список раскрывается по нажатию */
-  .fnav { grid-template-columns: 1fr; gap: 8px; padding: 0 0 24px; margin-bottom: 24px; }
+  /* Аккордеоны: заголовок — плита во всю ширину, список раскрывается по нажатию.
+     Плита и раскрытый список — одна фигура: у заголовка снизу канта нет,
+     иначе на стыке читались две линии подряд. */
+  .fnav { grid-template-columns: 1fr; gap: 6px; padding: 24px 0; margin: 0;
+          border-top: 1px solid rgba(255, 255, 255, .08); }
   .fnav__col { gap: 0; }
-  .fnav__head { box-sizing: border-box; height: 56px; padding: 0 16px; cursor: pointer;
-                background: rgba(255, 255, 255, .06); border-radius: 12px; }
-  .fnav__head b { font-size: 16px; }
-  .fnav__chev { display: block; width: 14px; height: 8px; opacity: .7;
-                transition: transform .2s ease; }
-  .fnav__head[aria-expanded="true"] { border-radius: 12px 12px 0 0; background: rgba(255, 255, 255, .1); }
-  .fnav__head[aria-expanded="true"] .fnav__chev { transform: rotate(180deg); }
-  .fnav__list { display: none; padding: 12px 16px 16px; gap: 14px;
-                background: rgba(255, 255, 255, .04); border-radius: 0 0 12px 12px; }
+  .fnav__head { box-sizing: border-box; height: 52px; padding: 0 16px; cursor: pointer;
+                background: rgba(255, 255, 255, .05);
+                border: 1px solid rgba(255, 255, 255, .07); border-radius: 12px;
+                transition: background-color .15s ease; }
+  .fnav__head b { font-size: 15px; }
+  .fnav__chev { display: block; width: 12px; height: 7px; opacity: .5;
+                transition: transform .2s ease, opacity .15s ease; }
+  .fnav__head[aria-expanded="true"] { background: rgba(255, 255, 255, .09);
+                                      border-radius: 12px 12px 0 0; border-bottom-color: transparent; }
+  .fnav__head[aria-expanded="true"] .fnav__chev { transform: rotate(180deg); opacity: .85; }
+  .fnav__list { display: none; padding: 6px 16px 14px; gap: 10px;
+                background: rgba(255, 255, 255, .035);
+                border: 1px solid rgba(255, 255, 255, .07); border-top: 0;
+                border-radius: 0 0 12px 12px; }
   .fnav__head[aria-expanded="true"] + .fnav__list { display: flex; }
-  .fnav__link { font-size: 14px; line-height: 20px; }
+  /* Поля у ссылок ради пальца: сама строка 20px, нажимается 32 */
+  .fnav__link { padding: 6px 0; font-size: 14px; line-height: 20px; }
 }
 
 /* Ряд бейджей стоит под реквизитами и равняется по их левому краю */
@@ -730,8 +738,14 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
                         font-size: 12px; line-height: 18px; color: var(--muted); }
 
 @media (max-width: 767px) {
-  .fbot { gap: 14px; margin: 20px 0 0; }
-  .footer__partners { height: auto; }
+  /* Ряд из знака, текста и бейджей не помещается: знак висел слева, текст
+     шёл уступом, а бейджи ужимались в колонку 300px и не читались.
+     Разворачиваем в одну колонку по центру — как марка и соцсети выше. */
+  .fbot { flex-direction: column; align-items: center; gap: 14px;
+          margin: 0; padding: 24px 0 0; text-align: center; }
+  .fbot__text { align-items: center; gap: 6px; width: 100%; }
+  .fbot__copy { font-size: 13px; line-height: 18px; }
+  .fbot__co { max-width: 32em; font-size: 12px; line-height: 18px; }
 }
 
 .footer-block { display: flex; flex-direction: column; gap: 24px; }
@@ -1232,33 +1246,45 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   }
 
   /* ── Подвал · 891:22528 ── */
-  /* Между провайдерами и подвалом в макете 153px пустоты: там лежит
-     скрытый баннер 891:22529 «Bonus Banner Mobile». Место сохранено. */
-  .footer { gap: 0; padding: 0; margin-top: 135px; border-top: 1px solid var(--hairline); }
+  /* Раньше подвал был колонкой на 234px логотипа с воздухом вокруг, а под
+     ним ряд из знака 18+, текста уступом и обрезанных бейджей. Собираем в
+     три яруса по центру: марка, разделы, реквизиты.
+     Нижнее поле — под нижнюю панель на 107: без него ряд бейджей навсегда
+     оставался под ней и был наполовину съеден. */
+  .footer { display: flex; flex-direction: column; gap: 0;
+            width: auto; margin: 40px calc(-1 * var(--edge, 16px)) 0;
+            border-radius: 16px 16px 0 0;
+            padding: 24px var(--edge, 16px) calc(107px + 16px + env(safe-area-inset-bottom, 0px));
+            border-top: 1px solid var(--hairline); }
+  /* Марка открывает подвал: посреди списков логотип читался как случайный */
   .footer__top {
-    display: flex; flex-direction: column; align-items: center;
-    height: 163px; padding-top: 40px; box-sizing: content-box;
+    order: -1; display: flex; flex-direction: column; align-items: center;
+    height: auto; gap: 14px; padding: 4px 0 24px; box-sizing: border-box;
   }
-  .footer__logo { width: 234px; height: 73px; flex: none; display: block; }
+  .footer__logo { width: 150px; height: auto; flex: none; display: block; }
   .footer__join {
-    margin: 24px 0 0; font-weight: 700; font-size: 12px; line-height: 14px;
-    color: var(--white); text-align: center; flex: none;
+    margin: 0; font-weight: 600; font-size: 13px; line-height: 18px;
+    color: var(--muted); text-align: center; flex: none;
   }
-  .footer__socials { display: flex; gap: 10px; margin-top: 12px; flex: none; }
+  .footer__socials { display: flex; gap: 12px; margin: 0; flex: none; }
+  /* 44 — минимальный размер под палец; на десктопе значки остаются 40 */
+  .footer__socials .fsoc { width: 44px; height: 44px; border-radius: 12px; }
   /* На мобильной соцсети уже есть в блоке с логотипом выше */
   .fsocs { display: none; }
-  /* В макете абзац идёт сплошным потоком в пять строк — перенос после
-     «Belize.» там отсутствует, поэтому на мобильной ширине его гасим. */
+  /* Мобильный кадр бейджей — свой, десктопный ряд на 402 нечитаем.
+     Высота была прибита к 72.64 при живой ширине — кадр то растягивался,
+     то обрезался. Держим пропорцию: ширина по колонке, высота сама. */
   .footer__badges { display: none; }
-  .footer__badges--mob { display: block; }
-  .footer__legal { margin: 41px 0 0; font-size: 10px; line-height: 12px; text-align: center; }
-  .footer__legal br { display: none; }
-  .footer__partners { display: block; height: 72.64px; margin: 20px 0 0; opacity: 1; }
-  /* Мобильный кадр бейджей — свой, десктопный ряд на 402 нечитаем */
-  /* Раньше ряд стоял во всю ширину футера, теперь — внутри колонки реквизитов,
-     поэтому жёсткие 370 не влезали и правый край бейджей срезался. */
-  .footer__badges--mob { display: block; width: 100%; max-width: 370px; height: auto; object-fit: contain; }
-  .footer__copy { margin: 20px 0 51px; font-size: 10px; line-height: 12px; text-align: center; }
+  /* Знаки лежат на своей плите: серый ряд без опоры читался как случайное
+     пятно внизу страницы, а не как часть подвала. Цвет плиты — тот же
+     #0e132a, что вшит фоном в сам кадр: у m-partners.png нет прозрачности,
+     и на любой другой подложке был бы виден его прямоугольник. */
+  .footer__partners { display: flex; justify-content: center; box-sizing: border-box;
+                      width: 100%; height: auto; margin: 14px 0 0; padding: 14px 12px;
+                      background: #0e132a; border-radius: 14px;
+                      border: 1px solid rgba(255, 255, 255, .05); opacity: 1; }
+  .footer__badges--mob { display: block; width: 100%; max-width: 100%;
+                         height: auto; object-fit: contain; opacity: .9; }
 }
 
 /* ───────────────────────────────────────────────────────────────────
