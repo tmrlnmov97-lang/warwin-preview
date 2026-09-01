@@ -763,73 +763,6 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Блок «Sports» на главной: что идёт сейчас и что скоро. Три строки
-   вместо полной росписи — за ней уводит кнопка внизу.
-   ═══════════════════════════════════════════════════════════════════ */
-.spnow { box-sizing: border-box; display: flex; flex-direction: column;
-         border-radius: 16px; background: #181e3b;
-         border: 1px solid rgba(255, 255, 255, .06); overflow: hidden; }
-.spnow__tabs { display: flex; gap: 4px; padding: 10px 12px;
-               border-bottom: 1px solid rgba(255, 255, 255, .06); }
-.spnow__tab { height: 32px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer;
-              background: none; color: var(--dp-label);
-              font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px;
-              transition: background-color .15s ease, color .15s ease; }
-.spnow__tab:hover { color: var(--white); }
-.spnow__tab.is-active { background: var(--white-10); color: var(--white); }
-.spnow__list[hidden] { display: none; }
-
-/* Строка матча: время слева, команды в середине, три коэффициента справа */
-.spnow__row { display: grid; grid-template-columns: 92px minmax(0, 1fr) auto;
-              align-items: center; gap: 16px; padding: 12px 16px;
-              border-top: 1px solid rgba(255, 255, 255, .05); }
-.spnow__list > .spnow__row:first-child { border-top: 0; }
-.spnow__when { display: flex; align-items: center; gap: 6px;
-               font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
-               color: var(--dp-label); font-variant-numeric: tabular-nums; }
-/* Точка живого матча пульсирует — она и отличает Live от Upcoming */
-.spnow__dot { width: 6px; height: 6px; flex: none; border-radius: 50%;
-              background: #e5484d; box-shadow: 0 0 0 3px rgba(229, 72, 77, .18);
-              animation: spnow-pulse 1.6s ease-in-out infinite; }
-@keyframes spnow-pulse { 50% { opacity: .35; } }
-@media (prefers-reduced-motion: reduce) { .spnow__dot { animation: none; } }
-/* Счёт прижат к правому краю колонки команд, а колонку держим узкой:
-   в растянутой на всю ширину строке счёт отрывался от названий. */
-.spnow__teams { display: flex; flex-direction: column; gap: 2px; min-width: 0; max-width: 340px; }
-.spnow__team { display: flex; align-items: baseline; gap: 8px; min-width: 0;
-               font-family: 'Work Sans', sans-serif; font-weight: 500;
-               font-size: 14px; line-height: 20px; color: var(--white); }
-.spnow__team b { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
-.spnow__odds { display: flex; gap: 6px; flex: none; }
-.spnow__odd { display: flex; flex-direction: column; align-items: center; justify-content: center;
-              gap: 1px; width: 62px; height: 44px; cursor: pointer;
-              border-radius: 10px; background: var(--white-06);
-              border: 1px solid rgba(255, 255, 255, .07);
-              transition: background-color .15s ease, border-color .15s ease; }
-.spnow__odd:hover { background: var(--white-10); border-color: rgba(7, 148, 255, .5); }
-.spnow__odd i { font-style: normal; font-family: 'Work Sans', sans-serif;
-                font-size: 11px; line-height: 14px; color: var(--dp-label); }
-.spnow__odd b { font-family: 'Work Sans', sans-serif; font-weight: 700;
-                font-size: 14px; line-height: 18px; color: var(--white);
-                font-variant-numeric: tabular-nums; }
-.spnow__go { display: flex; align-items: center; justify-content: center; width: 100%;
-             box-sizing: border-box; height: 48px; margin: 0; cursor: pointer;
-             border: 0; border-top: 1px solid rgba(255, 255, 255, .06); background: none;
-             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
-             color: var(--primary); transition: background-color .15s ease; }
-.spnow__go:hover { background: var(--white-04); }
-
-@media (max-width: 767px) {
-  /* Коэффициенты уходят под команды: в строку 360px они не встают */
-  .spnow__row { grid-template-columns: 1fr auto; gap: 8px 12px; padding: 12px; }
-  .spnow__when { grid-column: 1 / -1; }
-  .spnow__teams { grid-column: 1 / -1; }
-  .spnow__odds { grid-column: 1 / -1; }
-  .spnow__odd { flex: 1 1 0; width: auto; height: 42px; }
-  .spnow__tabs { padding: 8px 10px; }
-}
-
-/* ═══════════════════════════════════════════════════════════════════
    Выбор языка. Открывается строкой языка в боковом меню и в листе
    Browse, поэтому слой выше их обоих: лист 65, поднятая над ним
    панель 66.
@@ -5977,102 +5910,58 @@ body.br-open .bnav { z-index: 66; }
           </div>
         </section>
         <div class="section__line"></div>
-        <!-- 6. Sports: что идёт прямо сейчас и что скоро, с коэффициентами.
-             Полная роспись — на странице ставок, сюда вынесены три строки. -->
-        <section class="section section--nav">
+        <!-- 6. Sport Bets -->
+        <section class="section section--nav section--sport" data-node-id="1068:32551">
           <div class="section__head">
             <div class="section__title">
               <img loading="lazy" decoding="async" src="a/683a54f182.svg" alt="">
-              <h2>Sports</h2>
+              <h2>Sport Bets</h2>
             </div>
             <div class="section__nav">
               <a class="view-all" href="#" data-fgo="view:sport">View All</a>
+              <div class="slider-btns">
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+              </div>
             </div>
           </div>
-          <div class="spnow">
-            <div class="spnow__tabs" role="tablist">
-              <button class="spnow__tab is-active" type="button" role="tab" aria-selected="true" data-spnow="live">Live</button>
-              <button class="spnow__tab" type="button" role="tab" aria-selected="false" data-spnow="soon">Upcoming</button>
-            </div>
-            <div class="spnow__list" data-spnow-set="live" role="tabpanel">
-              <article class="spnow__row">
-                <span class="spnow__when"><i class="spnow__dot" aria-hidden="true"></i>63'</span>
-                <span class="spnow__teams">
-                  <span class="spnow__team">Barcelona <b>2</b></span>
-                  <span class="spnow__team">Real Madrid <b>1</b></span>
-                </span>
-                <span class="spnow__odds">
-                  <button class="spnow__odd" type="button"><i>1</i><b>1.85</b></button>
-                  <button class="spnow__odd" type="button"><i>X</i><b>3.40</b></button>
-                  <button class="spnow__odd" type="button"><i>2</i><b>4.20</b></button>
-                </span>
-              </article>
-              <article class="spnow__row">
-                <span class="spnow__when"><i class="spnow__dot" aria-hidden="true"></i>28'</span>
-                <span class="spnow__teams">
-                  <span class="spnow__team">Chelsea <b>0</b></span>
-                  <span class="spnow__team">Arsenal <b>0</b></span>
-                </span>
-                <span class="spnow__odds">
-                  <button class="spnow__odd" type="button"><i>1</i><b>2.60</b></button>
-                  <button class="spnow__odd" type="button"><i>X</i><b>3.10</b></button>
-                  <button class="spnow__odd" type="button"><i>2</i><b>2.75</b></button>
-                </span>
-              </article>
-              <article class="spnow__row">
-                <span class="spnow__when"><i class="spnow__dot" aria-hidden="true"></i>71'</span>
-                <span class="spnow__teams">
-                  <span class="spnow__team">Inter Milan <b>1</b></span>
-                  <span class="spnow__team">AC Milan <b>2</b></span>
-                </span>
-                <span class="spnow__odds">
-                  <button class="spnow__odd" type="button"><i>1</i><b>5.50</b></button>
-                  <button class="spnow__odd" type="button"><i>X</i><b>4.10</b></button>
-                  <button class="spnow__odd" type="button"><i>2</i><b>1.62</b></button>
-                </span>
-              </article>
-            </div>
-            <div class="spnow__list" data-spnow-set="soon" role="tabpanel" hidden>
-              <article class="spnow__row">
-                <span class="spnow__when">Today 20:45</span>
-                <span class="spnow__teams">
-                  <span class="spnow__team">Manchester United </span>
-                  <span class="spnow__team">Liverpool </span>
-                </span>
-                <span class="spnow__odds">
-                  <button class="spnow__odd" type="button"><i>1</i><b>2.90</b></button>
-                  <button class="spnow__odd" type="button"><i>X</i><b>3.35</b></button>
-                  <button class="spnow__odd" type="button"><i>2</i><b>2.40</b></button>
-                </span>
-              </article>
-              <article class="spnow__row">
-                <span class="spnow__when">Today 22:00</span>
-                <span class="spnow__teams">
-                  <span class="spnow__team">Real Madrid </span>
-                  <span class="spnow__team">Atletico Madrid </span>
-                </span>
-                <span class="spnow__odds">
-                  <button class="spnow__odd" type="button"><i>1</i><b>1.95</b></button>
-                  <button class="spnow__odd" type="button"><i>X</i><b>3.30</b></button>
-                  <button class="spnow__odd" type="button"><i>2</i><b>3.90</b></button>
-                </span>
-              </article>
-              <article class="spnow__row">
-                <span class="spnow__when">Tomorrow 18:30</span>
-                <span class="spnow__teams">
-                  <span class="spnow__team">Bayern Munich </span>
-                  <span class="spnow__team">Borussia Dortmund </span>
-                </span>
-                <span class="spnow__odds">
-                  <button class="spnow__odd" type="button"><i>1</i><b>1.70</b></button>
-                  <button class="spnow__odd" type="button"><i>X</i><b>4.00</b></button>
-                  <button class="spnow__odd" type="button"><i>2</i><b>4.40</b></button>
-                </span>
-              </article>
-            </div>
-            <button class="spnow__go" type="button" data-fgo="view:sport">Go to Sportsbook</button>
+          <div class="rail rail--sport" data-node-id="1068:32768">
+            <article class="sport">
+              <img loading="lazy" decoding="async" class="layer" src="a/8627c028a8.webp" alt="">
+              <div class="sport__info" style="--plate:49px;--plate-bg:linear-gradient(to bottom, rgba(11,26,37,0) 0%, #092B68 91.8%)"><div class="sport__name">FOOTBALL</div></div>
+              <span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span>
+            </article>
+            <article class="sport">
+              <img loading="lazy" decoding="async" class="layer" src="a/2da1eae5ba.webp" alt="">
+              <div class="sport__info" style="--plate:49px;--plate-bg:linear-gradient(to bottom, rgba(11,26,37,0) 0%, #7F0824 91.8%)"><div class="sport__name">BASKETBALL</div></div>
+              <span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span>
+            </article>
+            <article class="sport">
+              <img loading="lazy" decoding="async" class="layer" src="a/7aa1fcba38.webp" alt="">
+              <div class="sport__info" style="--plate:49px;--plate-bg:linear-gradient(to bottom, rgba(11,26,37,0) 0%, #C07D02 91.8%)"><div class="sport__name">VOLLEYBALL</div></div>
+              <span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span>
+            </article>
+            <article class="sport">
+              <img loading="lazy" decoding="async" class="layer" src="a/413fe52f24.webp" alt="">
+              <div class="sport__info" style="--plate:49px;--plate-bg:linear-gradient(to bottom, rgba(11,26,37,0) 0%, #DD3E00 91.8%)"><div class="sport__name">BASEBALL</div></div>
+              <span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span>
+            </article>
+            <article class="sport">
+              <img loading="lazy" decoding="async" class="layer" src="a/60a1c14e6e.webp" alt="">
+              <div class="sport__info" style="--plate:52px;--plate-bg:linear-gradient(to bottom, rgba(11,26,37,0) 0%, #AD011A 100%)"><div class="sport__name">MMA</div></div>
+              <span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span>
+            </article>
+            <article class="sport">
+              <img loading="lazy" decoding="async" class="layer" src="a/5d25247418.webp" alt="">
+              <div class="sport__info" style="--plate:49px;--plate-bg:linear-gradient(to bottom, rgba(11,26,37,0) 0%, #C30324 91.8%)"><div class="sport__name">TENNIS</div></div>
+              <span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span>
+            </article>
+            <article class="sport">
+              <img loading="lazy" decoding="async" class="layer" src="a/4234ce4699.webp" alt="">
+              <div class="sport__info" style="--plate:72px;--plate-bg:linear-gradient(to bottom, rgba(11,26,37,0) 0%, #AD011A 100%)"><div class="sport__name">TABLE<br>TENNIS</div></div>
+              <span class="card-veil" aria-hidden="true"><span class="card-play"><svg viewBox="0 0 32 32" focusable="false"><path d="M24.91 13.94 13.96 6.44a2.94 2.94 0 0 0-2.61-.16A2.79 2.79 0 0 0 10 8.5v15a2.79 2.79 0 0 0 1.35 2.21 2.94 2.94 0 0 0 2.61-.16l10.95-7.5a2.5 2.5 0 0 0 0-4.11Z"/></svg></span></span>
+            </article>
           </div>
-        </section>
           <div class="section__line"></div>
         </section>
 
@@ -13409,10 +13298,6 @@ body.br-open .bnav { z-index: 66; }
       'Deposit/Withdraw': 'Пополнение и вывод',
       'Popular': 'Популярное',
       'Live': 'Live',
-      'Go to Sportsbook': 'Перейти к ставкам',
-      'Today 20:45': 'Сегодня 20:45',
-      'Today 22:00': 'Сегодня 22:00',
-      'Tomorrow 18:30': 'Завтра 18:30',
       'Sports': 'Спорт',
       'Secure access with your email and password.': 'Безопасный вход по почте и паролю.',
       'New to Warwin? ': 'Впервые в Warwin? ',
@@ -13904,10 +13789,6 @@ body.br-open .bnav { z-index: 66; }
       'Deposit/Withdraw': 'Depósito y retiro',
       'Popular': 'Populares',
       'Live': 'En vivo',
-      'Go to Sportsbook': 'Ir a apuestas deportivas',
-      'Today 20:45': 'Hoy 20:45',
-      'Today 22:00': 'Hoy 22:00',
-      'Tomorrow 18:30': 'Mañana 18:30',
       'Sports': 'Deportes',
       'Secure access with your email and password.': 'Acceso seguro con tu correo y contraseña.',
       'New to Warwin? ': '¿Primera vez en Warwin? ',
@@ -15671,23 +15552,6 @@ body.br-open .bnav { z-index: 66; }
             o.setAttribute('aria-expanded', 'false');
           });
           h.setAttribute('aria-expanded', open ? 'false' : 'true');
-        });
-      });
-
-      /* ── Sports на главной: Live / Upcoming ── */
-      document.querySelectorAll('.spnow').forEach(function (box) {
-        var tabs = [].slice.call(box.querySelectorAll('.spnow__tab'));
-        tabs.forEach(function (t) {
-          t.addEventListener('click', function () {
-            tabs.forEach(function (o) {
-              var on = o === t;
-              o.classList.toggle('is-active', on);
-              o.setAttribute('aria-selected', on ? 'true' : 'false');
-            });
-            box.querySelectorAll('.spnow__list').forEach(function (l) {
-              l.hidden = l.dataset.spnowSet !== t.dataset.spnow;
-            });
-          });
         });
       });
 
