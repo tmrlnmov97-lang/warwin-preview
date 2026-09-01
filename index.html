@@ -5160,7 +5160,11 @@ body.br-open .bnav { z-index: 66; }
 
   #wp-axis {
     stroke: #fff; fill: none;
-    stroke-width: 132; stroke-linecap: round; stroke-linejoin: round;
+    /* Росчерк работает маской: логотип видно там, куда достала линия. Корона
+       поднята над строкой выше остальных букв — её дальняя точка в 77.5 от
+       линии, буквам хватает 55. При толщине 132 (половина 66) верх короны
+       не попадал в маску и пропадал совсем. 168 — это половина 84, с запасом. */
+    stroke-width: 168; stroke-linecap: round; stroke-linejoin: round;
     stroke-dasharray: 1; stroke-dashoffset: 1;
     animation: wp-draw var(--wp-draw) cubic-bezier(.65,0,.35,1) forwards;
   }
