@@ -12178,7 +12178,20 @@ body.br-open .bnav { z-index: 66; }
       <h2 class="lang__h2">Language</h2>
       <button class="lang__x" type="button" aria-label="Close" data-close>&#215;</button>
     </div>
-    <div class="lang__list" role="listbox"></div>
+    <div class="lang__list" role="listbox">
+      <button class="lang__item" type="button" role="option" data-set-lang="en">
+        <img loading="lazy" decoding="async" src="a/21c85c9e5d.svg" alt="" width="20" height="20"><span>English</span>
+        <i class="lang__tick" aria-hidden="true"></i>
+      </button>
+      <button class="lang__item" type="button" role="option" data-set-lang="ru">
+        <img loading="lazy" decoding="async" src="a/7c5675f1af.svg" alt="" width="20" height="20"><span>Русский</span>
+        <i class="lang__tick" aria-hidden="true"></i>
+      </button>
+      <button class="lang__item" type="button" role="option" data-set-lang="es">
+        <img loading="lazy" decoding="async" src="a/863439dcc7.svg" alt="" width="20" height="20"><span>Español</span>
+        <i class="lang__tick" aria-hidden="true"></i>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -13204,8 +13217,6 @@ body.br-open .bnav { z-index: 66; }
         'Живой чат и почта. Испанский и португальский — с октября',
 
       /* ── прочее ── */
-      'English': 'Английский',
-      'Español': 'Испанский',
       'Language': 'Язык',
       'WarWin — Casino Lobby': 'WarWin — лобби казино',
       'Close': 'Закрыть',
@@ -13692,8 +13703,6 @@ body.br-open .bnav { z-index: 66; }
         'Chat en vivo y correo. Español y portugués desde octubre',
 
       /* ── прочее ── */
-      'English': 'Inglés',
-      'Español': 'Español',
       'Language': 'Idioma',
       'WarWin — Casino Lobby': 'WarWin — lobby del casino',
       'Close': 'Cerrar',
@@ -13778,6 +13787,9 @@ body.br-open .bnav { z-index: 66; }
     var tag = el.tagName;
     if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return true;
     if (el.hasAttribute && el.hasAttribute('data-langset')) return true;
+    /* Список языков всегда подписан на самих языках: испанец не найдёт
+       «Español», если оно превратится в «Испанский». */
+    if (el.classList && el.classList.contains('lang__list')) return true;
     return !!(el.classList && el.classList.contains('states'));
   }
 
@@ -15501,23 +15513,19 @@ body.br-open .bnav { z-index: 66; }
       var langMenu = document.getElementById('lang-menu');
       if (i18n && langMenu) {
         var langList = langMenu.querySelector('.lang__list');
-        i18n.langs.forEach(function (l) {
-          var b = document.createElement('button');
-          b.className = 'lang__item';
-          b.type = 'button';
-          b.setAttribute('role', 'option');
-          b.dataset.setLang = l.code;
-          b.innerHTML = '<img loading="lazy" decoding="async" src="' + l.flag + '" alt="" width="20" height="20">' +
-                        '<span>' + l.name + '</span><i class="lang__tick" aria-hidden="true"></i>';
-          langList.appendChild(b);
-        });
         var langClose = function () { langMenu.hidden = true; };
         var langMark = function (code) {
-          var info = i18n.info(code);
+          /* Флаг и подпись берём из самих строк меню, а не из адреса в скрипте:
+             сборщик переписывает пути к картинкам только в разметке, и путь из
+             JS в собранном файле оказался бы битым. */
+          var row = langList.querySelector('[data-set-lang="' + code + '"]') ||
+                    langList.querySelector('[data-set-lang="en"]');
+          var name = row.querySelector('span').textContent;
+          var flag = row.querySelector('img').getAttribute('src');
           /* подпись строки и флаг — на выбранном языке, а не на языке сайта:
              так видно, куда попадёшь, даже если сайт сейчас на другом */
-          document.querySelectorAll('.lang__cur-name').forEach(function (n) { n.textContent = info.name; });
-          document.querySelectorAll('.lang__cur-flag').forEach(function (n) { n.src = info.flag; });
+          document.querySelectorAll('.lang__cur-name').forEach(function (n) { n.textContent = name; });
+          document.querySelectorAll('.lang__cur-flag').forEach(function (n) { n.setAttribute('src', flag); });
           langList.querySelectorAll('.lang__item').forEach(function (b) {
             b.classList.toggle('is-active', b.dataset.setLang === code);
             b.setAttribute('aria-selected', b.dataset.setLang === code ? 'true' : 'false');
