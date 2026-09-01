@@ -605,8 +605,16 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 }
 
 /* ─────────────── Бонус-баннер · 1104×206 ─────────────── */
+/* Раскладка потоком, а не по координатам из макета. Раньше блок текста и
+   кнопка стояли абсолютно, а у баннера была жёсткая высота 206 — числа
+   подогнаны под длину английских строк. Стоило заголовку занять две строки
+   (а по-русски и по-испански он занимает две), как текст съезжал с центра, а
+   на телефоне вылезал за верхний край и попадал под кнопку. Поля повторяют
+   прежние координаты, поэтому английский баннер выглядит ровно как раньше. */
 .bonus {
-  position: relative; width: 100%; height: 206px;
+  position: relative; width: 100%; min-height: 206px; height: auto;
+  display: flex; align-items: center; gap: 24px;
+  box-sizing: border-box; padding: 20px 32px 20px 299px;
   border-radius: 18px; overflow: hidden;
   background-image: linear-gradient(181.26deg, var(--banner-a) 2.83%, var(--banner-b) 28.46%, var(--banner-c) 86.84%);
 }
@@ -615,19 +623,19 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .bonus__girl { position: absolute; left: 32px; top: -25px; width: 206px; height: 532px; overflow: hidden; pointer-events: none; }
 .bonus__girl img { position: absolute; left: -193.1%; top: 0; width: 387%; height: 100%; max-width: none; display: block; }
 .bonus__copy {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  display: flex; flex-direction: column; gap: 8px; width: 506px; color: var(--white);
+  display: flex; flex-direction: column; gap: 8px;
+  flex: 1 1 auto; min-width: 0; max-width: 506px; color: var(--white);
 }
 .bonus__title {
   margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
   font-size: 45px; line-height: 1;
 }
 .bonus__sub {
-  margin: 0; font-weight: 400; font-size: 24px; line-height: normal; white-space: nowrap;
+  margin: 0; font-weight: 400; font-size: 24px; line-height: normal;
   font-variation-settings: 'wdth' 100;
 }
 .bonus__cta {
-  position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
+  flex: none; margin-left: auto;
   display: flex; align-items: center; justify-content: center;
   width: 183px; height: 48px; padding: 10px 12px;
   background: var(--primary); border: 0; border-radius: 10px; cursor: pointer;
@@ -1620,7 +1628,9 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 
   /* ── Бонус-баннер · 925:2740, 370x143, радиус 18 ── */
   .bonus {
-    width: auto; height: 143px; border-radius: 18px;
+    width: auto; min-height: 143px; height: auto; border-radius: 18px;
+    flex-direction: column; align-items: flex-start; justify-content: center; gap: 16px;
+    padding: 12px 4px 12px 142px;
     background-image: linear-gradient(182.6deg,
       var(--banner-a) 2.83%, var(--banner-b) 28.46%, var(--banner-c) 86.84%);
   }
@@ -1629,12 +1639,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .bonus__girl { left: 23px; top: 2px; width: 103px; height: 272px; }
   .bonus__girl img { left: -209.92%; top: -2.79%; width: 409.2%; height: 102.79%; }
   /* 925:2743 — колонка 212 на left 142, по центру высоты, зазор 16 */
-  .bonus__copy {
-    /* В макете центрируется вся колонка вместе с кнопкой (118 высотой),
-       а кнопка у нас снаружи — поэтому текст поднят на половину её блока. */
-    left: 142px; right: auto; top: calc(50% - 23.74px); transform: translateY(-50%);
-    width: 212px; gap: 4px; align-items: flex-start;
-  }
+  .bonus__copy { width: 212px; max-width: 100%; gap: 4px; align-items: flex-start; }
   /* 925:2745 — Condensed Bold 28, строка вплотную, бокс 264 шире колонки */
   .bonus__title {
     font-family: 'Instrument Sans', sans-serif; font-stretch: 75%;
@@ -1650,11 +1655,9 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
     white-space: normal; font-variation-settings: 'wdth' 100;
   }
   /* 925:2747 — 100x30, радиус 10, #0794FF, Bold 14; в макете лежит в той же
-     колонке с зазором 16 под текстом, у нас это соседний узел — ставим по
-     вычисленной от неё координате */
+     колонке с зазором 16 под текстом — так и делаем, потоком */
   .bonus__cta {
-    position: absolute; left: 142px; top: 99.8px; right: auto; bottom: auto;
-    transform: none; width: 100px; height: 30px; padding: 12px;
+    margin-left: 0; width: auto; min-width: 100px; height: 30px; padding: 0 12px;
     border-radius: 10px; background: var(--primary);
     font-family: 'Instrument Sans', sans-serif; font-variation-settings: 'wdth' 100;
     font-weight: 700; font-size: 14px; line-height: normal;
@@ -3348,12 +3351,17 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                flex: 1 1 auto; padding: 16px; }
 .promo__head { display: flex; flex-direction: column; gap: 6px; }
 /* Заголовок и суть держат по две строки, чтобы условия стояли на одной линии.
-   Перенос по слогам: русские и испанские слова длиннее английских и одним
-   куском не влезали в колонку карточки — обрезало посреди слова. */
-.promo__head h2 { margin: 0; height: 44px; overflow: hidden; hyphens: auto;
+   Жёсткая высота была подогнана под английский: русская и испанская строка
+   занимает три и обрезалась ровно посередине. Теперь это ограничение по
+   строкам — третья при необходимости появляется, а лишнее уходит в многоточие.
+   Английский не меняется: две строки как раз укладываются в прежние 44 и 36.
+   Перенос по слогам — чтобы длинное слово не резалось об край колонки. */
+.promo__head h2 { margin: 0; min-height: 44px; overflow: hidden; hyphens: auto;
+                  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
                   font-family: 'Work Sans', sans-serif; font-weight: 700;
                   font-size: 16px; line-height: 22px; color: var(--white); }
-.promo__head p { margin: 0; height: 36px; overflow: hidden; hyphens: auto;
+.promo__head p { margin: 0; min-height: 36px; overflow: hidden; hyphens: auto;
+                 display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
                  font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
                  color: var(--modal-text-1, #bbc6cd); }
 .promo__meta { display: flex; flex-direction: column; gap: 2px; font-family: 'Work Sans', sans-serif; }
@@ -3632,7 +3640,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .promo__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .promo__art { height: 110px; }
   .promo__body { padding: 12px; gap: 10px; }
-  .promo__head h2 { height: 40px; font-size: 15px; line-height: 20px; }
+  .promo__head h2 { min-height: 40px; font-size: 15px; line-height: 20px; }
   .promo__head p { display: none; }
   .promo__meta span { font-size: 12px; line-height: 16px; }
   .promo__meta b { font-size: 13px; line-height: 18px; }
