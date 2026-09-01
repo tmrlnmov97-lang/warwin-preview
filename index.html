@@ -2200,16 +2200,15 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .hslide { opacity: 0; visibility: hidden;
             transition: opacity .45s ease, visibility .45s ease; }
   .hslide.is-current { opacity: 1; visibility: visible; }
-  .hero__copy { position: absolute; left: 32px; top: 32px; width: 376px;
+  .hero__copy { position: absolute; left: 32px; top: 32px; width: 440px;
                 display: flex; flex-direction: column; gap: 32px; }
   /* Правило выше по весу равно базовому и включало бы мобильный блок входа */
   .hero__copy--mob-authed { display: none; }
   /* 1187:15585 — 360, 1187:15586 — 372, цвет #dcdcdc вместо акцентного */
   .hero .hero__copy--authed .hero__title { width: 360px; }
-  .hero .hero__copy--authed .hero__sub { width: 372px; color: #dcdcdc; }
+  .hero .hero__copy--authed .hero__sub { width: 420px; color: #dcdcdc; }
   /* 1186:15020 — у баннера Soccer копи-блок 342, а не 368 */
-  .hero .hero__copy--narrow .hero__title,
-  .hero .hero__copy--narrow .hero__sub { width: 342px; }
+  .hero .hero__copy--narrow .hero__title { width: 342px; }
   /* 1187:15587 — кнопка 114x40, тот же радиус, но синяя */
   .hero .hero__cta--join { width: 114px; background: var(--primary); }
   .hero .hero__cta--join:hover  { background: var(--primary-hover, #279fff); }
@@ -2247,11 +2246,15 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
     font-size: 40px; line-height: 40px; color: var(--white);
   }
   .hero__sub {
-    /* line-height 14 — высота текста в макете; при обычном интерлиньяже
-       блок выходил на 13px выше и нижний отступ переставал быть 32. */
-    margin: 0; width: 342px;
+    /* Ширина 342 из макета была рассчитана впритык под английскую строку, и
+       ей не хватало 4px — «spins» уезжало на вторую строку. Самой длинной
+       подписи среди слайдов и языков нужно 400, берём 420 с запасом.
+       Интерлиньяж был 14 при кегле 20: одна строка так совпадала с макетом,
+       но две налезали друг на друга. Даём настоящие 26 и гасим половинный
+       интерлиньяж полями — высота одной строки прежние 14. */
+    margin: -6px 0; width: 420px;
     font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 400;
-    font-size: 20px; line-height: 14px; color: var(--primary);
+    font-size: 20px; line-height: 26px; color: var(--primary);
   }
   .hero__row { display: flex; align-items: center; gap: 8px; height: 40px; }
   .hero__cta {
