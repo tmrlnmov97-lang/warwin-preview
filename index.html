@@ -544,7 +544,9 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .section__title img { width: 24px; height: 24px; display: block; }
 .section__title h2 {
   margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-  font-size: 20px; line-height: 26px; color: var(--white); white-space: nowrap;
+  font-size: 20px; line-height: 26px; color: var(--white);
+  /* переносится: переведённые названия разделов длиннее английских */
+  white-space: normal; text-wrap: balance;
 }
 .section__nav { display: flex; align-items: center; gap: var(--gap-lg); }
 .view-all {
@@ -751,6 +753,63 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .fbot__copy { font-size: 13px; line-height: 18px; }
   .fbot__co { max-width: 32em; font-size: 12px; line-height: 18px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Выбор языка. Открывается строкой языка в боковом меню и в листе
+   Browse, поэтому слой выше их обоих: лист 65, поднятая над ним
+   панель 66.
+   ═══════════════════════════════════════════════════════════════════ */
+.lang { position: fixed; inset: 0; z-index: 69; }
+.lang[hidden] { display: none; }
+.lang__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .55); }
+.lang__pop { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+             box-sizing: border-box; width: 320px; max-width: calc(100vw - 32px);
+             padding: 8px; border-radius: 18px; background: #181e3b;
+             border: 1px solid rgba(255, 255, 255, .1);
+             box-shadow: 0 28px 70px -22px rgba(0, 0, 0, .85);
+             animation: lang-in .18s cubic-bezier(.22, .61, .36, 1) both; }
+@keyframes lang-in { from { opacity: 0; transform: translate(-50%, -46%); } }
+@media (prefers-reduced-motion: reduce) { .lang__pop { animation: none; } }
+.lang__head { display: flex; align-items: center; gap: 12px; padding: 8px 8px 10px; }
+.lang__h2 { flex: 1 0 0; margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+            font-size: 16px; line-height: 22px; color: var(--white); }
+.lang__x { display: grid; place-items: center; flex: none; width: 30px; height: 30px;
+           padding: 0; margin-right: -4px; border: 0; border-radius: 8px; cursor: pointer;
+           background: none; color: var(--dp-label);
+           font-family: 'Work Sans', sans-serif; font-size: 20px; line-height: 1; }
+.lang__x:hover { background: var(--white-06); color: var(--white); }
+.lang__list { display: flex; flex-direction: column; gap: 2px; }
+.lang__item { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box;
+              height: 48px; padding: 0 12px; border: 0; border-radius: 12px; cursor: pointer;
+              background: none; text-align: left;
+              font-family: 'Work Sans', sans-serif; font-weight: 500;
+              font-size: 15px; line-height: 22px; color: var(--modal-text-1, #bbc6cd);
+              transition: background-color .15s ease, color .15s ease; }
+.lang__item img { display: block; flex: none; border-radius: 50%; }
+.lang__item span { flex: 1 0 0; min-width: 0; }
+.lang__item:hover { background: var(--white-06); color: var(--white); }
+.lang__item.is-active { background: var(--white-06); color: var(--white); font-weight: 600; }
+/* Галочка у выбранного — двумя линиями, без отдельной картинки */
+.lang__tick { flex: none; width: 16px; height: 16px; opacity: 0; position: relative; }
+.lang__item.is-active .lang__tick { opacity: 1; }
+.lang__tick::before { content: ''; position: absolute; left: 2px; top: 7px;
+                      width: 5px; height: 2px; border-radius: 1px; background: var(--primary);
+                      transform: rotate(45deg); transform-origin: left center; }
+.lang__tick::after { content: ''; position: absolute; left: 5px; top: 9px;
+                     width: 10px; height: 2px; border-radius: 1px; background: var(--primary);
+                     transform: rotate(-52deg); transform-origin: left center; }
+/* Строка языка в боковом меню и в Browse нажимается */
+[data-lang-open] { cursor: pointer; }
+
+@media (max-width: 767px) {
+  /* Лист снизу — как окно уведомлений: до края экрана дотягиваться удобнее */
+  .lang__pop { left: 0; right: 0; top: auto; bottom: 0; width: auto; max-width: none;
+               transform: none; border-radius: 18px 18px 0 0; padding: 8px 8px
+               calc(12px + env(safe-area-inset-bottom, 0px));
+               animation-name: lang-sheet-in; }
+  .lang__item { height: 52px; }
+}
+@keyframes lang-sheet-in { from { opacity: 0; transform: translateY(16px); } }
 
 /* ═══════════════════════════════════════════════════════════════════
    Юридические страницы (Legal). Это документы, а не интерфейс: колонка
@@ -1359,12 +1418,18 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   }
   /* 925:2533 — баланс тянется, 925:2538 — кнопка 86 */
   body.is-authed .wallet__balance { flex: 1 0 0; min-width: 0; height: 44px; }
-  body.is-authed .wallet__deposit { flex: none; width: 86px; height: 44px; }
+  /* Ширина по содержимому, а не 86 из макета: «ДЕПОЗИТ» и «DEPOSITAR»
+     длиннее английского и обрезались на 3px. */
+  body.is-authed .wallet__deposit { flex: none; width: auto; min-width: 86px;
+                                    padding: 0 12px; height: 44px; }
   /* место под шапку держит .page — после входа она выше на полосу кошелька */
   body.is-authed .page { padding-top: 122px; }
   .btn { height: 40px; border-radius: 10px; font-size: 13px; }
-  .btn--ghost  { width: 61px; background: var(--field); }
-  .btn--primary { width: 83px; }
+  /* Ширина по содержимому: 61 и 83 из макета рассчитаны на «LOGIN» и
+     «REGISTER», а «РЕГИСТРАЦИЯ» и «REGISTRARSE» в них не помещаются.
+     Минимумы прежние, поэтому английская шапка выглядит как раньше. */
+  .btn--ghost  { width: auto; min-width: 61px; padding: 0 12px; background: var(--field); }
+  .btn--primary { width: auto; min-width: 83px; padding: 0 12px; }
 
   /* ── Баннер · 903:41876, карта 370x210 внутри кадра 402x267 ── */
   .banner { width: auto; height: 210px; border-radius: 16px; }
@@ -1507,7 +1572,10 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .bonus__title {
     font-family: 'Instrument Sans', sans-serif; font-stretch: 75%;
     font-variation-settings: 'wdth' 75; font-weight: 700;
-    font-size: 28px; line-height: 1; white-space: nowrap;
+    font-size: 28px; line-height: 1.06;
+    /* без nowrap: русский и испанский заголовок длиннее английского и
+       обрезался о край карточки — пусть лучше переносится */
+    white-space: normal; text-wrap: balance;
   }
   /* 925:2746 — Regular 16 в две строки */
   .bonus__sub {
@@ -1690,6 +1758,9 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   font-variation-settings: 'wdth' 75; font-weight: 700;
   font-size: 18px; line-height: 21px; text-align: center;
   text-transform: uppercase; text-shadow: var(--text-shadow-game, 0 0 4px #00535c, 0 0 20px #000);
+  /* «БАСКЕТБОЛ» и «VÓLEY» одним словом шире плитки в 88px и обрезались:
+     переносим по слогам, а если словарь переносов не сработал — по буквам */
+  hyphens: auto; overflow-wrap: break-word;
 }
 /* Кнопки запуска здесь нет: это разделы ставок, а не игры —
    запускать нечего. Затемнение при наведении остаётся. */
@@ -2889,7 +2960,12 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .vlvl__i::before, .vlvl__i::after { display: none; }
   .vprv { grid-template-columns: 1fr; gap: 12px; }
   .vfaq { grid-template-columns: 1fr; gap: 16px; }
-  .vfaq__tabs { flex-direction: row; gap: 8px; }
+  /* Лента с прокруткой: на 360 длинные подписи в строку не влезают */
+  .vfaq__tabs { flex-direction: row; gap: 8px; flex-wrap: nowrap;
+                overflow-x: auto; scrollbar-width: none;
+                margin: 0 calc(-1 * var(--edge, 16px)); padding: 0 var(--edge, 16px); }
+  .vfaq__tabs::-webkit-scrollbar { display: none; }
+  .vfaq__tab { flex: none; white-space: nowrap; }
   .vfaq__tab { height: 36px; padding: 0 16px; border-radius: 999px; background: var(--white-06); }
   .vfaq__tab.is-active { background: var(--primary); color: var(--white); }
   .vsup { flex-direction: column; align-items: stretch; gap: 18px; padding: 20px; }
@@ -3147,7 +3223,10 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .bn__list { grid-template-columns: 1fr; gap: 12px; }
   .bnpromo { grid-template-columns: auto minmax(0, 1fr); padding: 16px; }
   .bnpromo__form { grid-column: 1 / -1; }
-  .bnpromo__input { flex: 1 1 auto; width: auto; }
+  /* min-width: 0 обязателен: у поля ввода собственная минимальная ширина
+     около 180px, и в WebKit строка с более длинной кнопкой («Применить»)
+     раздвигала страницу на 360. */
+  .bnpromo__input { flex: 1 1 auto; width: auto; min-width: 0; }
   .bnpromo__note { padding-left: 0; }
   .bn__guest { padding: 36px 20px; }
   .bn__guest-btns { width: 100%; }
@@ -3201,11 +3280,13 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .promo__body { display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
                flex: 1 1 auto; padding: 16px; }
 .promo__head { display: flex; flex-direction: column; gap: 6px; }
-/* Заголовок и суть держат по две строки, чтобы условия стояли на одной линии */
-.promo__head h2 { margin: 0; height: 44px; overflow: hidden;
+/* Заголовок и суть держат по две строки, чтобы условия стояли на одной линии.
+   Перенос по слогам: русские и испанские слова длиннее английских и одним
+   куском не влезали в колонку карточки — обрезало посреди слова. */
+.promo__head h2 { margin: 0; height: 44px; overflow: hidden; hyphens: auto;
                   font-family: 'Work Sans', sans-serif; font-weight: 700;
                   font-size: 16px; line-height: 22px; color: var(--white); }
-.promo__head p { margin: 0; height: 36px; overflow: hidden;
+.promo__head p { margin: 0; height: 36px; overflow: hidden; hyphens: auto;
                  font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
                  color: var(--modal-text-1, #bbc6cd); }
 .promo__meta { display: flex; flex-direction: column; gap: 2px; font-family: 'Work Sans', sans-serif; }
@@ -5170,15 +5251,15 @@ body.br-open .bnav { z-index: 66; }
         <button class="wallet__deposit" type="button" data-node-id="905:4393">DEPOSIT</button>
       </div>
       <div class="header-actions" data-node-id="904:3592">
-        <button class="btn-search" aria-label="Поиск"><img src="a/25f570e1f7.svg" alt=""></button>
+        <button class="btn-search" aria-label="Search"><img src="a/25f570e1f7.svg" alt=""></button>
         <button class="btn btn--ghost">LOGIN</button>
         <button class="btn btn--primary">REGISTER</button>
         <!-- 905:4403 — состояние после входа: профиль и уведомления -->
         <div class="authed" data-node-id="1180:21426">
-          <button class="authed__btn" type="button" aria-label="Профиль">
+          <button class="authed__btn" type="button" aria-label="Account">
             <img src="a/1d12ab6211.svg" alt="" width="22" height="22">
           </button>
-          <button class="authed__btn authed__btn--bell" type="button" aria-label="Уведомления">
+          <button class="authed__btn authed__btn--bell" type="button" aria-label="Notifications">
             <img src="a/ea0673126f.svg" alt="" width="24" height="24"><i></i>
           </button>
         </div>
@@ -5190,7 +5271,7 @@ body.br-open .bnav { z-index: 66; }
   <aside class="sidebar" id="sidebar" data-node-id="860:5895">
     <!-- Сворачивает панель в колонку иконок. Сидит на её правом крае,
          как у 1win: стрелки смотрят в ту сторону, куда поедет панель. -->
-    <button class="nav-toggle" type="button" aria-label="Свернуть меню"
+    <button class="nav-toggle" type="button" aria-label="Collapse menu"
             aria-expanded="true" aria-controls="sidebar"></button>
     <div class="sidebar__menu" data-node-id="860:5897">
       <!-- 860:5898 — две группы, между ними зазор 230 -->
@@ -5282,9 +5363,9 @@ body.br-open .bnav { z-index: 66; }
         <!-- 925:22128 — язык и поддержка, прижаты к низу -->
         <div class="sidebar__bottom" data-node-id="925:22128">
           <div class="sidebar__rule"></div>
-          <div class="side-item side-item--inline" data-node-id="860:5999">
-            <span class="ico ico--flag" aria-hidden="true"><img src="a/2cfe6eab94.svg" alt=""><img src="a/ccb494ee27.svg" alt=""><img src="a/3c4c1bbfde.svg" alt=""></span>
-            <span class="side-item__label">English</span>
+          <div class="side-item side-item--inline" data-lang-open role="button" tabindex="0" data-node-id="860:5999">
+            <span class="ico ico--flag" aria-hidden="true"><img class="lang__cur-flag" src="a/21c85c9e5d.svg" alt="" width="20" height="20"></span>
+            <span class="side-item__label lang__cur-name">English</span>
             <img class="chev" src="a/78eeca1f55.svg" alt="">
           </div>
           <div class="side-item side-item--accent" data-node-id="860:6001">
@@ -5354,8 +5435,8 @@ body.br-open .bnav { z-index: 66; }
         </div>
         <!-- 904:1982 «Slider Buttons» — те же 28x28 с зазором 4, что в рядах -->
         <div class="hero__nav slider-btns" data-node-id="904:1982">
-          <button class="slider-btn slider-btn--prev slider-btn--off" type="button" aria-label="Предыдущий баннер"><i><img src="a/8196602e48.svg" alt=""></i></button>
-          <button class="slider-btn slider-btn--next" type="button" aria-label="Следующий баннер"><i><img src="a/e20dc84eee.svg" alt=""></i></button>
+          <button class="slider-btn slider-btn--prev slider-btn--off" type="button" aria-label="Previous banner"><i><img src="a/8196602e48.svg" alt=""></i></button>
+          <button class="slider-btn slider-btn--next" type="button" aria-label="Next banner"><i><img src="a/e20dc84eee.svg" alt=""></i></button>
         </div>
         <div class="hero__copy hero__copy--guest" data-node-id="1126:15051">
           <div class="hero__text">
@@ -5408,7 +5489,7 @@ body.br-open .bnav { z-index: 66; }
           </div>
         </article>
       </div>
-      <div class="hero__dots" role="tablist" aria-label="Баннеры"></div>
+      <div class="hero__dots" role="tablist" aria-label="Banners"></div>
       <div class="hero__side" data-node-id="1126:15052">
         <a class="hcard hcard--cas" href="#" data-node-id="1122:15006">
           <img class="hcard__glow" src="a/91855a6b2e.svg" alt="">
@@ -5480,8 +5561,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -5584,8 +5665,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -5700,8 +5781,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -5799,8 +5880,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -5855,8 +5936,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -6005,21 +6086,21 @@ body.br-open .bnav { z-index: 66; }
               <span class="prof__label">Current password</span>
               <label class="prof__box">
                 <input type="password" autocomplete="current-password" aria-label="Current password">
-                <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                <button class="sec__eye" type="button" aria-label="Show password"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
               </label>
             </div>
             <div class="prof__cell">
               <span class="prof__label">New password</span>
               <label class="prof__box">
                 <input type="password" autocomplete="new-password" aria-label="New password">
-                <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                <button class="sec__eye" type="button" aria-label="Show password"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
               </label>
             </div>
             <div class="prof__cell">
               <span class="prof__label">Repeat new password</span>
               <label class="prof__box">
                 <input type="password" autocomplete="new-password" aria-label="Repeat new password">
-                <button class="sec__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+                <button class="sec__eye" type="button" aria-label="Show password"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
               </label>
             </div>
           </div>
@@ -6141,7 +6222,7 @@ body.br-open .bnav { z-index: 66; }
               <div class="rg__limit-head">
                 <span>Weekly limit</span>
                 <span class="rg__limit-val"><b>450.00 USDT</b> / 1,000,000 USDT
-                  <button class="rg__clear" type="button" aria-label="Снять лимит">&times;</button>
+                  <button class="rg__clear" type="button" aria-label="Remove limit">&times;</button>
                 </span>
               </div>
               <span class="rg__track"><i style="width:8%"></i></span>
@@ -6162,7 +6243,7 @@ body.br-open .bnav { z-index: 66; }
               <div class="rg__limit-head">
                 <span>Weekly limit</span>
                 <span class="rg__limit-val"><b>450.00 USDT</b> / 1,000,000 USDT
-                  <button class="rg__clear" type="button" aria-label="Снять лимит">&times;</button>
+                  <button class="rg__clear" type="button" aria-label="Remove limit">&times;</button>
                 </span>
               </div>
               <span class="rg__track"><i style="width:8%"></i></span>
@@ -6185,7 +6266,7 @@ body.br-open .bnav { z-index: 66; }
               <div class="rg__limit-head">
                 <span>Weekly limit</span>
                 <span class="rg__limit-val"><b>450.00 USDT</b> / 1,000,000 USDT
-                  <button class="rg__clear" type="button" aria-label="Снять лимит">&times;</button>
+                  <button class="rg__clear" type="button" aria-label="Remove limit">&times;</button>
                 </span>
               </div>
               <span class="rg__track"><i style="width:8%"></i></span>
@@ -6206,7 +6287,7 @@ body.br-open .bnav { z-index: 66; }
               <div class="rg__limit-head">
                 <span>Minute limit</span>
                 <span class="rg__limit-val"><b>42</b> / 100
-                  <button class="rg__clear" type="button" aria-label="Снять лимит">&times;</button>
+                  <button class="rg__clear" type="button" aria-label="Remove limit">&times;</button>
                 </span>
               </div>
               <span class="rg__track"><i style="width:42%"></i></span>
@@ -6701,7 +6782,7 @@ body.br-open .bnav { z-index: 66; }
       <!-- Страница одной акции: шапка с возвратом, арт, правила и кнопка -->
       <div class="view view--promo-one" id="view-promo-one" hidden>
         <div class="pone__top">
-          <button class="pone__back" type="button" aria-label="Назад">
+          <button class="pone__back" type="button" aria-label="Back">
             <img loading="lazy" decoding="async" src="a/8196602e48.svg" alt="">
           </button>
           <span class="pone__crumb"></span>
@@ -10934,10 +11015,10 @@ body.br-open .bnav { z-index: 66; }
 
             <div class="gv__bar">
               <div class="gv__tools">
-                <button class="gv__tool gv__tool--full" type="button" aria-label="На весь экран"></button>
-                <button class="gv__tool gv__tool--wide" type="button" aria-label="Широкий режим" aria-pressed="false"></button>
-                <button class="gv__tool gv__tool--fav" type="button" aria-label="В избранное" aria-pressed="false"></button>
-                <button class="gv__tool gv__tool--share" type="button" aria-label="Скопировать ссылку"></button>
+                <button class="gv__tool gv__tool--full" type="button" aria-label="Full screen"></button>
+                <button class="gv__tool gv__tool--wide" type="button" aria-label="Wide mode" aria-pressed="false"></button>
+                <button class="gv__tool gv__tool--fav" type="button" aria-label="Add to favourites" aria-pressed="false"></button>
+                <button class="gv__tool gv__tool--share" type="button" aria-label="Copy link"></button>
               </div>
               <!-- Общий механизм селектов вешает список на родителя кнопки,
                    поэтому у неё своя обёртка, а не вся панель. -->
@@ -10945,7 +11026,7 @@ body.br-open .bnav { z-index: 66; }
                 <button class="gv__cur" type="button" data-opts="USDT|USD|EUR|AZN">USDT<img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></button>
               </span>
               <img loading="lazy" decoding="async" class="gv__mark" src="a/0d526d6016.svg" alt="WarWin">
-              <div class="gv__modes" role="tablist" aria-label="Режим игры">
+              <div class="gv__modes" role="tablist" aria-label="Game mode">
                 <button class="gv__mode" type="button" role="tab" aria-selected="false">Demo</button>
                 <button class="gv__mode is-active" type="button" role="tab" aria-selected="true">Play</button>
               </div>
@@ -10961,7 +11042,7 @@ body.br-open .bnav { z-index: 66; }
           <aside class="gv__aside">
             <div class="gv__aside-head">
               <h2>Recommended games</h2>
-              <button class="gv__aside-close" type="button" aria-label="Закрыть">&#215;</button>
+              <button class="gv__aside-close" type="button" aria-label="Close">&#215;</button>
             </div>
             <div class="gv__rec"></div>
           </aside>
@@ -11070,7 +11151,7 @@ body.br-open .bnav { z-index: 66; }
             <button type="button" hidden>Try again</button>
           </div>
         <div class="hist__pager">
-          <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+          <button class="hist__page hist__page--nav" type="button" aria-label="Back"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
           <button class="hist__page is-current" type="button">1</button>
           <button class="hist__page" type="button">2</button>
           <button class="hist__page" type="button">3</button>
@@ -11078,7 +11159,7 @@ body.br-open .bnav { z-index: 66; }
           <button class="hist__page hist__page--wide" type="button">12</button>
           <button class="hist__page hist__page--wide" type="button">13</button>
           <button class="hist__page hist__page--wide" type="button">14</button>
-          <button class="hist__page hist__page--nav hist__page--next" type="button" aria-label="Вперёд"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+          <button class="hist__page hist__page--nav hist__page--next" type="button" aria-label="Next"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
         </div>
         </div>
 
@@ -11183,7 +11264,7 @@ body.br-open .bnav { z-index: 66; }
             <button type="button" hidden>Try again</button>
           </div>
         <div class="hist__pager">
-          <button class="hist__page hist__page--nav" type="button" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+          <button class="hist__page hist__page--nav" type="button" aria-label="Back"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
           <button class="hist__page is-current" type="button">1</button>
           <button class="hist__page" type="button">2</button>
           <button class="hist__page" type="button">3</button>
@@ -11191,7 +11272,7 @@ body.br-open .bnav { z-index: 66; }
           <button class="hist__page hist__page--wide" type="button">12</button>
           <button class="hist__page hist__page--wide" type="button">13</button>
           <button class="hist__page hist__page--wide" type="button">14</button>
-          <button class="hist__page hist__page--nav hist__page--next" type="button" aria-label="Вперёд"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+          <button class="hist__page hist__page--nav hist__page--next" type="button" aria-label="Next"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
         </div>
         </div>
 
@@ -11260,8 +11341,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -11302,8 +11383,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -11403,8 +11484,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -11505,8 +11586,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -11529,8 +11610,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -11626,8 +11707,8 @@ body.br-open .bnav { z-index: 66; }
             <div class="section__nav">
               <a class="view-all" href="#">View All</a>
               <div class="slider-btns">
-                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Назад"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
-                <button class="slider-btn slider-btn--next" aria-label="Вперёд"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--prev slider-btn--off" aria-label="Back"><i><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></i></button>
+                <button class="slider-btn slider-btn--next" aria-label="Next"><i><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></i></button>
               </div>
             </div>
           </div>
@@ -11759,7 +11840,7 @@ body.br-open .bnav { z-index: 66; }
         <section class="spleague" data-node-id="985:8187">
           <div class="spleague__head" data-node-id="985:11278">
             <div class="spleague__title"><span>England</span><i></i><span>Premier League</span></div>
-            <button class="spleague__toggle" type="button" aria-label="Свернуть"><b></b></button>
+            <button class="spleague__toggle" type="button" aria-label="Collapse"><b></b></button>
           </div>
           <div class="spgrid" data-node-id="985:9132">
             <article class="spmatch"><img loading="lazy" decoding="async" src="a/30c991a6c8.webp" alt=""></article>
@@ -11774,13 +11855,13 @@ body.br-open .bnav { z-index: 66; }
         <section class="spleague is-collapsed" data-node-id="974:11940">
           <div class="spleague__head">
             <div class="spleague__title"><span>Spain</span><i></i><span>La Liga</span></div>
-            <button class="spleague__toggle" type="button" aria-label="Развернуть"><b></b></button>
+            <button class="spleague__toggle" type="button" aria-label="Expand"><b></b></button>
           </div>
         </section>
         <section class="spleague is-collapsed" data-node-id="974:11947">
           <div class="spleague__head">
             <div class="spleague__title"><span>Italy</span><i></i><span>Serie A</span></div>
-            <button class="spleague__toggle" type="button" aria-label="Развернуть"><b></b></button>
+            <button class="spleague__toggle" type="button" aria-label="Expand"><b></b></button>
           </div>
         </section>
         <button class="spmore" type="button" data-node-id="974:11954">Show more<img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt="" width="18" height="18"></button>
@@ -11865,7 +11946,7 @@ body.br-open .bnav { z-index: 66; }
           <!-- Нижний блок: возрастной знак, права и реквизиты,
                под ними ряд бейджей ответственной игры -->
           <div class="fbot">
-            <span class="fbot__age" aria-label="Только для совершеннолетних">18+</span>
+            <span class="fbot__age" aria-label="Adults only">18+</span>
             <div class="fbot__text">
               <p class="fbot__copy">&#169; 2026 WarWin. All rights reserved</p>
               <p class="fbot__co">Owned and&nbsp;operated by&nbsp;WarWin Group International Ltd (Registration No.&nbsp;000054736), registered at&nbsp;San Victor Street, Orange Walk Town, Belize.</p>
@@ -11900,7 +11981,7 @@ body.br-open .bnav { z-index: 66; }
         <img loading="lazy" decoding="async" src="a/25f570e1f7.svg" alt="" width="18" height="18">
         <span>Search WarWin</span>
       </button>
-      <button class="br__close" type="button" aria-label="Закрыть" data-close>
+      <button class="br__close" type="button" aria-label="Close" data-close>
         <img loading="lazy" decoding="async" src="a/2f90aff24b.svg" alt="" width="14" height="14">
       </button>
     </div>
@@ -11985,9 +12066,9 @@ body.br-open .bnav { z-index: 66; }
     </nav>
 
     <div class="br__foot">
-      <button class="br__row" type="button">
-        <span class="ico ico--flag" aria-hidden="true"><img loading="lazy" decoding="async" src="a/2cfe6eab94.svg" alt=""><img loading="lazy" decoding="async" src="a/ccb494ee27.svg" alt=""><img loading="lazy" decoding="async" src="a/3c4c1bbfde.svg" alt=""></span>
-        <span class="br__row-label">English</span>
+      <button class="br__row" type="button" data-lang-open>
+        <span class="ico ico--flag" aria-hidden="true"><img loading="lazy" decoding="async" class="lang__cur-flag" src="a/21c85c9e5d.svg" alt="" width="20" height="20"></span>
+        <span class="br__row-label lang__cur-name">English</span>
         <img loading="lazy" decoding="async" class="br__chev br__chev--right" src="a/78eeca1f55.svg" alt="" width="12" height="12">
       </button>
       <button class="br__row br__row--accent" type="button">
@@ -11999,7 +12080,7 @@ body.br-open .bnav { z-index: 66; }
 </div>
 
 <!-- 903:39389 «BNB-06» — нижняя панель, кадр 402x107. Только на мобильной. -->
-<nav class="bnav" data-node-id="903:39389" aria-label="Основная навигация">
+<nav class="bnav" data-node-id="903:39389" aria-label="Main navigation">
   <!-- 903:39390 «Union» — плашка и выступ одним контуром, без стыка -->
   <img loading="lazy" decoding="async" class="bnav__shape" src="a/d12d2790b3.svg" alt="" aria-hidden="true">
   <div class="bnav__group" data-node-id="903:39394">
@@ -12028,7 +12109,7 @@ body.br-open .bnav { z-index: 66; }
 <!-- 973:19055 «Overlay» — вход. Модалка 498x786, маскот сверху 126x168 -->
 <div class="lg" id="login-modal" hidden data-node-id="973:19055">
   <div class="lg__scrim" data-close></div>
-  <div class="lg__wrap" role="dialog" aria-modal="true" aria-label="Вход">
+  <div class="lg__wrap" role="dialog" aria-modal="true" aria-label="Sign in">
     <!-- Разметка одна на оба окна: 4:14357 — вход, 4:18168 — регистрация.
          Тексты переставляет скрипт, блоки — правила .lg.is-reg. -->
     <div class="lg__modal" data-node-id="4:14357">
@@ -12038,7 +12119,7 @@ body.br-open .bnav { z-index: 66; }
           <h2 class="lg__title">Continue to Warwin</h2>
           <p class="lg__sub">Secure access with your email and&nbsp;password.</p>
         </div>
-        <button class="lg__close" type="button" aria-label="Закрыть" data-close>
+        <button class="lg__close" type="button" aria-label="Close" data-close>
           <img loading="lazy" decoding="async" src="a/2f90aff24b.svg" alt="" width="16" height="16">
         </button>
       </div>
@@ -12055,8 +12136,8 @@ body.br-open .bnav { z-index: 66; }
           <div class="lg__field" data-node-id="4:14364">
             <label class="lg__input">
               <img loading="lazy" decoding="async" src="a/89b75ddaa0.svg" alt="" width="20" height="20">
-              <input type="password" placeholder="Enter your password" aria-label="Пароль">
-              <button class="lg__eye" type="button" aria-label="Показать пароль"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
+              <input type="password" placeholder="Enter your password" aria-label="Password">
+              <button class="lg__eye" type="button" aria-label="Show password"><img loading="lazy" decoding="async" src="a/0668a3df98.svg" alt="" width="20" height="20"></button>
             </label>
             <p class="lg__hint"></p>
           </div>
@@ -12088,6 +12169,19 @@ body.br-open .bnav { z-index: 66; }
      справа меню. Окно 664x315, поля 16, кант #2f354f, радиус 20. -->
 <!-- 1226:31701 «Notifications» — поп-ап по колокольчику: заголовок,
      две вкладки и список событий. Окно 426, карточка 394x96, радиус 18. -->
+<!-- Выбор языка. Открывается строкой языка в боковом меню и в листе Browse.
+     Английский, русский, испанский; выбор запоминается и переживает перезагрузку. -->
+<div class="lang" id="lang-menu" hidden>
+  <div class="lang__scrim" data-close></div>
+  <div class="lang__pop" role="dialog" aria-modal="true" aria-label="Language">
+    <div class="lang__head">
+      <h2 class="lang__h2">Language</h2>
+      <button class="lang__x" type="button" aria-label="Close" data-close>&#215;</button>
+    </div>
+    <div class="lang__list" role="listbox"></div>
+  </div>
+</div>
+
 <div class="nt" id="notif-menu" hidden data-node-id="1226:31701">
   <div class="nt__scrim" data-close></div>
   <div class="nt__pop" role="dialog" aria-modal="true" aria-label="Notifications">
@@ -12098,7 +12192,7 @@ body.br-open .bnav { z-index: 66; }
         <button class="nt__clear" type="button">Clear all</button>
         <!-- Крестик нужен только листу во весь экран: на десктопе окно
              закрывается щелчком мимо, а лист занимает весь экран -->
-        <button class="nt__x" type="button" aria-label="Закрыть" data-close>&#215;</button>
+        <button class="nt__x" type="button" aria-label="Close" data-close>&#215;</button>
       </div>
       <div class="nt__tabs" role="tablist" data-node-id="1226:31708">
         <button class="nt__tab is-active" type="button" role="tab" aria-selected="true" data-nt="promo">Promotions</button>
@@ -12114,7 +12208,7 @@ body.br-open .bnav { z-index: 66; }
           <span class="nt__text">No funds available to receive</span>
           <span class="nt__ago">10 days ago</span>
         </span>
-        <button class="nt__del" type="button" aria-label="Удалить уведомление">&#215;</button>
+        <button class="nt__del" type="button" aria-label="Delete notification">&#215;</button>
       </div>
       <div class="nt__item">
         <span class="nt__ico nt__ico--gift" aria-hidden="true"></span>
@@ -12123,7 +12217,7 @@ body.br-open .bnav { z-index: 66; }
           <span class="nt__text">20 free spins on Gates of Olympus</span>
           <span class="nt__ago">10 days ago</span>
         </span>
-        <button class="nt__del" type="button" aria-label="Удалить уведомление">&#215;</button>
+        <button class="nt__del" type="button" aria-label="Delete notification">&#215;</button>
       </div>
       <div class="nt__item">
         <span class="nt__ico nt__ico--gift" aria-hidden="true"></span>
@@ -12132,7 +12226,7 @@ body.br-open .bnav { z-index: 66; }
           <span class="nt__text">10% of your net loss is back on the balance</span>
           <span class="nt__ago">12 days ago</span>
         </span>
-        <button class="nt__del" type="button" aria-label="Удалить уведомление">&#215;</button>
+        <button class="nt__del" type="button" aria-label="Delete notification">&#215;</button>
       </div>
     </div>
     <!-- 1226:33629 — вкладка Activities: тип события, дата и текст.
@@ -12142,11 +12236,11 @@ body.br-open .bnav { z-index: 66; }
       <div class="nt__item nt__item--act">
         <span class="nt__ico nt__ico--in" aria-hidden="true"></span>
         <span class="nt__main">
-          <span class="nt__row"><b class="nt__kind">Deposit</b><i class="nt__dot" aria-label="Не прочитано"></i></span>
+          <span class="nt__row"><b class="nt__kind">Deposit</b><i class="nt__dot" aria-label="Unread"></i></span>
           <span class="nt__body">Your deposit of 1000 USD has failed, please try to deposit again or contact customer support ($5448.39)</span>
           <span class="nt__when">15 Sept 2025, 22:27</span>
         </span>
-        <button class="nt__del" type="button" aria-label="Удалить уведомление">&#215;</button>
+        <button class="nt__del" type="button" aria-label="Delete notification">&#215;</button>
       </div>
       <div class="nt__item nt__item--act">
         <span class="nt__ico nt__ico--out" aria-hidden="true"></span>
@@ -12155,7 +12249,7 @@ body.br-open .bnav { z-index: 66; }
           <span class="nt__body">Your withdrawal of 1000 USD is on the way, funds usually arrive within an hour ($5448.39)</span>
           <span class="nt__when">15 Sept 2025, 22:27</span>
         </span>
-        <button class="nt__del" type="button" aria-label="Удалить уведомление">&#215;</button>
+        <button class="nt__del" type="button" aria-label="Delete notification">&#215;</button>
       </div>
     </div>
     </div>
@@ -12222,7 +12316,7 @@ body.br-open .bnav { z-index: 66; }
       <!-- 1180:32177 — заголовок вынесен абсолютно: слева 59, по центру 39 -->
       <h2 class="dp__title" id="deposit-title">Deposit/Withdraw</h2>
       <!-- 1180:32175 — кнопка закрытия на 539,19, кант 0.786 -->
-      <button class="dp__close" type="button" aria-label="Закрыть" data-close>
+      <button class="dp__close" type="button" aria-label="Close" data-close>
         <img loading="lazy" decoding="async" src="a/0d8f4b7b91.svg" alt="" width="14" height="14">
       </button>
 
@@ -12231,13 +12325,13 @@ body.br-open .bnav { z-index: 66; }
 
       <div class="dp__switches" data-node-id="1180:32123">
         <!-- 1180:32124 — вкладки на своём градиенте, радиус 12 -->
-        <div class="dp__seg" role="tablist" aria-label="Deposit или Withdraw" data-node-id="1180:32124">
+        <div class="dp__seg" role="tablist" aria-label="Deposit or Withdraw" data-node-id="1180:32124">
           <button class="dp__seg-btn is-active" type="button" role="tab" aria-selected="true" data-seg="deposit">Deposit</button>
           <button class="dp__seg-btn" type="button" role="tab" aria-selected="false" data-seg="withdraw">Withdraw</button>
         </div>
         <!-- 1180:32130 — Crypto и Fiat, у активного подчёркивание #00c1ff -->
         <div class="dp__methods" data-node-id="1180:32130">
-          <div class="dp__method" role="tablist" aria-label="Crypto или Fiat">
+          <div class="dp__method" role="tablist" aria-label="Crypto or Fiat">
             <button class="dp__method-btn is-active" type="button" role="tab" aria-selected="true" data-method="crypto" data-node-id="1180:32132">
               <span class="dp__ico"><img loading="lazy" decoding="async" class="dp__ico--crypto" src="a/796916f40e.svg" alt=""></span><span>Crypto</span>
             </button>
@@ -12263,7 +12357,7 @@ body.br-open .bnav { z-index: 66; }
                   <span class="dp__select-value">ETH</span>
                   <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
                 </button>
-                <div class="dp__list" role="listbox" aria-label="Валюта пополнения" hidden>
+                <div class="dp__list" role="listbox" aria-label="Deposit currency" hidden>
                 <button class="dp__opt" type="button" role="option" aria-selected="false" data-coin="ADA">
                   <img loading="lazy" decoding="async" src="a/515a3a12ca.svg" alt="" width="32" height="32">
                   <span>ADA</span><i class="dp__radio" aria-hidden="true"></i>
@@ -12521,7 +12615,7 @@ body.br-open .bnav { z-index: 66; }
   <div class="srch__modal" role="dialog" aria-modal="true" aria-labelledby="search-title">
     <div class="srch__head" data-node-id="932:42897">
       <h2 id="search-title">Search</h2>
-      <button class="srch__close" data-close aria-label="Закрыть поиск">
+      <button class="srch__close" data-close aria-label="Close search">
         <img loading="lazy" decoding="async" src="a/aa70eeba3a.svg" alt="" width="16" height="16">
       </button>
     </div>
@@ -12658,15 +12752,1147 @@ body.br-open .bnav { z-index: 66; }
     </div>
 
     <div class="srch__pager" data-node-id="932:43003">
-      <button class="srch__page srch__page--arrow" aria-label="Назад"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+      <button class="srch__page srch__page--arrow" aria-label="Back"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
       <button class="srch__page is-current" aria-current="page">1</button>
       <button class="srch__page">2</button>
       <button class="srch__page">3</button>
-      <button class="srch__page srch__page--arrow srch__page--next" aria-label="Вперёд"><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></button>
+      <button class="srch__page srch__page--arrow srch__page--next" aria-label="Next"><img loading="lazy" decoding="async" src="a/e20dc84eee.svg" alt=""></button>
     </div>
   </div>
 </div>
 <script>
+/* Трёхъязычный интерфейс: английский, русский, испанский.
+ *
+ * Перевод идёт не по разметке, а по словарю английских строк. Так решено по
+ * двум замерам: в интерфейсе нет строк, которые в разных местах значат разное
+ * («Casino» всюду одно и то же), и почти нет фраз, разрезанных вложенными
+ * тегами. Значит размечать 300 элементов атрибутами незачем — хватает одного
+ * прохода по текстовым узлам.
+ *
+ * Английский исходник каждого узла запоминается при первом проходе, и перевод
+ * всегда идёт от него. Иначе после ru → es получилась бы каша из двух языков.
+ *
+ * Страницы About Us, Help Center и юридические сюда не попадают: у них свои
+ * версии на трёх языках, их переключает langSync в index.html по атрибуту
+ * lang у <html>. Витрина состояний ?states служебная и остаётся русской.
+ */
+(function () {
+  'use strict';
+
+  var LANGS = [
+    { code: 'en', name: 'English', flag: 'assets/flag-us.svg' },
+    { code: 'ru', name: 'Русский', flag: 'assets/flag-ru.svg' },
+    { code: 'es', name: 'Español', flag: 'assets/flag-ar.svg' }
+  ];
+
+  /* Не переводится: названия игр и провайдеров, тикеры, суммы, имена людей. */
+  var DICT = {
+    ru: {
+      /* ── шапка, меню, навигация ── */
+      'CASINO': 'КАЗИНО',
+      'SPORT': 'СПОРТ',
+      'SPORTS': 'СПОРТ',
+      'LOGIN': 'ВХОД',
+      'REGISTER': 'РЕГИСТРАЦИЯ',
+      'DEPOSIT': 'ДЕПОЗИТ',
+      'Casino': 'Казино',
+      'Sport': 'Спорт',
+      'Sportsbook': 'Ставки на спорт',
+      'Live Casino': 'Живое казино',
+      'Fast Games': 'Быстрые игры',
+      'Crash Games': 'Краш-игры',
+      'New Slots': 'Новые слоты',
+      'Popular Slots': 'Популярные слоты',
+      'Table Games': 'Настольные игры',
+      'Game Shows': 'Игровые шоу',
+      'Video Poker': 'Видеопокер',
+      'High RTP': 'Высокий RTP',
+      'Bonus Buy': 'Покупка бонуса',
+      'Providers': 'Провайдеры',
+      'Lobby': 'Лобби',
+      'Slots': 'Слоты',
+      'Jackpots': 'Джекпоты',
+      'New Games': 'Новые игры',
+      'Popular Games': 'Популярные игры',
+      'All games': 'Все игры',
+      'Recommended games': 'Рекомендуем',
+      'Promotions': 'Акции',
+      'Bonuses': 'Бонусы',
+      'VIP Club': 'VIP-клуб',
+      'Live Support': 'Живая поддержка',
+      'Browse': 'Меню',
+      'Home': 'Главная',
+      'Search': 'Поиск',
+      'Chat': 'Чат',
+      'View All': 'Показать все',
+      'View Details': 'Подробнее',
+      'Play': 'Играть',
+      'Demo': 'Демо',
+      'Play now': 'Играть',
+      'Join now': 'Присоединиться',
+      'Sign in': 'Войти',
+      'Support 24/7': 'Поддержка 24/7',
+      'Invite a Friend': 'Пригласи друга',
+      'Sport Bets': 'Ставки на спорт',
+      'Outrights': 'Долгосрочные',
+      'Upcoming': 'Ближайшие',
+      'Today': 'Сегодня',
+      'This week': 'На этой неделе',
+      'This month': 'В этом месяце',
+
+      /* ── игры быстрого раздела ── */
+      'Dice': 'Кости',
+      'Mines': 'Мины',
+      'Plinko': 'Плинко',
+      'Keno': 'Кено',
+      'Limbo': 'Лимбо',
+      'Wheel': 'Колесо',
+      'Poker': 'Покер',
+      'Roulette': 'Рулетка',
+      'Baccarat': 'Баккара',
+      'Blackjack': 'Блэкджек',
+
+      /* ── виды спорта ── */
+      'FOOTBALL': 'ФУТБОЛ',
+      'BASKETBALL': 'БАСКЕТБОЛ',
+      'BASEBALL': 'БЕЙСБОЛ',
+      'VOLLEYBALL': 'ВОЛЕЙБОЛ',
+      'TABLE': 'НАСТОЛЬНЫЙ',
+      'TENNIS': 'ТЕННИС',
+      'MMA': 'ММА',
+
+      /* ── баннеры и герой ── */
+      '20 FREE SPINS WAITING FOR YOU': '20 ФРИСПИНОВ ЖДУТ ВАС',
+      '20 FREE SPINS ON FIRE IN GET OF OLYMPUS': '20 ФРИСПИНОВ В GATES OF OLYMPUS',
+      'FREE SPINS GIVEAWAY': 'РАЗДАЧА ФРИСПИНОВ',
+      '100% CASINO BONUS': 'БОНУС 100% В КАЗИНО',
+      '+100% up to $500 and 200 free spins': '+100% до $500 и 200 фриспинов',
+      'WIN UP TO $500': 'ВЫИГРАЙ ДО $500',
+      'UP TO 20.000$ PRIZE now!': 'ПРИЗ ДО 20 000$ прямо сейчас!',
+      'WAR ARENA TOURNAMENT': 'ТУРНИР WAR ARENA',
+      'SOCCER PARTY BET&WIN': 'SOCCER PARTY: СТАВЬ И ВЫИГРЫВАЙ',
+      'BUY BONUS NOW!': 'КУПИ БОНУС!',
+      'Buy Bonus Buys': 'Покупка бонусов',
+      'Before You Play': 'Перед игрой',
+      'Discover betting without borders': 'Ставки без границ',
+      'Boost': 'Ускорение',
+
+      /* ── вход и регистрация ── */
+      'Continue to Warwin': 'Вход в Warwin',
+      'Secure access with your email': 'Безопасный вход по почте',
+      'E-mail': 'E-mail',
+      'Password': 'Пароль',
+      'Forgot Password?': 'Забыли пароль?',
+      'or': 'или',
+      'or register via': 'или зарегистрируйтесь через',
+      'username': 'имя пользователя',
+      'Show password': 'Показать пароль',
+      'Hide password': 'Скрыть пароль',
+      'Signing in': 'Входим',
+      'Creating account': 'Создаём аккаунт',
+
+      /* ── кошелёк и касса ── */
+      'Deposit': 'Депозит',
+      'Withdraw': 'Вывод',
+      'Crypto': 'Крипто',
+      'Fiat': 'Фиат',
+      'Deposit Currency': 'Валюта пополнения',
+      'Withdraw Currency': 'Валюта вывода',
+      'Network': 'Сеть',
+      'Contract Address': 'Адрес пополнения',
+      'Copy Address': 'Скопировать адрес',
+      'Copied': 'Скопировано',
+      'Amount': 'Сумма',
+      'Payment Method': 'Способ оплаты',
+      'First Name*': 'Имя*',
+      'Last Name*': 'Фамилия*',
+      'Available': 'Доступно',
+      'Availability': 'Доступность',
+      'Bonus balance': 'Бонусный баланс',
+      'Account Summary': 'Сводка по счёту',
+      'Withdrawable': 'К выводу',
+      'Deposit and withdraw in the Wallet section.': 'Пополнение и вывод — в разделе «Кошелёк».',
+      'Back to wallet': 'Вернуться в кошелёк',
+
+      /* ── профиль ── */
+      'Profile': 'Профиль',
+      'Game History': 'История игр',
+      'Responsible Gambling': 'Ответственная игра',
+      'Log out': 'Выйти',
+      'Personal data': 'Личные данные',
+      'Contacts and login': 'Контакты и вход',
+      'Address': 'Адрес',
+      'First and last name': 'Имя и фамилия',
+      'Date of birth': 'Дата рождения',
+      'Nationality': 'Гражданство',
+      'Country': 'Страна',
+      'City': 'Город',
+      'Street and house': 'Улица и дом',
+      'Postal code': 'Почтовый индекс',
+      'Phone': 'Телефон',
+      'Brazil': 'Бразилия',
+      'Change': 'Изменить',
+      'Save': 'Сохранить',
+      'Cancel': 'Отмена',
+      'Verify': 'Подтвердить',
+      'Identity verified': 'Личность подтверждена',
+      'verified': 'подтверждено',
+      'not verified': 'не подтверждено',
+      'checked': 'проверено',
+      'Player since March 2026': 'С нами с марта 2026',
+      'Unsaved changes in the address': 'Адрес изменён и не сохранён',
+      'They match the document. Locked after verification — write to support if something needs fixing.':
+        'Совпадают с документом. После верификации не редактируются — если нужно исправить, напишите в поддержку.',
+      'Confirmation codes and withdrawal notices come here.':
+        'Сюда приходят коды подтверждения и уведомления о выводе.',
+      'Needed to restore access and to withdraw via PIX.':
+        'Нужен для восстановления доступа и вывода через PIX.',
+      'Needed only for card withdrawals. Can be filled in later.':
+        'Нужен только для вывода на карту. Можно заполнить позже.',
+      'Change password': 'Смена пароля',
+      'Current password': 'Текущий пароль',
+      'New password': 'Новый пароль',
+      'Repeat new password': 'Повторите новый пароль',
+      'Choose a password you do not use anywhere else. Minimum 8 characters.':
+        'Придумайте пароль, который больше нигде не используете. Минимум 8 символов.',
+      'Password changed.': 'Пароль изменён.',
+      'Minimum 8 characters.': 'Минимум 8 символов.',
+      'The new passwords do not match.': 'Новые пароли не совпадают.',
+      'The new password repeats the current one.': 'Новый пароль повторяет текущий.',
+      'Looks good.': 'Всё в порядке.',
+
+      /* ── верификация ── */
+      'Verification': 'Верификация',
+      'Needed once before your first withdrawal. The check takes up to 15 minutes — you can play and deposit right now.':
+        'Нужна один раз перед первым выводом. Проверка занимает до 15 минут — играть и пополнять счёт можно уже сейчас.',
+      'of': 'из',
+      'required documents uploaded': 'обязательных документов загружено',
+      'Proof of identity (front)': 'Документ, лицевая сторона',
+      'Proof of identity (back)': 'Документ, оборотная сторона',
+      'Proof of address': 'Подтверждение адреса',
+      'Source of funds': 'Источник средств',
+      'Passport, ID card or driver’s licence — the side with your photo.':
+        'Паспорт, ID-карта или водительские права — сторона с фотографией.',
+      'The reverse side of the same document.': 'Оборотная сторона того же документа.',
+      'A utility bill or a bank statement no older than 3 months.':
+        'Счёт за коммунальные услуги или банковская выписка не старше 3 месяцев.',
+      'We ask separately if needed — you will get an e-mail.':
+        'Запросим отдельно, если понадобится, — придёт письмо.',
+      'Upload ID front': 'Загрузить лицевую сторону',
+      'Upload ID back': 'Загрузить оборотную сторону',
+      'Upload image': 'Загрузить файл',
+      'PNG, JPG or PDF · up to 5 MB': 'PNG, JPG или PDF · до 5 МБ',
+      'Replace': 'Заменить',
+      'Required': 'Обязательно',
+      'Not needed yet': 'Пока не нужно',
+      'In review': 'На проверке',
+      'Documents are encrypted and visible only to the review team.':
+        'Документы зашифрованы и видны только проверяющим.',
+
+      /* ── ответственная игра ── */
+      'Deposit limit': 'Лимит на депозит',
+      'Loss limit': 'Лимит на проигрыш',
+      'Wager limit': 'Лимит на ставки',
+      'Session limit': 'Лимит сессии',
+      'Minute limit': 'Лимит по времени',
+      'Cooling off': 'Временный перерыв',
+      'Self exclusion': 'Самоисключение',
+      'Period': 'Период',
+      'Minute': 'Минуты',
+      'None': 'Нет',
+      'Set': 'Установить',
+      'Weekly limit': 'Недельный лимит',
+      'Your account can be set with deposit limits. This setting limits the amount you can deposit per day, week or month.':
+        'На счёт можно поставить лимит депозита. Он ограничивает сумму пополнения за день, неделю или месяц.',
+      'Your account can be set with loss limits. This setting limits the amount you can lose per day, week or month.':
+        'На счёт можно поставить лимит проигрыша. Он ограничивает сумму потерь за день, неделю или месяц.',
+      'Your account can be set with wager limits. This setting controls the amount of money you can wager per day, week or month.':
+        'На счёт можно поставить лимит ставок. Он ограничивает сумму ставок за день, неделю или месяц.',
+      'You can limit the amount of time spent gambling. The restriction takes effect instantly. If you hit the limit, you will be automatically logged out of your account.':
+        'Можно ограничить время в игре. Ограничение действует сразу. Когда лимит исчерпан, из аккаунта выбросит автоматически.',
+      'Feel the need to stay away from the casino for some time? You can set a cooling-off limit for a certain period of time. The restriction takes effect instantly. You won\'t be able to make deposits and play during the specified period, also you will be excluded from all advertising offers. After the set period expires, you\'ll receive a notification email saying your account is active again.':
+        'Хотите на время отойти от казино? Поставьте перерыв на выбранный срок. Ограничение действует сразу: пополнять счёт и играть будет нельзя, рекламные предложения тоже отключатся. Когда срок закончится, придёт письмо о том, что аккаунт снова активен.',
+      'Feel the need to block access to your account? You can set a self-exclusion limit for a definite or an indefinite period of time. The restriction takes effect instantly. During the set period you will not be able to log into your account. To be excluded from gambling on our site for an indefinite period of time, please, contact our support team via Live Chat.':
+        'Хотите закрыть себе доступ к аккаунту? Поставьте самоисключение на срок или бессрочно. Ограничение действует сразу: войти в аккаунт в этот период будет нельзя. Для бессрочного самоисключения напишите в поддержку через живой чат.',
+
+      /* ── история ── */
+      'History': 'История',
+      'Game': 'Игра',
+      'Bet sum': 'Сумма ставки',
+      'Stake': 'Ставка',
+      'Win': 'Выигрыш',
+      'Date': 'Дата',
+      'Result': 'Результат',
+      'Status': 'Статус',
+      'All': 'Все',
+      'Won': 'Выигрыш',
+      'Lost': 'Проигрыш',
+      'Pending': 'В расчёте',
+      'Bonus': 'Бонус',
+      'Reward': 'Награда',
+      'Nothing here yet': 'Пока пусто',
+      'No bets match the selected filters.': 'По выбранным фильтрам ставок нет.',
+      'No bonus history yet': 'История бонусов пуста',
+      'Granted and used bonuses will appear here.': 'Здесь появятся выданные и использованные бонусы.',
+      'No bets yet': 'Ставок ещё не было',
+      'Could not load history': 'Не удалось загрузить историю',
+      'Try again': 'Повторить',
+      'Combo': 'Экспресс',
+      'Both Teams to Score': 'Обе забьют',
+
+      /* ── бонусы ── */
+      'Active': 'Активные',
+      'Cancelled': 'Отменён',
+      'Credited': 'Начислен',
+      'Wagered': 'Отыгран',
+      'Expired': 'Истёк',
+      'In progress': 'В отыгрыше',
+      'Receive': 'Получить',
+      'Apply': 'Применить',
+      'Have a promo code?': 'Есть промокод?',
+      'Promo code': 'Промокод',
+      'Enter it here — the bonus is added to this list right away.':
+        'Введите его здесь — бонус сразу появится в списке.',
+      'Activate bonus': 'Активировать бонус',
+      'Play bonus': 'Играть с бонусом',
+      'Cancel bonus': 'Отменить бонус',
+      'Keep bonus': 'Оставить бонус',
+      'Yes, cancel': 'Да, отменить',
+      'Go to Available': 'К доступным',
+      'Open Promotions': 'Открыть акции',
+      'Cancelling drops the bonus balance and the wagering done so far.':
+        'Отмена обнулит бонусный баланс и весь отыгрыш.',
+      'Wagering progress': 'Отыгрыш',
+      'Left to wager': 'Осталось отыграть',
+      'Winnings move to the real balance once wagering is complete.':
+        'После отыгрыша выигрыш переходит на основной баланс.',
+      'No bonus in progress': 'Нет бонусов в отыгрыше',
+      'Activate one from the Available tab — wagering will show up here.':
+        'Активируйте бонус во вкладке «Доступные» — отыгрыш появится здесь.',
+      'New bonuses show up here as soon as they are issued.':
+        'Новые бонусы появятся здесь сразу после выдачи.',
+      'Bonuses you used up or let expire will be listed here.':
+        'Здесь окажутся бонусы, которые вы отыграли или дали истечь.',
+      'Bonuses are available after sign in': 'Бонусы доступны после входа',
+      'Current offers are in Promotions': 'Актуальные предложения — в разделе «Акции»',
+      'No offers for you right now': 'Сейчас предложений нет',
+      'No promotions here yet': 'В этой категории пока пусто',
+      'Pick another category — new offers show up every week.':
+        'Выберите другую категорию — новые предложения появляются каждую неделю.',
+      'Free Spins': 'Фриспины',
+      'Cashback': 'Кэшбэк',
+      'Referral': 'Рефералы',
+      'First Deposit Bonus': 'Бонус на первый депозит',
+      'Welcome Free Spins': 'Приветственные фриспины',
+      'Weekly Cashback': 'Еженедельный кэшбэк',
+      'Weekly Loss Cashback': 'Кэшбэк за проигрыш',
+      'Reload Bonus': 'Бонус на пополнение',
+      'Zeus Friday': 'Пятница Зевса',
+      'Daily reload': 'Ежедневное пополнение',
+      '3 days': '3 дня',
+      'up to 3 days': 'до 3 дней',
+      'Every Monday': 'Каждый понедельник',
+      'Every Monday · UTC': 'Каждый понедельник · UTC',
+      'Every Friday · UTC': 'Каждую пятницу · UTC',
+      'First deposit only': 'Только первый депозит',
+      'From 2nd deposit': 'Со второго депозита',
+      'Up to 5 friends': 'До 5 друзей',
+      'Active for registration': 'Действует при регистрации',
+      'How it works': 'Как это работает',
+      '100% on your first deposit, up to 500 USDT': '100% на первый депозит, до 500 USDT',
+      '100 Free Spins right after registration, no deposit needed.':
+        '100 фриспинов сразу после регистрации, без депозита.',
+      '100 Free Spins for new players, valid 3 days after issue.':
+        '100 фриспинов новым игрокам, действуют 3 дня после выдачи.',
+      '10% back from last week’s deposit-funded net loss.':
+        '10% от чистого проигрыша с депозитов за прошлую неделю.',
+      'Part of the week’s net loss comes back every Monday.':
+        'Часть чистого проигрыша за неделю возвращается каждый понедельник.',
+      '5% of each invited friend’s net loss for 30 days.':
+        '5% от чистого проигрыша каждого приглашённого друга в течение 30 дней.',
+      'From the second deposit, move 5% of it to the main balance.':
+        'Со второго депозита 5% от него переходит на основной баланс.',
+      '5% Bonus Unlock': 'Разблокировка бонуса 5%',
+      '100% bonus up to 150 AZN on your first successful deposit.':
+        'Бонус 100% до 150 AZN на первый успешный депозит.',
+      'Play 50 spins of 1.00 AZN on Gates of Olympus — get 20 Free Spins.':
+        'Сделайте 50 спинов по 1.00 AZN в Gates of Olympus — получите 20 фриспинов.',
+      '20 free spins on Gates of Olympus 1000': '20 фриспинов в Gates of Olympus 1000',
+
+      /* ── VIP ── */
+      'Your VIP progress': 'Ваш VIP-прогресс',
+      'WarWin level system': 'Система уровней WarWin',
+      'Next level: Silver': 'Следующий уровень: Silver',
+      'Soldier': 'Soldier',
+      'Captain': 'Captain',
+      'General': 'General',
+      'Warlord I–III': 'Warlord I–III',
+      'Privileges': 'Привилегии',
+      'Rakeback': 'Рейкбек',
+      'Weekly bonus': 'Недельный бонус',
+      'Monthly bonus': 'Месячный бонус',
+      'Level-up bonus': 'Бонус за уровень',
+      'Personal manager': 'Персональный менеджер',
+      'Higher bonuses': 'Повышенные бонусы',
+      'Higher withdrawal limit': 'Повышенный лимит вывода',
+      'Custom terms': 'Индивидуальные условия',
+      'Managers': 'Менеджеры',
+      'Everything from Captain': 'Всё из Captain',
+      'Everything from General': 'Всё из General',
+      'Bonus for your activity every week and month': 'Бонус за активность каждую неделю и месяц',
+      'Part of the losses back when you move up a level': 'Часть проигрыша возвращается при переходе на уровень',
+      'The higher the level, the bigger the payout': 'Чем выше уровень, тем больше выплата',
+      'Privileges tuned through your manager': 'Привилегии настраиваются через менеджера',
+      'Handles your questions outside the general queue': 'Решает вопросы вне общей очереди',
+      'Full VIP Terms & Conditions': 'Полные условия VIP-клуба',
+      'How to join the club': 'Как попасть в клуб',
+      'How wagering is counted': 'Как считается отыгрыш',
+      'When bonuses are credited': 'Когда начисляются бонусы',
+      'Does the level expire': 'Сгорает ли уровень',
+      'Do privileges stack': 'Складываются ли привилегии',
+      'Who gets a manager': 'Кому положен менеджер',
+      'How to reach the manager': 'Как связаться с менеджером',
+      'The club opens automatically once your wagering reaches the Soldier threshold. No application needed — the level and its perks turn on the same day.':
+        'Клуб открывается сам, как только отыгрыш дойдёт до порога Soldier. Заявка не нужна — уровень и привилегии включаются в тот же день.',
+      'Only real money counts, in casino and sportsbook alike. Bets placed with bonus funds and cancelled bets stay out of the total.':
+        'Считаются только реальные деньги — и в казино, и в ставках. Ставки бонусными средствами и отменённые ставки в зачёт не идут.',
+      'The weekly bonus lands on Monday, the monthly one on the first day of the month. Both go straight to the balance — nothing to claim.':
+        'Недельный бонус приходит в понедельник, месячный — первого числа. Оба сразу на баланс, забирать вручную не нужно.',
+      'The level stays as long as the wagering behind it does. It is recalculated once a month, and the drop is never more than one step at a time.':
+        'Уровень держится, пока держится отыгрыш за ним. Пересчёт раз в месяц, и понижение всегда не больше чем на одну ступень.',
+      'Every level keeps everything from the one below it and adds its own. Nothing is taken away when you move up.':
+        'Каждый уровень сохраняет всё из предыдущего и добавляет своё. При переходе вверх ничего не отнимается.',
+      'From General up. The manager writes first the day the level turns on.':
+        'С уровня General. Менеджер пишет первым в день включения уровня.',
+      'In the same chat you already use. Messages from club players are answered outside the general queue.':
+        'В том же чате, которым вы уже пользуетесь. Сообщения игроков клуба разбираются вне общей очереди.',
+      'No percentages on this page on purpose — the numbers live in your account.':
+        'Процентов на этой странице нет намеренно — цифры лежат в личном кабинете.',
+
+      /* ── уведомления ── */
+      'Notifications': 'Уведомления',
+      'Clear all': 'Очистить всё',
+      'Activities': 'Действия',
+      'No notifications yet.': 'Уведомлений нет.',
+      'No activity yet.': 'Действий пока нет.',
+
+      /* ── поиск ── */
+      'Search WarWin': 'Поиск по WarWin',
+      'Search Games': 'Поиск игр',
+
+      /* ── подвал ── */
+      'Join our Community!': 'Присоединяйтесь к нам!',
+      'About Us': 'О нас',
+      'Affiliate Program': 'Партнёрская программа',
+      'Help Center / FAQ': 'Центр помощи / FAQ',
+      'Deposit & Withdrawal': 'Пополнение и вывод',
+      'Contact Support': 'Связаться с поддержкой',
+      'Terms & Conditions': 'Пользовательское соглашение',
+      'Privacy Policy': 'Политика конфиденциальности',
+      'Cookie Policy': 'Политика cookie',
+      'Responsible Gaming': 'Ответственная игра',
+      'AML / KYC Policy': 'Политика AML / KYC',
+      'Live Betting': 'Ставки в лайве',
+      'Help': 'Помощь',
+      'Legal': 'Документы',
+      'FAQ': 'FAQ',
+      'WarWin': 'WarWin',
+      'All rights reserved': 'Все права защищены',
+      'Owned and operated by WarWin Group International Ltd (Registration No. 000054736), registered at San Victor Street, Orange Walk Town, Belize.':
+        'Управляется компанией WarWin Group International Ltd (рег. № 000054736), зарегистрированной по адресу San Victor Street, Orange Walk Town, Belize.',
+      'Live chat and email. Spanish and Portuguese planned from October':
+        'Живой чат и почта. Испанский и португальский — с октября',
+
+      /* ── прочее ── */
+      'English': 'Английский',
+      'Español': 'Испанский',
+      'Language': 'Язык',
+      'WarWin — Casino Lobby': 'WarWin — лобби казино',
+      'Close': 'Закрыть',
+      'Back': 'Назад',
+      'Next': 'Вперёд',
+      'Banners': 'Баннеры',
+      'Previous banner': 'Предыдущий баннер',
+      'Next banner': 'Следующий баннер',
+      'Add to favourites': 'В избранное',
+      'Copy link': 'Скопировать ссылку',
+      'Full screen': 'На весь экран',
+      'Wide mode': 'Широкий режим',
+      'Game mode': 'Режим игры',
+      'Collapse menu': 'Свернуть меню',
+      'Expand menu': 'Развернуть меню',
+      'Remove limit': 'Снять лимит',
+      'Account': 'Профиль',
+      'Enter': 'Введите',
+      'Enter day': 'Введите день',
+      'Days': 'Дни',
+      'Minutes': 'Минуты',
+      'Limit amount': 'Сумма лимита',
+      'locked': 'заблокировано',
+      'Close search': 'Закрыть поиск',
+      'Unread': 'Не прочитано',
+      'Main navigation': 'Основная навигация',
+      'Delete notification': 'Удалить уведомление',
+      'Adults only': 'Только для совершеннолетних',
+      'Expand': 'Развернуть',
+      'Collapse': 'Свернуть',
+      'Crypto or Fiat': 'Crypto или Fiat',
+      'Deposit or Withdraw': 'Deposit или Withdraw',
+      'Deposit currency': 'Валюта пополнения',
+      'Withdraw currency': 'Валюта вывода',
+      'Register': 'Регистрация',
+      'Banner': 'Баннер',
+      'Sports': 'Спорт',
+      'Secure access with your email and password.': 'Безопасный вход по почте и паролю.',
+      'New to Warwin? ': 'Впервые в Warwin? ',
+      'Create account': 'Создать аккаунт',
+      'Login': 'Войти',
+      'Create your Warwin account': 'Создайте аккаунт Warwin',
+      'Sign up with your email, choose a username, and set <br>a secure password.': 'Зарегистрируйтесь по почте, придумайте имя пользователя <br>и надёжный пароль.',
+      'Email is required.': 'Укажите почту.',
+      'Minimum 8 characters, include a number and a symbol.': 'Минимум 8 символов, с цифрой и знаком.',
+      'Choose CoinNetwork': 'Выберите монету и сеть',
+      'Bonus activated': 'Бонус активирован',
+      'Open in Active': 'Открыть в активных',
+      'Enter a promo code.': 'Введите промокод.',
+      'Code applied \u2014 Welcome Free Spins is ready to receive.': 'Промокод принят — приветственные фриспины можно получить.',
+      'We do not know this code. Check the spelling.': 'Такой промокод нам неизвестен. Проверьте написание.',
+      'Processing…': 'Обрабатываем…',
+      'Fill them in before the first withdrawal — they must match the document.': 'Заполните до первого вывода — данные должны совпадать с документом.',
+      'Identity not verified': 'Личность не подтверждена',
+      'on review': 'на проверке',
+      'Identity on review': 'Личность на проверке',
+      'Sent for checking on 12 August. Usually takes up to 24 hours.': 'Отправлено на проверку 12 августа. Обычно занимает до 24 часов.',
+
+      /* ── строки с подстановкой ── */
+      '{n} day left': 'остался {n} день',
+      '{n} days left': 'осталось {n} дн.',
+      'Expires {date} · {left}': 'Истекает {date} · {left}',
+      'Released {age}': 'Вышла {age}',
+      'Withdraw {sum} {cur}': 'Вывести {sum} {cur}',
+      '{done} of {goal} {cur}': '{done} из {goal} {cur}',
+      '{done} of {goal} {cur} · wagering x{mult}': '{done} из {goal} {cur} · вейджер x{mult}',
+      '{n} days ago': '{n} дн. назад'
+    },
+
+    es: {
+      /* ── шапка, меню, навигация ── */
+      'CASINO': 'CASINO',
+      'SPORT': 'DEPORTES',
+      'SPORTS': 'DEPORTES',
+      'LOGIN': 'INGRESAR',
+      'REGISTER': 'REGISTRARSE',
+      'DEPOSIT': 'DEPOSITAR',
+      'Casino': 'Casino',
+      'Sport': 'Deportes',
+      'Sportsbook': 'Apuestas deportivas',
+      'Live Casino': 'Casino en vivo',
+      'Fast Games': 'Juegos rápidos',
+      'Crash Games': 'Juegos crash',
+      'New Slots': 'Slots nuevos',
+      'Popular Slots': 'Slots populares',
+      'Table Games': 'Juegos de mesa',
+      'Game Shows': 'Game shows',
+      'Video Poker': 'Video póker',
+      'High RTP': 'RTP alto',
+      'Bonus Buy': 'Compra de bono',
+      'Providers': 'Proveedores',
+      'Lobby': 'Lobby',
+      'Slots': 'Slots',
+      'Jackpots': 'Jackpots',
+      'New Games': 'Juegos nuevos',
+      'Popular Games': 'Juegos populares',
+      'All games': 'Todos los juegos',
+      'Recommended games': 'Juegos recomendados',
+      'Promotions': 'Promociones',
+      'Bonuses': 'Bonos',
+      'VIP Club': 'Club VIP',
+      'Live Support': 'Soporte en vivo',
+      'Browse': 'Menú',
+      'Home': 'Inicio',
+      'Search': 'Buscar',
+      'Chat': 'Chat',
+      'View All': 'Ver todo',
+      'View Details': 'Ver detalles',
+      'Play': 'Jugar',
+      'Demo': 'Demo',
+      'Play now': 'Jugar',
+      'Join now': 'Unirse',
+      'Sign in': 'Ingresar',
+      'Support 24/7': 'Soporte 24/7',
+      'Invite a Friend': 'Invitá a un amigo',
+      'Sport Bets': 'Apuestas deportivas',
+      'Outrights': 'Apuestas a futuro',
+      'Upcoming': 'Próximos',
+      'Today': 'Hoy',
+      'This week': 'Esta semana',
+      'This month': 'Este mes',
+
+      /* ── игры быстрого раздела ── */
+      'Dice': 'Dados',
+      'Mines': 'Minas',
+      'Plinko': 'Plinko',
+      'Keno': 'Keno',
+      'Limbo': 'Limbo',
+      'Wheel': 'Ruleta de premios',
+      'Poker': 'Póker',
+      'Roulette': 'Ruleta',
+      'Baccarat': 'Bacará',
+      'Blackjack': 'Blackjack',
+
+      /* ── виды спорта ── */
+      'FOOTBALL': 'FÚTBOL',
+      'BASKETBALL': 'BÁSQUET',
+      'BASEBALL': 'BÉISBOL',
+      'VOLLEYBALL': 'VÓLEY',
+      'TABLE': 'TENIS DE',
+      'TENNIS': 'MESA',
+      'MMA': 'MMA',
+
+      /* ── баннеры и герой ── */
+      '20 FREE SPINS WAITING FOR YOU': '20 GIROS GRATIS TE ESPERAN',
+      '20 FREE SPINS ON FIRE IN GET OF OLYMPUS': '20 GIROS GRATIS EN GATES OF OLYMPUS',
+      'FREE SPINS GIVEAWAY': 'SORTEO DE GIROS GRATIS',
+      '100% CASINO BONUS': 'BONO DE CASINO 100%',
+      '+100% up to $500 and 200 free spins': '+100% hasta $500 y 200 giros gratis',
+      'WIN UP TO $500': 'GANÁ HASTA $500',
+      'UP TO 20.000$ PRIZE now!': '¡PREMIO DE HASTA 20.000$ ahora!',
+      'WAR ARENA TOURNAMENT': 'TORNEO WAR ARENA',
+      'SOCCER PARTY BET&WIN': 'SOCCER PARTY: APOSTÁ Y GANÁ',
+      'BUY BONUS NOW!': '¡COMPRÁ EL BONO!',
+      'Buy Bonus Buys': 'Compra de bonos',
+      'Before You Play': 'Antes de jugar',
+      'Discover betting without borders': 'Apuestas sin fronteras',
+      'Boost': 'Impulso',
+
+      /* ── вход и регистрация ── */
+      'Continue to Warwin': 'Ingresar a Warwin',
+      'Secure access with your email': 'Acceso seguro con tu correo',
+      'E-mail': 'Correo electrónico',
+      'Password': 'Contraseña',
+      'Forgot Password?': '¿Olvidaste tu contraseña?',
+      'or': 'o',
+      'or register via': 'o registrate con',
+      'username': 'nombre de usuario',
+      'Show password': 'Mostrar contraseña',
+      'Hide password': 'Ocultar contraseña',
+      'Signing in': 'Ingresando',
+      'Creating account': 'Creando la cuenta',
+
+      /* ── кошелёк и касса ── */
+      'Deposit': 'Depósito',
+      'Withdraw': 'Retiro',
+      'Crypto': 'Cripto',
+      'Fiat': 'Fiat',
+      'Deposit Currency': 'Moneda de depósito',
+      'Withdraw Currency': 'Moneda de retiro',
+      'Network': 'Red',
+      'Contract Address': 'Dirección de depósito',
+      'Copy Address': 'Copiar dirección',
+      'Copied': 'Copiado',
+      'Amount': 'Monto',
+      'Payment Method': 'Método de pago',
+      'First Name*': 'Nombre*',
+      'Last Name*': 'Apellido*',
+      'Available': 'Disponibles',
+      'Availability': 'Disponibilidad',
+      'Bonus balance': 'Saldo de bono',
+      'Account Summary': 'Resumen de la cuenta',
+      'Withdrawable': 'Retirable',
+      'Deposit and withdraw in the Wallet section.': 'Depósitos y retiros en la sección Billetera.',
+      'Back to wallet': 'Volver a la billetera',
+
+      /* ── профиль ── */
+      'Profile': 'Perfil',
+      'Game History': 'Historial de juego',
+      'Responsible Gambling': 'Juego responsable',
+      'Log out': 'Cerrar sesión',
+      'Personal data': 'Datos personales',
+      'Contacts and login': 'Contacto e ingreso',
+      'Address': 'Domicilio',
+      'First and last name': 'Nombre y apellido',
+      'Date of birth': 'Fecha de nacimiento',
+      'Nationality': 'Nacionalidad',
+      'Country': 'País',
+      'City': 'Ciudad',
+      'Street and house': 'Calle y número',
+      'Postal code': 'Código postal',
+      'Phone': 'Teléfono',
+      'Brazil': 'Brasil',
+      'Change': 'Cambiar',
+      'Save': 'Guardar',
+      'Cancel': 'Cancelar',
+      'Verify': 'Verificar',
+      'Identity verified': 'Identidad verificada',
+      'verified': 'verificado',
+      'not verified': 'sin verificar',
+      'checked': 'verificado',
+      'Player since March 2026': 'Jugador desde marzo de 2026',
+      'Unsaved changes in the address': 'Cambios sin guardar en el domicilio',
+      'They match the document. Locked after verification — write to support if something needs fixing.':
+        'Coinciden con el documento. Se bloquean tras la verificación: si hay que corregir algo, escribí al soporte.',
+      'Confirmation codes and withdrawal notices come here.':
+        'Acá llegan los códigos de confirmación y los avisos de retiro.',
+      'Needed to restore access and to withdraw via PIX.':
+        'Necesario para recuperar el acceso y para retirar por PIX.',
+      'Needed only for card withdrawals. Can be filled in later.':
+        'Necesario solo para retiros con tarjeta. Se puede completar después.',
+      'Change password': 'Cambiar contraseña',
+      'Current password': 'Contraseña actual',
+      'New password': 'Contraseña nueva',
+      'Repeat new password': 'Repetir la contraseña nueva',
+      'Choose a password you do not use anywhere else. Minimum 8 characters.':
+        'Elegí una contraseña que no uses en ningún otro lado. Mínimo 8 caracteres.',
+      'Password changed.': 'Contraseña cambiada.',
+      'Minimum 8 characters.': 'Mínimo 8 caracteres.',
+      'The new passwords do not match.': 'Las contraseñas nuevas no coinciden.',
+      'The new password repeats the current one.': 'La contraseña nueva repite la actual.',
+      'Looks good.': 'Todo bien.',
+
+      /* ── верификация ── */
+      'Verification': 'Verificación',
+      'Needed once before your first withdrawal. The check takes up to 15 minutes — you can play and deposit right now.':
+        'Se hace una sola vez antes del primer retiro. La revisión demora hasta 15 minutos: podés jugar y depositar ya mismo.',
+      'of': 'de',
+      'required documents uploaded': 'documentos obligatorios subidos',
+      'Proof of identity (front)': 'Documento, frente',
+      'Proof of identity (back)': 'Documento, dorso',
+      'Proof of address': 'Comprobante de domicilio',
+      'Source of funds': 'Origen de los fondos',
+      'Passport, ID card or driver’s licence — the side with your photo.':
+        'Pasaporte, documento de identidad o licencia de conducir: el lado con la foto.',
+      'The reverse side of the same document.': 'El dorso del mismo documento.',
+      'A utility bill or a bank statement no older than 3 months.':
+        'Una factura de servicios o un extracto bancario de no más de 3 meses.',
+      'We ask separately if needed — you will get an e-mail.':
+        'Lo pedimos aparte si hace falta: te llega un correo.',
+      'Upload ID front': 'Subir el frente',
+      'Upload ID back': 'Subir el dorso',
+      'Upload image': 'Subir archivo',
+      'PNG, JPG or PDF · up to 5 MB': 'PNG, JPG o PDF · hasta 5 MB',
+      'Replace': 'Reemplazar',
+      'Required': 'Obligatorio',
+      'Not needed yet': 'Todavía no hace falta',
+      'In review': 'En revisión',
+      'Documents are encrypted and visible only to the review team.':
+        'Los documentos están cifrados y solo los ve el equipo de revisión.',
+
+      /* ── ответственная игра ── */
+      'Deposit limit': 'Límite de depósito',
+      'Loss limit': 'Límite de pérdida',
+      'Wager limit': 'Límite de apuesta',
+      'Session limit': 'Límite de sesión',
+      'Minute limit': 'Límite de tiempo',
+      'Cooling off': 'Pausa temporal',
+      'Self exclusion': 'Autoexclusión',
+      'Period': 'Período',
+      'Minute': 'Minutos',
+      'None': 'Ninguno',
+      'Set': 'Aplicar',
+      'Weekly limit': 'Límite semanal',
+      'Your account can be set with deposit limits. This setting limits the amount you can deposit per day, week or month.':
+        'Podés poner un límite de depósito en tu cuenta. Limita el monto que podés depositar por día, semana o mes.',
+      'Your account can be set with loss limits. This setting limits the amount you can lose per day, week or month.':
+        'Podés poner un límite de pérdida en tu cuenta. Limita el monto que podés perder por día, semana o mes.',
+      'Your account can be set with wager limits. This setting controls the amount of money you can wager per day, week or month.':
+        'Podés poner un límite de apuesta en tu cuenta. Controla el monto que podés apostar por día, semana o mes.',
+      'You can limit the amount of time spent gambling. The restriction takes effect instantly. If you hit the limit, you will be automatically logged out of your account.':
+        'Podés limitar el tiempo que pasás jugando. La restricción se aplica al instante y, al llegar al límite, se cierra tu sesión automáticamente.',
+      'Feel the need to stay away from the casino for some time? You can set a cooling-off limit for a certain period of time. The restriction takes effect instantly. You won\'t be able to make deposits and play during the specified period, also you will be excluded from all advertising offers. After the set period expires, you\'ll receive a notification email saying your account is active again.':
+        '¿Querés alejarte del casino por un tiempo? Poné una pausa por el período que elijas. La restricción se aplica al instante: no vas a poder depositar ni jugar, y quedás fuera de todas las ofertas publicitarias. Cuando termine el período, te llega un correo avisando que la cuenta está activa de nuevo.',
+      'Feel the need to block access to your account? You can set a self-exclusion limit for a definite or an indefinite period of time. The restriction takes effect instantly. During the set period you will not be able to log into your account. To be excluded from gambling on our site for an indefinite period of time, please, contact our support team via Live Chat.':
+        '¿Querés bloquear el acceso a tu cuenta? Poné una autoexclusión por un período determinado o indefinido. La restricción se aplica al instante: durante ese tiempo no vas a poder ingresar a tu cuenta. Para una autoexclusión indefinida, escribinos por el chat en vivo.',
+
+      /* ── история ── */
+      'History': 'Historial',
+      'Game': 'Juego',
+      'Bet sum': 'Monto apostado',
+      'Stake': 'Apuesta',
+      'Win': 'Ganancia',
+      'Date': 'Fecha',
+      'Result': 'Resultado',
+      'Status': 'Estado',
+      'All': 'Todos',
+      'Won': 'Ganada',
+      'Lost': 'Perdida',
+      'Pending': 'Pendiente',
+      'Bonus': 'Bono',
+      'Reward': 'Premio',
+      'Nothing here yet': 'Todavía no hay nada',
+      'No bets match the selected filters.': 'No hay apuestas para los filtros elegidos.',
+      'No bonus history yet': 'Todavía no hay historial de bonos',
+      'Granted and used bonuses will appear here.': 'Acá van a aparecer los bonos otorgados y usados.',
+      'No bets yet': 'Todavía no hay apuestas',
+      'Could not load history': 'No se pudo cargar el historial',
+      'Try again': 'Reintentar',
+      'Combo': 'Combinada',
+      'Both Teams to Score': 'Ambos equipos marcan',
+
+      /* ── бонусы ── */
+      'Active': 'Activos',
+      'Cancelled': 'Cancelado',
+      'Credited': 'Acreditado',
+      'Wagered': 'Apostado',
+      'Expired': 'Vencido',
+      'In progress': 'En curso',
+      'Receive': 'Recibir',
+      'Apply': 'Aplicar',
+      'Have a promo code?': '¿Tenés un código promocional?',
+      'Promo code': 'Código promocional',
+      'Enter it here — the bonus is added to this list right away.':
+        'Ingresalo acá: el bono se suma a esta lista al instante.',
+      'Activate bonus': 'Activar bono',
+      'Play bonus': 'Jugar el bono',
+      'Cancel bonus': 'Cancelar bono',
+      'Keep bonus': 'Conservar el bono',
+      'Yes, cancel': 'Sí, cancelar',
+      'Go to Available': 'Ir a Disponibles',
+      'Open Promotions': 'Abrir Promociones',
+      'Cancelling drops the bonus balance and the wagering done so far.':
+        'Cancelar borra el saldo del bono y todo el avance del wagering.',
+      'Wagering progress': 'Avance del wagering',
+      'Left to wager': 'Falta apostar',
+      'Winnings move to the real balance once wagering is complete.':
+        'Al completar el wagering, las ganancias pasan al saldo real.',
+      'No bonus in progress': 'No hay bonos en curso',
+      'Activate one from the Available tab — wagering will show up here.':
+        'Activá uno en la pestaña Disponibles y el avance aparece acá.',
+      'New bonuses show up here as soon as they are issued.':
+        'Los bonos nuevos aparecen acá apenas se otorgan.',
+      'Bonuses you used up or let expire will be listed here.':
+        'Acá quedan los bonos que usaste o dejaste vencer.',
+      'Bonuses are available after sign in': 'Los bonos están disponibles después de ingresar',
+      'Current offers are in Promotions': 'Las ofertas vigentes están en Promociones',
+      'No offers for you right now': 'Por ahora no hay ofertas para vos',
+      'No promotions here yet': 'Todavía no hay promociones acá',
+      'Pick another category — new offers show up every week.':
+        'Elegí otra categoría: cada semana aparecen ofertas nuevas.',
+      'Free Spins': 'Giros gratis',
+      'Cashback': 'Cashback',
+      'Referral': 'Referidos',
+      'First Deposit Bonus': 'Bono de primer depósito',
+      'Welcome Free Spins': 'Giros gratis de bienvenida',
+      'Weekly Cashback': 'Cashback semanal',
+      'Weekly Loss Cashback': 'Cashback por pérdidas',
+      'Reload Bonus': 'Bono de recarga',
+      'Zeus Friday': 'Viernes de Zeus',
+      'Daily reload': 'Recarga diaria',
+      '3 days': '3 días',
+      'up to 3 days': 'hasta 3 días',
+      'Every Monday': 'Todos los lunes',
+      'Every Monday · UTC': 'Todos los lunes · UTC',
+      'Every Friday · UTC': 'Todos los viernes · UTC',
+      'First deposit only': 'Solo primer depósito',
+      'From 2nd deposit': 'Desde el 2.º depósito',
+      'Up to 5 friends': 'Hasta 5 amigos',
+      'Active for registration': 'Vigente al registrarse',
+      'How it works': 'Cómo funciona',
+      '100% on your first deposit, up to 500 USDT': '100% en tu primer depósito, hasta 500 USDT',
+      '100 Free Spins right after registration, no deposit needed.':
+        '100 giros gratis apenas te registrás, sin depósito.',
+      '100 Free Spins for new players, valid 3 days after issue.':
+        '100 giros gratis para jugadores nuevos, válidos 3 días desde la entrega.',
+      '10% back from last week’s deposit-funded net loss.':
+        '10% de la pérdida neta con depósitos de la semana pasada.',
+      'Part of the week’s net loss comes back every Monday.':
+        'Parte de la pérdida neta de la semana vuelve todos los lunes.',
+      '5% of each invited friend’s net loss for 30 days.':
+        '5% de la pérdida neta de cada amigo invitado durante 30 días.',
+      'From the second deposit, move 5% of it to the main balance.':
+        'Desde el segundo depósito, el 5% pasa al saldo principal.',
+      '5% Bonus Unlock': 'Desbloqueo de bono 5%',
+      '100% bonus up to 150 AZN on your first successful deposit.':
+        'Bono del 100% hasta 150 AZN en tu primer depósito exitoso.',
+      'Play 50 spins of 1.00 AZN on Gates of Olympus — get 20 Free Spins.':
+        'Jugá 50 giros de 1,00 AZN en Gates of Olympus y llevate 20 giros gratis.',
+      '20 free spins on Gates of Olympus 1000': '20 giros gratis en Gates of Olympus 1000',
+
+      /* ── VIP ── */
+      'Your VIP progress': 'Tu progreso VIP',
+      'WarWin level system': 'Sistema de niveles de WarWin',
+      'Next level: Silver': 'Próximo nivel: Silver',
+      'Soldier': 'Soldier',
+      'Captain': 'Captain',
+      'General': 'General',
+      'Warlord I–III': 'Warlord I–III',
+      'Privileges': 'Privilegios',
+      'Rakeback': 'Rakeback',
+      'Weekly bonus': 'Bono semanal',
+      'Monthly bonus': 'Bono mensual',
+      'Level-up bonus': 'Bono por subir de nivel',
+      'Personal manager': 'Gerente personal',
+      'Higher bonuses': 'Bonos más altos',
+      'Higher withdrawal limit': 'Límite de retiro más alto',
+      'Custom terms': 'Condiciones a medida',
+      'Managers': 'Gerentes',
+      'Everything from Captain': 'Todo lo de Captain',
+      'Everything from General': 'Todo lo de General',
+      'Bonus for your activity every week and month': 'Bono por tu actividad cada semana y cada mes',
+      'Part of the losses back when you move up a level': 'Parte de las pérdidas vuelve al subir de nivel',
+      'The higher the level, the bigger the payout': 'Cuanto más alto el nivel, mayor el pago',
+      'Privileges tuned through your manager': 'Privilegios ajustados con tu gerente',
+      'Handles your questions outside the general queue': 'Resuelve tus consultas fuera de la fila general',
+      'Full VIP Terms & Conditions': 'Condiciones completas del club VIP',
+      'How to join the club': 'Cómo entrar al club',
+      'How wagering is counted': 'Cómo se cuenta el wagering',
+      'When bonuses are credited': 'Cuándo se acreditan los bonos',
+      'Does the level expire': 'El nivel, ¿vence?',
+      'Do privileges stack': 'Los privilegios, ¿se acumulan?',
+      'Who gets a manager': 'Quién tiene gerente',
+      'How to reach the manager': 'Cómo contactar al gerente',
+      'The club opens automatically once your wagering reaches the Soldier threshold. No application needed — the level and its perks turn on the same day.':
+        'El club se abre solo cuando tu wagering llega al umbral de Soldier. No hay que pedir nada: el nivel y sus beneficios se activan el mismo día.',
+      'Only real money counts, in casino and sportsbook alike. Bets placed with bonus funds and cancelled bets stay out of the total.':
+        'Solo cuenta el dinero real, tanto en casino como en deportes. Las apuestas con fondos de bono y las canceladas quedan fuera del total.',
+      'The weekly bonus lands on Monday, the monthly one on the first day of the month. Both go straight to the balance — nothing to claim.':
+        'El bono semanal llega el lunes y el mensual el primer día del mes. Los dos van directo al saldo: no hay que reclamarlos.',
+      'The level stays as long as the wagering behind it does. It is recalculated once a month, and the drop is never more than one step at a time.':
+        'El nivel se mantiene mientras se mantenga el wagering que lo sostiene. Se recalcula una vez por mes y la baja nunca es de más de un escalón.',
+      'Every level keeps everything from the one below it and adds its own. Nothing is taken away when you move up.':
+        'Cada nivel conserva todo lo del anterior y suma lo suyo. Al subir no se quita nada.',
+      'From General up. The manager writes first the day the level turns on.':
+        'Desde General en adelante. El gerente escribe primero el día que se activa el nivel.',
+      'In the same chat you already use. Messages from club players are answered outside the general queue.':
+        'En el mismo chat que ya usás. Los mensajes de jugadores del club se responden fuera de la fila general.',
+      'No percentages on this page on purpose — the numbers live in your account.':
+        'En esta página no hay porcentajes a propósito: los números están en tu cuenta.',
+
+      /* ── уведомления ── */
+      'Notifications': 'Notificaciones',
+      'Clear all': 'Borrar todo',
+      'Activities': 'Actividad',
+      'No notifications yet.': 'Todavía no hay notificaciones.',
+      'No activity yet.': 'Todavía no hay actividad.',
+
+      /* ── поиск ── */
+      'Search WarWin': 'Buscar en WarWin',
+      'Search Games': 'Buscar juegos',
+
+      /* ── подвал ── */
+      'Join our Community!': '¡Sumate a la comunidad!',
+      'About Us': 'Sobre nosotros',
+      'Affiliate Program': 'Programa de afiliados',
+      'Help Center / FAQ': 'Centro de ayuda / FAQ',
+      'Deposit & Withdrawal': 'Depósitos y retiros',
+      'Contact Support': 'Contactar al soporte',
+      'Terms & Conditions': 'Términos y Condiciones',
+      'Privacy Policy': 'Política de Privacidad',
+      'Cookie Policy': 'Política de Cookies',
+      'Responsible Gaming': 'Juego responsable',
+      'AML / KYC Policy': 'Política AML / KYC',
+      'Live Betting': 'Apuestas en vivo',
+      'Help': 'Ayuda',
+      'Legal': 'Legales',
+      'FAQ': 'FAQ',
+      'WarWin': 'WarWin',
+      'All rights reserved': 'Todos los derechos reservados',
+      'Owned and operated by WarWin Group International Ltd (Registration No. 000054736), registered at San Victor Street, Orange Walk Town, Belize.':
+        'Operado por WarWin Group International Ltd (Registro N.º 000054736), con domicilio en San Victor Street, Orange Walk Town, Belize.',
+      'Live chat and email. Spanish and Portuguese planned from October':
+        'Chat en vivo y correo. Español y portugués desde octubre',
+
+      /* ── прочее ── */
+      'English': 'Inglés',
+      'Español': 'Español',
+      'Language': 'Idioma',
+      'WarWin — Casino Lobby': 'WarWin — lobby del casino',
+      'Close': 'Cerrar',
+      'Back': 'Atrás',
+      'Next': 'Siguiente',
+      'Banners': 'Banners',
+      'Previous banner': 'Banner anterior',
+      'Next banner': 'Banner siguiente',
+      'Add to favourites': 'Agregar a favoritos',
+      'Copy link': 'Copiar enlace',
+      'Full screen': 'Pantalla completa',
+      'Wide mode': 'Modo ancho',
+      'Game mode': 'Modo de juego',
+      'Collapse menu': 'Contraer el menú',
+      'Expand menu': 'Expandir el menú',
+      'Remove limit': 'Quitar el límite',
+      'Account': 'Cuenta',
+      'Enter': 'Ingresá',
+      'Enter day': 'Ingresá el día',
+      'Days': 'Días',
+      'Minutes': 'Minutos',
+      'Limit amount': 'Monto del límite',
+      'locked': 'bloqueado',
+      'Close search': 'Cerrar la búsqueda',
+      'Unread': 'Sin leer',
+      'Main navigation': 'Navegación principal',
+      'Delete notification': 'Eliminar la notificación',
+      'Adults only': 'Solo para mayores de edad',
+      'Expand': 'Expandir',
+      'Collapse': 'Contraer',
+      'Crypto or Fiat': 'Cripto o fiat',
+      'Deposit or Withdraw': 'Depósito o retiro',
+      'Deposit currency': 'Moneda de depósito',
+      'Withdraw currency': 'Moneda de retiro',
+      'Register': 'Registrarse',
+      'Banner': 'Banner',
+      'Sports': 'Deportes',
+      'Secure access with your email and password.': 'Acceso seguro con tu correo y contraseña.',
+      'New to Warwin? ': '¿Primera vez en Warwin? ',
+      'Create account': 'Crear cuenta',
+      'Login': 'Ingresar',
+      'Create your Warwin account': 'Creá tu cuenta de Warwin',
+      'Sign up with your email, choose a username, and set <br>a secure password.': 'Registrate con tu correo, elegí un nombre de usuario <br>y una contraseña segura.',
+      'Email is required.': 'Ingresá tu correo.',
+      'Minimum 8 characters, include a number and a symbol.': 'Mínimo 8 caracteres, con un número y un símbolo.',
+      'Choose CoinNetwork': 'Elegí la moneda y la red',
+      'Bonus activated': 'Bono activado',
+      'Open in Active': 'Abrir en Activos',
+      'Enter a promo code.': 'Ingresá un código promocional.',
+      'Code applied \u2014 Welcome Free Spins is ready to receive.': 'Código aplicado: los giros gratis de bienvenida están listos para recibir.',
+      'We do not know this code. Check the spelling.': 'No conocemos ese código. Revisá cómo lo escribiste.',
+      'Processing…': 'Procesando…',
+      'Fill them in before the first withdrawal — they must match the document.': 'Completalos antes del primer retiro: tienen que coincidir con el documento.',
+      'Identity not verified': 'Identidad sin verificar',
+      'on review': 'en revisión',
+      'Identity on review': 'Identidad en revisión',
+      'Sent for checking on 12 August. Usually takes up to 24 hours.': 'Enviado a revisión el 12 de agosto. Suele demorar hasta 24 horas.',
+
+      /* ── строки с подстановкой ── */
+      '{n} day left': 'queda {n} día',
+      '{n} days left': 'quedan {n} días',
+      'Expires {date} · {left}': 'Vence {date} · {left}',
+      'Released {age}': 'Lanzado {age}',
+      'Withdraw {sum} {cur}': 'Retirar {sum} {cur}',
+      '{done} of {goal} {cur}': '{done} de {goal} {cur}',
+      '{done} of {goal} {cur} · wagering x{mult}': '{done} de {goal} {cur} · wagering x{mult}',
+      '{n} days ago': 'hace {n} días'
+    }
+  };
+
+  /* ───────────────────────── рантайм ───────────────────────── */
+
+  var cur = 'en';
+  var origText = new WeakMap();   /* текстовый узел -> английский исходник */
+  var origAttr = new WeakMap();   /* элемент -> { атрибут: английский }   */
+  var ATTRS = ['placeholder', 'aria-label', 'title', 'alt'];
+
+  /* Поддеревья, куда переводчик не заходит: у документных страниц свои
+     языковые версии, витрина состояний служебная. */
+  function blocked(el) {
+    if (el.nodeType !== 1) return false;
+    var tag = el.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return true;
+    if (el.hasAttribute && el.hasAttribute('data-langset')) return true;
+    return !!(el.classList && el.classList.contains('states'));
+  }
+
+  function pick(code, key) {
+    var d = DICT[code];
+    return d && Object.prototype.hasOwnProperty.call(d, key) ? d[key] : null;
+  }
+
+  function doText(node, code) {
+    var raw = origText.get(node);
+    if (raw === undefined) { raw = node.nodeValue; origText.set(node, raw); }
+    var key = raw.replace(/ /g, ' ').trim();
+    if (!key) return;
+    var to = code === 'en' ? null : pick(code, key);
+    if (to === null) { if (node.nodeValue !== raw) node.nodeValue = raw; return; }
+    /* пробелы по краям сохраняем: они часто отделяют текст от соседнего тега */
+    var m = raw.match(/^([\s ]*)[\s\S]*?([\s ]*)$/);
+    var next = m[1] + to + m[2];
+    if (node.nodeValue !== next) node.nodeValue = next;
+  }
+
+  function doAttrs(el, code) {
+    for (var i = 0; i < ATTRS.length; i++) {
+      var a = ATTRS[i];
+      if (!el.hasAttribute(a)) continue;
+      var store = origAttr.get(el);
+      if (!store) { store = {}; origAttr.set(el, store); }
+      if (!(a in store)) store[a] = el.getAttribute(a);
+      var raw = store[a], key = raw.trim();
+      if (!key) continue;
+      var to = code === 'en' ? raw : (pick(code, key) || raw);
+      if (el.getAttribute(a) !== to) el.setAttribute(a, to);
+    }
+  }
+
+  function apply(code, root) {
+    root = root || document.body;
+    if (!root) return;
+    if (root.nodeType === 1 && !blocked(root)) doAttrs(root, code);
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (n.nodeType === 1) return blocked(n) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var n;
+    while ((n = w.nextNode())) {
+      if (n.nodeType === 1) doAttrs(n, code); else doText(n, code);
+    }
+  }
+
+  /* Строки, которые ставит скрипт. Подстановки в фигурных скобках: у русского
+     и испанского другой порядок слов, кусками такие фразы резать нельзя. */
+  function T(str, vars) {
+    var s = (cur === 'en' ? null : pick(cur, str)) || str;
+    if (vars) {
+      s = s.replace(/\{(\w+)\}/g, function (_, k) {
+        return vars[k] === undefined || vars[k] === null ? '' : String(vars[k]);
+      });
+    }
+    return s;
+  }
+
+  function known(code) {
+    for (var i = 0; i < LANGS.length; i++) if (LANGS[i].code === code) return true;
+    return false;
+  }
+
+  var origTitle = null;
+  function setLang(code) {
+    if (!known(code)) code = 'en';
+    cur = code;
+    document.documentElement.lang = code;
+    /* Заголовок вкладки живёт в <head>, обход по body до него не доходит */
+    if (origTitle === null) origTitle = document.title;
+    document.title = (code === 'en' ? null : pick(code, origTitle)) || origTitle;
+    try { localStorage.setItem('ww-lang', code); } catch (e) {}
+    apply(code);
+    document.dispatchEvent(new CustomEvent('ww:lang', { detail: code }));
+  }
+
+  /* Первый заход — язык браузера, дальше главнее сохранённый выбор. */
+  function boot() {
+    var saved = null;
+    try { saved = localStorage.getItem('ww-lang'); } catch (e) {}
+    if (saved && known(saved)) return saved;
+    var nav = ((navigator.languages && navigator.languages[0]) || navigator.language || 'en')
+      .slice(0, 2).toLowerCase();
+    return known(nav) ? nav : 'en';
+  }
+
+  window.WW_I18N = {
+    langs: LANGS,
+    T: T,
+    setLang: setLang,
+    boot: boot,
+    current: function () { return cur; },
+    info: function (code) {
+      for (var i = 0; i < LANGS.length; i++) if (LANGS[i].code === code) return LANGS[i];
+      return LANGS[0];
+    },
+    /* пересобрали кусок разметки — перевести его заново */
+    apply: function (root) { apply(cur, root); }
+  };
+})();
+
+</script>
+<script>
+  /* Короткое имя переводчика: строки, которые ставит скрипт, идут через него.
+     Если i18n.js почему-то не загрузился, T возвращает английский исходник и
+     интерфейс просто остаётся английским. */
+  var T = function (s, v) {
+    return window.WW_I18N ? window.WW_I18N.T(s, v) : s;
+  };
+
   /* Масштаб холста под ширину экрана.
      Макет нарисован под 1440. До 1920 показываем его один к одному: лишнюю
      ширину забирает не масштаб, а поле по краям — колонка контента упирается
@@ -12828,13 +14054,13 @@ body.br-open .bnav { z-index: 66; }
           var x = LG_TEXT[mode];
           lgMode = mode;
           lg.classList.toggle('is-reg', mode === 'reg');
-          lg.querySelector('.lg__title').textContent = x.title;
-          lg.querySelector('.lg__sub').innerHTML = x.sub;
+          lg.querySelector('.lg__title').textContent = T(x.title);
+          lg.querySelector('.lg__sub').innerHTML = T(x.sub);
           var sw = lg.querySelector('.lg__switch');
-          sw.firstChild.nodeValue = x.tail;
-          sw.querySelector('a').textContent = x.link;
-          submitLabel.textContent = x.submit;
-          lgHints.forEach(function (h, i) { h.textContent = x.hints[i]; h.dataset.base = x.hints[i]; });
+          sw.firstChild.nodeValue = T(x.tail);
+          sw.querySelector('a').textContent = T(x.link);
+          submitLabel.textContent = T(x.submit);
+          lgHints.forEach(function (h, i) { h.textContent = T(x.hints[i]); h.dataset.base = T(x.hints[i]); });
           /* Переключение состояний идёт через ту же разметку, поэтому чистим
              подсветку полей и текст ошибки, иначе они переезжают следом. */
           reset();
@@ -12896,7 +14122,7 @@ body.br-open .bnav { z-index: 66; }
 
           submit.disabled = true;
           lg.querySelector('.lg__modal').classList.add('is-busy');
-          submit.querySelector('.lg__submit-label').textContent = 'Signing in';
+          submit.querySelector('.lg__submit-label').textContent = T('Signing in');
           setTimeout(function () {
             lg.querySelector('.lg__modal').classList.remove('is-busy');
             submitLabel.textContent = LG_TEXT[lgMode].submit;
@@ -13033,8 +14259,8 @@ body.br-open .bnav { z-index: 66; }
                 dp.classList.toggle('is-withdraw', wd);
                 var labels = dp.querySelectorAll('.dp__body > .dp__row .dp__label');
                 if (labels.length === 2) {
-                  labels[0].textContent = wd ? 'Withdraw Currency' : 'Deposit Currency';
-                  labels[1].textContent = wd ? 'Choose CoinNetwork' : 'Network';
+                  labels[0].textContent = wd ? T('Withdraw Currency') : T('Deposit Currency');
+                  labels[1].textContent = wd ? T('Choose CoinNetwork') : T('Network');
                 }
               });
             });
@@ -13074,7 +14300,7 @@ body.br-open .bnav { z-index: 66; }
             if (!isFinite(v) || v < 0) v = 0;
             sumAmount.textContent = v.toFixed(2) + ' ' + WD_CUR;
             sumFee.textContent = (v * wdFeeRate).toFixed(2) + ' ' + WD_CUR;
-            wdSubmit.textContent = 'Withdraw ' + (v ? v : 0) + ' ' + WD_CUR;
+            wdSubmit.textContent = T('Withdraw {sum} {cur}', { sum: (v ? v : 0), cur: WD_CUR });
             /* Кнопка ждёт только сумму: адрес в прототипе можно не вводить,
                а до минимума 20 она остаётся выключенной. */
             wdSubmit.disabled = !(v >= wdMin);
@@ -13233,8 +14459,8 @@ body.br-open .bnav { z-index: 66; }
         if (copy && addr) copy.addEventListener('click', function () {
           var text = addr.textContent.trim();
           var done = function () {
-            copy.textContent = 'Copied'; copy.classList.add('is-done');
-            setTimeout(function () { copy.textContent = 'Copy Address'; copy.classList.remove('is-done'); }, 1600);
+            copy.textContent = T('Copied'); copy.classList.add('is-done');
+            setTimeout(function () { copy.textContent = T('Copy Address'); copy.classList.remove('is-done'); }, 1600);
           };
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(done, function () {});
@@ -13407,7 +14633,7 @@ body.br-open .bnav { z-index: 66; }
       addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMenu(); closeProv(); } });
       /* при закрытии сбрасываем, чтобы в следующий раз открылось чистым */
       srch.addEventListener('search-reset', function () {
-        field.value = ''; provFilter = 'all'; pval.textContent = 'All';
+        field.value = ''; provFilter = 'all'; pval.textContent = T('All');
         pmenu.querySelectorAll('li').forEach(function (o, i) {
           o.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
         });
@@ -13587,7 +14813,7 @@ body.br-open .bnav { z-index: 66; }
         d.type = 'button';
         d.className = 'hero__dot' + (i === 0 ? ' is-current' : '');
         d.setAttribute('role', 'tab');
-        d.setAttribute('aria-label', 'Баннер ' + (i + 1));
+        d.setAttribute('aria-label', 'Banner ' + (i + 1));
         d.addEventListener('click', function () {
           msTrack.scrollTo({ left: card.offsetLeft - msTrack.offsetLeft,
                              behavior: msCalm ? 'auto' : 'smooth' });
@@ -13965,10 +15191,10 @@ body.br-open .bnav { z-index: 66; }
           var cur = secInputs[0].value, a = secInputs[1].value, b = secInputs[2].value;
           var msg = '', cls = '', ok = false;
           if (!cur || !a || !b) msg = '';
-          else if (a.length < 8) { msg = 'Minimum 8 characters.'; cls = 'is-bad'; }
-          else if (a !== b) { msg = 'The new passwords do not match.'; cls = 'is-bad'; }
-          else if (a === cur) { msg = 'The new password repeats the current one.'; cls = 'is-bad'; }
-          else { msg = 'Looks good.'; cls = 'is-ok'; ok = true; }
+          else if (a.length < 8) { msg = T('Minimum 8 characters.'); cls = 'is-bad'; }
+          else if (a !== b) { msg = T('The new passwords do not match.'); cls = 'is-bad'; }
+          else if (a === cur) { msg = T('The new password repeats the current one.'); cls = 'is-bad'; }
+          else { msg = T('Looks good.'); cls = 'is-ok'; ok = true; }
           secHint.textContent = msg;
           secHint.className = 'sec__hint ' + cls;
           secBtn.disabled = !ok;
@@ -13976,7 +15202,7 @@ body.br-open .bnav { z-index: 66; }
         secInputs.forEach(function (i) { i.addEventListener('input', secCheck); });
         secBtn.addEventListener('click', function () {
           secInputs.forEach(function (i) { i.value = ''; i.type = 'password'; });
-          secHint.textContent = 'Password changed.';
+          secHint.textContent = T('Password changed.');
           secHint.className = 'sec__hint is-ok';
           secBtn.disabled = true;
         });
@@ -14014,7 +15240,7 @@ body.br-open .bnav { z-index: 66; }
           name.textContent = f.name + '  ·  ' + (f.size / 1048576).toFixed(1) + ' MB';
           file.hidden = false;
           drop.hidden = true;
-          badge.textContent = 'In review';
+          badge.textContent = T('In review');
           badge.className = 'prof__badge prof__badge--ok';
           vfSync();
         });
@@ -14065,7 +15291,7 @@ body.br-open .bnav { z-index: 66; }
             lim.className = 'rg__limit';
             lim.innerHTML = '<div class="rg__limit-head"><span></span>' +
               '<span class="rg__limit-val"><b></b> <i></i>' +
-              '<button class="rg__clear" type="button" aria-label="Снять лимит">\u00D7</button></span></div>' +
+              '<button class="rg__clear" type="button" aria-label="Remove limit">\u00D7</button></span></div>' +
               '<span class="rg__track"><i></i></span>';
             card.insertBefore(lim, card.querySelector('.rg__row'));
           }
@@ -14215,7 +15441,7 @@ body.br-open .bnav { z-index: 66; }
             ul.appendChild(li);
           });
           var cta = pone.querySelector('.pone__cta');
-          cta.textContent = 'Activate bonus';
+          cta.textContent = T('Activate bonus');
           cta.classList.remove('is-done');
           cta.disabled = false;
           showView('promoOne');
@@ -14223,7 +15449,7 @@ body.br-open .bnav { z-index: 66; }
         pone.querySelector('.pone__back').addEventListener('click', function () { showView('promo'); });
         /* Кнопка отвечает на нажатие: акция становится активированной */
         pone.querySelector('.pone__cta').addEventListener('click', function () {
-          this.textContent = 'Bonus activated';
+          this.textContent = T('Bonus activated');
           this.classList.add('is-done');
           this.disabled = true;
         });
@@ -14267,6 +15493,53 @@ body.br-open .bnav { z-index: 66; }
         });
       });
 
+      /* ── Выбор языка ──
+         Интерфейс переводит i18n.js по словарю английских строк, страницы
+         документов — langSync ниже по своим версиям. Обе части слушают одно
+         событие, поэтому переключатель один. */
+      var i18n = window.WW_I18N;
+      var langMenu = document.getElementById('lang-menu');
+      if (i18n && langMenu) {
+        var langList = langMenu.querySelector('.lang__list');
+        i18n.langs.forEach(function (l) {
+          var b = document.createElement('button');
+          b.className = 'lang__item';
+          b.type = 'button';
+          b.setAttribute('role', 'option');
+          b.dataset.setLang = l.code;
+          b.innerHTML = '<img loading="lazy" decoding="async" src="' + l.flag + '" alt="" width="20" height="20">' +
+                        '<span>' + l.name + '</span><i class="lang__tick" aria-hidden="true"></i>';
+          langList.appendChild(b);
+        });
+        var langClose = function () { langMenu.hidden = true; };
+        var langMark = function (code) {
+          var info = i18n.info(code);
+          /* подпись строки и флаг — на выбранном языке, а не на языке сайта:
+             так видно, куда попадёшь, даже если сайт сейчас на другом */
+          document.querySelectorAll('.lang__cur-name').forEach(function (n) { n.textContent = info.name; });
+          document.querySelectorAll('.lang__cur-flag').forEach(function (n) { n.src = info.flag; });
+          langList.querySelectorAll('.lang__item').forEach(function (b) {
+            b.classList.toggle('is-active', b.dataset.setLang === code);
+            b.setAttribute('aria-selected', b.dataset.setLang === code ? 'true' : 'false');
+          });
+        };
+        document.addEventListener('click', function (e) {
+          var open = e.target.closest('[data-lang-open]');
+          if (open) { e.preventDefault(); langMenu.hidden = false; return; }
+          if (langMenu.hidden) return;
+          var pickBtn = e.target.closest('[data-set-lang]');
+          if (pickBtn) { i18n.setLang(pickBtn.dataset.setLang); langClose(); return; }
+          if (e.target.closest('[data-close]') || !e.target.closest('.lang__pop')) langClose();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !langMenu.hidden) langClose();
+          if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('[data-lang-open]')) {
+            e.preventDefault(); langMenu.hidden = false;
+          }
+        });
+        document.addEventListener('ww:lang', function (e) { langMark(e.detail); langSync(); });
+      }
+
       /* ── Языковые версии страниц (About Us, Help Center) ──
          Язык берём у сайта, отдельного выбора на страницах нет. Источник —
          атрибут lang у <html>; версии нет — показываем английскую. */
@@ -14286,6 +15559,8 @@ body.br-open .bnav { z-index: 66; }
       /* Сменят язык сайта — страницы переключатся сами, без правок здесь */
       new MutationObserver(langSync).observe(document.documentElement,
         { attributes: true, attributeFilter: ['lang'] });
+      /* Первый заход — язык браузера, дальше главнее сохранённый выбор */
+      if (i18n) i18n.setLang(i18n.boot());
 
       /* ── Ответы в центре помощи раскрываются по нажатию ── */
       document.querySelectorAll('.hc__q').forEach(function (q) {
@@ -14520,7 +15795,7 @@ body.br-open .bnav { z-index: 66; }
           txt.querySelector('.gvrec__prov').textContent = gvProv(c);
           txt.querySelector('.gvrec__live').appendChild(
             document.createTextNode(meta.players + ' playing'));
-          txt.querySelector('.gvrec__when').textContent = 'Released ' + meta.age;
+          txt.querySelector('.gvrec__when').textContent = T('Released {age}', { age: meta.age });
           row.appendChild(art);
           row.appendChild(txt);
           row.addEventListener('click', function () { gvOpen(c); });
@@ -14745,7 +16020,7 @@ body.br-open .bnav { z-index: 66; }
                               .match(/[\d.]+/) || ['0'])[0]) || 0;
         var mult = bal ? Math.round(goal / bal) : 0;
         a.querySelector('.bnact__nums').textContent =
-          bnMoney(done) + ' of ' + bnMoney(goal) + ' ' + cur + (mult ? ' \u00B7 wagering x' + mult : '');
+          (mult ? T('{done} of {goal} {cur} \u00B7 wagering x{mult}', { done: bnMoney(done), goal: bnMoney(goal), cur: cur, mult: mult }) : T('{done} of {goal} {cur}', { done: bnMoney(done), goal: bnMoney(goal), cur: cur }));
         a.querySelector('.bnact__left').textContent = bnMoney(left) + ' ' + cur;
 
         var days = parseInt(a.dataset.days, 10);
@@ -14755,7 +16030,7 @@ body.br-open .bnav { z-index: 66; }
                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var short = till.getDate() + ' ' + MON[till.getMonth()];
         var when = a.querySelector('.bnact__when');
-        when.textContent = 'Expires ' + short + ' \u00B7 ' + days + (days === 1 ? ' day left' : ' days left');
+        when.textContent = T('Expires {date} \u00B7 {left}', { date: short, left: T(days === 1 ? '{n} day left' : '{n} days left', { n: days }) });
         when.classList.toggle('is-soon', days <= 1);
       };
       /* Перенос бонуса в отыгрыш: имя, обложка, условия и срок — из карточки */
@@ -14780,16 +16055,16 @@ body.br-open .bnav { z-index: 66; }
         var tag = c.querySelector('.bn__tag');
         c.classList.toggle('is-taken', on);
         if (on) {
-          tag.textContent = 'In progress';
+          tag.textContent = T('In progress');
           tag.classList.add('bn__tag--live');
-          b.textContent = 'Open in Active';
+          b.textContent = T('Open in Active');
           b.classList.remove('bn__btn--primary');
           b.removeAttribute('data-bn-act');
           b.setAttribute('data-bn-goactive', '');
         } else {
           tag.textContent = tag.dataset.base || tag.textContent;
           tag.classList.remove('bn__tag--live');
-          b.textContent = b.dataset.base || 'Receive';
+          b.textContent = b.dataset.base || T('Receive');
           b.classList.add('bn__btn--primary');
           b.removeAttribute('data-bn-goactive');
           b.setAttribute('data-bn-act', '');
@@ -14825,18 +16100,18 @@ body.br-open .bnav { z-index: 66; }
           note.className = 'bnpromo__note';
           if (!code) {
             note.classList.add('is-bad');
-            note.textContent = 'Enter a promo code.';
+            note.textContent = T('Enter a promo code.');
             inp.focus();
             return;
           }
           var mine = bnView.querySelector('.bncard[data-key="welcome"]');
           if (code === 'WELCOME' && mine && !mine.hidden) {
             note.classList.add('is-ok');
-            note.textContent = 'Code applied \u2014 Welcome Free Spins is ready to receive.';
+            note.textContent = T('Code applied \u2014 Welcome Free Spins is ready to receive.');
             inp.value = '';
           } else {
             note.classList.add('is-bad');
-            note.textContent = 'We do not know this code. Check the spelling.';
+            note.textContent = T('We do not know this code. Check the spelling.');
           }
           return;
         }
@@ -14998,7 +16273,7 @@ body.br-open .bnav { z-index: 66; }
         ['Кошелёк · отправка', [
           ['Кнопка в работе', function () { stOpen('withdraw', 'crypto'); fill('.dp__amount-input', '50');
             var b = dpEl.querySelector('.dp__wd-foot .dp__submit');
-            b.classList.add('is-busy'); b.disabled = true; b.textContent = 'Processing…'; }],
+            b.classList.add('is-busy'); b.disabled = true; b.textContent = T('Processing…'); }],
           ['Заявка принята', function () { stOpen('withdraw', 'crypto');
             stScreen('wait', '\u23F3', 'Withdrawal requested',
               'We are reviewing your request. Usually it takes up to 30 minutes, and you will get an email when the payout is sent.',
@@ -15140,22 +16415,22 @@ body.br-open .bnav { z-index: 66; }
           /* подпись карточки тоже своя: у новичка данных ещё нет, и обещать,
              что они совпадают с документом, нельзя */
           cards[1].querySelector('.prof__card-head p').textContent =
-            'Fill them in before the first withdrawal — they must match the document.';
+            T('Fill them in before the first withdrawal — they must match the document.');
           v.querySelectorAll('[data-prof-addr]').forEach(function (i) { i.value = ''; });
           var em = cards[0].querySelector('.prof__badge');
-          em.textContent = 'not verified'; em.className = 'prof__badge prof__badge--warn';
+          em.textContent = T('not verified'); em.className = 'prof__badge prof__badge--warn';
           var ok = v.querySelector('.prof__ok');
-          ok.textContent = 'Identity not verified';
+          ok.textContent = T('Identity not verified');
           ok.style.color = 'var(--brand-yellow, #eaff00)';
         } else if (what === 'review') {
           /* Данные отправлены: поля уже заперты, но отметка ещё нейтральная */
           var b2 = cards[1].querySelector('.prof__card-head .prof__badge');
           b2.hidden = false;
-          b2.textContent = 'on review'; b2.className = 'prof__badge prof__badge--wait';
+          b2.textContent = T('on review'); b2.className = 'prof__badge prof__badge--wait';
           cards[1].querySelector('.prof__card-head p').textContent =
-            'Sent for checking on 12 August. Usually takes up to 24 hours.';
+            T('Sent for checking on 12 August. Usually takes up to 24 hours.');
           var ok2 = v.querySelector('.prof__ok');
-          ok2.textContent = 'Identity on review';
+          ok2.textContent = T('Identity on review');
           ok2.style.color = 'var(--dp-label)';
         } else if (what === 'bad') {
           /* Ошибки в адресе: индекс не того формата, город не заполнен */
@@ -15243,7 +16518,7 @@ body.br-open .bnav { z-index: 66; }
       panel.className = 'states';
       panel.hidden = true;
       var html = '<div class="states__head"><b>Состояния</b>' +
-                 '<button class="states__x" type="button" aria-label="Закрыть">\u00D7</button></div>';
+                 '<button class="states__x" type="button" aria-label="Close">\u00D7</button></div>';
       STATES.forEach(function (group, gi) {
         html += '<div class="states__group"><span>' + group[0] + '</span>';
         group[1].forEach(function (item, ii) {
