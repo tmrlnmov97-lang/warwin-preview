@@ -5132,6 +5132,92 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 body.br-open .bnav { z-index: 66; }
 
 
+/* ───────────────────────────────────────────────────────────────────
+   Окно подтверждения (.cf) и полоса сообщений (.note).
+
+   Подтверждение перекрывает всё, из чего может быть вызвано: кассу (70),
+   меню профиля и уведомления (72), лист Browse (65), вход (60). Витрина
+   состояний (90) служебная и остаётся выше — иначе её нечем закрыть.
+   ─────────────────────────────────────────────────────────────────── */
+.cf { position: fixed; inset: 0; z-index: 80;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; box-sizing: border-box; }
+.cf[hidden] { display: none; }
+html.cf-open, html.cf-open body { overflow: hidden; }
+.cf__scrim { position: absolute; inset: 0; background: rgba(0, 9, 16, .78);
+             backdrop-filter: blur(2px); }
+.cf__card { position: relative; width: 420px; max-width: 100%;
+            box-sizing: border-box; padding: 24px;
+            display: flex; flex-direction: column; gap: 10px;
+            background: var(--modal-bg, #131a35); border-radius: 18px;
+            border: 1px solid var(--white-10, rgba(255, 255, 255, .1));
+            box-shadow: 0 24px 64px rgba(0, 0, 0, .45); }
+.cf__title { margin: 0; font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 20px; line-height: 26px; color: var(--white); text-wrap: balance; }
+.cf__text { margin: 0; font-family: 'Instrument Sans', sans-serif; font-weight: 400;
+            font-size: 15px; line-height: 21px; color: var(--modal-text-1, #bbc6cd);
+            text-wrap: pretty; }
+.cf__row { display: flex; gap: 10px; margin-top: 8px; }
+/* Кнопки равной ширины: ни один ответ не выглядит главным по размеру,
+   выбор делается текстом, а не габаритом. */
+.cf__btn { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 16px;
+           border: 0; border-radius: 12px; cursor: pointer;
+           font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+           font-size: 15px; line-height: 20px; color: var(--white); }
+.cf__btn--ghost { background: var(--white-06, rgba(255, 255, 255, .06));
+                  border: 1px solid var(--white-10, rgba(255, 255, 255, .1)); }
+.cf__btn--ghost:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
+.cf__btn--go { background: var(--primary, #0794ff); }
+.cf__btn--go:hover { background: var(--primary-hover, #279fff); }
+/* Необратимое действие — красным, но по-прежнему без перевеса по размеру */
+.cf__btn--danger { background: #d93a3a; }
+.cf__btn--danger:hover { background: #e14b4b; }
+.cf__btn:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+
+/* Полоса сообщений: то, что сказать надо, а привязать не к чему */
+.note { position: fixed; left: 50%; bottom: 24px; z-index: 85;
+        transform: translate(-50%, 12px); opacity: 0; pointer-events: none;
+        max-width: calc(100vw - 32px); box-sizing: border-box;
+        padding: 12px 18px; border-radius: 12px;
+        background: #1b2342; border: 1px solid var(--white-10, rgba(255, 255, 255, .1));
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .4);
+        font-family: 'Instrument Sans', sans-serif; font-weight: 500;
+        font-size: 15px; line-height: 20px; color: var(--white);
+        transition: opacity .18s ease, transform .18s ease; }
+.note.is-on { opacity: 1; transform: translate(-50%, 0); }
+.note--ok { border-color: rgba(17, 170, 62, .5); }
+.note--bad { border-color: rgba(217, 58, 58, .6); }
+@media (prefers-reduced-motion: reduce) { .note { transition: none; } }
+/* На мобильной полоса не должна лечь под нижнюю панель */
+@media (max-width: 1023px) { .note { bottom: calc(107px + 16px + env(safe-area-inset-bottom, 0px)); } }
+
+/* Картинка не отдалась — вместо значка битой картинки ровное место.
+   Значок ломает сетку карточек сильнее, чем пустота на его месте. */
+img.is-missing { visibility: hidden; }
+
+/* Подсказка под рядом полей в ответственной игре и под зоной загрузки
+   документа. Раньше на неполноту тут был молчаливый выход. */
+.rg__err, .vf__err {
+  margin: 6px 0 0; font-family: 'Instrument Sans', sans-serif; font-weight: 500;
+  font-size: 13px; line-height: 18px; color: #ff8080;
+}
+.rg__err[hidden], .vf__err[hidden] { display: none; }
+
+/* Отказ копирования адреса кошелька */
+.dp__copy.is-bad { color: #ff8080; }
+
+/* Длинные названия и ники обрезаем по строкам, а не растягиваем карточку:
+   в проекте на 34 правила nowrap приходилось 4 ellipsis, и переведённые
+   названия вылезали из своих коробок. */
+.game__name, .lc__name {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.gvrec__name, .bncard__body h2, .promo__body h2 {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
 </style>
 </head>
 <body>
@@ -5201,11 +5287,22 @@ body.br-open .bnav { z-index: 66; }
   var wp = document.getElementById('wp');
   if (!wp) return;
 
-  if (ONCE_PER_SESSION && sessionStorage.getItem('wp-seen')) {
+  /* Заслонка идёт до главного скрипта, поэтому обёртка над хранилищем здесь
+     своя. В приватном Safari и при запрете хранилища обращение бросает
+     исключение: раньше на нём обрывался этот IIFE, #wp никогда не получал
+     wp-off, и сайт не открывался вообще — белый экран навсегда. */
+  var seen = function (write) {
+    try {
+      if (write) { sessionStorage.setItem('wp-seen', '1'); return true; }
+      return !!sessionStorage.getItem('wp-seen');
+    } catch (e) { return false; }
+  };
+
+  if (ONCE_PER_SESSION && seen()) {
     wp.classList.add('wp-off');
     return;
   }
-  sessionStorage.setItem('wp-seen', '1');
+  seen(true);
 
   var css = getComputedStyle(document.documentElement);
   var ms  = function (n) { return parseInt(css.getPropertyValue(n)) || 0 };
@@ -5417,7 +5514,7 @@ body.br-open .bnav { z-index: 66; }
                 <p class="hero__sub" data-node-id="1187:15586">20 free spins on&nbsp;Gates of&nbsp;Olympus 1000</p>
               </div>
               <div class="hero__row">
-                <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15587">Join now</button>
+                <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15587" data-fgo="auth:reg">Join now</button>
               </div>
             </div>
           </div>
@@ -5430,7 +5527,7 @@ body.br-open .bnav { z-index: 66; }
                 <p class="hero__sub" data-node-id="1187:15708">UP&nbsp;TO&nbsp;20.000$ PRIZE now!</p>
               </div>
               <div class="hero__row">
-                <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15709">Join now</button>
+                <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15709" data-fgo="auth:reg">Join now</button>
               </div>
             </div>
           </div>
@@ -5443,7 +5540,7 @@ body.br-open .bnav { z-index: 66; }
                 <p class="hero__sub" data-node-id="1186:15023">WIN UP&nbsp;TO $500</p>
               </div>
               <div class="hero__row">
-                <button class="hero__cta hero__cta--join" type="button" data-node-id="1186:15024">Join now</button>
+                <button class="hero__cta hero__cta--join" type="button" data-node-id="1186:15024" data-fgo="auth:reg">Join now</button>
               </div>
             </div>
           </div>
@@ -5459,12 +5556,12 @@ body.br-open .bnav { z-index: 66; }
             <p class="hero__sub" data-node-id="1118:14912">+100% up&nbsp;to $500 and&nbsp;200 free spins</p>
           </div>
           <div class="hero__row" data-node-id="1118:14902">
-            <button class="hero__cta" type="button" data-node-id="1125:15043">REGISTER</button>
+            <button class="hero__cta" type="button" data-node-id="1125:15043" data-fgo="auth:reg">REGISTER</button>
             <span class="hero__or">or</span>
             <div class="hero__socials" data-node-id="1143:10609">
-              <a class="hero__soc" href="#" aria-label="Google"><img src="a/93b28ea74e.svg" alt="" width="20" height="20"></a>
-              <a class="hero__soc" href="#" aria-label="Telegram"><img src="a/344221bbb4.svg" alt="" width="20" height="20"></a>
-              <a class="hero__soc" href="#" aria-label="Facebook"><img src="a/dacfa20d08.svg" alt="" width="20" height="20"></a>
+              <a class="hero__soc" href="https://accounts.google.com" target="_blank" rel="noopener noreferrer" aria-label="Google"><img src="a/93b28ea74e.svg" alt="" width="20" height="20"></a>
+              <a class="hero__soc" href="https://t.me/warwin" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><img src="a/344221bbb4.svg" alt="" width="20" height="20"></a>
+              <a class="hero__soc" href="https://facebook.com/warwin" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="a/dacfa20d08.svg" alt="" width="20" height="20"></a>
             </div>
           </div>
         </div>
@@ -5480,7 +5577,7 @@ body.br-open .bnav { z-index: 66; }
               <h2 class="hero__title">FREE SPINS GIVEAWAY</h2>
               <p class="hero__sub">20 FREE SPINS ON&nbsp;FIRE IN&nbsp;GET OF&nbsp;OLYMPUS</p>
             </div>
-            <button class="hero__cta hero__cta--join" type="button">Join now</button>
+            <button class="hero__cta hero__cta--join" type="button" data-fgo="auth:reg">Join now</button>
           </div>
         </article>
         <article class="mslide">
@@ -5490,7 +5587,7 @@ body.br-open .bnav { z-index: 66; }
               <h2 class="hero__title">WAR ARENA TOURNAMENT</h2>
               <p class="hero__sub">UP&nbsp;TO&nbsp;20.000$ PRIZE now!</p>
             </div>
-            <button class="hero__cta hero__cta--join" type="button">Join now</button>
+            <button class="hero__cta hero__cta--join" type="button" data-fgo="auth:reg">Join now</button>
           </div>
         </article>
         <article class="mslide">
@@ -5500,7 +5597,7 @@ body.br-open .bnav { z-index: 66; }
               <h2 class="hero__title">SOCCER PARTY BET&amp;WIN</h2>
               <p class="hero__sub">WIN UP&nbsp;TO $500</p>
             </div>
-            <button class="hero__cta hero__cta--join" type="button">Join now</button>
+            <button class="hero__cta hero__cta--join" type="button" data-fgo="auth:reg">Join now</button>
           </div>
         </article>
       </div>
@@ -5513,7 +5610,7 @@ body.br-open .bnav { z-index: 66; }
           <h3 class="hcard__title">CASINO</h3>
           <span class="hcard__go"><img src="a/269dba37ff.svg" alt="" width="16" height="16"></span>
         </a>
-        <a class="hcard hcard--sport" href="#" data-node-id="1125:15026">
+        <a class="hcard hcard--sport" href="#" data-fgo="view:sport" data-node-id="1125:15026">
           <img class="hcard__glow" src="a/4a36cf1975.svg" alt="">
           <img class="hcard__dust" src="a/b73244828f.webp" alt="">
           <span class="hcard__pic"><img src="a/afffb197e4.webp" alt=""></span>
@@ -5533,11 +5630,11 @@ body.br-open .bnav { z-index: 66; }
       <div class="banner__copy">
         <div class="banner__inner">
           <h1 class="banner__title">Discover betting without borders</h1>
-          <button class="banner__cta">REGISTER</button>
+          <button class="banner__cta" data-fgo="auth:reg">REGISTER</button>
           <p class="banner__or">or&nbsp;register via</p>
         </div>
         <div class="socials">
-          <a class="social social--google" href="#">
+          <a class="social social--google" href="https://accounts.google.com" target="_blank" rel="noopener noreferrer">
             <span class="social__icon">
               <img src="a/6e21a18d39.svg" alt="" style="inset:12.09% 2% 40.91% 50%; bottom:12.09%; left:50%; right:2%; top:40.91%">
               <img src="a/4bee644947.svg" alt="" style="inset:59.52% 16.91% 0 5.36%">
@@ -5546,7 +5643,7 @@ body.br-open .bnav { z-index: 66; }
             </span>
             <span>Google</span>
           </a>
-          <a class="social" href="#">
+          <a class="social" href="https://t.me/warwin" target="_blank" rel="noopener noreferrer">
             <span class="social__icon">
               <img src="a/8ee961e52d.svg" alt="" style="inset:0">
               <img src="a/9067b0719a.svg" alt="" style="inset:30.1% 26.8% 24.9% 18.9%">
@@ -5879,7 +5976,7 @@ body.br-open .bnav { z-index: 66; }
             <h2 class="bonus__title">100% CASINO BONUS</h2>
             <p class="bonus__sub">Buy Bonus Buys <br class="only-mobile">Before You Play</p>
           </div>
-          <button class="bonus__cta"><span class="only-desktop">BUY BONUS NOW!</span><span class="only-mobile">Join now</span></button>
+          <button class="bonus__cta" data-fgo="auth:reg"><span class="only-desktop">BUY BONUS NOW!</span><span class="only-mobile">Join now</span></button>
         </section>
 
       </div>
@@ -6054,14 +6151,14 @@ body.br-open .bnav { z-index: 66; }
               <span class="prof__label">E-mail <em class="prof__badge prof__badge--ok">verified</em></span>
               <div class="prof__box">
                 <span class="prof__value">user@warwin.com</span>
-                <button class="prof__link" type="button">Change</button>
+                <button class="prof__link" type="button" data-fgo="tab:general">Change</button>
               </div>
             </div>
             <div class="prof__cell">
               <span class="prof__label">Phone <em class="prof__badge prof__badge--warn">not verified</em></span>
               <div class="prof__box">
                 <span class="prof__value">+55 11 992••••38</span>
-                <button class="prof__link" type="button">Verify</button>
+                <button class="prof__link" type="button" data-fgo="tab:verification">Verify</button>
               </div>
               <span class="prof__note">Needed to restore access and to withdraw via PIX.</span>
             </div>
@@ -6530,12 +6627,12 @@ body.br-open .bnav { z-index: 66; }
             <p>Live chat and&nbsp;email. Spanish and&nbsp;Portuguese planned from October</p>
           </div>
           <div class="vsup__btns">
-            <button class="vsup__btn" type="button">Espa&ntilde;ol</button>
-            <button class="vsup__btn vsup__btn--primary" type="button">Chat</button>
+            <button class="vsup__btn" type="button" data-lang-open>Espa&ntilde;ol</button>
+            <button class="vsup__btn vsup__btn--primary" type="button" data-fgo="msg:Live chat opens in the mobile app — on the web write to support@warwin.com.">Chat</button>
           </div>
         </section>
 
-        <button class="vip__terms" type="button">Full VIP Terms &amp; Conditions</button>
+        <button class="vip__terms" type="button" data-fgo="view:legalTc">Full VIP Terms &amp; Conditions</button>
       </div>
 
       <!-- 1471:13191 «Bonuses». Одна страница в пяти состояниях: гостю —
@@ -11983,10 +12080,10 @@ body.br-open .bnav { z-index: 66; }
             <img loading="lazy" decoding="async" class="footer__logo" src="a/cfa22cccd3.svg" alt="Warwin" width="234" height="73">
             <p class="footer__join" data-node-id="891:22540">Join our Community!</p>
             <div class="footer__socials" data-node-id="891:22541">
-              <a class="fsoc" href="#" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
+              <a class="fsoc" href="https://x.com/warwin" target="_blank" rel="noopener noreferrer" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
+              <a class="fsoc" href="https://t.me/warwin" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
+              <a class="fsoc" href="https://instagram.com/warwin" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
+              <a class="fsoc" href="https://tiktok.com/@warwin" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
             </div>
           </div>
 
@@ -12004,12 +12101,12 @@ body.br-open .bnav { z-index: 66; }
             </div>
             <!-- Соцсети десктопа. На мобильной свой блок выше, с логотипом -->
             <div class="fsocs">
-              <a class="fsoc" href="#" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
+              <a class="fsoc" href="https://x.com/warwin" target="_blank" rel="noopener noreferrer" aria-label="X"><img loading="lazy" decoding="async" src="a/86a8b0b29f.svg" alt=""></a>
               <a class="fsoc" href="#" aria-label="LinkedIn"><img loading="lazy" decoding="async" src="a/c9c30c956f.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Facebook"><img loading="lazy" decoding="async" src="a/94a086da44.svg" alt=""></a>
-              <a class="fsoc" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
+              <a class="fsoc" href="https://instagram.com/warwin" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img loading="lazy" decoding="async" src="a/110c3b7474.svg" alt=""></a>
+              <a class="fsoc" href="https://tiktok.com/@warwin" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img loading="lazy" decoding="async" src="a/1cc404657a.svg" alt=""></a>
+              <a class="fsoc" href="https://facebook.com/warwin" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img loading="lazy" decoding="async" src="a/94a086da44.svg" alt=""></a>
+              <a class="fsoc" href="https://t.me/warwin" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><img loading="lazy" decoding="async" src="a/98e8aff388.svg" alt=""></a>
             </div>
           </div>
         </footer>
@@ -12542,7 +12639,9 @@ body.br-open .bnav { z-index: 66; }
                   <button class="dp__max dp__fw-max" type="button">MAX</button>
                 </label>
               </div>
-              <p class="dp__error dp__error--fd" hidden></p>
+              <!-- Подсказка вывода: класс стоял крест-накрест с депозитом, и
+                   сообщение о выводе всплывало в чужом блоке -->
+              <p class="dp__error dp__error--fw" hidden></p>
               <div class="dp__chips">
                 <button class="dp__chip" type="button" data-amount="100">100</button>
                 <button class="dp__chip" type="button" data-amount="150">150</button>
@@ -12605,7 +12704,7 @@ body.br-open .bnav { z-index: 66; }
                   <button class="dp__max dp__fd-max" type="button">MAX</button>
                 </label>
               </div>
-              <p class="dp__error dp__error--fw" hidden></p>
+              <p class="dp__error dp__error--fd" hidden></p>
               <div class="dp__chips">
                 <button class="dp__chip" type="button" data-amount="100">100</button>
                 <button class="dp__chip" type="button" data-amount="500">500</button>
@@ -13335,7 +13434,94 @@ body.br-open .bnav { z-index: 66; }
       'Withdraw {sum} {cur}': 'Вывести {sum} {cur}',
       '{done} of {goal} {cur}': '{done} из {goal} {cur}',
       '{done} of {goal} {cur} · wagering x{mult}': '{done} из {goal} {cur} · вейджер x{mult}',
-      '{n} days ago': '{n} дн. назад'
+      '{n} days ago': '{n} дн. назад',
+      /* ── починка состояний: подтверждения, ошибки форм, касса ── */
+      'Confirm': 'Подтвердить',
+      'Enter a valid email address.': 'Введите корректный адрес почты.',
+      'Password is required.': 'Введите пароль.',
+      'We have no account with this email.': 'Аккаунта с такой почтой нет.',
+      'Account not found. Check the email and try again.': 'Аккаунт не найден. Проверьте почту и попробуйте снова.',
+      'Wrong password.': 'Неверный пароль.',
+      'Wrong password. Try again.': 'Неверный пароль. Попробуйте ещё раз.',
+      'This email is already registered.': 'Эта почта уже зарегистрирована.',
+      'This email is already registered. Log in instead.': 'Эта почта уже зарегистрирована — войдите.',
+      'Account created. Welcome to Warwin!': 'Аккаунт создан. Добро пожаловать в Warwin!',
+      'You are signed in.': 'Вы вошли.',
+      'Connecting': 'Подключаемся',
+      'Signed in with {name}.': 'Вход через {name} выполнен.',
+      'Minimum withdrawal is {sum}.': 'Минимальная сумма вывода — {sum}.',
+      'Not enough balance. Available: {sum}.': 'Недостаточно средств. Доступно: {sum}.',
+      'Enter the wallet address.': 'Введите адрес кошелька.',
+      'Sending': 'Отправляем',
+      'Withdrawal requested': 'Заявка на вывод принята',
+      '{sum} is on the way to {addr}. It usually takes up to 30 minutes.': '{sum} уходит на {addr}. Обычно это занимает до 30 минут.',
+      'Confirm the withdrawal': 'Подтвердите вывод',
+      '{sum} to {addr}, fee {fee}. Transfers cannot be undone.': '{sum} на {addr}, комиссия {fee}. Перевод отменить нельзя.',
+      'This address looks like {got}, but {want} is selected.': 'Адрес похож на {got}, а выбрана сеть {want}.',
+      'The address does not match the network': 'Адрес не совпадает с сетью',
+      'The address looks like {got}, and {want} is selected. Sending to the wrong network loses the funds for good.': 'Адрес похож на {got}, а выбрана {want}. Отправка не в ту сеть теряет деньги навсегда.',
+      'Send anyway': 'Всё равно отправить',
+      'Check the address': 'Проверить адрес',
+      'Minimum deposit is {sum}.': 'Минимальная сумма пополнения — {sum}.',
+      'Last name is required.': 'Введите фамилию.',
+      'First name is required.': 'Введите имя.',
+      'Confirm the deposit': 'Подтвердите пополнение',
+      'Top up the balance by {sum}?': 'Пополнить баланс на {sum}?',
+      'Deposit credited': 'Пополнение зачислено',
+      '{sum} is already on the balance — the games are open.': '{sum} уже на балансе — игры открыты.',
+      '{sum} to the card, fee {fee}. Transfers cannot be undone.': '{sum} на карту, комиссия {fee}. Перевод отменить нельзя.',
+      'The payout to the card usually takes one to three business days.': 'Выплата на карту обычно идёт от одного до трёх рабочих дней.',
+      'Copy failed': 'Не скопировалось',
+      'Could not copy the address — select and copy it by hand.': 'Не удалось скопировать адрес — выделите и скопируйте вручную.',
+      'Could not copy the link.': 'Не удалось скопировать ссылку.',
+      'Nothing found for “{q}”. Try a different spelling or clear the filters.': 'По запросу «{q}» ничего не нашлось. Попробуйте другое написание или снимите фильтры.',
+      'Nothing matches these filters. Try clearing them.': 'Под эти фильтры ничего не подходит. Попробуйте их снять.',
+      'Oops! There is no data yet!': 'Пока здесь пусто!',
+      'Log in to open this page.': 'Войдите, чтобы открыть эту страницу.',
+      'Delete all notifications?': 'Удалить все уведомления?',
+      '{n} notifications will be removed. They cannot be brought back.': 'Будет удалено уведомлений: {n}. Вернуть их будет нельзя.',
+      'Delete all': 'Удалить все',
+      'Notifications cleared.': 'Уведомления удалены.',
+      'Log out?': 'Выйти из аккаунта?',
+      'Amounts you typed and documents you uploaded will not be kept.': 'Введённые суммы и загруженные документы не сохранятся.',
+      'Stay': 'Остаться',
+      'You are logged out.': 'Вы вышли из аккаунта.',
+      'The current password is wrong.': 'Текущий пароль неверен.',
+      'Saving': 'Сохраняем',
+      'Only PNG, JPG or PDF are accepted.': 'Принимаются только PNG, JPG или PDF.',
+      'The file is {size} — the limit is 5 MB.': 'Файл весит {size} — предел 5 МБ.',
+      'Document sent for review.': 'Документ отправлен на проверку.',
+      'Fill in the country.': 'Укажите страну.',
+      'Fill in the city — without it a card withdrawal will not go through': 'Заполните город — без него вывод на карту не пройдёт',
+      'Fill in the street and house.': 'Укажите улицу и дом.',
+      'Postal code must be 8 digits': 'Индекс должен состоять из 8 цифр',
+      'Address saved.': 'Адрес сохранён.',
+      'Choose how long the pause should last.': 'Выберите, на какой срок ставим паузу.',
+      'Enter the number of days.': 'Введите число дней.',
+      'Enter the number of days as a number.': 'Число дней введите числом.',
+      'Cooling-off is set for {what}': 'Пауза установлена на {what}',
+      'Self-exclusion is set for {what} days': 'Самоисключение установлено на {what} дн.',
+      'Take a break?': 'Поставить паузу?',
+      'Block the account?': 'Заблокировать аккаунт?',
+      'Deposits and play will be paused for {what}. The pause cannot be lifted early.': 'Пополнение и игра будут остановлены на {what}. Снять паузу досрочно нельзя.',
+      'The account will be blocked for {what} days. It cannot be unblocked before the term ends.': 'Аккаунт будет заблокирован на {what} дн. Разблокировать до конца срока нельзя.',
+      'Pause': 'Поставить паузу',
+      'Block': 'Заблокировать',
+      'Enter the amount as a number.': 'Сумму введите числом.',
+      'Enter the limit amount.': 'Введите сумму лимита.',
+      'Limit saved.': 'Лимит сохранён.',
+      'Remove the limit?': 'Снять лимит?',
+      '{name} will stop applying right away.': '{name} перестанет действовать сразу.',
+      'The limit': 'Лимит',
+      'Remove': 'Снять',
+      'Keep': 'Оставить',
+      'Limit removed.': 'Лимит снят.',
+      'Remove from favourites': 'Убрать из избранного',
+      'Removed from favourites.': 'Убрано из избранного.',
+      'Added to favourites.': 'Добавлено в избранное.',
+      'Fullscreen is not available here.': 'Полноэкранный режим здесь недоступен.',
+      'Live chat opens in the mobile app — on the web write to support@warwin.com.': 'Живой чат работает в мобильном приложении — в вебе пишите на support@warwin.com.',
+      'Sign up with your email and set <br>a secure password.': 'Зарегистрируйтесь по почте и задайте <br>надёжный пароль.'
     },
 
     es: {
@@ -13826,7 +14012,94 @@ body.br-open .bnav { z-index: 66; }
       'Withdraw {sum} {cur}': 'Retirar {sum} {cur}',
       '{done} of {goal} {cur}': '{done} de {goal} {cur}',
       '{done} of {goal} {cur} · wagering x{mult}': '{done} de {goal} {cur} · wagering x{mult}',
-      '{n} days ago': 'hace {n} días'
+      '{n} days ago': 'hace {n} días',
+      /* ── починка состояний: подтверждения, ошибки форм, касса ── */
+      'Confirm': 'Confirmar',
+      'Enter a valid email address.': 'Ingresá un correo válido.',
+      'Password is required.': 'Ingresá la contraseña.',
+      'We have no account with this email.': 'No hay ninguna cuenta con este correo.',
+      'Account not found. Check the email and try again.': 'Cuenta no encontrada. Revisá el correo y probá de nuevo.',
+      'Wrong password.': 'Contraseña incorrecta.',
+      'Wrong password. Try again.': 'Contraseña incorrecta. Probá de nuevo.',
+      'This email is already registered.': 'Este correo ya está registrado.',
+      'This email is already registered. Log in instead.': 'Este correo ya está registrado: iniciá sesión.',
+      'Account created. Welcome to Warwin!': 'Cuenta creada. ¡Bienvenido a Warwin!',
+      'You are signed in.': 'Iniciaste sesión.',
+      'Connecting': 'Conectando',
+      'Signed in with {name}.': 'Iniciaste sesión con {name}.',
+      'Minimum withdrawal is {sum}.': 'El retiro mínimo es {sum}.',
+      'Not enough balance. Available: {sum}.': 'Saldo insuficiente. Disponible: {sum}.',
+      'Enter the wallet address.': 'Ingresá la dirección de la billetera.',
+      'Sending': 'Enviando',
+      'Withdrawal requested': 'Retiro solicitado',
+      '{sum} is on the way to {addr}. It usually takes up to 30 minutes.': '{sum} va en camino a {addr}. Suele demorar hasta 30 minutos.',
+      'Confirm the withdrawal': 'Confirmá el retiro',
+      '{sum} to {addr}, fee {fee}. Transfers cannot be undone.': '{sum} a {addr}, comisión {fee}. Las transferencias no se pueden deshacer.',
+      'This address looks like {got}, but {want} is selected.': 'La dirección parece de {got}, pero está seleccionada {want}.',
+      'The address does not match the network': 'La dirección no coincide con la red',
+      'The address looks like {got}, and {want} is selected. Sending to the wrong network loses the funds for good.': 'La dirección parece de {got} y está seleccionada {want}. Enviar a la red equivocada pierde el dinero para siempre.',
+      'Send anyway': 'Enviar igual',
+      'Check the address': 'Revisar la dirección',
+      'Minimum deposit is {sum}.': 'El depósito mínimo es {sum}.',
+      'Last name is required.': 'Ingresá el apellido.',
+      'First name is required.': 'Ingresá el nombre.',
+      'Confirm the deposit': 'Confirmá el depósito',
+      'Top up the balance by {sum}?': '¿Cargar {sum} al saldo?',
+      'Deposit credited': 'Depósito acreditado',
+      '{sum} is already on the balance — the games are open.': '{sum} ya está en el saldo: los juegos están abiertos.',
+      '{sum} to the card, fee {fee}. Transfers cannot be undone.': '{sum} a la tarjeta, comisión {fee}. Las transferencias no se pueden deshacer.',
+      'The payout to the card usually takes one to three business days.': 'El pago a la tarjeta suele demorar de uno a tres días hábiles.',
+      'Copy failed': 'No se copió',
+      'Could not copy the address — select and copy it by hand.': 'No se pudo copiar la dirección: seleccionala y copiala a mano.',
+      'Could not copy the link.': 'No se pudo copiar el enlace.',
+      'Nothing found for “{q}”. Try a different spelling or clear the filters.': 'No se encontró nada para «{q}». Probá otra escritura o quitá los filtros.',
+      'Nothing matches these filters. Try clearing them.': 'Nada coincide con estos filtros. Probá quitarlos.',
+      'Oops! There is no data yet!': '¡Todavía no hay nada acá!',
+      'Log in to open this page.': 'Iniciá sesión para abrir esta página.',
+      'Delete all notifications?': '¿Borrar todas las notificaciones?',
+      '{n} notifications will be removed. They cannot be brought back.': 'Se borrarán {n} notificaciones. No se van a poder recuperar.',
+      'Delete all': 'Borrar todas',
+      'Notifications cleared.': 'Notificaciones borradas.',
+      'Log out?': '¿Cerrar sesión?',
+      'Amounts you typed and documents you uploaded will not be kept.': 'Los montos que escribiste y los documentos que subiste no se guardan.',
+      'Stay': 'Quedarme',
+      'You are logged out.': 'Cerraste sesión.',
+      'The current password is wrong.': 'La contraseña actual es incorrecta.',
+      'Saving': 'Guardando',
+      'Only PNG, JPG or PDF are accepted.': 'Solo se aceptan PNG, JPG o PDF.',
+      'The file is {size} — the limit is 5 MB.': 'El archivo pesa {size}: el límite es 5 MB.',
+      'Document sent for review.': 'Documento enviado a revisión.',
+      'Fill in the country.': 'Completá el país.',
+      'Fill in the city — without it a card withdrawal will not go through': 'Completá la ciudad: sin ella el retiro a tarjeta no sale',
+      'Fill in the street and house.': 'Completá la calle y el número.',
+      'Postal code must be 8 digits': 'El código postal debe tener 8 dígitos',
+      'Address saved.': 'Dirección guardada.',
+      'Choose how long the pause should last.': 'Elegí cuánto dura la pausa.',
+      'Enter the number of days.': 'Ingresá la cantidad de días.',
+      'Enter the number of days as a number.': 'Ingresá la cantidad de días en números.',
+      'Cooling-off is set for {what}': 'Pausa activada por {what}',
+      'Self-exclusion is set for {what} days': 'Autoexclusión activada por {what} días',
+      'Take a break?': '¿Tomar una pausa?',
+      'Block the account?': '¿Bloquear la cuenta?',
+      'Deposits and play will be paused for {what}. The pause cannot be lifted early.': 'Los depósitos y el juego se pausan por {what}. La pausa no se puede levantar antes.',
+      'The account will be blocked for {what} days. It cannot be unblocked before the term ends.': 'La cuenta se bloquea por {what} días. No se puede desbloquear antes de que termine el plazo.',
+      'Pause': 'Pausar',
+      'Block': 'Bloquear',
+      'Enter the amount as a number.': 'Ingresá el monto en números.',
+      'Enter the limit amount.': 'Ingresá el monto del límite.',
+      'Limit saved.': 'Límite guardado.',
+      'Remove the limit?': '¿Quitar el límite?',
+      '{name} will stop applying right away.': '{name} deja de aplicarse en el acto.',
+      'The limit': 'El límite',
+      'Remove': 'Quitar',
+      'Keep': 'Dejarlo',
+      'Limit removed.': 'Límite quitado.',
+      'Remove from favourites': 'Quitar de favoritos',
+      'Removed from favourites.': 'Quitado de favoritos.',
+      'Added to favourites.': 'Agregado a favoritos.',
+      'Fullscreen is not available here.': 'La pantalla completa no está disponible acá.',
+      'Live chat opens in the mobile app — on the web write to support@warwin.com.': 'El chat en vivo funciona en la app móvil; en la web escribí a support@warwin.com.',
+      'Sign up with your email and set <br>a secure password.': 'Registrate con tu correo y creá <br>una contraseña segura.'
     }
   };
 
@@ -13847,6 +14120,10 @@ body.br-open .bnav { z-index: 66; }
     /* Список языков всегда подписан на самих языках: испанец не найдёт
        «Español», если оно превратится в «Испанский». */
     if (el.classList && el.classList.contains('lang__list')) return true;
+    /* Окно подтверждения и полоса сообщений собираются скриптом и получают
+       текст уже переведённым через T(). Обход по ним запомнил бы перевод как
+       английский исходник, и следующая смена языка его бы не тронула. */
+    if (el.classList && (el.classList.contains('cf') || el.classList.contains('note'))) return true;
     return !!(el.classList && el.classList.contains('states'));
   }
 
@@ -13960,6 +14237,244 @@ body.br-open .bnav { z-index: 66; }
      интерфейс просто остаётся английским. */
   var T = function (s, v) {
     return window.WW_I18N ? window.WW_I18N.T(s, v) : s;
+  };
+
+  /* ═══ Общая часть ═══════════════════════════════════════════════════
+     Пять кусков, на которых держится всё остальное: хранилище, которое не
+     роняет страницу, ожидание с отменой, полоса сообщений, окно
+     подтверждения и уже нарисованные состояния кассы, истории и профиля.
+
+     Состояния до этого жили внутри витрины ?states и из настоящих
+     обработчиков были недоступны. Отсюда и брался главный разрыв: экраны
+     «Сумма ниже минимума», «Адрес из другой сети», «Нужна верификация»
+     нарисованы, но пользователь их не видел никогда. Здесь они объявлены в
+     общем месте — витрина и обработчики зовут одни и те же функции.
+     ═══════════════════════════════════════════════════════════════════ */
+
+  /* Хранилище. В приватном Safari и при запрете хранилища запись бросает
+     исключение. Раньше на этом обрывалась заслонка загрузки: #wp никогда не
+     получал wp-off, и сайт не открывался вообще. */
+  var safeStore = {
+    get: function (key, session) {
+      try { return (session ? sessionStorage : localStorage).getItem(key); }
+      catch (e) { return null; }
+    },
+    set: function (key, value, session) {
+      try { (session ? sessionStorage : localStorage).setItem(key, value); return true; }
+      catch (e) { return false; }
+    }
+  };
+
+  /* Блокировка прокрутки со счётчиком. Окна открываются друг поверх друга —
+     касса поверх профиля, подтверждение поверх кассы, — и прежнее
+     `body.style.overflow = ''` при закрытии верхнего возвращало прокрутку
+     странице под ещё открытым нижним. */
+  var lockScroll = (function () {
+    var depth = 0;
+    return function (on) {
+      depth = Math.max(0, depth + (on ? 1 : -1));
+      document.body.style.overflow = depth ? 'hidden' : '';
+    };
+  })();
+
+  /* Не отдавшаяся картинка. Тегов <img> в разметке шесть сотен, вешать
+     onerror на каждый незачем: событие error не всплывает, но перехватывается
+     на стадии погружения. Значок битой картинки заменяем ровным местом. */
+  addEventListener('error', function (e) {
+    var el = e.target;
+    if (!el || el.tagName !== 'IMG' || el.dataset.imgFail === '1') return;
+    el.dataset.imgFail = '1';
+    el.classList.add('is-missing');
+  }, true);
+
+  /* Полоса сообщений поверх страницы — для случаев, где сообщение не к чему
+     привязать: отказ буфера обмена, «пока недоступно», подтверждение
+     сохранения. Подписи под полями она не заменяет: у кассы и профиля своя
+     разметка, и сводить их в одну было бы хуже для обеих. */
+  var notify = (function () {
+    var box = null, hide = 0;
+    return function (text, tone) {
+      if (!box) {
+        box = document.createElement('div');
+        box.className = 'note';
+        box.setAttribute('role', 'status');
+        document.body.appendChild(box);
+      }
+      box.textContent = text;
+      box.className = 'note note--' + (tone || 'info') + ' is-on';
+      clearTimeout(hide);
+      hide = setTimeout(function () { box.classList.remove('is-on'); }, 3600);
+    };
+  })();
+
+  /* Действие «в работе»: блокировка, подмена подписи, гарантированное
+     восстановление и отмена. Раньше так был написан только вход — вручную и
+     без отмены: закрыв окно во время «Signing in», пользователь через 1.4 с
+     всё равно оказывался авторизован. Возвращает отменялку. */
+  var withPending = function (btn, o) {
+    o = o || {};
+    if (!btn || btn.dataset.pending === '1') return function () {};
+    var label = o.label || btn;
+    var wasText = label.textContent;
+    var wasOff = btn.disabled;
+    btn.dataset.pending = '1';
+    btn.disabled = true;
+    btn.classList.add('is-busy');
+    if (o.busy) label.textContent = o.busy;
+    var restore = function () {
+      label.textContent = wasText;
+      btn.disabled = wasOff;
+      btn.classList.remove('is-busy');
+      delete btn.dataset.pending;
+    };
+    var t = setTimeout(function () {
+      restore();
+      if (o.done) o.done();
+    }, o.ms === undefined ? 900 : o.ms);
+    return function () { clearTimeout(t); restore(); };
+  };
+
+  /* Окно подтверждения — одно на весь сайт, собирается при первом вызове.
+     Фокус уходит на безопасный ответ: подтверждение не должно срабатывать
+     случайным Enter. Esc и тап мимо равны отказу. */
+  var wwConfirm = (function () {
+    var box = null, onDone = null, opener = null;
+    var close = function (yes) {
+      if (!box || box.hidden) return;
+      box.hidden = true;
+      document.documentElement.classList.remove('cf-open');
+      var fn = onDone, back = opener;
+      onDone = null; opener = null;
+      if (back && back.focus) back.focus();
+      if (fn) fn(!!yes);
+    };
+    var build = function () {
+      box = document.createElement('div');
+      box.className = 'cf';
+      box.hidden = true;
+      box.innerHTML =
+        '<div class="cf__scrim" data-cf="no"></div>' +
+        '<div class="cf__card" role="alertdialog" aria-modal="true"' +
+        ' aria-labelledby="cf-title" aria-describedby="cf-text">' +
+          '<h2 class="cf__title" id="cf-title"></h2>' +
+          '<p class="cf__text" id="cf-text"></p>' +
+          '<div class="cf__row">' +
+            '<button class="cf__btn cf__btn--ghost" type="button" data-cf="no"></button>' +
+            '<button class="cf__btn cf__btn--go" type="button" data-cf="yes"></button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(box);
+      box.addEventListener('click', function (e) {
+        /* Меню профиля и уведомления закрываются по клику мимо себя, слушая
+           document. Подтверждение поверх них — это «мимо», и ответ на вопрос
+           закрывал список под окном. Дальше клик не пускаем. */
+        e.stopPropagation();
+        var b = e.target.closest('[data-cf]');
+        if (b) close(b.dataset.cf === 'yes');
+      });
+      /* Фокус не выпускаем из окна: два ответа, Tab ходит между ними */
+      box.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+        var btns = [].slice.call(box.querySelectorAll('[data-cf]:not(.cf__scrim)'));
+        var i = btns.indexOf(document.activeElement);
+        e.preventDefault();
+        btns[(i + (e.shiftKey ? -1 : 1) + btns.length) % btns.length].focus();
+      });
+      addEventListener('keydown', function (e) {
+        if (!box.hidden && e.key === 'Escape') { e.preventDefault(); close(false); }
+      });
+    };
+    return function (o, done) {
+      if (!box) build();
+      opener = document.activeElement;
+      onDone = done;
+      box.querySelector('.cf__title').textContent = o.title || '';
+      box.querySelector('.cf__text').textContent = o.text || '';
+      var no = box.querySelector('[data-cf="no"].cf__btn');
+      var yes = box.querySelector('[data-cf="yes"]');
+      no.textContent = o.cancel || T('Cancel');
+      yes.textContent = o.ok || T('Confirm');
+      yes.classList.toggle('cf__btn--danger', !!o.danger);
+      box.hidden = false;
+      document.documentElement.classList.add('cf-open');
+      no.focus();
+    };
+  })();
+
+  /* ── Готовые состояния: касса, история, профиль ──
+     Разметка и стили под них написаны давно — .dp__error, .dp__state,
+     .hist__skel, .prof__err. Не хватало только вызова из настоящего потока. */
+  var dpBox = function () { return document.getElementById('deposit-modal'); };
+
+  /* Подсказка под полем суммы */
+  var stError = function (kind, text, warn) {
+    var dp = dpBox(); if (!dp) return;
+    var e = dp.querySelector('.dp__error--' + kind);
+    if (!e) return;
+    e.textContent = text;
+    e.hidden = false;
+    e.classList.toggle('dp__error--warn', !!warn);
+  };
+
+  /* Экран вместо формы. go — что делает кнопка действия на этом экране;
+     без него кнопка прячется, как было. */
+  var stScreen = function (tone, ico, title, text, cta, go) {
+    var dp = dpBox(); if (!dp) return;
+    var st = dp.querySelector('.dp__state');
+    if (!st) return;
+    st.className = 'dp__state dp__state--' + tone;
+    st.querySelector('.dp__state-ico').textContent = ico;
+    st.querySelector('.dp__state-title').textContent = title;
+    st.querySelector('.dp__state-text').textContent = text;
+    var c = st.querySelector('.dp__state-cta');
+    c.hidden = !cta;
+    if (cta) c.textContent = cta;
+    c.dataset.stGo = go || '';
+    dp.classList.add('is-state');
+  };
+
+  var stClear = function () {
+    var dp = dpBox(); if (!dp) return;
+    dp.classList.remove('is-state');
+    dp.querySelectorAll('.dp__error').forEach(function (e) { e.hidden = true; e.textContent = ''; });
+    dp.querySelectorAll('.dp__input').forEach(function (e) { e.classList.remove('is-bad'); });
+    dp.querySelectorAll('.dp__submit').forEach(function (b) { b.classList.remove('is-busy'); });
+    var st = dp.querySelector('.dp__state');
+    if (st) st.className = 'dp__state';
+  };
+
+  /* Состояния истории: карточка та же, меняется её содержимое. Ищем открытую
+     карточку — на неё и смотрит пользователь. */
+  var histShow = function (what, title, text, cta) {
+    var v = document.getElementById('view-history');
+    if (!v || v.hidden) return;
+    var c = v.querySelector('.hist__card:not([hidden])');
+    if (!c) return;
+    var skel = c.querySelector('.hist__skel');
+    var table = c.querySelector('.hist__table');
+    var pager = c.querySelector('.hist__pager');
+    var empty = c.querySelector('.hist__empty');
+    /* У бонусов нет постраничной навигации: строк три, делить нечего */
+    if (skel) skel.hidden = what !== 'load';
+    if (table) table.hidden = what !== 'rows';
+    if (pager) pager.hidden = what !== 'rows';
+    if (empty) empty.hidden = what !== 'text';
+    if (what === 'text' && empty) {
+      empty.querySelector('b').textContent = title;
+      empty.querySelector('span').textContent = text;
+      empty.querySelector('button').hidden = !cta;
+    }
+  };
+
+  var profErr = function (box, text) {
+    if (!box) return;
+    box.classList.add('is-bad');
+    var cell = box.closest('.prof__cell');
+    if (!cell) return;
+    var e = cell.querySelector('.prof__err');
+    if (!e) { e = document.createElement('span'); e.className = 'prof__err';
+              cell.appendChild(e); }
+    e.textContent = text; e.hidden = false;
   };
 
   /* Масштаб холста под ширину экрана.
@@ -14080,13 +14595,14 @@ body.br-open .bnav { z-index: 66; }
       var openSearch = function () {
         lastFocus = document.activeElement;
         srch.hidden = false;
-        document.body.style.overflow = 'hidden';
+        lockScroll(true);
         var f = srch.querySelector('input');
         if (f) f.focus();
       };
       var closeSearch = function () {
+        if (srch.hidden) return;
         srch.hidden = true;
-        document.body.style.overflow = '';
+        lockScroll(false);
         srch.dispatchEvent(new Event('search-reset'));
         if (lastFocus) lastFocus.focus();
       };
@@ -14102,7 +14618,17 @@ body.br-open .bnav { z-index: 66; }
       if (lg && loginBtn) {
         /* Кнопка, с которой открыли: на неё возвращаем фокус при закрытии. */
         var opener = loginBtn;
-        var closeLogin = function () { lg.hidden = true; document.body.style.overflow = ''; if (opener) opener.focus(); };
+        /* Ожидание входа отменяется вместе с окном. Раньше таймер доживал до
+           конца: закрыв окно по Esc во время «Signing in», пользователь через
+           1.4 с всё равно оказывался авторизован, а открытая к тому моменту
+           регистрация закрывалась сама собой. */
+        var lgCancel = null;
+        var closeLogin = function () {
+          if (lgCancel) { lgCancel(); lgCancel = null; }
+          var m = lg.querySelector('.lg__modal');
+          if (m) m.classList.remove('is-busy');
+          lg.hidden = true; lockScroll(false); if (opener) opener.focus();
+        };
         /* Тексты обоих состояний. Подсказки под полями в макете входа
            пустые, поэтому там пустые строки — слот скрыт правилом :empty. */
         var LG_TEXT = {
@@ -14112,7 +14638,8 @@ body.br-open .bnav { z-index: 66; }
                    submit: 'Login',
                    hints: ['', ''] },
           reg:   { title: 'Create your Warwin account',
-                   sub: 'Sign up with your email, choose a username, and set <br>a secure password.',
+                   /* Поля имени пользователя в форме нет — не обещаем его */
+                   sub: 'Sign up with your email and set <br>a secure password.',
                    tail: 'New to Warwin? ', link: 'Login',
                    submit: 'Create account',
                    hints: ['Email is required.', 'Minimum 8 characters, include a number and a symbol.'] }
@@ -14134,7 +14661,8 @@ body.br-open .bnav { z-index: 66; }
              подсветку полей и текст ошибки, иначе они переезжают следом. */
           reset();
           opener = btn;
-          lg.hidden = false; document.body.style.overflow = 'hidden';
+          var wasOpen = !lg.hidden;
+          lg.hidden = false; if (!wasOpen) lockScroll(true);
           var f = lg.querySelector('input'); if (f) f.focus();
         };
         /* Нижняя ссылка ведёт в соседнее состояние: из входа в регистрацию,
@@ -14176,32 +14704,71 @@ body.br-open .bnav { z-index: 66; }
           if (submit.disabled) return;
           reset();
           var m = mail.value.trim(), p = pass.value;
-          if (!m) { setBad(fields[0], true, 'Email is required.'); mail.focus(); return; }
+          if (!m) { setBad(fields[0], true, T('Email is required.')); mail.focus(); return; }
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) {
-            setBad(fields[0], true, 'Enter a valid email address.'); mail.focus(); return; }
-          if (!p) { setBad(fields[1], true, 'Password is required.'); pass.focus(); return; }
+            setBad(fields[0], true, T('Enter a valid email address.')); mail.focus(); return; }
+          if (!p) { setBad(fields[1], true, T('Password is required.')); pass.focus(); return; }
           if (p.length < 8) {
-            setBad(fields[1], true, 'Minimum 8 characters, include a number and a symbol.'); pass.focus(); return; }
-          if (m.toLowerCase() !== OK_MAIL) {
-            setBad(fields[0], true, 'We have no account with this email.');
-            say('Account not found. Check the email and try again.'); mail.focus(); return; }
-          if (p !== OK_PASS) {
-            setBad(fields[1], true, 'Wrong password.');
-            say('Wrong password. Try again.'); pass.focus(); return; }
+            setBad(fields[1], true, T('Minimum 8 characters, include a number and a symbol.')); pass.focus(); return; }
+          /* Вход и регистрация шли через одну проверку, и создать аккаунт было
+             нельзя вообще: любая почта, кроме зашитой, получала «нет такого
+             аккаунта» — текст, прямо противоречащий действию. Теперь у входа
+             своя проверка, у регистрации своя. */
+          if (lgMode === 'login') {
+            if (m.toLowerCase() !== OK_MAIL) {
+              setBad(fields[0], true, T('We have no account with this email.'));
+              say(T('Account not found. Check the email and try again.')); mail.focus(); return; }
+            if (p !== OK_PASS) {
+              setBad(fields[1], true, T('Wrong password.'));
+              say(T('Wrong password. Try again.')); pass.focus(); return; }
+          } else {
+            /* Единственный занятый адрес в прототипе — демонстрационный */
+            if (m.toLowerCase() === OK_MAIL) {
+              setBad(fields[0], true, T('This email is already registered.'));
+              say(T('This email is already registered. Log in instead.')); mail.focus(); return; }
+          }
 
-          submit.disabled = true;
-          lg.querySelector('.lg__modal').classList.add('is-busy');
-          submit.querySelector('.lg__submit-label').textContent = T('Signing in');
-          setTimeout(function () {
-            lg.querySelector('.lg__modal').classList.remove('is-busy');
-            submitLabel.textContent = LG_TEXT[lgMode].submit;
-            submit.disabled = false;
-            document.body.classList.add('is-authed');
-            closeLogin();
-          }, 1400);
+          var busy = lg.querySelector('.lg__modal');
+          busy.classList.add('is-busy');
+          lgCancel = withPending(submit, {
+            ms: 1400,
+            label: submitLabel,
+            busy: T(lgMode === 'reg' ? 'Creating account' : 'Signing in'),
+            done: function () {
+              lgCancel = null;
+              busy.classList.remove('is-busy');
+              document.body.classList.add('is-authed');
+              closeLogin();
+              notify(T(lgMode === 'reg' ? 'Account created. Welcome to Warwin!' : 'You are signed in.'), 'ok');
+            }
+          });
         });
         [mail, pass].forEach(function (i) {
           i.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit.click(); });
+        });
+
+        /* Вход через провайдера был нарисован и не работал. Настоящего OAuth
+           в прототипе нет, поэтому имитируем тем же ожиданием, что и обычный
+           вход, — и так же отменяем его при закрытии окна. */
+        lg.querySelectorAll('.lg__soc').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var name = (b.querySelector('span') || {}).textContent || '';
+            reset();
+            var busySoc = lg.querySelector('.lg__modal');
+            busySoc.classList.add('is-busy');
+            lgCancel = withPending(b, {
+              ms: 1200,
+              busy: T('Connecting'),
+              label: b.querySelector('span'),
+              done: function () {
+                lgCancel = null;
+                busySoc.classList.remove('is-busy');
+                document.body.classList.add('is-authed');
+                closeLogin();
+                notify(T('Signed in with {name}.', { name: name }), 'ok');
+              }
+            });
+          });
         });
 
         var eye = lg.querySelector('.lg__eye');
@@ -14263,14 +14830,17 @@ body.br-open .bnav { z-index: 66; }
           dpModal.addEventListener('transitionend', done);
           setTimeout(done, 420);          /* если transitionend не пришёл */
         };
-        var closeDep = function () { dp.hidden = true; document.body.classList.remove('dp-open');
+        var closeDep = function () { if (dp.hidden) return;
+                                    dp.hidden = true; document.body.classList.remove('dp-open');
                                     dpWrap.style.marginTop = '';
-                                    document.body.style.overflow = '';
+                                    lockScroll(false);
                                     document.documentElement.style.overflow = '';
                                     depBtn.focus(); };
         depBtn.addEventListener('click', function (e) {
-          e.preventDefault(); dp.hidden = false; document.body.classList.add('dp-open');
-          document.body.style.overflow = 'hidden';
+          e.preventDefault();
+          var wasDep = !dp.hidden;
+          dp.hidden = false; document.body.classList.add('dp-open');
+          if (!wasDep) lockScroll(true);
           /* Прокручивается html, а не body: без этого страница за листом
              продолжала ехать под пальцем */
           document.documentElement.style.overflow = 'hidden';
@@ -14339,7 +14909,43 @@ body.br-open .bnav { z-index: 66; }
         /* Вывод: окно открывается пустым, кнопка неактивна. Оживает, когда
            заполнены фамилия, имя и сумма не меньше минимума из макета (20).
            Комиссия 1.67% — из чисел самого макета: 1.67 USDT при 100. */
+        /* Экран состояния: «Back to wallet» возвращает форму, а кнопка действия
+           ведёт туда, куда указывает сам экран. Раньше она была мёртвой, и с
+           экранов «Verify your identity first» и «Weekly deposit limit reached»
+           уйти по подсказке было нельзя — работала только «Back to wallet». */
+        var stBack = dp.querySelector('.dp__state-back');
+        if (stBack) stBack.addEventListener('click', stClear);
+        var stCta = dp.querySelector('.dp__state-cta');
+        if (stCta) stCta.addEventListener('click', function () {
+          var go = stCta.dataset.stGo || '';
+          stClear();
+          if (go === 'verify') { closeDep(); showView('profile');
+            var tv = document.querySelector('.prof__tab[data-tab="verification"]');
+            if (tv) tv.click(); return; }
+          if (go === 'limits') { closeDep(); showView('profile');
+            var tr = document.querySelector('.prof__tab[data-tab="responsible"]');
+            if (tr) tr.click(); return; }
+          if (go === 'deposit') {
+            var sg = dp.querySelector('[data-seg="deposit"]');
+            if (sg) sg.click(); return; }
+          if (go === 'support') { closeDep(); showView('helpSup'); return; }
+        });
+
         var wdMin = 20, wdFeeRate = 0.0167;
+        /* Баланс в шапке — единственный источник правды о деньгах: от него
+           считаются MAX и доли, им же ограничен вывод. Пополнение его
+           увеличивает, вывод уменьшает, иначе проверка достаточности не на
+           чем стоять и «Not enough balance» остаётся нарисованным вхолостую. */
+        var balEl = document.querySelector('.wallet__balance span');
+        var getBalance = function () {
+          var n = balEl ? parseFloat((balEl.textContent.match(/[\d.]+/) || ['0'])[0]) : 0;
+          return isFinite(n) && n > 0 ? n : 0;
+        };
+        var setBalance = function (v) {
+          if (!balEl) return;
+          balEl.textContent = (Math.max(0, v)).toFixed(2);
+        };
+        var money = function (v, cur) { return v.toFixed(2) + ' ' + (cur || 'USDT'); };
         var amountInput = dp.querySelector('.dp__amount-input');
         if (amountInput) {
           var addrInput = dp.querySelector('.dp__addr-input');
@@ -14355,24 +14961,41 @@ body.br-open .bnav { z-index: 66; }
           /* В макете весь этот блок считается в USDT независимо от выбранной
              валюты — минимум, итог, комиссия и подпись кнопки. */
           var WD_CUR = 'USDT';
-          /* Баланс берём из шапки: и MAX, и доли считаются от него */
-          var wdBalance = function () {
-            var bal = document.querySelector('.wallet__balance span');
-            var n = bal ? parseFloat((bal.textContent.match(/[\d.]+/) || ['0'])[0]) : 0;
-            return isFinite(n) && n > 0 ? n : 0;
-          };
+          var wdBalance = getBalance;
           var wdPart = function (c) {
             return Math.round(wdBalance() * parseFloat(c.dataset.part) / 100 * 100) / 100;
+          };
+          /* Сеть выбирается списком выше; по началу адреса видно, из какой
+             он сети на самом деле. Предупреждение об этом уже нарисовано. */
+          var addrNet = function (a) {
+            a = (a || '').trim();
+            if (/^0x[0-9a-f]{6,}$/i.test(a)) return 'ERC20';
+            if (/^T[1-9A-HJ-NP-Za-km-z]{20,}$/.test(a)) return 'TRC20';
+            if (/^(bc1|[13])[0-9a-z]{20,}$/i.test(a)) return 'Bitcoin';
+            return '';
+          };
+          var wdNetName = function () {
+            var n = dp.querySelector('.dp__field:last-child .dp__select-value');
+            return n ? n.textContent.trim() : '';
           };
           var wdSync = function () {
             var v = parseFloat(amountInput.value.replace(',', '.'));
             if (!isFinite(v) || v < 0) v = 0;
-            sumAmount.textContent = v.toFixed(2) + ' ' + WD_CUR;
-            sumFee.textContent = (v * wdFeeRate).toFixed(2) + ' ' + WD_CUR;
+            var bal = wdBalance();
+            sumAmount.textContent = money(v, WD_CUR);
+            sumFee.textContent = money(v * wdFeeRate, WD_CUR);
             wdSubmit.textContent = T('Withdraw {sum} {cur}', { sum: (v ? v : 0), cur: WD_CUR });
-            /* Кнопка ждёт только сумму: адрес в прототипе можно не вводить,
-               а до минимума 20 она остаётся выключенной. */
-            wdSubmit.disabled = !(v >= wdMin);
+            /* Проверка суммы идёт живьём под полем, а не молча в кнопке:
+               раньше при балансе 0.00 можно было ввести 900 и кнопка
+               становилась активной, а состояние «Not enough balance» было
+               нарисовано и никогда не показывалось. */
+            var err = dp.querySelector('.dp__error--crypto');
+            var bad = '';
+            if (v > 0 && v < wdMin) bad = T('Minimum withdrawal is {sum}.', { sum: money(wdMin, WD_CUR) });
+            else if (v > bal) bad = T('Not enough balance. Available: {sum}.', { sum: money(bal, WD_CUR) });
+            if (bad) stError('crypto', bad);
+            else if (err) { err.hidden = true; err.textContent = ''; }
+            wdSubmit.disabled = !(v >= wdMin && v <= bal);
             /* 1180:38835 — выбранная доля подсвечивается; при нулевом балансе
                все доли дают 0, и подсвечивать нечего */
             chips.forEach(function (c) {
@@ -14380,7 +15003,10 @@ body.br-open .bnav { z-index: 66; }
             });
           };
           amountInput.addEventListener('input', wdSync);
-          addrInput.addEventListener('input', wdSync);
+          /* Проверка на null, как у соседнего amountInput: без неё пропажа
+             поля из разметки обрывала скрипт, и всё, что регистрируется
+             ниже — страница игры, списки, витрина, — переставало работать. */
+          if (addrInput) addrInput.addEventListener('input', wdSync);
           chips.forEach(function (c) {
             c.addEventListener('click', function () { amountInput.value = wdPart(c); wdSync(); });
           });
@@ -14390,6 +15016,62 @@ body.br-open .bnav { z-index: 66; }
             wdSync();
           });
           wdSync();
+
+
+        /* Отправка вывода. Раньше кнопка «Withdraw 100 USDT» была активна и
+             на нажатие не отвечала ничем — молчаливый провал главной денежной
+             операции. Теперь: проверки адреса, подтверждение с суммой и
+             комиссией, ожидание и уже нарисованный экран заявки. */
+          wdSubmit.addEventListener('click', function () {
+            if (wdSubmit.disabled) return;
+            var v = parseFloat(amountInput.value.replace(',', '.')) || 0;
+            var addr = addrInput ? addrInput.value.trim() : '';
+            if (!addr) {
+              stError('crypto', T('Enter the wallet address.'));
+              if (addrInput) addrInput.focus();
+              return;
+            }
+            var want = wdNetName(), got = addrNet(addr);
+            var send = function () {
+              withPending(wdSubmit, {
+                ms: 900,
+                busy: T('Sending'),
+                done: function () {
+                  setBalance(getBalance() - v - v * wdFeeRate);
+                  wdSync();
+                  stScreen('wait', '\u23F3', T('Withdrawal requested'),
+                    T('{sum} is on the way to {addr}. It usually takes up to 30 minutes.',
+                      { sum: money(v, WD_CUR), addr: addr.slice(0, 10) + '…' }),
+                    T('Back to wallet'), 'back');
+                }
+              });
+            };
+            var ask = function () {
+              wwConfirm({
+                title: T('Confirm the withdrawal'),
+                text: T('{sum} to {addr}, fee {fee}. Transfers cannot be undone.',
+                  { sum: money(v, WD_CUR), addr: addr, fee: money(v * wdFeeRate, WD_CUR) }),
+                ok: T('Withdraw'),
+                cancel: T('Cancel')
+              }, function (yes) { if (yes) send(); });
+            };
+            if (got && want && got !== want) {
+              /* Несовпадение сети — самая дорогая ошибка вывода: деньги уходят
+                 навсегда. Предупреждение уже нарисовано, здесь оно и всплывает. */
+              stError('crypto', T('This address looks like {got}, but {want} is selected.',
+                { got: got, want: want }), true);
+              wwConfirm({
+                title: T('The address does not match the network'),
+                text: T('The address looks like {got}, and {want} is selected. Sending to the wrong network loses the funds for good.',
+                  { got: got, want: want }),
+                ok: T('Send anyway'),
+                cancel: T('Check the address'),
+                danger: true
+              }, function (yes) { if (yes) ask(); else if (addrInput) addrInput.focus(); });
+              return;
+            }
+            ask();
+          });
         }
 
         /* Фиатный депозит: сумма с быстрыми значениями, комиссия та же 1.67%,
@@ -14399,14 +15081,20 @@ body.br-open .bnav { z-index: 66; }
           var fdSum = dp.querySelector('.dp__fd-sum');
           var fdFee = dp.querySelector('.dp__fd-fee');
           var fdSubmit = dp.querySelector('.dp__fd-submit');
-          var fdChips = [].slice.call(dp.querySelectorAll('.dp__fd-amount .dp__chip'));
+          /* Обёртка .dp__fd-amount стоит и в блоке вывода: по общему селектору
+             сюда попадали его быстрые суммы, и нажатие на них молча
+             переписывало поле депозита. Берём только свой блок. */
+          var fdChips = [].slice.call(dp.querySelectorAll('.dp__fd .dp__chip'));
           var fdMax = dp.querySelector('.dp__fd-max');
           var FD_MIN = 20, FD_CAP = 100000;
           var fdSync = function () {
             var v = parseFloat(fdInput.value.replace(',', '.'));
             if (!isFinite(v) || v < 0) v = 0;
-            fdSum.textContent = v.toFixed(2) + ' USDT';
-            fdFee.textContent = (v * wdFeeRate).toFixed(2) + ' USDT';
+            fdSum.textContent = money(v);
+            fdFee.textContent = money(v * wdFeeRate);
+            var fdErr = dp.querySelector('.dp__error--fd');
+            if (v > 0 && v < FD_MIN) stError('fd', T('Minimum deposit is {sum}.', { sum: money(FD_MIN) }));
+            else if (fdErr) { fdErr.hidden = true; fdErr.textContent = ''; }
             fdSubmit.disabled = !(v >= FD_MIN);
             fdChips.forEach(function (c) {
               c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
@@ -14419,6 +15107,43 @@ body.br-open .bnav { z-index: 66; }
           /* MAX — верх допустимого диапазона из подписи над полем */
           if (fdMax) fdMax.addEventListener('click', function () { fdInput.value = FD_CAP; fdSync(); });
           fdSync();
+
+          /* Отправка пополнения. Кнопка была активна и не делала ничего. */
+          var fdLast = dp.querySelector('.dp__fd-last');
+          var fdFirst = dp.querySelector('.dp__fd-first');
+          fdSubmit.addEventListener('click', function () {
+            if (fdSubmit.disabled) return;
+            var v = parseFloat(fdInput.value.replace(',', '.')) || 0;
+            var bad = null;
+            if (fdLast && !fdLast.value.trim()) bad = [fdLast, T('Last name is required.')];
+            else if (fdFirst && !fdFirst.value.trim()) bad = [fdFirst, T('First name is required.')];
+            if (bad) {
+              bad[0].closest('.dp__input').classList.add('is-bad');
+              stError('fd', bad[1]);
+              bad[0].focus();
+              return;
+            }
+            wwConfirm({
+              title: T('Confirm the deposit'),
+              text: T('Top up the balance by {sum}?', { sum: money(v) }),
+              ok: T('Deposit'),
+              cancel: T('Cancel')
+            }, function (yes) {
+              if (!yes) return;
+              withPending(fdSubmit, {
+                ms: 900,
+                busy: T('Sending'),
+                done: function () {
+                  setBalance(getBalance() + v);
+                  fdInput.value = ''; fdSync();
+                  if (typeof wdSync === 'function') wdSync();
+                  stScreen('ok', '\u2713', T('Deposit credited'),
+                    T('{sum} is already on the balance — the games are open.', { sum: money(v) }),
+                    T('Back to wallet'), 'back');
+                }
+              });
+            });
+          });
         }
 
         /* Фиатный вывод: те же поля, что у депозита фиатом, но суммы
@@ -14433,9 +15158,16 @@ body.br-open .bnav { z-index: 66; }
           var fwSync = function () {
             var v = parseFloat(fwInput.value.replace(',', '.'));
             if (!isFinite(v) || v < 0) v = 0;
-            fwSum.textContent = v.toFixed(2) + ' USDT';
-            fwFee.textContent = (v * wdFeeRate).toFixed(2) + ' USDT';
-            fwSubmit.disabled = !(v >= wdMin);
+            var fwBal = getBalance();
+            fwSum.textContent = money(v);
+            fwFee.textContent = money(v * wdFeeRate);
+            var fwErr = dp.querySelector('.dp__error--fw');
+            var fwBad = '';
+            if (v > 0 && v < wdMin) fwBad = T('Minimum withdrawal is {sum}.', { sum: money(wdMin) });
+            else if (v > fwBal) fwBad = T('Not enough balance. Available: {sum}.', { sum: money(fwBal) });
+            if (fwBad) stError('fw', fwBad);
+            else if (fwErr) { fwErr.hidden = true; fwErr.textContent = ''; }
+            fwSubmit.disabled = !(v >= wdMin && v <= fwBal);
             fwChips.forEach(function (c) {
               c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
             });
@@ -14446,10 +15178,47 @@ body.br-open .bnav { z-index: 66; }
           });
           /* MAX берёт баланс из шапки — как на крипто-выводе */
           if (fwMax) fwMax.addEventListener('click', function () {
-            fwInput.value = wdBalance();
+            fwInput.value = getBalance();
             fwSync();
           });
           fwSync();
+
+          /* Отправка вывода фиатом — те же проверки, что у крипты, плюс имя */
+          var fwLast = dp.querySelector('.dp__fw-last');
+          var fwFirst = dp.querySelector('.dp__fw-first');
+          fwSubmit.addEventListener('click', function () {
+            if (fwSubmit.disabled) return;
+            var v = parseFloat(fwInput.value.replace(',', '.')) || 0;
+            var bad = null;
+            if (fwLast && !fwLast.value.trim()) bad = [fwLast, T('Last name is required.')];
+            else if (fwFirst && !fwFirst.value.trim()) bad = [fwFirst, T('First name is required.')];
+            if (bad) {
+              bad[0].closest('.dp__input').classList.add('is-bad');
+              stError('fw', bad[1]);
+              bad[0].focus();
+              return;
+            }
+            wwConfirm({
+              title: T('Confirm the withdrawal'),
+              text: T('{sum} to the card, fee {fee}. Transfers cannot be undone.',
+                { sum: money(v), fee: money(v * wdFeeRate) }),
+              ok: T('Withdraw'),
+              cancel: T('Cancel')
+            }, function (yes) {
+              if (!yes) return;
+              withPending(fwSubmit, {
+                ms: 900,
+                busy: T('Sending'),
+                done: function () {
+                  setBalance(getBalance() - v - v * wdFeeRate);
+                  fwInput.value = ''; fwSync();
+                  stScreen('wait', '\u23F3', T('Withdrawal requested'),
+                    T('The payout to the card usually takes one to three business days.'),
+                    T('Back to wallet'), 'back');
+                }
+              });
+            });
+          });
         }
 
         /* Выбор валюты: список открывается по клику, выбор меняет подпись,
@@ -14531,15 +15300,26 @@ body.br-open .bnav { z-index: 66; }
             copy.textContent = T('Copied'); copy.classList.add('is-done');
             setTimeout(function () { copy.textContent = T('Copy Address'); copy.classList.remove('is-done'); }, 1600);
           };
+          /* Отказ буфера обмена молчал в обеих ветках: адрес оставался
+             нескопированным, а пользователь этого не знал и переводил деньги
+             на адрес, которого у него нет. Теперь об отказе говорим и
+             показываем адрес, чтобы его можно было выделить руками. */
+          var fail = function () {
+            copy.textContent = T('Copy failed'); copy.classList.add('is-bad');
+            setTimeout(function () { copy.textContent = T('Copy Address'); copy.classList.remove('is-bad'); }, 2400);
+            notify(T('Could not copy the address — select and copy it by hand.'), 'bad');
+          };
           if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(done, function () {});
+            navigator.clipboard.writeText(text).then(done, fail);
           } else {
             /* Запасной путь для страниц без защищённого контекста */
             var ta = document.createElement('textarea');
             ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
             document.body.appendChild(ta); ta.select();
-            try { document.execCommand('copy'); done(); } catch (err) {}
+            var okCopy = false;
+            try { okCopy = document.execCommand('copy'); } catch (err) { okCopy = false; }
             document.body.removeChild(ta);
+            if (okCopy) done(); else fail();
           }
         });
       }
@@ -14568,7 +15348,7 @@ body.br-open .bnav { z-index: 66; }
          закрываем его так же, как это делает brClose. */
       var bnavCloseSheet = function () {
         var m = document.getElementById('browse-menu');
-        if (m && !m.hidden) { m.hidden = true; document.body.style.overflow = ''; }
+        if (m && !m.hidden) { m.hidden = true; lockScroll(false); }
       };
       var bnavCasino = bnavItem(/casino/i);
       if (bnavCasino) bnavCasino.addEventListener('click', function (e) {
@@ -14620,23 +15400,91 @@ body.br-open .bnav { z-index: 66; }
         c._i = i;
       });
       var provFilter = 'all';
-      var applyFilter = function () {
+      /* Жанр чипа берём из разделов самого лобби, а не выдумываем: игра
+         относится к «Crash Games» или «Live Casino» ровно потому, что она в
+         этом разделе на странице. Чипы, которым раздела не нашлось (High RTP,
+         Table Games), честно не находят ничего — и говорят об этом. */
+      var genreOf = {};
+      document.querySelectorAll('.section').forEach(function (sec) {
+        var h = sec.querySelector('h2');
+        if (!h) return;
+        var title = norm(h.textContent);
+        sec.querySelectorAll('.game, .lc').forEach(function (g) {
+          var nm = g.querySelector('.game__name, .lc__name');
+          if (!nm) return;
+          var key = norm(nm.textContent);
+          (genreOf[key] = genreOf[key] || []).push(title);
+        });
+      });
+      var tagFilter = '';
+      var inGenre = function (c) {
+        if (!tagFilter) return true;
+        var list = genreOf[c._name] || [];
+        return list.some(function (t) {
+          return t.indexOf(tagFilter) >= 0 || tagFilter.indexOf(t) >= 0;
+        });
+      };
+
+      /* Постранично: раньше цифры только подсвечивались, а выдача не менялась */
+      /* Имя короче нельзя: var в этом файле — на всю функцию, и «page»
+         здесь затирал бы элемент .page из блока масштабирования. */
+      var SRCH_PAGE = 8;
+      var pager = srch.querySelector('.srch__pager');
+      var srchPageBtns = [].slice.call(pager.querySelectorAll('.srch__page:not(.srch__page--arrow)'));
+      var srchPage = 1, srchMax = 1;
+      var drawPager = function () {
+        srchPageBtns.forEach(function (b, i) {
+          var num = i + 1;
+          b.hidden = num > srchMax;
+          b.textContent = String(num);
+          b.classList.toggle('is-current', num === srchPage);
+          if (num === srchPage) b.setAttribute('aria-current', 'page');
+          else b.removeAttribute('aria-current');
+        });
+        var back = pager.querySelector('.srch__page--arrow:not(.srch__page--next)');
+        var next = pager.querySelector('.srch__page--next');
+        if (back) back.disabled = srchPage <= 1;
+        if (next) next.disabled = srchPage >= srchMax;
+        pager.hidden = srchMax <= 1;
+      };
+
+      var applyFilter = function (keepPage) {
         var q = norm(field.value);
         var words = q ? q.split(' ') : [];
-        var shown = 0;
+        var match = [];
         cards.forEach(function (c) {
           var ok = words.every(function (w) { return c._text.indexOf(w) >= 0; })
-                   && (provFilter === 'all' || c._prov.indexOf(provFilter) >= 0);
-          c.hidden = !ok;
-          if (ok) shown++;
+                   && (provFilter === 'all' || c._prov.indexOf(provFilter) >= 0)
+                   && inGenre(c);
+          if (ok) match.push(c);
         });
-        empty.hidden = shown > 0;
-        grid.hidden = shown === 0;
-        /* когда ничего не нашлось, листать нечего */
-        srch.querySelector('.srch__pager').hidden = shown === 0;
+        srchMax = Math.max(1, Math.ceil(match.length / SRCH_PAGE));
+        if (!keepPage) srchPage = 1;
+        if (srchPage > srchMax) srchPage = srchMax;
+        var from = (srchPage - 1) * SRCH_PAGE, to = from + SRCH_PAGE;
+        cards.forEach(function (c) { c.hidden = true; });
+        match.slice(from, to).forEach(function (c) { c.hidden = false; });
+        /* «Нет данных» и «ничего не найдено» — разные вещи: раньше на оба
+           случая был один текст, и по запросу «qqq» пользователь читал, что
+           данных пока нет. */
+        var filtered = !!(q || tagFilter || provFilter !== 'all');
+        var msg = empty.querySelector('p');
+        if (msg) {
+          if (!match.length && filtered) {
+            msg.textContent = q
+              ? T('Nothing found for “{q}”. Try a different spelling or clear the filters.', { q: field.value.trim() })
+              : T('Nothing matches these filters. Try clearing them.');
+          } else if (!match.length) {
+            msg.textContent = T('Oops! There is no data yet!');
+          }
+        }
+        empty.hidden = match.length > 0;
+        grid.hidden = match.length === 0;
+        drawPager();
+        if (!match.length) pager.hidden = true;
         grid.scrollTop = 0;
       };
-      field.addEventListener('input', applyFilter);
+      field.addEventListener('input', function () { applyFilter(); });
 
       /* Сортировка. Настоящей даты выхода у игр в макете нет, поэтому
          Newest — обратный порядок исходного списка: заглушка до реальных
@@ -14702,27 +15550,37 @@ body.br-open .bnav { z-index: 66; }
       addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMenu(); closeProv(); } });
       /* при закрытии сбрасываем, чтобы в следующий раз открылось чистым */
       srch.addEventListener('search-reset', function () {
-        field.value = ''; provFilter = 'all'; pval.textContent = T('All');
+        field.value = ''; provFilter = 'all'; tagFilter = ''; srchPage = 1;
+        srch.querySelectorAll('.srch__tag').forEach(function (t) { t.classList.remove('is-active'); });
+        pval.textContent = T('All');
         pmenu.querySelectorAll('li').forEach(function (o, i) {
           o.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
         });
         applyFilter();
       });
 
-      /* Чипы и страницы переключаются, чтобы состояние было видно */
+      /* Чипы жанров и страницы теперь меняют выдачу, а не только подсветку */
       srch.addEventListener('click', function (e) {
         var tag = e.target.closest('.srch__tag');
         if (tag) {
           var on = tag.classList.contains('is-active');
           srch.querySelectorAll('.srch__tag').forEach(function (t) { t.classList.remove('is-active'); });
           if (!on) tag.classList.add('is-active');
+          tagFilter = on ? '' : norm(tag.textContent);
+          applyFilter();
+          return;
         }
         var pg = e.target.closest('.srch__page:not(.srch__page--arrow)');
-        if (pg) {
-          srch.querySelectorAll('.srch__page').forEach(function (t) {
-            t.classList.remove('is-current'); t.removeAttribute('aria-current');
-          });
-          pg.classList.add('is-current'); pg.setAttribute('aria-current', 'page');
+        if (pg && !pg.hidden) {
+          srchPage = parseInt(pg.textContent, 10) || 1;
+          applyFilter(true);
+          return;
+        }
+        var arrow = e.target.closest('.srch__page--arrow');
+        if (arrow && !arrow.disabled) {
+          srchPage += arrow.classList.contains('srch__page--next') ? 1 : -1;
+          srchPage = Math.max(1, Math.min(srchMax, srchPage));
+          applyFilter(true);
         }
       });
     }
@@ -14772,7 +15630,18 @@ body.br-open .bnav { z-index: 66; }
     var chipView = { 'lobby': 'casino', 'crash games': 'crash' };
     /* Что было с панелью до входа в игру — чтобы вернуть на выходе */
     var gameRailWas = false;
+    /* Страницы, которые нельзя показывать гостю: там чужие данные. Раньше
+       showView переключал что угодно без проверки, и по ссылке из подвала
+       неавторизованный открывал профиль с чужим адресом и документами.
+       Бонусы в список не входят: у них свой экран приглашения войти. */
+    var NEEDS_AUTH = { profile: 1, history: 1 };
     var showView = function (key) {
+      if (NEEDS_AUTH[key] && !document.body.classList.contains('is-authed')) {
+        var enter = document.querySelector('.header-actions .btn--ghost');
+        if (enter) enter.click();
+        notify(T('Log in to open this page.'));
+        return;
+      }
       Object.keys(views).forEach(function (k) { views[k].hidden = key !== k; });
       /* В игре навигация всегда свёрнута, а колонка контента идёт во всю
          ширину: кадру нужно место, ради него сюда и заходят. */
@@ -14800,6 +15669,7 @@ body.br-open .bnav { z-index: 66; }
       /* Переход по ссылке — это новая страница, а не прокрутка к её началу:
          из подвала длинного документа плавный скролл летел через весь текст. */
       scrollTo(0, 0);
+      document.dispatchEvent(new CustomEvent('ww:view', { detail: key }));
     };
     tabs.forEach(function (t) {
       var label = (t.textContent || '').trim().toLowerCase();
@@ -14839,7 +15709,7 @@ body.br-open .bnav { z-index: 66; }
       if (name !== 'bonuses' && name !== 'vip club') return;
       it.addEventListener('click', function () {
         var br = document.getElementById('browse-menu');
-        if (br && !br.hidden) { br.hidden = true; document.body.style.overflow = ''; }
+        if (br && !br.hidden) { br.hidden = true; lockScroll(false); }
         showView(name === 'vip club' ? 'vip' : 'bonuses');
       });
     });
@@ -14937,6 +15807,15 @@ body.br-open .bnav { z-index: 66; }
         heroBanner.addEventListener('mouseenter', hstop);
         heroBanner.addEventListener('mouseleave', hplay);
       }
+      /* Таймер крутился в фоновой вкладке и на всех остальных страницах:
+         вернувшись на главную, пользователь заставал другой баннер. */
+      var heroSee = function () {
+        var host = document.querySelector('.hero');
+        var live = !document.hidden && host && !host.hidden;
+        if (live) hplay(); else hstop();
+      };
+      document.addEventListener('visibilitychange', heroSee);
+      document.addEventListener('ww:view', heroSee);
       /* После своего клика отсчёт начинается заново */
       hprev.addEventListener('click', function () { hshow(hcur - 1); hplay(); });
       hnext.addEventListener('click', function () { hshow(hcur + 1); hplay(); });
@@ -15054,9 +15933,25 @@ body.br-open .bnav { z-index: 66; }
         card.parentNode.removeChild(card);
         ntRefresh();
       });
+      /* «Clear all» стирал весь список одним нажатием, без вопроса и без
+         возможности вернуть. Удаление по одному крестиком оставляем как есть:
+         там цена ошибки — одна карточка, и спрашивать на каждую назойливо. */
       ntClear.addEventListener('click', function () {
-        ntActive().querySelectorAll('.nt__item').forEach(function (c) { c.parentNode.removeChild(c); });
-        ntRefresh();
+        var list = ntActive();
+        var n = list.querySelectorAll('.nt__item').length;
+        if (!n) return;
+        wwConfirm({
+          title: T('Delete all notifications?'),
+          text: T('{n} notifications will be removed. They cannot be brought back.', { n: n }),
+          ok: T('Delete all'),
+          cancel: T('Cancel'),
+          danger: true
+        }, function (yes) {
+          if (!yes) return;
+          list.querySelectorAll('.nt__item').forEach(function (c) { c.parentNode.removeChild(c); });
+          ntRefresh();
+          notify(T('Notifications cleared.'));
+        });
       });
       ntRefresh();
 
@@ -15119,6 +16014,39 @@ body.br-open .bnav { z-index: 66; }
         if (!e.target.closest('.pm__pop')) pmClose();
       });
       addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pmPop.hidden) pmClose(); });
+      /* Выход из аккаунта. Раньше уходил молча и оставлял в разметке всё, что
+         ввёл предыдущий: суммы вывода, поставленные лимиты, загруженные
+         документы — следующий, кто войдёт, видел чужое. */
+      var wwLogout = function () {
+        wwConfirm({
+          title: T('Log out?'),
+          text: T('Amounts you typed and documents you uploaded will not be kept.'),
+          ok: T('Log out'),
+          cancel: T('Stay')
+        }, function (yes) {
+          if (!yes) return;
+          /* Поля ввода и подсказки об ошибках */
+          document.querySelectorAll(
+            '.dp__amount-input, .dp__addr-input, .dp__fd-input, .dp__fw-input,' +
+            '.dp__fd-last, .dp__fd-first, .dp__fw-last, .dp__fw-first,' +
+            '#prof-responsible input, .bnpromo__input'
+          ).forEach(function (i) { i.value = ''; i.dispatchEvent(new Event('input')); });
+          document.querySelectorAll('.dp__error, .prof__err, .rg__err').forEach(function (e) {
+            e.hidden = true; e.textContent = '';
+          });
+          document.querySelectorAll('.dp__input, .prof__box').forEach(function (b) {
+            b.classList.remove('is-bad');
+          });
+          /* Поставленные лимиты и загруженные документы */
+          document.querySelectorAll('.rg__limit').forEach(function (l) { l.hidden = true; });
+          document.querySelectorAll('.vf__card .vf__replace').forEach(function (b) { b.click(); });
+          stClear();
+          document.body.classList.remove('is-authed');
+          showView('home');
+          notify(T('You are logged out.'));
+        });
+      };
+
       pmPop.querySelectorAll('.pm__item').forEach(function (it) {
         it.addEventListener('click', function () {
           var go = it.dataset.go;
@@ -15130,7 +16058,7 @@ body.br-open .bnav { z-index: 66; }
             if (rgTab) rgTab.click();
           }
           else if (go === 'history') showView('history');
-          else if (go === 'logout') { document.body.classList.remove('is-authed'); showView('home'); }
+          else if (go === 'logout') wwLogout();
         });
       });
     }
@@ -15171,6 +16099,9 @@ body.br-open .bnav { z-index: 66; }
                    : row.querySelector('.hist__status--lose, .hist__win--down') ? 'lose'
                    : row.querySelector('.hist__status--wait') ? 'pending' : 'won';
           var ok = (st.result === 'all' || st.result === kind) && st.period !== 'today';
+          /* Отбор фильтра и отбор страницы — разные вещи: пагинация листает
+             только то, что фильтр оставил, поэтому помечаем отдельно. */
+          if (ok) delete row.dataset.histOut; else row.dataset.histOut = '1';
           row.hidden = !ok;
           if (ok) shown++;
         });
@@ -15180,7 +16111,28 @@ body.br-open .bnav { z-index: 66; }
         if (table) table.hidden = shown === 0;
         if (pager) pager.hidden = shown === 0;
         if (empty) empty.hidden = shown !== 0;
+        /* Кнопка повтора уместна только после ошибки загрузки, а не когда
+           фильтры ничего не нашли */
+        var again = empty && empty.querySelector('button');
+        if (again) again.hidden = true;
+        /* После отбора страницы пересобираются: их число зависит от того,
+           сколько строк осталось */
+        if (panel._histDraw) panel._histDraw();
       };
+
+      /* «Try again» после ошибки загрузки. Кнопка была нарисована во всех трёх
+         вкладках истории и не отвечала ни в одной — единственный путь
+         повторить действие вёл в никуда. */
+      histView.addEventListener('click', function (e) {
+        var again = e.target.closest('.hist__empty button');
+        if (!again) return;
+        var panel = again.closest('.hist__card');
+        histShow('load');
+        setTimeout(function () {
+          histShow('rows');
+          if (panel) hfApply(panel);
+        }, 700);
+      });
       histView.querySelectorAll('.hist__picker').forEach(function (pk) {
         var btn = pk.querySelector('.hist__select');
         var menu = pk.querySelector('.hist__menu');
@@ -15269,11 +16221,29 @@ body.br-open .bnav { z-index: 66; }
           secBtn.disabled = !ok;
         };
         secInputs.forEach(function (i) { i.addEventListener('input', secCheck); });
+        /* «Password changed.» появлялось мгновенно и всегда: отличить успех
+           от несохранённого было нельзя. Теперь есть ожидание и есть отказ —
+           текущий пароль сверяется с тем, под которым вошли. */
+        var CUR_PASS = 'Warwin666';
         secBtn.addEventListener('click', function () {
-          secInputs.forEach(function (i) { i.value = ''; i.type = 'password'; });
-          secHint.textContent = T('Password changed.');
-          secHint.className = 'sec__hint is-ok';
-          secBtn.disabled = true;
+          if (secBtn.disabled) return;
+          if (secInputs[0].value !== CUR_PASS) {
+            secHint.textContent = T('The current password is wrong.');
+            secHint.className = 'sec__hint is-bad';
+            secInputs[0].focus();
+            return;
+          }
+          withPending(secBtn, {
+            ms: 800,
+            busy: T('Saving'),
+            done: function () {
+              secInputs.forEach(function (i) { i.value = ''; i.type = 'password'; });
+              secHint.textContent = T('Password changed.');
+              secHint.className = 'sec__hint is-ok';
+              secBtn.disabled = true;
+              notify(T('Password changed.'), 'ok');
+            }
+          });
         });
         var secPages = [].slice.call(secPanel.querySelectorAll('.sec__page:not(.sec__page--nav)'));
         secPages.forEach(function (b) {
@@ -15303,18 +16273,52 @@ body.br-open .bnav { z-index: 66; }
         var name = card.querySelector('.vf__file-name');
         var badge = card.querySelector('.prof__badge');
         var badgeBase = { text: badge.textContent, cls: badge.className };
+        /* Ограничения написаны прямо под полем — «PNG, JPG or PDF · up to 5 MB»,
+           но не проверялись: файл на 50 МБ и .exe принимались и уходили
+           в «In review», где их никто не примет. */
+        var VF_MAX = 5 * 1024 * 1024;
+        var VF_TYPES = ['image/png', 'image/jpeg', 'application/pdf'];
+        var vfErr = function (text) {
+          var e = card.querySelector('.vf__err');
+          if (!e) {
+            e = document.createElement('p');
+            e.className = 'vf__err';
+            drop.parentNode.insertBefore(e, drop.nextSibling);
+          }
+          e.textContent = text || '';
+          e.hidden = !text;
+        };
+        /* Размер: мелкий документ подписывался «0.0 MB» — показываем в КБ */
+        var vfSize = function (b) {
+          return b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' KB'
+                             : (b / 1048576).toFixed(1) + ' MB';
+        };
         input.addEventListener('change', function () {
           var f = input.files && input.files[0];
           if (!f) return;
-          name.textContent = f.name + '  ·  ' + (f.size / 1048576).toFixed(1) + ' MB';
+          var okType = VF_TYPES.indexOf(f.type) >= 0 || /\.(png|jpe?g|pdf)$/i.test(f.name);
+          if (!okType) {
+            vfErr(T('Only PNG, JPG or PDF are accepted.'));
+            input.value = '';
+            return;
+          }
+          if (f.size > VF_MAX) {
+            vfErr(T('The file is {size} — the limit is 5 MB.', { size: vfSize(f.size) }));
+            input.value = '';
+            return;
+          }
+          vfErr('');
+          name.textContent = f.name + '  ·  ' + vfSize(f.size);
           file.hidden = false;
           drop.hidden = true;
           badge.textContent = T('In review');
           badge.className = 'prof__badge prof__badge--ok';
           vfSync();
+          notify(T('Document sent for review.'), 'ok');
         });
         card.querySelector('.vf__replace').addEventListener('click', function () {
           input.value = '';
+          vfErr('');
           file.hidden = true;
           drop.hidden = false;
           badge.textContent = badgeBase.text;
@@ -15338,14 +16342,64 @@ body.br-open .bnav { z-index: 66; }
         profFields.forEach(function (i, k) { i.value = profBase[k]; });
         profSave.hidden = true;
       });
+      /* Раньше «Save» просто пересчитывал базовую линию и прятал полосу:
+         пустой город и индекс «742-15» сохранялись молча. Ошибки для этих
+         полей уже были нарисованы (profErr) — здесь они наконец в потоке. */
+      var profClear = function () {
+        profFields.forEach(function (i) {
+          var box = i.closest('.prof__box');
+          if (box) box.classList.remove('is-bad');
+        });
+        profView.querySelectorAll('.prof__err').forEach(function (e) { e.hidden = true; });
+      };
+      profFields.forEach(function (i) { i.addEventListener('input', profClear); });
       profView.querySelector('[data-prof=save]').addEventListener('click', function () {
-        profBase = profFields.map(function (i) { return i.value; });
-        profSave.hidden = true;
+        profClear();
+        var boxes = profFields.map(function (i) { return i.closest('.prof__box'); });
+        /* Порядок полей задан разметкой: страна, город, улица, индекс */
+        var checks = [
+          [0, function (v) { return !!v.trim(); }, T('Fill in the country.')],
+          [1, function (v) { return !!v.trim(); },
+              T('Fill in the city — without it a card withdrawal will not go through')],
+          [2, function (v) { return !!v.trim(); }, T('Fill in the street and house.')],
+          [3, function (v) { return /^\d{8}$/.test(v.replace(/[\s-]/g, '')); },
+              T('Postal code must be 8 digits')]
+        ];
+        var bad = null;
+        for (var c = 0; c < checks.length; c++) {
+          var f = profFields[checks[c][0]];
+          if (f && !checks[c][1](f.value)) { bad = [boxes[checks[c][0]], checks[c][2], f]; break; }
+        }
+        if (bad) { profErr(bad[0], bad[1]); if (bad[2]) bad[2].focus(); return; }
+        var btn = this;
+        withPending(btn, {
+          ms: 700,
+          busy: T('Saving'),
+          done: function () {
+            profBase = profFields.map(function (i) { return i.value; });
+            profSave.hidden = true;
+            notify(T('Address saved.'), 'ok');
+          }
+        });
       });
     }
 
     /* ═══ Кнопки, которые раньше ничего не делали ═══ */
     (function () {
+      /* ── «Show more» в спорте ──
+         Свёрнутые лиги в разметке пустые, догружать нечего: кнопка
+         разворачивает их все и уходит, потому что дальше показывать нечего. */
+      var spMore = document.querySelector('.spmore');
+      if (spMore) spMore.addEventListener('click', function () {
+        var rest = document.querySelectorAll('.spleague.is-collapsed');
+        rest.forEach(function (sec) {
+          sec.classList.remove('is-collapsed');
+          var t = sec.querySelector('.spleague__toggle');
+          if (t) t.setAttribute('aria-label', 'Collapse');
+        });
+        spMore.hidden = true;
+      });
+
       /* ── Responsible Gambling: Set ставит лимит, крестик снимает ── */
       var rgPanel = document.getElementById('prof-responsible');
       if (rgPanel) {
@@ -15379,24 +16433,70 @@ body.br-open .bnav { z-index: 66; }
           var input = card.querySelector('input');
           var selects = [].slice.call(row.querySelectorAll('.rg__select'));
 
+          /* Подсказка об ошибке живёт под рядом полей карточки: раньше на
+             любую неполноту тут был молчаливый return, и игрок уходил
+             уверенным, что лимит на проигрыш поставлен, хотя его не было. */
+          var rgSay = function (text) {
+            var e = card.querySelector('.rg__err');
+            if (!e) {
+              e = document.createElement('p');
+              e.className = 'rg__err';
+              row.parentNode.insertBefore(e, row.nextSibling);
+            }
+            e.textContent = text;
+            e.hidden = !text;
+          };
+
           set.addEventListener('click', function () {
             /* Подпись селекта до выбора — подсказка, а не значение:
                иначе лимит подписывался «Period limit». */
             var picked = function (el) {
               return el && el.classList.contains('is-picked') ? el.textContent.trim() : '';
             };
+            rgSay('');
             var period = picked(selects[0]);
             if (title === 'Cooling off' || title === 'Self exclusion') {
               var what = title === 'Cooling off' ? period : (input && input.value.trim());
-              if (!what || what === 'None') return;
+              if (!what || what === 'None') {
+                rgSay(title === 'Cooling off'
+                  ? T('Choose how long the pause should last.')
+                  : T('Enter the number of days.'));
+                if (input) input.focus();
+                return;
+              }
+              if (title === 'Self exclusion' && !(rgNum(what) > 0)) {
+                rgSay(T('Enter the number of days as a number.'));
+                if (input) input.focus();
+                return;
+              }
               var text = title === 'Cooling off'
-                ? 'Cooling-off is set for ' + what
-                : 'Self-exclusion is set for ' + what + ' days';
-              rgFill(card, text, '', '', 100);
+                ? T('Cooling-off is set for {what}', { what: what })
+                : T('Self-exclusion is set for {what} days', { what: what });
+              /* Блокировка аккаунта необратима до конца срока — спрашиваем */
+              wwConfirm({
+                title: title === 'Cooling off' ? T('Take a break?') : T('Block the account?'),
+                text: title === 'Cooling off'
+                  ? T('Deposits and play will be paused for {what}. The pause cannot be lifted early.', { what: what })
+                  : T('The account will be blocked for {what} days. It cannot be unblocked before the term ends.', { what: what }),
+                ok: title === 'Cooling off' ? T('Pause') : T('Block'),
+                cancel: T('Cancel'),
+                danger: true
+              }, function (yes) {
+                if (!yes) return;
+                rgFill(card, text, '', '', 100);
+                if (input) input.value = '';
+                notify(text, 'ok');
+              });
               return;
             }
             var v = rgNum(input && input.value);
-            if (!v) return;
+            if (!v) {
+              rgSay(input && input.value.trim()
+                ? T('Enter the amount as a number.')
+                : T('Enter the limit amount.'));
+              if (input) input.focus();
+              return;
+            }
             if (title === 'Session limit') {
               rgFill(card, (period || 'Minute') + ' limit', String(v), '100',
                      Math.max(2, Math.min(100, v)));
@@ -15408,33 +16508,79 @@ body.br-open .bnav { z-index: 66; }
                      '1,000,000 ' + cur, pct);
             }
             if (input) input.value = '';
+            notify(T('Limit saved.'), 'ok');
           });
         });
 
-        /* Крестик снимает лимит — карточка возвращается к пустой форме */
+        /* Крестик снимает лимит. Это снятие защиты, а не настройка вида —
+           поэтому со спросом. */
         rgPanel.addEventListener('click', function (e) {
           var x = e.target.closest('.rg__clear');
           if (!x) return;
           var lim = x.closest('.rg__limit');
-          if (lim) lim.hidden = true;
+          if (!lim) return;
+          var name = lim.querySelector('.rg__limit-head > span');
+          wwConfirm({
+            title: T('Remove the limit?'),
+            text: T('{name} will stop applying right away.',
+              { name: name ? name.textContent.trim() : T('The limit') }),
+            ok: T('Remove'),
+            cancel: T('Keep'),
+            danger: true
+          }, function (yes) {
+            if (!yes) return;
+            lim.hidden = true;
+            notify(T('Limit removed.'));
+          });
         });
       }
 
-      /* ── История: страницы переключаются ── */
+      /* ── История: страницы действительно листают строки ──
+         Раньше цифры только переставляли подсветку, а таблица оставалась
+         прежней: страница 2 подсвечивалась, ставки были те же. */
+      /* Размер страницы. В демо-данных на вкладку приходится по 5 строк, и при
+         странице в 5 листать было бы нечего — нарисованная пагинация опять
+         оказалась бы бутафорией. Придут настоящие данные — поднять до 10-20. */
+      var HIST_PAGE = 3;
       document.querySelectorAll('.hist__pager').forEach(function (pager) {
+        var card = pager.closest('.hist__card');
+        if (!card) return;
         var pages = [].slice.call(pager.querySelectorAll('.hist__page:not(.hist__page--nav)'));
-        var go = function (btn) {
-          pages.forEach(function (b) { b.classList.toggle('is-current', b === btn); });
-        };
-        pages.forEach(function (b) { b.addEventListener('click', function () { go(b); }); });
         var nav = pager.querySelectorAll('.hist__page--nav');
-        var step = function (dir) {
-          var i = pages.findIndex(function (b) { return b.classList.contains('is-current'); });
-          var next = pages[Math.max(0, Math.min(pages.length - 1, i + dir))];
-          if (next) go(next);
+        var cur = 1;
+        /* Строки берём заново на каждый показ: фильтры прячут часть, и
+           листать надо то, что осталось после них. */
+        var draw = function () {
+          var rows = [].slice.call(card.querySelectorAll('.hist__row:not(.hist__row--head)'))
+            .filter(function (r) { return !r.dataset.histOut; });
+          var max = Math.max(1, Math.ceil(rows.length / HIST_PAGE));
+          if (cur > max) cur = max;
+          rows.forEach(function (r, i) {
+            r.hidden = !(i >= (cur - 1) * HIST_PAGE && i < cur * HIST_PAGE);
+          });
+          pages.forEach(function (b, i) {
+            b.hidden = (i + 1) > max;
+            b.textContent = String(i + 1);
+            b.classList.toggle('is-current', (i + 1) === cur);
+          });
+          if (nav[0]) nav[0].disabled = cur <= 1;
+          if (nav[1]) nav[1].disabled = cur >= max;
+          /* Одна страница — листать нечего, ряд кнопок только сбивает */
+          pager.hidden = max <= 1;
+          pager.dataset.histMax = max;
         };
-        if (nav[0]) nav[0].addEventListener('click', function () { step(-1); });
-        if (nav[1]) nav[1].addEventListener('click', function () { step(1); });
+        pages.forEach(function (b) {
+          b.addEventListener('click', function () {
+            if (b.hidden) return;
+            cur = parseInt(b.textContent, 10) || 1; draw();
+          });
+        });
+        if (nav[0]) nav[0].addEventListener('click', function () { cur = Math.max(1, cur - 1); draw(); });
+        if (nav[1]) nav[1].addEventListener('click', function () {
+          cur = Math.min(parseInt(pager.dataset.histMax, 10) || 1, cur + 1); draw();
+        });
+        card._histDraw = draw;
+        draw();
       });
 
       /* ── Акции: пункт бокового меню и отбор по категориям ── */
@@ -15443,7 +16589,7 @@ body.br-open .bnav { z-index: 66; }
         el.style.cursor = 'pointer';
         el.addEventListener('click', function () {
           var br = document.getElementById('browse-menu');
-          if (br && !br.hidden) { br.hidden = true; document.body.style.overflow = ''; }
+          if (br && !br.hidden) { br.hidden = true; lockScroll(false); }
           showView('promo');
         });
       });
@@ -15643,9 +16789,32 @@ body.br-open .bnav { z-index: 66; }
         var link = e.target.closest('[data-fgo]');
         if (!link) return;
         if (link.tagName === 'A') e.preventDefault();
-        var go = link.dataset.fgo.split(':');
-        var kind = go[0], what = go[1];
+        /* Значение вида «kind:what»; во what может быть двоеточие (адрес),
+           поэтому режем только по первому. */
+        var raw = link.dataset.fgo;
+        var cut = raw.indexOf(':');
+        var kind = cut < 0 ? raw : raw.slice(0, cut);
+        var what = cut < 0 ? '' : raw.slice(cut + 1);
         if (kind === 'view') { showView(what); return; }
+        /* Кнопки конверсии на баннерах вели в никуда: семь «Join now»,
+           «REGISTER» и «BUY BONUS NOW!» не отвечали на нажатие. Вошедшему
+           окно входа не нужно — ведём туда, куда кнопка обещает. */
+        if (kind === 'auth') {
+          if (document.body.classList.contains('is-authed')) {
+            showView(what === 'reg' ? 'bonuses' : 'home');
+            return;
+          }
+          /* Открываем тем же путём, что и шапка: у кнопок LOGIN и REGISTER
+             уже висит обработчик, который знает про режим и фокус. Ищем по
+             классу, а не по подписи: подписи переводятся. */
+          var btn = document.querySelector('.header-actions .btn--' +
+            (what === 'reg' ? 'primary' : 'ghost'));
+          if (btn) btn.click();
+          return;
+        }
+        /* Сообщение вместо мёртвой кнопки: честнее, чем прыжок наверх */
+        if (kind === 'msg') { notify(T(what)); return; }
+        if (kind === 'url') { window.open(what, '_blank', 'noopener'); return; }
         if (kind === 'tab') {
           showView('profile');
           var t = document.querySelector('.prof__tab[data-tab="' + what + '"]');
@@ -15828,6 +16997,8 @@ body.br-open .bnav { z-index: 66; }
         clone.classList.remove('is-active');
         gvCover.innerHTML = '';
         gvCover.appendChild(clone);
+        /* Звёздочку сверяем со списком сразу: она про эту игру, а не про кнопку */
+        if (typeof favSync === 'function') favSync();
 
         /* Подложка — первый слой обложки. Берём разрешённый браузером адрес
            из свойства src, поэтому хэшированные имена в сборке не мешают. */
@@ -15901,18 +17072,52 @@ body.br-open .bnav { z-index: 66; }
         gvSolo(gvWide.getAttribute('aria-pressed') !== 'true');
       });
 
+      /* Избранное запоминаем по названию игры: раньше звёздочка гасла, стоило
+         уйти со страницы, и смысла в ней не было. */
       var gvFav = gv.querySelector('.gv__tool--fav');
-      gvFav.addEventListener('click', function () {
-        var on = gvFav.getAttribute('aria-pressed') !== 'true';
+      var favKey = 'ww-fav';
+      var favList = function () {
+        try { return JSON.parse(safeStore.get(favKey) || '[]') || []; }
+        catch (e) { return []; }
+      };
+      /* Название открытой игры лежит в клоне карточки внутри обложки —
+         отдельного заголовка у страницы игры нет. */
+      var favNow = function () {
+        var t = gv.querySelector('.gv__cover .game__name, .gv__cover .lc__name');
+        return t ? (t.textContent || '').replace(/\s+/g, ' ').trim() : '';
+      };
+      var favSync = function () {
+        var on = favList().indexOf(favNow()) >= 0;
         gvFav.setAttribute('aria-pressed', String(on));
-        gvFav.setAttribute('aria-label', on ? 'Убрать из избранного' : 'В избранное');
+        gvFav.setAttribute('aria-label', on ? T('Remove from favourites') : T('Add to favourites'));
+      };
+      gvFav.addEventListener('click', function () {
+        var name = favNow();
+        if (!name) return;
+        var list = favList();
+        var i = list.indexOf(name);
+        if (i >= 0) list.splice(i, 1); else list.push(name);
+        safeStore.set(favKey, JSON.stringify(list));
+        favSync();
+        notify(i >= 0 ? T('Removed from favourites.') : T('Added to favourites.'));
       });
+
 
       var gvFull = gv.querySelector('.gv__tool--full');
       gvFull.addEventListener('click', function () {
         var frame = gv.querySelector('.gv__frame');
-        if (document.fullscreenElement) document.exitFullscreen();
-        else if (frame.requestFullscreen) frame.requestFullscreen();
+        /* Браузер вправе отказать (нет жеста, запрет политикой). Раньше отказ
+           уходил неперехваченным отклонением промиса, а кнопка молчала. */
+        var fail = function () { notify(T('Fullscreen is not available here.'), 'bad'); };
+        try {
+          if (document.fullscreenElement) {
+            var out = document.exitFullscreen();
+            if (out && out.catch) out.catch(fail);
+          } else if (frame.requestFullscreen) {
+            var into = frame.requestFullscreen();
+            if (into && into.catch) into.catch(fail);
+          } else fail();
+        } catch (e) { fail(); }
       });
 
       var gvShare = gv.querySelector('.gv__tool--share');
@@ -15921,8 +17126,13 @@ body.br-open .bnav { z-index: 66; }
           gvShare.classList.add('is-copied');
           setTimeout(function () { gvShare.classList.remove('is-copied'); }, 1200);
         };
-        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(done, done);
-        else done();
+        /* Раньше отказ обрабатывался тем же коллбэком, что и успех: «Copied»
+           появлялось и когда ссылка не скопировалась. Ложное подтверждение
+           хуже отсутствующего. */
+        var failShare = function () { notify(T('Could not copy the link.'), 'bad'); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(location.href).then(done, failShare);
+        } else failShare();
       });
 
       gv.querySelector('.gv__prov-all').addEventListener('click', function () { showView('casino'); });
@@ -16253,14 +17463,9 @@ body.br-open .bnav { z-index: 66; }
       var dpEl = document.getElementById('deposit-modal');
       if (!dpEl) return;
 
-      var stClear = function () {
-        dpEl.classList.remove('is-state');
-        dpEl.querySelectorAll('.dp__error').forEach(function (e) { e.hidden = true; e.textContent = ''; });
-        dpEl.querySelectorAll('.dp__input').forEach(function (e) { e.classList.remove('is-bad'); });
-        dpEl.querySelectorAll('.dp__submit').forEach(function (b) { b.classList.remove('is-busy'); });
-        var st = dpEl.querySelector('.dp__state');
-        st.className = 'dp__state';
-      };
+      /* stClear, stError, stScreen, histShow и profErr объявлены в общей части
+         скрипта: витрина и настоящие обработчики должны звать одни и те же
+         функции, иначе состояние на витрине и состояние в потоке разъезжаются. */
 
       /* Открыть окно на нужной паре вкладок */
       var stOpen = function (seg, method) {
@@ -16272,28 +17477,6 @@ body.br-open .bnav { z-index: 66; }
         if (segBtn && !segBtn.classList.contains('is-active')) segBtn.click();
         var mBtn = dpEl.querySelector('[data-method="' + method + '"]');
         if (mBtn && !mBtn.classList.contains('is-active')) mBtn.click();
-      };
-
-      /* Подсказка под полем суммы */
-      var stError = function (kind, text, warn) {
-        var e = dpEl.querySelector('.dp__error--' + kind);
-        if (!e) return;
-        e.textContent = text;
-        e.hidden = false;
-        e.classList.toggle('dp__error--warn', !!warn);
-      };
-
-      /* Экран вместо формы */
-      var stScreen = function (tone, ico, title, text, cta) {
-        var st = dpEl.querySelector('.dp__state');
-        st.className = 'dp__state dp__state--' + tone;
-        st.querySelector('.dp__state-ico').textContent = ico;
-        st.querySelector('.dp__state-title').textContent = title;
-        st.querySelector('.dp__state-text').textContent = text;
-        var c = st.querySelector('.dp__state-cta');
-        c.hidden = !cta;
-        if (cta) c.textContent = cta;
-        dpEl.classList.add('is-state');
       };
 
       var fill = function (sel, value) {
@@ -16353,7 +17536,7 @@ body.br-open .bnav { z-index: 66; }
           ['Отказ платёжной системы', function () { stOpen('deposit', 'fiat');
             stScreen('bad', '\u2715', 'Payment declined',
               'The provider declined the payment. Nothing was charged — try another method or a smaller amount.',
-              'Try again'); }],
+              'Try again', 'deposit'); }],
           ['Депозит зачислен', function () { stOpen('deposit', 'crypto');
             stScreen('ok', '\u2713', 'Deposit credited',
               '100.00 USDT is already on your balance. Bonus, if any, is credited to the bonus balance.',
@@ -16366,11 +17549,11 @@ body.br-open .bnav { z-index: 66; }
           ['Нужна верификация', function () { stOpen('withdraw', 'crypto');
             stScreen('wait', '\u26A0', 'Verify your identity first',
               'Withdrawals open after identity verification. It usually takes a few minutes.',
-              'Go to verification'); }],
+              'Go to verification', 'verify'); }],
           ['Достигнут лимит депозита', function () { stOpen('deposit', 'crypto');
             stScreen('wait', '\u26A0', 'Weekly deposit limit reached',
               'You set a weekly deposit limit of 450.00 USDT. The limit resets on Monday, 00:00 UTC.',
-              'Responsible gambling'); }],
+              'Responsible gambling', 'limits'); }],
           ['Активна пауза Cooling off', function () { stOpen('deposit', 'crypto');
             stScreen('wait', '\u26A0', 'Cooling-off is active',
               'Deposits and play are paused until 03.09.2026. Withdrawals stay available.', ''); }],
@@ -16379,10 +17562,11 @@ body.br-open .bnav { z-index: 66; }
           ['Нечего выводить', function () { stOpen('withdraw', 'crypto');
             stScreen('wait', '\u2205', 'Nothing to withdraw yet',
               'Your balance is 0.00 USDT. Make a deposit and play — winnings will be available here.',
-              'Deposit'); }],
+              'Deposit', 'deposit'); }],
           ['Способ на техработах', function () { stOpen('deposit', 'fiat');
             stScreen('wait', '\u26A0', 'Payphone is temporarily unavailable',
-              'The provider is under maintenance. Try crypto or come back in an hour.', ''); }]
+              'The provider is under maintenance. Try crypto or come back in an hour.',
+              'Support', 'support'); }]
         ]]
       ];
 
@@ -16397,23 +17581,10 @@ body.br-open .bnav { z-index: 66; }
         }
         return v.querySelector('.hist__card:not([hidden])');
       };
-      var histShow = function (what, title, text, cta) {
-        var c = histPanel();
-        if (!c) return;
-        var skel = c.querySelector('.hist__skel');
-        var table = c.querySelector('.hist__table');
-        var pager = c.querySelector('.hist__pager');
-        var empty = c.querySelector('.hist__empty');
-        /* У бонусов нет постраничной навигации: строк три, делить нечего */
-        if (skel) skel.hidden = what !== 'load';
-        if (table) table.hidden = what !== 'rows';
-        if (pager) pager.hidden = what !== 'rows';
-        if (empty) empty.hidden = what !== 'text';
-        if (what === 'text' && empty) {
-          empty.querySelector('b').textContent = title;
-          empty.querySelector('span').textContent = text;
-          empty.querySelector('button').hidden = !cta;
-        }
+      /* Витрине надо сперва открыть историю — дальше работает общая histShow */
+      var histAt = function (what, title, text, cta) {
+        histPanel();
+        histShow(what, title, text, cta);
       };
       /* ── Состояния вкладки General в профиле ──
          Три сценария, которых на странице не было: новичок сразу после
@@ -16462,14 +17633,6 @@ body.br-open .bnav { z-index: 66; }
                                                         n.dataset.profHid = n.hidden ? '1' : ''; }
            }
          });
-      };
-      var profErr = function (box, text) {
-        box.classList.add('is-bad');
-        var cell = box.closest('.prof__cell');
-        var e = cell.querySelector('.prof__err');
-        if (!e) { e = document.createElement('span'); e.className = 'prof__err';
-                  cell.appendChild(e); }
-        e.textContent = text; e.hidden = false;
       };
       var profShow = function (what) {
         var v = profGen(); if (!v) return;
@@ -16570,14 +17733,14 @@ body.br-open .bnav { z-index: 66; }
         if (t && !t.classList.contains('is-active')) t.click();
       };
       STATES.push(['История', [
-        ['Загрузка', function () { histShow('load'); }],
-        ['Ставок ещё не было', function () { histShow('text', 'No bets yet',
+        ['Загрузка', function () { histAt('load'); }],
+        ['Ставок ещё не было', function () { histAt('text', 'No bets yet',
           'Your casino bets will show up here right after the first spin.'); }],
-        ['Ошибка загрузки', function () { histShow('text', 'Could not load history',
+        ['Ошибка загрузки', function () { histAt('text', 'Could not load history',
           'Check the connection and try again — your bets are safe.', true); }],
-        ['Обычный список', function () { histShow('rows'); }],
-        ['Бонусы: список', function () { histTab('bonus'); histShow('rows'); }],
-        ['Бонусы: пусто', function () { histTab('bonus'); histShow('text', 'No bonus history yet',
+        ['Обычный список', function () { histAt('rows'); }],
+        ['Бонусы: список', function () { histTab('bonus'); histAt('rows'); }],
+        ['Бонусы: пусто', function () { histTab('bonus'); histAt('text', 'No bonus history yet',
           'Granted and used bonuses will appear here.'); }]
       ]]);
 
@@ -16616,7 +17779,6 @@ body.br-open .bnav { z-index: 66; }
         if (e.target.closest('.states__x')) panel.hidden = true;
       });
 
-      dpEl.querySelector('.dp__state-back').addEventListener('click', stClear);
 
       var stToggle = function () { panel.hidden = !panel.hidden; };
       if (/states/.test(location.search)) panel.hidden = false;
@@ -16630,9 +17792,10 @@ body.br-open .bnav { z-index: 66; }
     var brBtn = document.querySelector('.bnav__item');
     if (brMenu && brBtn) {
       var brClose = function () {
+        if (brMenu.hidden) return;
         brMenu.hidden = true;
         document.body.classList.remove('br-open');
-        document.body.style.overflow = '';
+        lockScroll(false);
       };
       /* Лист стоял на постоянных 74px от верха — это высота шапки до входа.
          После входа шапка 122, и верхние 48px листа вместе с краем поиска
@@ -16656,7 +17819,7 @@ body.br-open .bnav { z-index: 66; }
         /* Панель поднимаем над листом, иначе он её накроет и закрыть меню
            будет нечем */
         document.body.classList.toggle('br-open', open);
-        document.body.style.overflow = open ? 'hidden' : '';
+        lockScroll(open);
       });
       brMenu.addEventListener('click', function (e) {
         if (e.target.closest('[data-close]')) brClose();
