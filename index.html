@@ -5278,6 +5278,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
    оранжевая — на тёмной карточке это выглядит случайным. */
 .cur__item:focus-visible { outline: 2px solid var(--white); outline-offset: -2px; }
 .cur__x:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+/* Сообщение вместо вопроса: вторая кнопка прячется атрибутом. Правило
+   обязательное — в проекте уже ловили, когда display из класса перебивал
+   hidden, и спрятанный элемент оставался на экране. */
+.cf__btn[hidden] { display: none; }
 
 </style>
 </head>
@@ -13525,7 +13529,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'US Dollar': 'Доллар США',
       'Argentine Peso': 'Аргентинское песо',
       'Russian Ruble': 'Российский рубль',
-      'Account currency: {name}': 'Валюта счёта: {name}',
+      'Currency changed': 'Валюта счёта изменена',
+      'Got it': 'Понятно',
+      'The account is now in {name} ({code}). Balance {sum}. Deposits and withdrawals go to this account — the other currencies keep their own.': 'Счёт теперь в валюте «{name}» ({code}). Баланс {sum}. Пополнение и вывод идут на этот счёт — у остальных валют свой.',
       /* ── починка состояний: подтверждения, ошибки форм, касса ── */
       'Confirm': 'Подтвердить',
       'Enter a valid email address.': 'Введите корректный адрес почты.',
@@ -14108,7 +14114,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'US Dollar': 'Dólar estadounidense',
       'Argentine Peso': 'Peso argentino',
       'Russian Ruble': 'Rublo ruso',
-      'Account currency: {name}': 'Moneda de la cuenta: {name}',
+      'Currency changed': 'Moneda cambiada',
+      'Got it': 'Entendido',
+      'The account is now in {name} ({code}). Balance {sum}. Deposits and withdrawals go to this account — the other currencies keep their own.': 'La cuenta ahora está en {name} ({code}). Saldo {sum}. Los depósitos y retiros van a esta cuenta; las otras monedas conservan la suya.',
       /* ── починка состояний: подтверждения, ошибки форм, касса ── */
       'Confirm': 'Confirmar',
       'Enter a valid email address.': 'Ingresá un correo válido.',
@@ -14549,12 +14557,16 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       box.querySelector('.cf__text').textContent = o.text || '';
       var no = box.querySelector('[data-cf="no"].cf__btn');
       var yes = box.querySelector('[data-cf="yes"]');
-      no.textContent = o.cancel || T('Cancel');
-      yes.textContent = o.ok || T('Confirm');
+      /* cancel: false — сообщение, а не вопрос: второй кнопке отвечать нечего.
+         Фокус тогда уходит на единственную кнопку. */
+      var ask = o.cancel !== false;
+      no.hidden = !ask;
+      no.textContent = ask ? (o.cancel || T('Cancel')) : '';
+      yes.textContent = o.ok || T(ask ? 'Confirm' : 'Got it');
       yes.classList.toggle('cf__btn--danger', !!o.danger);
       box.hidden = false;
       document.documentElement.classList.add('cf-open');
-      no.focus();
+      (ask ? no : yes).focus();
     };
   })();
 
@@ -16904,9 +16916,19 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         curMenu.addEventListener('click', function (e) {
           var pick = e.target.closest('[data-set-cur]');
           if (pick) {
-            wwCur.pick(pick.dataset.setCur);
+            var code = pick.dataset.setCur;
+            /* Ту же валюту выбрали заново — менять нечего, и сообщать не о чем */
+            if (code === wwCur.code()) { curClose(); return; }
+            wwCur.pick(code);
             curClose();
-            notify(T('Account currency: {name}', { name: T(wwCur.info(pick.dataset.setCur).name) }));
+            var info = wwCur.info(code);
+            wwConfirm({
+              title: T('Currency changed'),
+              text: T('The account is now in {name} ({code}). Balance {sum}. Deposits and withdrawals go to this account — the other currencies keep their own.',
+                { name: T(info.name), code: code, sum: wwCur.text(wwCur.get(code)) + ' ' + code }),
+              cancel: false,
+              ok: T('Got it')
+            });
             return;
           }
           if (e.target.closest('[data-close]') || !e.target.closest('.cur__pop')) curClose();
