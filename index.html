@@ -5283,6 +5283,12 @@ body.cur-open .wallet__balance { background: var(--white-16); }
    hidden, и спрятанный элемент оставался на экране. */
 .cf__btn[hidden] { display: none; }
 
+
+/* Блок с подтверждением возраста нужен только при регистрации — там человек
+   заводит аккаунт и принимает условия. В окне входа он лишний, поэтому
+   прячем его там же, где скрыт «Forgot Password?» в регистрации:
+   зеркальное правило к .lg.is-reg .lg__forgot. */
+.lg:not(.is-reg) .lg__terms { display: none; }
 </style>
 </head>
 <body>
