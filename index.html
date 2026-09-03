@@ -5296,6 +5296,26 @@ body.cur-open .wallet__balance { background: var(--white-16); }
    Отдаём меню недостающую ширину — сводка и поля остаются прежними.
    На узких экранах колонки складываются вертикально, там ширина своя. */
 .pm__pop { width: 712px; }
+
+/* Раскрывающийся пункт в поп-апе профиля. Приём взят у .br__row/.br__subs
+   в меню Browse: шеврон поворачивается по aria-expanded, список прячется
+   атрибутом hidden — и для него обязательно своё display:none, иначе
+   display:flex его перебьёт. */
+.pm__item[aria-expanded] .pm__chev { transition: transform .15s ease; }
+.pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); }
+/* Отступ 26 + собственный 10 у подпункта = 36, ровно под подписью верхнего
+   пункта: там иконка 20 и зазор 8 при поле 8. */
+.pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 6px 26px; }
+.pm__subs[hidden] { display: none; }
+.pm__sub { display: flex; align-items: center; width: 100%; min-height: 40px;
+           padding: 0 10px; text-align: left; cursor: pointer;
+           background: none; border: 0; border-radius: 10px;
+           font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+           font-size: 13px; line-height: 18px; color: var(--modal-text-1, #bbc6cd); }
+.pm__sub:hover { background: var(--white-06); color: var(--white); }
+/* Между списком и следующим пунктом линия пропала бы: соседом стал не
+   .pm__item, а блок подпунктов. Возвращаем её. */
+.pm__subs + .pm__item { border-top: 1px solid rgba(255, 255, 255, .08); }
 </style>
 </head>
 <body>
@@ -12552,10 +12572,15 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         <img loading="lazy" decoding="async" class="pm__ico" src="a/5899700828.svg" alt="" width="18" height="20"><span>Profile</span>
         <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
       </button>
-      <button class="pm__item" type="button" data-go="history">
+      <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-hist-subs">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>Transactions &amp; Gaming History</span>
         <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
       </button>
+      <!-- Подпункты лежат рядом, а не внутри: кнопку в кнопку класть нельзя -->
+      <div class="pm__subs" id="pm-hist-subs" hidden>
+        <button class="pm__sub" type="button" data-sub="transactions">Transactions</button>
+        <button class="pm__sub" type="button" data-sub="history">Gaming History</button>
+      </div>
       <button class="pm__item" type="button" data-go="responsible">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/35a86a7526.svg" alt="" width="15" height="20"><span>Responsible Gaming</span>
         <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
@@ -13179,6 +13204,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── профиль ── */
       'Profile': 'Профиль',
       'Transactions & Gaming History': 'История транзакций и игр',
+      'Transactions': 'Транзакции',
+      'Gaming History': 'История игр',
       'Responsible Gambling': 'Ответственная игра',
       'Log out': 'Выйти',
       'Personal data': 'Личные данные',
@@ -13764,6 +13791,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── профиль ── */
       'Profile': 'Perfil',
       'Transactions & Gaming History': 'Historial de transacciones y juego',
+      'Transactions': 'Transacciones',
+      'Gaming History': 'Historial de juego',
       'Responsible Gambling': 'Juego responsable',
       'Log out': 'Cerrar sesión',
       'Personal data': 'Datos personales',
@@ -16227,6 +16256,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       pmPop.querySelectorAll('.pm__item').forEach(function (it) {
         it.addEventListener('click', function () {
           var go = it.dataset.go;
+          /* У раскрывающегося пункта своего data-go нет: он не ведёт никуда,
+             а разворачивает подпункты — окно при этом закрывать нельзя. */
+          if (!go) return;
           pmClose();
           if (go === 'profile') showView('profile');
           else if (go === 'responsible') {
@@ -16238,6 +16270,26 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           else if (go === 'logout') wwLogout();
         });
       });
+
+      /* Пункт истории раскрывается на две строки. Приём тот же, что у
+         .br__row/.br__subs в меню Browse: aria-expanded на кнопке и
+         hidden на списке. Transactions пока никуда не ведёт — своей
+         страницы у него нет. */
+      var pmHist = pmPop.querySelector('.pm__item[aria-controls="pm-hist-subs"]');
+      var pmSubs = document.getElementById('pm-hist-subs');
+      if (pmHist && pmSubs) {
+        pmHist.addEventListener('click', function (e) {
+          e.preventDefault();
+          var open = pmSubs.hidden;
+          pmSubs.hidden = !open;
+          pmHist.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        pmSubs.addEventListener('click', function (e) {
+          var b = e.target.closest('.pm__sub');
+          if (!b) return;
+          if (b.dataset.sub === 'history') { pmClose(); showView('history'); }
+        });
+      }
     }
 
     /* 1358:18986 — вкладки истории: активна ровно одна, панели переключаются */
