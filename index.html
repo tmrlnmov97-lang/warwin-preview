@@ -5218,6 +5218,67 @@ img.is-missing { visibility: hidden; }
   overflow: hidden;
 }
 
+/* ───────────────────────────────────────────────────────────────────
+   905:4388 — валюта счёта. Список раскрывается под кнопкой баланса в
+   шапке: положение ставит скрипт по её месту, потому что на мобильной
+   кнопка уезжает во вторую строку шапки и стоит по-другому.
+   Слой 71 — выше кассы (70) и листа Browse (65), ниже меню профиля и
+   уведомлений (72): из них список не открывается.
+   ─────────────────────────────────────────────────────────────────── */
+.cur { position: fixed; inset: 0; z-index: 71; }
+.cur[hidden] { display: none; }
+.cur__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .55); }
+.cur__pop { position: absolute; box-sizing: border-box; width: 288px;
+            max-width: calc(100vw - 32px); padding: 8px; border-radius: 18px;
+            background: #181e3b; border: 1px solid rgba(255, 255, 255, .1);
+            box-shadow: 0 28px 70px -22px rgba(0, 0, 0, .85);
+            animation: cur-in .16s cubic-bezier(.22, .61, .36, 1) both; }
+@keyframes cur-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .cur__pop { animation: none; } }
+.cur__head { display: flex; align-items: center; gap: 12px; padding: 8px 8px 10px; }
+.cur__h2 { flex: 1 0 0; margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+           font-size: 16px; line-height: 22px; color: var(--white); }
+.cur__x { display: grid; place-items: center; flex: none; width: 30px; height: 30px;
+          padding: 0; margin-right: -4px; border: 0; border-radius: 8px; cursor: pointer;
+          background: none; color: var(--dp-label);
+          font-family: 'Work Sans', sans-serif; font-size: 20px; line-height: 1; }
+.cur__x:hover { background: var(--white-06); color: var(--white); }
+.cur__list { display: flex; flex-direction: column; gap: 2px; }
+.cur__item { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box;
+             min-height: 52px; padding: 0 12px; border: 0; border-radius: 12px; cursor: pointer;
+             background: none; text-align: left; color: var(--modal-text-1, #bbc6cd);
+             transition: background-color .15s ease, color .15s ease; }
+.cur__item:hover { background: var(--white-06); color: var(--white); }
+.cur__item.is-active { background: var(--white-06); color: var(--white); }
+.cur__flag { display: block; flex: none; border-radius: 50%; }
+.cur__text { display: flex; flex-direction: column; flex: 1 0 0; min-width: 0; }
+.cur__text b { font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 14px; line-height: 19px; color: inherit;
+               overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cur__text em { font-family: 'Work Sans', sans-serif; font-style: normal; font-weight: 500;
+                font-size: 12px; line-height: 16px; color: var(--dp-label, #7c88a8); }
+/* Сумма своя у каждой валюты — счета раздельные, курса между ними нет */
+.cur__sum { flex: none; font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 14px; line-height: 19px; color: var(--white);
+            font-variant-numeric: tabular-nums; }
+.cur__tick { flex: none; width: 16px; height: 16px; opacity: 0; position: relative; }
+.cur__item.is-active .cur__tick { opacity: 1; }
+.cur__tick::before { content: ''; position: absolute; left: 2px; top: 7px;
+                     width: 5px; height: 2px; border-radius: 1px; background: var(--primary);
+                     transform: rotate(45deg); transform-origin: left center; }
+.cur__tick::after { content: ''; position: absolute; left: 5px; top: 9px;
+                    width: 10px; height: 2px; border-radius: 1px; background: var(--primary);
+                    transform: rotate(-52deg); transform-origin: left center; }
+/* Пока список открыт, кнопка баланса подсвечена — видно, что раскрыто именно от неё */
+body.cur-open .wallet__balance { background: var(--white-16); }
+.wallet__balance[aria-expanded="true"] .wallet__chev { transform: rotate(180deg); }
+.wallet__chev { transition: transform .16s ease; }
+@media (prefers-reduced-motion: reduce) { .wallet__chev { transition: none; } }
+/* Обводка фокуса своя: браузерная по умолчанию здесь то ярко-синяя, то
+   оранжевая — на тёмной карточке это выглядит случайным. */
+.cur__item:focus-visible { outline: 2px solid var(--white); outline-offset: -2px; }
+.cur__x:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+
 </style>
 </head>
 <body>
@@ -12307,6 +12368,39 @@ img.is-missing { visibility: hidden; }
      две вкладки и список событий. Окно 426, карточка 394x96, радиус 18. -->
 <!-- Выбор языка. Открывается строкой языка в боковом меню и в листе Browse.
      Английский, русский, испанский; выбор запоминается и переживает перезагрузку. -->
+<!-- 905:4388 — валюта счёта. Кнопка баланса в шапке открывает этот список.
+     Счёт у каждой валюты свой, поэтому сумма показана прямо в строке: иначе
+     после переключения казалось бы, что деньги пропали. -->
+<div class="cur" id="cur-menu" hidden>
+  <div class="cur__scrim" data-close></div>
+  <div class="cur__pop" role="dialog" aria-modal="true" aria-label="Account currency">
+    <div class="cur__head">
+      <h2 class="cur__h2">Account currency</h2>
+      <button class="cur__x" type="button" aria-label="Close" data-close>&#215;</button>
+    </div>
+    <div class="cur__list" role="listbox">
+      <button class="cur__item" type="button" role="option" data-set-cur="USD">
+        <img loading="lazy" decoding="async" class="cur__flag" src="a/21c85c9e5d.svg" alt="" width="20" height="20">
+        <span class="cur__text"><b>US Dollar</b><em>USD</em></span>
+        <span class="cur__sum">0.00</span>
+        <i class="cur__tick" aria-hidden="true"></i>
+      </button>
+      <button class="cur__item" type="button" role="option" data-set-cur="ARS">
+        <img loading="lazy" decoding="async" class="cur__flag" src="a/863439dcc7.svg" alt="" width="20" height="20">
+        <span class="cur__text"><b>Argentine Peso</b><em>ARS</em></span>
+        <span class="cur__sum">0.00</span>
+        <i class="cur__tick" aria-hidden="true"></i>
+      </button>
+      <button class="cur__item" type="button" role="option" data-set-cur="RUB">
+        <img loading="lazy" decoding="async" class="cur__flag" src="a/7c5675f1af.svg" alt="" width="20" height="20">
+        <span class="cur__text"><b>Russian Ruble</b><em>RUB</em></span>
+        <span class="cur__sum">0.00</span>
+        <i class="cur__tick" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="lang" id="lang-menu" hidden>
   <div class="lang__scrim" data-close></div>
   <div class="lang__pop" role="dialog" aria-modal="true" aria-label="Language">
@@ -13426,6 +13520,12 @@ img.is-missing { visibility: hidden; }
       '{done} of {goal} {cur}': '{done} из {goal} {cur}',
       '{done} of {goal} {cur} · wagering x{mult}': '{done} из {goal} {cur} · вейджер x{mult}',
       '{n} days ago': '{n} дн. назад',
+      /* ── валюта счёта ── */
+      'Account currency': 'Валюта счёта',
+      'US Dollar': 'Доллар США',
+      'Argentine Peso': 'Аргентинское песо',
+      'Russian Ruble': 'Российский рубль',
+      'Account currency: {name}': 'Валюта счёта: {name}',
       /* ── починка состояний: подтверждения, ошибки форм, касса ── */
       'Confirm': 'Подтвердить',
       'Enter a valid email address.': 'Введите корректный адрес почты.',
@@ -14003,6 +14103,12 @@ img.is-missing { visibility: hidden; }
       '{done} of {goal} {cur}': '{done} de {goal} {cur}',
       '{done} of {goal} {cur} · wagering x{mult}': '{done} de {goal} {cur} · wagering x{mult}',
       '{n} days ago': 'hace {n} días',
+      /* ── валюта счёта ── */
+      'Account currency': 'Moneda de la cuenta',
+      'US Dollar': 'Dólar estadounidense',
+      'Argentine Peso': 'Peso argentino',
+      'Russian Ruble': 'Rublo ruso',
+      'Account currency: {name}': 'Moneda de la cuenta: {name}',
       /* ── починка состояний: подтверждения, ошибки форм, касса ── */
       'Confirm': 'Confirmar',
       'Enter a valid email address.': 'Ingresá un correo válido.',
@@ -14254,6 +14360,67 @@ img.is-missing { visibility: hidden; }
       catch (e) { return false; }
     }
   };
+
+  /* ── Валюта счёта ──
+     Кнопка баланса в шапке была нарисована со стрелкой и ничего не открывала.
+     Счета раздельные: у доллара, песо и рубля своя сумма, курса между ними
+     здесь нет и придумывать его незачем — в списке видно все три сразу.
+     Выбор запоминаем как настройку, суммы — нет: остальной прототип тоже
+     начинает каждый заход с чистого листа. */
+  var wwCur = (function () {
+    var CUR = {
+      USD: { name: 'US Dollar', flag: 'flag-us' },
+      ARS: { name: 'Argentine Peso', flag: 'flag-ar' },
+      RUB: { name: 'Russian Ruble', flag: 'flag-ru' }
+    };
+    var bal = { USD: 0, ARS: 0, RUB: 0 };
+    var code = 'USD';
+    var subs = [];
+    var fix = function (v) { return (Math.round(Math.max(0, v) * 100) / 100).toFixed(2); };
+    return {
+      codes: ['USD', 'ARS', 'RUB'],
+      info: function (c) { return CUR[c] || CUR.USD; },
+      code: function () { return code; },
+      /* сумма активного счёта — на неё смотрят касса и кнопка в шапке */
+      get: function (c) { return bal[c || code] || 0; },
+      set: function (v, c) { bal[c || code] = Math.max(0, v); this.sync(); },
+      add: function (d, c) { this.set(this.get(c) + d, c); },
+      text: fix,
+      pick: function (c) {
+        if (!CUR[c]) return;
+        code = c;
+        safeStore.set('ww-cur', c);
+        this.sync();
+      },
+      boot: function () {
+        var saved = safeStore.get('ww-cur');
+        if (saved && CUR[saved]) code = saved;
+        this.sync();
+      },
+      on: function (fn) { subs.push(fn); },
+      sync: function () {
+        var btn = document.querySelector('.wallet__balance');
+        if (btn) {
+          var sum = btn.querySelector('span');
+          var flag = btn.querySelector('.wallet__flag');
+          if (sum) sum.textContent = fix(bal[code]);
+          /* Путь к флагу берём из строки списка, а не из скрипта: сборщик
+             переписывает адреса картинок только в разметке. */
+          var row = document.querySelector('[data-set-cur="' + code + '"] .cur__flag');
+          if (flag && row) flag.setAttribute('src', row.getAttribute('src'));
+        }
+        document.querySelectorAll('[data-set-cur]').forEach(function (b) {
+          var c = b.dataset.setCur;
+          var on = c === code;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+          var s = b.querySelector('.cur__sum');
+          if (s) s.textContent = fix(bal[c]);
+        });
+        subs.forEach(function (fn) { fn(code); });
+      }
+    };
+  })();
 
   /* Блокировка прокрутки со счётчиком. Окна открываются друг поверх друга —
      касса поверх профиля, подтверждение поверх кассы, — и прежнее
@@ -14922,19 +15089,12 @@ img.is-missing { visibility: hidden; }
         });
 
         var wdMin = 20, wdFeeRate = 0.0167;
-        /* Баланс в шапке — единственный источник правды о деньгах: от него
-           считаются MAX и доли, им же ограничен вывод. Пополнение его
-           увеличивает, вывод уменьшает, иначе проверка достаточности не на
-           чем стоять и «Not enough balance» остаётся нарисованным вхолостую. */
-        var balEl = document.querySelector('.wallet__balance span');
-        var getBalance = function () {
-          var n = balEl ? parseFloat((balEl.textContent.match(/[\d.]+/) || ['0'])[0]) : 0;
-          return isFinite(n) && n > 0 ? n : 0;
-        };
-        var setBalance = function (v) {
-          if (!balEl) return;
-          balEl.textContent = (Math.max(0, v)).toFixed(2);
-        };
+        /* Деньги живут в wwCur: у каждой валюты счёта своя сумма, а касса
+           работает с активной. Пополнение её увеличивает, вывод уменьшает —
+           иначе проверке достаточности не на чем стоять и «Not enough
+           balance» остаётся нарисованным вхолостую. */
+        var getBalance = function () { return wwCur.get(); };
+        var setBalance = function (v) { wwCur.set(v); };
         var money = function (v, cur) { return v.toFixed(2) + ' ' + (cur || 'USDT'); };
         var amountInput = dp.querySelector('.dp__amount-input');
         if (amountInput) {
@@ -15006,7 +15166,8 @@ img.is-missing { visibility: hidden; }
             wdSync();
           });
           wdSync();
-
+          /* Сменили валюту счёта — суммы и кнопки в кассе считаются заново */
+          wwCur.on(wdSync);
 
         /* Отправка вывода. Раньше кнопка «Withdraw 100 USDT» была активна и
              на нажатие не отвечала ничем — молчаливый провал главной денежной
@@ -15172,6 +15333,7 @@ img.is-missing { visibility: hidden; }
             fwSync();
           });
           fwSync();
+          wwCur.on(fwSync);
 
           /* Отправка вывода фиатом — те же проверки, что у крипты, плюс имя */
           var fwLast = dp.querySelector('.dp__fw-last');
@@ -16697,6 +16859,65 @@ img.is-missing { visibility: hidden; }
           h.setAttribute('aria-expanded', open ? 'false' : 'true');
         });
       });
+
+      /* ── Валюта счёта ──
+         Кнопка баланса раскрывает список под собой. Положение считаем по её
+         месту на экране: на мобильной она уезжает во вторую строку шапки. */
+      var curMenu = document.getElementById('cur-menu');
+      var curBtn = document.querySelector('.wallet__balance');
+      if (curMenu && curBtn) {
+        var curPop = curMenu.querySelector('.cur__pop');
+        var curFit = function () {
+          var r = curBtn.getBoundingClientRect();
+          /* На мобильной кнопка баланса шире списка — тянем список под неё,
+             иначе он висит уступом и выглядит чужим. */
+          curPop.style.width = Math.max(288, Math.min(r.width, innerWidth - 32)) + 'px';
+          var w = Math.min(curPop.offsetWidth || 288, innerWidth - 32);
+          var left = Math.min(Math.max(16, r.left), innerWidth - w - 16);
+          curPop.style.left = Math.round(left) + 'px';
+          curPop.style.top = Math.round(r.bottom + 8) + 'px';
+          /* Список не должен уходить под нижнюю панель на мобильной */
+          curPop.style.maxHeight = Math.max(180, innerHeight - r.bottom - 16 - navHeight()) + 'px';
+          curPop.style.overflowY = 'auto';
+        };
+        var curClose = function () {
+          if (curMenu.hidden) return;
+          curMenu.hidden = true;
+          document.body.classList.remove('cur-open');
+          curBtn.setAttribute('aria-expanded', 'false');
+          curBtn.focus();
+        };
+        var curOpen = function () {
+          curMenu.hidden = false;
+          document.body.classList.add('cur-open');
+          curBtn.setAttribute('aria-expanded', 'true');
+          curFit();
+          var act = curMenu.querySelector('.cur__item.is-active') || curMenu.querySelector('.cur__item');
+          if (act) act.focus();
+        };
+        curBtn.setAttribute('aria-haspopup', 'listbox');
+        curBtn.setAttribute('aria-expanded', 'false');
+        curBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (curMenu.hidden) curOpen(); else curClose();
+        });
+        curMenu.addEventListener('click', function (e) {
+          var pick = e.target.closest('[data-set-cur]');
+          if (pick) {
+            wwCur.pick(pick.dataset.setCur);
+            curClose();
+            notify(T('Account currency: {name}', { name: T(wwCur.info(pick.dataset.setCur).name) }));
+            return;
+          }
+          if (e.target.closest('[data-close]') || !e.target.closest('.cur__pop')) curClose();
+        });
+        addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !curMenu.hidden) { e.preventDefault(); curClose(); }
+        });
+        addEventListener('resize', function () { if (!curMenu.hidden) curFit(); });
+        addEventListener('scroll', function () { if (!curMenu.hidden) curFit(); }, { passive: true });
+        wwCur.boot();
+      }
 
       /* ── Выбор языка ──
          Интерфейс переводит i18n.js по словарю английских строк, страницы
