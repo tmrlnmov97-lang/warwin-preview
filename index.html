@@ -5289,6 +5289,13 @@ body.cur-open .wallet__balance { background: var(--white-16); }
    прячем его там же, где скрыт «Forgot Password?» в регистрации:
    зеркальное правило к .lg.is-reg .lg__forgot. */
 .lg:not(.is-reg) .lg__terms { display: none; }
+
+/* Пункт «Transactions & Gaming History» длиннее прежнего «Game History»
+   и в колонке 276 переносился на две строки: 36px текста в строке 44,
+   ряд переставал совпадать с соседними. Испанская подпись ещё длиннее.
+   Отдаём меню недостающую ширину — сводка и поля остаются прежними.
+   На узких экранах колонки складываются вертикально, там ширина своя. */
+.pm__pop { width: 712px; }
 </style>
 </head>
 <body>
@@ -12546,7 +12553,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
       </button>
       <button class="pm__item" type="button" data-go="history">
-        <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>Game History</span>
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>Transactions &amp; Gaming History</span>
         <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
       </button>
       <button class="pm__item" type="button" data-go="responsible">
@@ -13171,7 +13178,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
       /* ── профиль ── */
       'Profile': 'Профиль',
-      'Game History': 'История игр',
+      'Transactions & Gaming History': 'История транзакций и игр',
       'Responsible Gambling': 'Ответственная игра',
       'Log out': 'Выйти',
       'Personal data': 'Личные данные',
@@ -13756,7 +13763,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
       /* ── профиль ── */
       'Profile': 'Perfil',
-      'Game History': 'Historial de juego',
+      'Transactions & Gaming History': 'Historial de transacciones y juego',
       'Responsible Gambling': 'Juego responsable',
       'Log out': 'Cerrar sesión',
       'Personal data': 'Datos personales',
