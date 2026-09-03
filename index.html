@@ -5305,9 +5305,15 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 .pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); }
 /* Отступ 26 + собственный 10 у подпункта = 36, ровно под подписью верхнего
    пункта: там иконка 20 и зазор 8 при поле 8. */
-.pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 6px 26px; }
+/* Внутреннее меньше внешнего. Было: от родителя до подпункта 27 — ровно
+   столько же, сколько между несвязанными пунктами, и вложенность не читалась.
+   Стало 13 внутри группы, 23 до соседнего пункта, 27 между обычными.
+   Отрицательное поле съедает нижний припуск родителя: его строка 44 при
+   тексте 18, и эти 13px принадлежат самой строке, а не зазору. */
+.pm__subs { display: flex; flex-direction: column; gap: 0; margin-top: -6px;
+            padding: 0 0 4px 26px; }
 .pm__subs[hidden] { display: none; }
-.pm__sub { display: flex; align-items: center; width: 100%; min-height: 40px;
+.pm__sub { display: flex; align-items: center; width: 100%; min-height: 30px;
            padding: 0 10px; text-align: left; cursor: pointer;
            background: none; border: 0; border-radius: 10px;
            font-family: 'Instrument Sans', sans-serif; font-weight: 600;
