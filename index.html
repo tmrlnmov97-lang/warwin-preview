@@ -5283,33 +5283,56 @@ body.cur-open .wallet__balance { background: var(--white-16); }
    hidden, и спрятанный элемент оставался на экране. */
 .cf__btn[hidden] { display: none; }
 
+/* ───────────────────────────────────────────────────────────────────
+   Транзакции. Кости те же, что у истории ставок (.hist__*), поэтому
+   вкладки, фильтры, скелет и постраничная навигация достаются даром.
+   Своего здесь — четыре колонки строки и значок способа оплаты.
+   ─────────────────────────────────────────────────────────────────── */
+.tx__ico { display: grid; place-items: center; flex: none; width: 48px; height: 48px;
+           border-radius: 14px; background: var(--white-06, rgba(255, 255, 255, .06)); }
+.tx__ico img { display: block; opacity: .9; }
+/* Пополнение и вывод различаются подложкой значка, а не только подписью:
+   в списке из двенадцати строк вид операции должен читаться до чтения. */
+.tx__ico--deposit { background: rgba(126, 231, 135, .12); }
+.tx__ico--withdraw { background: rgba(229, 72, 77, .12); }
+.tx__sum, .tx__date { text-align: right; font-family: 'Work Sans', sans-serif; }
+.tx__sum { font-weight: 600; font-size: 16px; line-height: 22px; color: var(--white);
+           font-variant-numeric: tabular-nums; }
+.tx__date { font-weight: 400; font-size: 14px; line-height: 20px; color: var(--dp-label, #7c88a8); }
+.hist__row--head .tx__sum, .hist__row--head .hist__status, .hist__row--head .tx__date {
+  font-weight: 500; font-size: 12px; line-height: 16px; color: var(--dp-label, #7c88a8);
+  letter-spacing: .04em; text-transform: uppercase; }
 
-/* Блок с подтверждением возраста нужен только при регистрации — там человек
-   заводит аккаунт и принимает условия. В окне входа он лишний, поэтому
-   прячем его там же, где скрыт «Forgot Password?» в регистрации:
-   зеркальное правило к .lg.is-reg .lg__forgot. */
-.lg:not(.is-reg) .lg__terms { display: none; }
+@media (max-width: 1023px) {
+  /* Дату на мобильной не прячем, как у ставок: у транзакции второй даты
+     внутри названия нет, и без неё строка теряет смысл. Ставим её под
+     способом оплаты, состояние — справа от суммы. */
+  .tx__row { grid-template-columns: 1fr auto; gap: 2px 12px; }
+  .tx__row .hist__game { grid-row: 1 / span 2; grid-column: 1; }
+  .tx__row .tx__sum { grid-row: 1; grid-column: 2; font-size: 15px; }
+  .tx__row .hist__status { grid-row: 2; grid-column: 2; font-size: 13px; line-height: 18px; }
+  .tx__row .tx__date { grid-row: 3; grid-column: 1 / -1; text-align: left;
+                       font-size: 12px; line-height: 16px; padding-top: 2px; }
+  /* Правило ставок дописывает «Bet» перед суммой — здесь оно не к месту */
+  .tx__row .tx__sum::before { content: none; }
+  .tx__ico { width: 40px; height: 40px; border-radius: 12px; }
+}
 
-/* Пункт «Transactions & Gaming History» длиннее прежнего «Game History»
-   и в колонке 276 переносился на две строки: 36px текста в строке 44,
-   ряд переставал совпадать с соседними. Испанская подпись ещё длиннее.
-   Отдаём меню недостающую ширину — сводка и поля остаются прежними.
-   На узких экранах колонки складываются вертикально, там ширина своя. */
-.pm__pop { width: 712px; }
+/* Парное правило к hidden. Без него display: grid из .hist__row перебивает
+   атрибут, и спрятанная строка остаётся на экране: постраничная навигация
+   в истории и транзакциях прятала строки только в разметке. */
+.hist__row[hidden] { display: none; }
+/* У транзакции вторая строка — способ оплаты, и он нужен на любой ширине.
+   У ставок там дублируется дата, поэтому на десктопе она скрыта. */
+.tx__row .hist__game-text span { display: block; font-family: 'Work Sans', sans-serif;
+                                 font-weight: 400; font-size: 13px; line-height: 18px;
+                                 color: var(--dp-label, #7c88a8); }
 
-/* Раскрывающийся пункт в поп-апе профиля. Приём взят у .br__row/.br__subs
-   в меню Browse: шеврон поворачивается по aria-expanded, список прячется
-   атрибутом hidden — и для него обязательно своё display:none, иначе
-   display:flex его перебьёт. */
+/* Пункт «Transactions & Gaming History» раскрывается на две строки.
+   Правила перенесены из другой копии проекта, чтобы её работа не пропала
+   при выкладке: там этот пункт уже сделан. */
 .pm__item[aria-expanded] .pm__chev { transition: transform .15s ease; }
 .pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); }
-/* Отступ 26 + собственный 10 у подпункта = 36, ровно под подписью верхнего
-   пункта: там иконка 20 и зазор 8 при поле 8. */
-/* Внутреннее меньше внешнего. Было: от родителя до подпункта 27 — ровно
-   столько же, сколько между несвязанными пунктами, и вложенность не читалась.
-   Стало 13 внутри группы, 23 до соседнего пункта, 27 между обычными.
-   Отрицательное поле съедает нижний припуск родителя: его строка 44 при
-   тексте 18, и эти 13px принадлежат самой строке, а не зазору. */
 .pm__subs { display: flex; flex-direction: column; gap: 0; margin-top: -6px;
             padding: 0 0 4px 26px; }
 .pm__subs[hidden] { display: none; }
@@ -5319,9 +5342,15 @@ body.cur-open .wallet__balance { background: var(--white-16); }
            font-family: 'Instrument Sans', sans-serif; font-weight: 600;
            font-size: 13px; line-height: 18px; color: var(--modal-text-1, #bbc6cd); }
 .pm__sub:hover { background: var(--white-06); color: var(--white); }
-/* Между списком и следующим пунктом линия пропала бы: соседом стал не
-   .pm__item, а блок подпунктов. Возвращаем её. */
 .pm__subs + .pm__item { border-top: 1px solid rgba(255, 255, 255, .08); }
+
+/* Блок с подтверждением возраста нужен только при регистрации — там человек
+   заводит аккаунт и принимает условия. В окне входа он лишний, поэтому
+   прячем его там же, где скрыт «Forgot Password?» в регистрации:
+   зеркальное правило к .lg.is-reg .lg__forgot. Перенесено из другой копии
+   проекта, чтобы её работа не пропала при выкладке. */
+.lg:not(.is-reg) .lg__terms { display: none; }
+
 </style>
 </head>
 <body>
@@ -11289,6 +11318,183 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         </div>
       </div>
 
+
+      <!-- Транзакции: те же кости, что у истории ставок — вкладки, фильтры,
+           таблица, скелет, пустое состояние и постраничная навигация. Вкладка
+           отбирает по виду операции, фильтры — по состоянию и сроку. -->
+      <div class="view view--history tx" id="view-transactions" hidden>
+        <div class="hist__head">
+          <h1 class="hist__h1">Transactions</h1>
+          <div class="hist__tabs" role="tablist">
+            <button class="hist__tab is-active" type="button" role="tab" aria-selected="true" data-tx="all">All</button>
+            <button class="hist__tab" type="button" role="tab" aria-selected="false" data-tx="deposit">Deposit</button>
+            <button class="hist__tab" type="button" role="tab" aria-selected="false" data-tx="withdraw">Withdraw</button>
+          </div>
+        </div>
+
+        <div class="hist__card" id="tx-list" role="tabpanel">
+          <div class="hist__filters">
+            <div class="hist__filter">
+              <span>Status</span>
+              <div class="hist__picker" data-txfilter="state">
+                <button class="hist__select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="hist__value">All</span><img loading="lazy" decoding="async" src="a/e139209072.svg" alt="">
+                </button>
+                <ul class="hist__menu" role="listbox" hidden>
+                  <li><button type="button" role="option" data-val="all" aria-selected="true">All</button></li>
+                  <li><button type="button" role="option" data-val="done" aria-selected="false">Completed</button></li>
+                  <li><button type="button" role="option" data-val="wait" aria-selected="false">Pending</button></li>
+                  <li><button type="button" role="option" data-val="bad" aria-selected="false">Declined</button></li>
+                </ul>
+              </div>
+            </div>
+            <div class="hist__filter">
+              <span>Period</span>
+              <div class="hist__picker" data-txfilter="when">
+                <button class="hist__select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="hist__value">This month</span><img loading="lazy" decoding="async" src="a/e139209072.svg" alt="">
+                </button>
+                <ul class="hist__menu" role="listbox" hidden>
+                  <li><button type="button" role="option" data-val="today" aria-selected="false">Today</button></li>
+                  <li><button type="button" role="option" data-val="week" aria-selected="false">This week</button></li>
+                  <li><button type="button" role="option" data-val="month" aria-selected="true">This month</button></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="hist__table">
+            <div class="hist__row hist__row--head tx__row">
+              <span>Transaction</span><span class="tx__sum">Amount</span>
+              <span class="hist__status">Status</span><span class="tx__date">Date</span>
+            </div>
+          <div class="hist__row tx__row" data-tx-kind="deposit" data-tx-state="done" data-tx-when="today">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--deposit"><img loading="lazy" decoding="async" src="a/796916f40e.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Deposit</b><span>Crypto · ERC20</span></div>
+            </div>
+            <span class="tx__sum hist__win--up">+500.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">03.09.2026, 14:12</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="withdraw" data-tx-state="wait" data-tx-when="today">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--withdraw"><img loading="lazy" decoding="async" src="a/64aeb080c4.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Withdrawal</b><span>Card · Visa</span></div>
+            </div>
+            <span class="tx__sum hist__win--down">-250.00 USDT</span>
+            <b class="hist__status hist__status--wait">Pending</b>
+            <span class="tx__date">03.09.2026, 11:48</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="deposit" data-tx-state="done" data-tx-when="today">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--deposit"><img loading="lazy" decoding="async" src="a/c22f96a525.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Deposit</b><span>Payphone</span></div>
+            </div>
+            <span class="tx__sum hist__win--up">+100.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">03.09.2026, 09:05</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="withdraw" data-tx-state="done" data-tx-when="week">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--withdraw"><img loading="lazy" decoding="async" src="a/796916f40e.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Withdrawal</b><span>Crypto · TRC20</span></div>
+            </div>
+            <span class="tx__sum hist__win--down">-1,000.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">01.09.2026, 20:31</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="deposit" data-tx-state="bad" data-tx-when="week">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--deposit"><img loading="lazy" decoding="async" src="a/64aeb080c4.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Deposit</b><span>Card · Mastercard</span></div>
+            </div>
+            <span class="tx__sum hist__win--up">+50.00 USDT</span>
+            <b class="hist__status hist__status--lose">Declined</b>
+            <span class="tx__date">31.08.2026, 18:02</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="deposit" data-tx-state="done" data-tx-when="week">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--deposit"><img loading="lazy" decoding="async" src="a/796916f40e.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Deposit</b><span>Crypto · BTC</span></div>
+            </div>
+            <span class="tx__sum hist__win--up">+2,000.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">30.08.2026, 12:40</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="withdraw" data-tx-state="done" data-tx-when="week">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--withdraw"><img loading="lazy" decoding="async" src="a/c22f96a525.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Withdrawal</b><span>Bank transfer</span></div>
+            </div>
+            <span class="tx__sum hist__win--down">-300.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">29.08.2026, 16:19</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="deposit" data-tx-state="done" data-tx-when="month">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--deposit"><img loading="lazy" decoding="async" src="a/796916f40e.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Deposit</b><span>Crypto · ERC20</span></div>
+            </div>
+            <span class="tx__sum hist__win--up">+150.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">24.08.2026, 22:07</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="withdraw" data-tx-state="bad" data-tx-when="month">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--withdraw"><img loading="lazy" decoding="async" src="a/64aeb080c4.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Withdrawal</b><span>Card · Visa</span></div>
+            </div>
+            <span class="tx__sum hist__win--down">-75.00 USDT</span>
+            <b class="hist__status hist__status--lose">Declined</b>
+            <span class="tx__date">21.08.2026, 13:55</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="deposit" data-tx-state="done" data-tx-when="month">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--deposit"><img loading="lazy" decoding="async" src="a/c22f96a525.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Deposit</b><span>Payphone</span></div>
+            </div>
+            <span class="tx__sum hist__win--up">+400.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">17.08.2026, 10:26</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="withdraw" data-tx-state="done" data-tx-when="month">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--withdraw"><img loading="lazy" decoding="async" src="a/796916f40e.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Withdrawal</b><span>Crypto · TRC20</span></div>
+            </div>
+            <span class="tx__sum hist__win--down">-600.00 USDT</span>
+            <b class="hist__status hist__status--win">Completed</b>
+            <span class="tx__date">12.08.2026, 19:41</span>
+          </div>
+          <div class="hist__row tx__row" data-tx-kind="deposit" data-tx-state="wait" data-tx-when="month">
+            <div class="hist__game">
+              <span class="tx__ico tx__ico--deposit"><img loading="lazy" decoding="async" src="a/796916f40e.svg" alt="" width="20" height="20"></span>
+              <div class="hist__game-text"><b>Deposit</b><span>Crypto · ETH</span></div>
+            </div>
+            <span class="tx__sum hist__win--up">+1,200.00 USDT</span>
+            <b class="hist__status hist__status--wait">Pending</b>
+            <span class="tx__date">08.08.2026, 08:33</span>
+          </div>
+          </div>
+          <div class="hist__skel" hidden aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="hist__empty" hidden>
+            <b>Nothing here yet</b>
+            <span>No transactions match the selected filters.</span>
+            <button type="button" hidden>Try again</button>
+          </div>
+          <div class="hist__pager" data-hist-size="5">
+            <button class="hist__page hist__page--nav" type="button" aria-label="Back"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+            <button class="hist__page is-current" type="button">1</button>
+            <button class="hist__page" type="button">2</button>
+            <button class="hist__page" type="button">3</button>
+            <button class="hist__page" type="button">4</button>
+            <button class="hist__page hist__page--nav hist__page--next" type="button" aria-label="Next"><img loading="lazy" decoding="async" src="a/8196602e48.svg" alt=""></button>
+          </div>
+        </div>
+      </div>
+
       <!-- 1358:18986 «History» — вкладки Casino / Sportsbook / Bonus,
            фильтры, таблица ставок и постраничная навигация. -->
       <div class="view view--history" id="view-history" hidden data-node-id="1358:18986">
@@ -13209,9 +13415,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
       /* ── профиль ── */
       'Profile': 'Профиль',
-      'Transactions & Gaming History': 'История транзакций и игр',
-      'Transactions': 'Транзакции',
-      'Gaming History': 'История игр',
+      'Game History': 'История игр',
       'Responsible Gambling': 'Ответственная игра',
       'Log out': 'Выйти',
       'Personal data': 'Личные данные',
@@ -13575,6 +13779,22 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'US Dollar': 'Доллар США',
       'Argentine Peso': 'Аргентинское песо',
       'Russian Ruble': 'Российский рубль',
+      /* ── транзакции ── */
+      'Transactions': 'Транзакции',
+      'Transactions & Gaming History': 'Транзакции и история игр',
+      'Gaming History': 'История игр',
+      'Transaction': 'Операция',
+      'Withdrawal': 'Вывод',
+      'Completed': 'Исполнено',
+      'Declined': 'Отклонено',
+      'No transactions match the selected filters.': 'Под выбранные фильтры операций нет.',
+      'Crypto · ERC20': 'Крипта · ERC20',
+      'Crypto · TRC20': 'Крипта · TRC20',
+      'Crypto · BTC': 'Крипта · BTC',
+      'Crypto · ETH': 'Крипта · ETH',
+      'Card · Visa': 'Карта · Visa',
+      'Card · Mastercard': 'Карта · Mastercard',
+      'Bank transfer': 'Банковский перевод',
       'Currency changed': 'Валюта счёта изменена',
       'Got it': 'Понятно',
       'The account is now in {name} ({code}). Balance {sum}. Deposits and withdrawals go to this account — the other currencies keep their own.': 'Счёт теперь в валюте «{name}» ({code}). Баланс {sum}. Пополнение и вывод идут на этот счёт — у остальных валют свой.',
@@ -13796,9 +14016,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
       /* ── профиль ── */
       'Profile': 'Perfil',
-      'Transactions & Gaming History': 'Historial de transacciones y juego',
-      'Transactions': 'Transacciones',
-      'Gaming History': 'Historial de juego',
+      'Game History': 'Historial de juego',
       'Responsible Gambling': 'Juego responsable',
       'Log out': 'Cerrar sesión',
       'Personal data': 'Datos personales',
@@ -14162,6 +14380,22 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'US Dollar': 'Dólar estadounidense',
       'Argentine Peso': 'Peso argentino',
       'Russian Ruble': 'Rublo ruso',
+      /* ── транзакции ── */
+      'Transactions': 'Transacciones',
+      'Transactions & Gaming History': 'Transacciones e historial de juego',
+      'Gaming History': 'Historial de juego',
+      'Transaction': 'Operación',
+      'Withdrawal': 'Retiro',
+      'Completed': 'Completada',
+      'Declined': 'Rechazada',
+      'No transactions match the selected filters.': 'No hay operaciones con estos filtros.',
+      'Crypto · ERC20': 'Cripto · ERC20',
+      'Crypto · TRC20': 'Cripto · TRC20',
+      'Crypto · BTC': 'Cripto · BTC',
+      'Crypto · ETH': 'Cripto · ETH',
+      'Card · Visa': 'Tarjeta · Visa',
+      'Card · Mastercard': 'Tarjeta · Mastercard',
+      'Bank transfer': 'Transferencia bancaria',
       'Currency changed': 'Moneda cambiada',
       'Got it': 'Entendido',
       'The account is now in {name} ({code}). Balance {sum}. Deposits and withdrawals go to this account — the other currencies keep their own.': 'La cuenta ahora está en {name} ({code}). Saldo {sum}. Los depósitos y retiros van a esta cuenta; las otras monedas conservan la suya.',
@@ -14477,6 +14711,11 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       }
     };
   })();
+
+  /* Добавить строку в список транзакций. Присваивается ниже, когда страница
+     найдена; касса зовёт её через проверку — без страницы операция просто не
+     попадает в список, а не роняет кассу. */
+  var txAdd = null;
 
   /* Блокировка прокрутки со счётчиком. Окна открываются друг поверх друга —
      касса поверх профиля, подтверждение поверх кассы, — и прежнее
@@ -15250,6 +15489,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 done: function () {
                   setBalance(getBalance() - v - v * wdFeeRate);
                   wdSync();
+                  if (txAdd) txAdd('withdraw', '-' + money(v, WD_CUR),
+                    'Crypto · ' + (wdNetName() || 'ERC20'), 'wait');
                   stScreen('wait', '\u23F3', T('Withdrawal requested'),
                     T('{sum} is on the way to {addr}. It usually takes up to 30 minutes.',
                       { sum: money(v, WD_CUR), addr: addr.slice(0, 10) + '…' }),
@@ -15346,6 +15587,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 busy: T('Sending'),
                 done: function () {
                   setBalance(getBalance() + v);
+                  if (txAdd) txAdd('deposit', '+' + money(v), 'Card · Visa', 'done');
                   fdInput.value = ''; fdSync();
                   if (typeof wdSync === 'function') wdSync();
                   stScreen('ok', '\u2713', T('Deposit credited'),
@@ -15423,6 +15665,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 busy: T('Sending'),
                 done: function () {
                   setBalance(getBalance() - v - v * wdFeeRate);
+                  if (txAdd) txAdd('withdraw', '-' + money(v), 'Card · Visa', 'wait');
                   fwInput.value = ''; fwSync();
                   stScreen('wait', '\u23F3', T('Withdrawal requested'),
                     T('The payout to the card usually takes one to three business days.'),
@@ -15819,6 +16062,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                     sport: document.getElementById('view-sport'),
                     profile: document.getElementById('view-profile'),
                     history: document.getElementById('view-history'),
+                    transactions: document.getElementById('view-transactions'),
                     promo: document.getElementById('view-promo'),
                     promoOne: document.getElementById('view-promo-one'),
                     game: document.getElementById('view-game'),
@@ -15846,7 +16090,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
        showView переключал что угодно без проверки, и по ссылке из подвала
        неавторизованный открывал профиль с чужим адресом и документами.
        Бонусы в список не входят: у них свой экран приглашения войти. */
-    var NEEDS_AUTH = { profile: 1, history: 1 };
+    var NEEDS_AUTH = { profile: 1, history: 1, transactions: 1 };
     var showView = function (key) {
       if (NEEDS_AUTH[key] && !document.body.classList.contains('is-authed')) {
         var enter = document.querySelector('.header-actions .btn--ghost');
@@ -16273,14 +16517,14 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             if (rgTab) rgTab.click();
           }
           else if (go === 'history') showView('history');
+          else if (go === 'transactions') showView('transactions');
           else if (go === 'logout') wwLogout();
         });
       });
 
       /* Пункт истории раскрывается на две строки. Приём тот же, что у
-         .br__row/.br__subs в меню Browse: aria-expanded на кнопке и
-         hidden на списке. Transactions пока никуда не ведёт — своей
-         страницы у него нет. */
+         .br__row/.br__subs в меню Browse: aria-expanded на кнопке и hidden
+         на списке. Обе строки ведут на свои страницы. */
       var pmHist = pmPop.querySelector('.pm__item[aria-controls="pm-hist-subs"]');
       var pmSubs = document.getElementById('pm-hist-subs');
       if (pmHist && pmSubs) {
@@ -16293,9 +16537,125 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         pmSubs.addEventListener('click', function (e) {
           var b = e.target.closest('.pm__sub');
           if (!b) return;
-          if (b.dataset.sub === 'history') { pmClose(); showView('history'); }
+          pmClose();
+          showView(b.dataset.sub === 'transactions' ? 'transactions' : 'history');
         });
       }
+    }
+
+    /* ═══ Транзакции ═══
+       Вкладка отбирает по виду операции, два фильтра — по состоянию и сроку.
+       Строки те же .hist__row, поэтому постраничная навигация и скелет уже
+       работают: помечаем скрытое тем же data-hist-out, что и история ставок. */
+    var txView = document.getElementById('view-transactions');
+    if (txView) {
+      var txCard = document.getElementById('tx-list');
+      var txTabs = [].slice.call(txView.querySelectorAll('.hist__tab'));
+      var txKind = 'all';
+      var txPick = { state: 'all', when: 'month' };
+      /* «За месяц» включает неделю и сегодня — сроки вложены друг в друга */
+      var TX_WHEN = { today: 0, week: 1, month: 2 };
+
+      var txApply = function () {
+        var shown = 0;
+        txCard.querySelectorAll('.tx__row:not(.hist__row--head)').forEach(function (r) {
+          var ok = (txKind === 'all' || r.dataset.txKind === txKind)
+                && (txPick.state === 'all' || r.dataset.txState === txPick.state)
+                && (TX_WHEN[r.dataset.txWhen] <= TX_WHEN[txPick.when]);
+          if (ok) delete r.dataset.histOut; else r.dataset.histOut = '1';
+          r.hidden = !ok;
+          if (ok) shown++;
+        });
+        var table = txCard.querySelector('.hist__table');
+        var empty = txCard.querySelector('.hist__empty');
+        var pager = txCard.querySelector('.hist__pager');
+        if (table) table.hidden = shown === 0;
+        if (empty) empty.hidden = shown !== 0;
+        if (pager) pager.hidden = shown === 0;
+        /* Страницы пересобираются: их число зависит от того, что осталось */
+        if (txCard._histDraw) txCard._histDraw();
+      };
+
+      txTabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          txTabs.forEach(function (o) {
+            var on = o === t;
+            o.classList.toggle('is-active', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          txKind = t.dataset.tx;
+          txApply();
+        });
+      });
+
+      var txShut = function (except) {
+        txView.querySelectorAll('[data-txfilter]').forEach(function (pk) {
+          if (pk === except) return;
+          pk.querySelector('.hist__menu').hidden = true;
+          pk.querySelector('.hist__select').setAttribute('aria-expanded', 'false');
+        });
+      };
+      txView.querySelectorAll('[data-txfilter]').forEach(function (pk) {
+        var btn = pk.querySelector('.hist__select');
+        var menu = pk.querySelector('.hist__menu');
+        var val = pk.querySelector('.hist__value');
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = menu.hidden;
+          txShut(pk);
+          menu.hidden = !open;
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        menu.querySelectorAll('button').forEach(function (opt) {
+          opt.addEventListener('click', function () {
+            menu.querySelectorAll('button').forEach(function (o) { o.setAttribute('aria-selected', 'false'); });
+            opt.setAttribute('aria-selected', 'true');
+            val.textContent = opt.textContent;
+            txPick[pk.dataset.txfilter] = opt.dataset.val;
+            menu.hidden = true;
+            btn.setAttribute('aria-expanded', 'false');
+            txApply();
+          });
+        });
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('[data-txfilter]')) txShut();
+      });
+      addEventListener('keydown', function (e) { if (e.key === 'Escape') txShut(); });
+
+      /* Настоящая операция из кассы попадает в список сразу. Строку не
+         собираем текстом, а клонируем подходящую: значки способов лежат в
+         разметке, и сборщик переписывает пути только там. */
+      txAdd = function (kind, sum, method, state) {
+        var rows = [].slice.call(txCard.querySelectorAll('.tx__row:not(.hist__row--head)'));
+        var first = method.split(' ')[0];
+        var sample = rows.filter(function (r) {
+          var m = r.querySelector('.hist__game-text span');
+          return r.dataset.txKind === kind && m && m.textContent.split(' ')[0] === first;
+        })[0] || rows.filter(function (r) { return r.dataset.txKind === kind; })[0];
+        if (!sample) return;
+        var row = sample.cloneNode(true);
+        row.dataset.txState = state;
+        row.dataset.txWhen = 'today';
+        delete row.dataset.histOut;
+        row.hidden = false;
+        row.querySelector('.hist__game-text span').textContent = method;
+        row.querySelector('.tx__sum').textContent = sum;
+        var st = { done: ['Completed', 'win'], wait: ['Pending', 'wait'], bad: ['Declined', 'lose'] }[state];
+        var badge = row.querySelector('.hist__status');
+        badge.className = 'hist__status hist__status--' + st[1];
+        badge.textContent = T(st[0]);
+        var d = new Date(), two = function (n) { return (n < 10 ? '0' : '') + n; };
+        row.querySelector('.tx__date').textContent =
+          two(d.getDate()) + '.' + two(d.getMonth() + 1) + '.' + d.getFullYear() +
+          ', ' + two(d.getHours()) + ':' + two(d.getMinutes());
+        var table = txCard.querySelector('.hist__table');
+        table.insertBefore(row, table.querySelector('.hist__row--head').nextSibling);
+        if (window.WW_I18N) window.WW_I18N.apply(row);
+        txApply();
+      };
+
+      txApply();
     }
 
     /* 1358:18986 — вкладки истории: активна ровно одна, панели переключаются */
@@ -16773,25 +17133,28 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── История: страницы действительно листают строки ──
          Раньше цифры только переставляли подсветку, а таблица оставалась
          прежней: страница 2 подсвечивалась, ставки были те же. */
-      /* Размер страницы. В демо-данных на вкладку приходится по 5 строк, и при
-         странице в 5 листать было бы нечего — нарисованная пагинация опять
-         оказалась бы бутафорией. Придут настоящие данные — поднять до 10-20. */
+      /* Размер страницы у каждой таблицы свой: у истории ставок в демо-данных
+         по 5 строк на вкладку, и при странице в 5 листать было бы нечего —
+         нарисованная пагинация опять оказалась бы бутафорией. У транзакций
+         строк 12, там страница крупнее и карточка не пустует.
+         Придут настоящие данные — поднять оба до 10-20. */
       var HIST_PAGE = 3;
       document.querySelectorAll('.hist__pager').forEach(function (pager) {
         var card = pager.closest('.hist__card');
         if (!card) return;
         var pages = [].slice.call(pager.querySelectorAll('.hist__page:not(.hist__page--nav)'));
         var nav = pager.querySelectorAll('.hist__page--nav');
+        var size = parseInt(pager.dataset.histSize, 10) || HIST_PAGE;
         var cur = 1;
         /* Строки берём заново на каждый показ: фильтры прячут часть, и
            листать надо то, что осталось после них. */
         var draw = function () {
           var rows = [].slice.call(card.querySelectorAll('.hist__row:not(.hist__row--head)'))
             .filter(function (r) { return !r.dataset.histOut; });
-          var max = Math.max(1, Math.ceil(rows.length / HIST_PAGE));
+          var max = Math.max(1, Math.ceil(rows.length / size));
           if (cur > max) cur = max;
           rows.forEach(function (r, i) {
-            r.hidden = !(i >= (cur - 1) * HIST_PAGE && i < cur * HIST_PAGE);
+            r.hidden = !(i >= (cur - 1) * size && i < cur * size);
           });
           pages.forEach(function (b, i) {
             b.hidden = (i + 1) > max;
@@ -17879,9 +18242,14 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         var v = document.getElementById('view-history');
         if (!v) return null;
         if (v.hidden) {
-          var b = document.querySelector('.pm__item[data-go="history"]');
-          if (b) { var u = document.querySelector('.authed__btn:not(.authed__btn--bell)');
-                   if (u) u.click(); b.click(); }
+          /* Пункт истории теперь раскрывающийся: сперва разворачиваем его,
+             потом жмём подпункт. Прямого data-go у него больше нет. */
+          var u = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+          if (u) u.click();
+          var head = document.querySelector('.pm__item[aria-controls="pm-hist-subs"]');
+          if (head) head.click();
+          var b = document.querySelector('.pm__sub[data-sub="history"]');
+          if (b) b.click(); else showView('history');
         }
         return v.querySelector('.hist__card:not([hidden])');
       };
