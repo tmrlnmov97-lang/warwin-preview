@@ -4579,8 +4579,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    а не окно. */
 .pm__pop {
   position: absolute; right: 0; top: 0; bottom: 0; box-sizing: border-box;
-  display: flex; flex-direction: column; gap: 10px;
-  width: 380px; max-width: calc(100vw - 24px); padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  width: 380px; max-width: calc(100vw - 24px); padding: 20px 16px;
   background: #181e3b; border-left: 1px solid rgba(255, 255, 255, .12);
   box-shadow: -32px 0 80px -24px rgba(0, 0, 0, .9);
   overflow-y: auto;
@@ -4594,14 +4594,20 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .pm__pop, .pm__scrim { animation: none; }
 }
 
+/* ── Шкала размеров в панели ──
+   Всё было в диапазоне 13–16px: уровни не отличались, и список читался
+   сплошным серым полотном. Разводим на пять ступеней —
+   баланс 20, имя 17, разделы 16, подпункты 14, подписи 13, — чтобы
+   было видно, что здесь главное, а что справочное. */
+
 /* шапка панели */
-.pm__head { display: flex; align-items: center; gap: 12px; padding: 4px 0 6px; }
-.pm__ava { display: grid; place-items: center; flex: none; width: 40px; height: 40px;
+.pm__head { display: flex; align-items: center; gap: 12px; padding: 0 0 4px; }
+.pm__ava { display: grid; place-items: center; flex: none; width: 48px; height: 48px;
            border-radius: 50%; background: var(--white-10, rgba(255, 255, 255, .1)); }
-.pm__ava img { display: block; opacity: .8; }
+.pm__ava img { display: block; width: 26px; height: 26px; opacity: .8; }
 .pm__who { display: flex; flex-direction: column; flex: 1 0 0; min-width: 0; }
 .pm__name { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-            font-size: 15px; line-height: 20px; color: var(--white);
+            font-size: 17px; line-height: 22px; color: var(--white);
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pm__status { font-family: 'Work Sans', sans-serif; font-weight: 500;
               font-size: 13px; line-height: 18px; color: var(--dp-label, #8b93a8); }
@@ -4613,33 +4619,36 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__x:hover { background: var(--white-10); color: var(--white); }
 .pm__x:active { background: var(--white-16); }
 
-/* баланс и очки: поле слева, действие справа */
+/* Баланс и очки: поле слева, действие справа. Строки не равны по весу —
+   деньги это то, за чем панель открывают, а очки лежат рядом справочно.
+   Поэтому верхняя строка выше и с крупным числом, нижняя — обычная. */
 .pm__money { display: flex; align-items: center; gap: 10px; }
-.pm__cur, .pm__bonus { display: flex; align-items: center; gap: 10px; flex: 1 0 0; min-width: 0;
-                       box-sizing: border-box; height: 48px; padding: 0 12px;
+.pm__cur, .pm__bonus { display: flex; align-items: center; gap: 12px; flex: 1 0 0; min-width: 0;
+                       box-sizing: border-box; height: 48px; padding: 0 14px;
                        border: 1px solid var(--white-10, rgba(255, 255, 255, .1));
                        border-radius: 12px; background: #0e132a; }
-.pm__cur { cursor: pointer;
+.pm__cur { height: 56px; cursor: pointer;
            transition: background-color .16s ease, border-color .16s ease; }
 .pm__cur:hover { background: #121734; border-color: var(--white-16); }
 .pm__cur:active { background: #0b1024; }
 .pm__cur:hover .pm__cur-chev { opacity: 1; }
-.pm__coin-flag { display: block; flex: none; width: 24px; height: 24px; border-radius: 50%; }
+.pm__coin-flag { display: block; flex: none; width: 26px; height: 26px; border-radius: 50%; }
 .pm__cur-sum, .pm__bonus-sum { flex: 1 0 0; min-width: 0; text-align: left;
                                font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-                               font-size: 16px; line-height: 22px; color: var(--white);
-                               font-variant-numeric: tabular-nums; }
+                               color: var(--white); font-variant-numeric: tabular-nums; }
+.pm__cur-sum { font-size: 20px; line-height: 26px; }
+.pm__bonus-sum { font-size: 16px; line-height: 22px; }
 .pm__cur-chev { display: block; flex: none; opacity: .7; transition: opacity .16s ease; }
 .pm__bonus-ico { display: grid; place-items: center; flex: none; width: 24px; height: 24px;
                  border-radius: 50%; border: 1px solid #d8b24a; color: #d8b24a;
                  font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 10px; }
-.pm__top, .pm__swap { flex: none; min-width: 120px; height: 48px; padding: 0 18px;
+.pm__top, .pm__swap { flex: none; min-width: 124px; height: 48px; padding: 0 18px;
                       border: 0; border-radius: 12px; cursor: pointer;
                       font-family: 'Instrument Sans', sans-serif; font-weight: 700;
                       font-size: 15px; line-height: 20px;
                       transition: filter .16s ease, background-color .16s ease,
                                   border-color .16s ease; }
-.pm__top { background: var(--register, #00c928); color: #06210d; }
+.pm__top { height: 56px; background: var(--register, #00c928); color: #06210d; }
 .pm__top:hover { filter: brightness(1.08); }
 .pm__top:active { filter: brightness(.94); }
 .pm__swap { background: var(--white-06, rgba(255, 255, 255, .06)); color: var(--white);
@@ -4648,13 +4657,17 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                   border-color: var(--white-16); }
 .pm__swap:active { background: var(--white-16); }
 
-/* разделы */
-.pm__menu { flex: 1 0 auto; display: flex; flex-direction: column; gap: 2px; margin-top: 6px; }
+/* Разделы. Волосяная линия отделяет «кто я и сколько у меня» от навигации:
+   без неё панель шла одним потоком строк и разница между деньгами и
+   переходами по разделам была не видна. */
+.pm__menu { flex: 1 0 auto; display: flex; flex-direction: column; gap: 2px;
+            margin-top: 6px; padding-top: 14px;
+            border-top: 1px solid var(--white-06, rgba(255, 255, 255, .06)); }
 .pm__item { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
-            width: 100%; min-height: 52px; padding: 0 12px; border: 0; border-radius: 12px;
+            width: 100%; min-height: 56px; padding: 0 12px; border: 0; border-radius: 12px;
             cursor: pointer; background: none; text-align: left;
             font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-            font-size: 15px; line-height: 20px; color: var(--white);
+            font-size: 16px; line-height: 22px; color: var(--white);
             transition: background-color .16s ease, color .16s ease; }
 .pm__item span { flex: 1 0 0; min-width: 0; }
 .pm__item:hover { background: var(--white-10); }
@@ -4662,7 +4675,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* Иконки разделов нарисованы под разную ширину — 20, 18, 18, 20. Пока каждая
    занимала свою, подписи начинались с разных мест и столбец текста ехал.
    Держим их в одинаковой клетке 20x20, картинка вписывается внутрь. */
-.pm__ico { display: block; flex: none; width: 20px; height: 20px;
+.pm__ico { display: block; flex: none; width: 22px; height: 22px;
            object-fit: contain; opacity: .75; transition: opacity .16s ease; }
 .pm__chev { display: block; flex: none; opacity: .5;
             transition: transform .18s cubic-bezier(.22, .61, .36, 1), opacity .16s ease; }
@@ -4672,16 +4685,17 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* Раскрытый раздел вместе со своими пунктами читается одним блоком: подсветка
    идёт насквозь, углы скруглены только снаружи, шов между ними убран
    отрицательным полем — иначе подпункты висели в пустоте и список выглядел
-   рваным. Подписи подпунктов встают ровно под подписью раздела: 32 отступа
-   списка плюс 12 внутри кнопки = те же 44, что у раздела. */
+   рваным. Подписи подпунктов встают ровно под подписью раздела: 34 отступа
+   списка плюс 12 внутри кнопки = те же 46, что у раздела (12 поля + 22
+   иконка + 12 зазор). */
 .pm__item[aria-expanded="true"] { background: var(--white-04); border-radius: 12px 12px 0 0; }
 .pm__item[aria-expanded="true"]:hover { background: var(--white-10); }
 .pm__item[aria-expanded="true"] + .pm__subs { margin-top: -2px; }
-.pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 0 0 8px 32px;
+.pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 0 0 8px 34px;
             background: var(--white-04); border-radius: 0 0 12px 12px; }
 .pm__subs[hidden] { display: none; }
 .pm__sub { display: flex; align-items: center; width: 100%; box-sizing: border-box;
-           min-height: 40px; padding: 0 12px; text-align: left; cursor: pointer;
+           min-height: 44px; padding: 0 12px; text-align: left; cursor: pointer;
            background: none; border: 0; border-radius: 10px;
            font-family: 'Instrument Sans', sans-serif; font-weight: 500;
            font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd);
@@ -4705,10 +4719,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
 /* выход прижат к низу панели */
 .pm__out { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box;
-           min-height: 52px; margin-top: auto; padding: 0 12px; border: 0; border-radius: 12px;
+           min-height: 56px; margin-top: auto; padding: 0 12px; border: 0; border-radius: 12px;
            cursor: pointer; background: none; text-align: left;
            font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-           font-size: 15px; line-height: 20px; color: var(--modal-text-1, #bbc6cd);
+           font-size: 16px; line-height: 22px; color: var(--modal-text-1, #bbc6cd);
            transition: background-color .16s ease, color .16s ease; }
 .pm__out:hover { background: var(--white-06); color: var(--white); }
 .pm__out:active { background: var(--white-10); }
