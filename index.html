@@ -4602,9 +4602,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
 /* шапка панели */
 .pm__head { display: flex; align-items: center; gap: 12px; padding: 0 0 4px; }
+/* Инициалы вместо силуэта — те же, что на странице профиля. Плоский серый
+   кружок читался как «картинка не загрузилась», поэтому мягкая заливка
+   с наклоном и волосяное кольцо по краю. */
 .pm__ava { display: grid; place-items: center; flex: none; width: 48px; height: 48px;
-           border-radius: 50%; background: var(--white-10, rgba(255, 255, 255, .1)); }
-.pm__ava img { display: block; width: 26px; height: 26px; opacity: .8; }
+           border-radius: 50%;
+           background: linear-gradient(150deg, #303c6d 0%, #1e2549 100%);
+           box-shadow: inset 0 0 0 1px var(--white-10, rgba(255, 255, 255, .1));
+           font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+           font-size: 17px; line-height: 1; letter-spacing: .5px; color: var(--white); }
 .pm__who { display: flex; flex-direction: column; flex: 1 0 0; min-width: 0; }
 .pm__name { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
             font-size: 17px; line-height: 22px; color: var(--white);
@@ -4623,14 +4629,23 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    деньги это то, за чем панель открывают, а очки лежат рядом справочно.
    Поэтому верхняя строка выше и с крупным числом, нижняя — обычная. */
 .pm__money { display: flex; align-items: center; gap: 10px; }
+/* Поле утоплено, но мягко. Раньше под ним стоял плоский почти чёрный
+   #0e132a — на панели #181e3b это резкий провал, отсюда и жёсткость.
+   Теперь затемнение полупрозрачное и с наклоном: сверху глубже, снизу
+   почти вровень с панелью. Светлее делать нельзя — поле сравняется с
+   кнопкой рядом и перестанет читаться полем. */
 .pm__cur, .pm__bonus { display: flex; align-items: center; gap: 12px; flex: 1 0 0; min-width: 0;
                        box-sizing: border-box; height: 48px; padding: 0 14px;
                        border: 1px solid var(--white-10, rgba(255, 255, 255, .1));
-                       border-radius: 12px; background: #0e132a; }
+                       border-radius: 12px;
+                       background: linear-gradient(180deg, rgba(0, 0, 0, .24) 0%,
+                                                           rgba(0, 0, 0, .08) 100%); }
 .pm__cur { height: 56px; cursor: pointer;
-           transition: background-color .16s ease, border-color .16s ease; }
-.pm__cur:hover { background: #121734; border-color: var(--white-16); }
-.pm__cur:active { background: #0b1024; }
+           transition: background-color .16s ease, border-color .16s ease,
+                       box-shadow .16s ease; }
+.pm__cur:hover { border-color: var(--white-16);
+                 box-shadow: inset 0 0 0 40px rgba(255, 255, 255, .04); }
+.pm__cur:active { box-shadow: inset 0 0 0 40px rgba(0, 0, 0, .12); }
 .pm__cur:hover .pm__cur-chev { opacity: 1; }
 .pm__coin-flag { display: block; flex: none; width: 26px; height: 26px; border-radius: 50%; }
 .pm__cur-sum, .pm__bonus-sum { flex: 1 0 0; min-width: 0; text-align: left;
@@ -4647,10 +4662,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                       font-family: 'Instrument Sans', sans-serif; font-weight: 700;
                       font-size: 15px; line-height: 20px;
                       transition: filter .16s ease, background-color .16s ease,
-                                  border-color .16s ease; }
-.pm__top { height: 56px; background: var(--register, #00c928); color: #06210d; }
-.pm__top:hover { filter: brightness(1.08); }
-.pm__top:active { filter: brightness(.94); }
+                                  border-color .16s ease, transform .12s ease,
+                                  box-shadow .16s ease; }
+/* Тот же лайм, что у кнопки депозита в шапке (2745): плоский --register
+   рядом с ней читался как другая кнопка другого продукта. Постоянного
+   блика, как в шапке, здесь нет — в открытой панели он бы мельтешил. */
+.pm__top { height: 56px; color: #00151f;
+           background: linear-gradient(to bottom, #cdfa50, #a6e22e); }
+.pm__top:hover { filter: brightness(1.06); transform: translateY(-1px);
+                 box-shadow: 0 6px 18px -6px rgba(205, 250, 80, .55); }
+.pm__top:active { transform: translateY(0); filter: brightness(.96); }
 .pm__swap { background: var(--white-06, rgba(255, 255, 255, .06)); color: var(--white);
             border: 1px solid var(--white-10, rgba(255, 255, 255, .1)); }
 .pm__swap:hover { background: var(--white-10, rgba(255, 255, 255, .1));
@@ -4680,7 +4701,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__chev { display: block; flex: none; opacity: .5;
             transition: transform .18s cubic-bezier(.22, .61, .36, 1), opacity .16s ease; }
 .pm__item:hover .pm__chev { opacity: .8; }
-.pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); opacity: .9; }
+/* Свёрнутый раздел показывает стрелку вниз — «здесь развернётся список»,
+   раскрытый переворачивает её вверх. Стрелка вправо обещала переход на
+   другую страницу, а список раскрывается на месте. */
+.pm__item[aria-expanded="true"] .pm__chev { transform: rotate(180deg); opacity: .9; }
 
 /* Раскрытый раздел вместе со своими пунктами читается одним блоком: подсветка
    идёт насквозь, углы скруглены только снаружи, шов между ними убран
@@ -4744,6 +4768,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 @media (prefers-reduced-motion: reduce) {
   .pm__chev { transition-property: opacity; }
   .pm__subs:not([hidden]), .pm__subs:not([hidden]) .pm__sub { animation: none; }
+  .pm__top:hover { transform: none; }
 }
 
 /* На узком экране панель занимает всю ширину: 380 там уже не полоса сбоку,
@@ -12828,7 +12853,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
   <aside class="pm__pop" role="dialog" aria-modal="true" aria-label="Account">
 
     <div class="pm__head">
-      <span class="pm__ava" aria-hidden="true"><img loading="lazy" decoding="async" src="a/1d12ab6211.svg" alt="" width="22" height="22"></span>
+      <!-- Инициалы, как на странице профиля: безликий силуэт в панели своего
+           же аккаунта выглядел заглушкой. -->
+      <span class="pm__ava" aria-hidden="true">RD</span>
       <div class="pm__who">
         <b class="pm__name">Ricardo Destaole</b>
         <span class="pm__status">Soldier</span>
@@ -12857,7 +12884,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
     <nav class="pm__menu">
       <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-fin">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/62a19a7a9a.svg" alt="" width="20" height="20"><span>Finance</span>
-        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
       </button>
       <div class="pm__subs" id="pm-fin" hidden>
         <button class="pm__sub" type="button" data-pm-go="wallet">Deposit</button>
@@ -12867,7 +12894,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
       <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-acc">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/5899700828.svg" alt="" width="18" height="20"><span>My account</span>
-        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
       </button>
       <div class="pm__subs" id="pm-acc" hidden>
         <button class="pm__sub" type="button" data-pm-go="profile">Profile</button>
@@ -12878,7 +12905,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
       <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-sup">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/1d015c4521.svg" alt="" width="18" height="18"><span>Support</span>
-        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
       </button>
       <div class="pm__subs" id="pm-sup" hidden>
         <button class="pm__sub" type="button" data-pm-go="helpSup">Help Centre</button>
@@ -12887,7 +12914,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
       <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-hist-subs">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>History</span>
-        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
       </button>
       <!-- Подпункты лежат рядом, а не внутри: кнопку в кнопку класть нельзя -->
       <div class="pm__subs" id="pm-hist-subs" hidden>
