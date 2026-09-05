@@ -4617,12 +4617,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pm__status { font-family: 'Work Sans', sans-serif; font-weight: 500;
               font-size: 13px; line-height: 18px; color: var(--dp-label, #8b93a8); }
-.pm__x { display: grid; place-items: center; flex: none; width: 32px; height: 32px;
-         padding: 0; border: 0; border-radius: 8px; cursor: pointer;
-         background: none; color: var(--dp-label, #8b93a8);
-         font-family: 'Work Sans', sans-serif; font-size: 22px; line-height: 1;
-         transition: background-color .16s ease, color .16s ease; }
-.pm__x:hover { background: var(--white-10); color: var(--white); }
+.pm__x { display: grid; place-items: center; flex: none; width: 40px; height: 40px;
+         padding: 0; border: 0; border-radius: 12px; cursor: pointer;
+         background: none;
+         transition: background-color .16s ease; }
+.pm__x img { display: block; width: 16px; height: 16px; opacity: .55;
+             transition: opacity .16s ease; }
+.pm__x:hover { background: var(--white-10); }
+.pm__x:hover img { opacity: 1; }
 .pm__x:active { background: var(--white-16); }
 
 /* Баланс и очки: поле слева, действие справа. Строки не равны по весу —
@@ -5236,8 +5238,9 @@ body.br-open .bnav { z-index: 66; }
    Окно подтверждения (.cf) и полоса сообщений (.note).
 
    Подтверждение перекрывает всё, из чего может быть вызвано: кассу (70),
-   меню профиля и уведомления (72), лист Browse (65), вход (60). Витрина
-   состояний (90) служебная и остаётся выше — иначе её нечем закрыть.
+   меню профиля и уведомления (72), список валют (73), лист Browse (65),
+   вход (60). Витрина состояний (90) служебная и остаётся выше — иначе её
+   нечем закрыть.
    ─────────────────────────────────────────────────────────────────── */
 .cf { position: fixed; inset: 0; z-index: 80;
       display: flex; align-items: center; justify-content: center;
@@ -5325,7 +5328,9 @@ img.is-missing { visibility: hidden; }
    Слой 71 — выше кассы (70) и листа Browse (65), ниже меню профиля и
    уведомлений (72): из них список не открывается.
    ─────────────────────────────────────────────────────────────────── */
-.cur { position: fixed; inset: 0; z-index: 71; }
+/* Выше панели профиля (72): список валют открывается из неё, и на 71 он
+   выезжал под панелью — со стороны выглядело так, будто кнопка не работает. */
+.cur { position: fixed; inset: 0; z-index: 73; }
 .cur[hidden] { display: none; }
 .cur__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .55); }
 .cur__pop { position: absolute; box-sizing: border-box; width: 288px;
@@ -12855,7 +12860,11 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         <b class="pm__name">Ricardo Destaole</b>
         <span class="pm__status">Soldier</span>
       </div>
-      <button class="pm__x" type="button" aria-label="Close" data-close>&#215;</button>
+      <!-- Крестик картинкой, а не знаком «×»: у знака ink сидит выше середины
+           строки, и в квадратной кнопке он вставал заметно криво. -->
+      <button class="pm__x" type="button" aria-label="Close" data-close>
+        <img loading="lazy" decoding="async" src="a/0d8f4b7b91.svg" alt="" width="16" height="16">
+      </button>
     </div>
 
     <!-- Баланс и валюта те же, что в шапке: счёт один, показывать его двумя
@@ -16577,6 +16586,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       });
       addEventListener('click', function (e) {
         if (pmPop.hidden || !e.target.isConnected) return;
+        /* Список валют раскрывается из панели, но лежит вне неё — иначе
+           первое же нажатие в списке закрывало панель под ним. */
+        if (e.target.closest('#cur-menu')) return;
         if (!e.target.closest('.pm__pop')) pmClose();
       });
       addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pmPop.hidden) pmClose(); });
@@ -16674,16 +16686,11 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         showView(go);
       });
 
-      /* Баланс в панели — тот же счёт, что в шапке: подписываемся на смену
-         валюты, а нажатие открывает уже сделанный список валют. */
-      var pmCur = pmPop.querySelector('[data-pm-cur]');
-      if (pmCur) {
-        pmCur.addEventListener('click', function (e) {
-          e.stopPropagation();
-          var head = document.querySelector('.wallet__balance');
-          if (head) head.click();
-        });
-      }
+      /* Список валют по полю баланса включается там же, где он сделан для
+         шапки — см. «Валюта счёта». Раньше здесь звали клик по кнопке в
+         шапке: синтетический клик всплывал до document, обработчик закрытия
+         не находил над собой .pm__pop и захлопывал панель — со стороны это
+         выглядело как возврат на главную. */
     }
 
     /* ═══ Транзакции ═══
@@ -17456,8 +17463,14 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       var curBtn = document.querySelector('.wallet__balance');
       if (curMenu && curBtn) {
         var curPop = curMenu.querySelector('.cur__pop');
+        /* Счёт один, а открыть список можно из двух мест: кнопкой в шапке и
+           полем баланса в панели профиля. Список встаёт под тем, что его
+           позвало, — иначе, открытый из панели, он выезжал у шапки под
+           затемнением и казался пропавшим. */
+        var pmCurBtn = document.querySelector('#profile-menu [data-pm-cur]');
+        var curAnchor = curBtn;
         var curFit = function () {
-          var r = curBtn.getBoundingClientRect();
+          var r = curAnchor.getBoundingClientRect();
           /* На мобильной кнопка баланса шире списка — тянем список под неё,
              иначе он висит уступом и выглядит чужим. */
           curPop.style.width = Math.max(288, Math.min(r.width, innerWidth - 32)) + 'px';
@@ -17474,12 +17487,17 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           curMenu.hidden = true;
           document.body.classList.remove('cur-open');
           curBtn.setAttribute('aria-expanded', 'false');
-          curBtn.focus();
+          if (pmCurBtn) pmCurBtn.setAttribute('aria-expanded', 'false');
+          /* Возвращаем внимание тому, что открывало: фокус на кнопку в шапке
+             уводил его под затемнение, когда список звали из панели. */
+          curAnchor.focus();
+          curAnchor = curBtn;
         };
-        var curOpen = function () {
+        var curOpen = function (from) {
+          curAnchor = from || curBtn;
           curMenu.hidden = false;
           document.body.classList.add('cur-open');
-          curBtn.setAttribute('aria-expanded', 'true');
+          curAnchor.setAttribute('aria-expanded', 'true');
           curFit();
           var act = curMenu.querySelector('.cur__item.is-active') || curMenu.querySelector('.cur__item');
           if (act) act.focus();
@@ -17488,8 +17506,17 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         curBtn.setAttribute('aria-expanded', 'false');
         curBtn.addEventListener('click', function (e) {
           e.preventDefault();
-          if (curMenu.hidden) curOpen(); else curClose();
+          if (curMenu.hidden) curOpen(curBtn); else curClose();
         });
+        if (pmCurBtn) {
+          pmCurBtn.setAttribute('aria-expanded', 'false');
+          pmCurBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            /* Панель остаётся открытой: список валют — её часть, а не переход */
+            e.stopPropagation();
+            if (curMenu.hidden) curOpen(pmCurBtn); else curClose();
+          });
+        }
         curMenu.addEventListener('click', function (e) {
           var pick = e.target.closest('[data-set-cur]');
           if (pick) {
