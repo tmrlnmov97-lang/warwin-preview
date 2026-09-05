@@ -4608,7 +4608,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__ava { display: grid; place-items: center; flex: none; width: 48px; height: 48px;
            border-radius: 50%;
            background: linear-gradient(150deg, #303c6d 0%, #1e2549 100%);
-           box-shadow: inset 0 0 0 1px var(--white-10, rgba(255, 255, 255, .1));
+           box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
            font-family: 'Instrument Sans', sans-serif; font-weight: 700;
            font-size: 17px; line-height: 1; letter-spacing: .5px; color: var(--white); }
 .pm__who { display: flex; flex-direction: column; flex: 1 0 0; min-width: 0; }
@@ -4629,22 +4629,18 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    деньги это то, за чем панель открывают, а очки лежат рядом справочно.
    Поэтому верхняя строка выше и с крупным числом, нижняя — обычная. */
 .pm__money { display: flex; align-items: center; gap: 10px; }
-/* Поле утоплено, но мягко. Раньше под ним стоял плоский почти чёрный
-   #0e132a — на панели #181e3b это резкий провал, отсюда и жёсткость.
-   Теперь затемнение полупрозрачное и с наклоном: сверху глубже, снизу
-   почти вровень с панелью. Светлее делать нельзя — поле сравняется с
-   кнопкой рядом и перестанет читаться полем. */
+/* Поле утоплено, но без канта. Сначала под ним стоял плоский почти чёрный
+   #0e132a с кантом в 1px — на панели #181e3b это резкий провал в жёсткой
+   рамке. Теперь только полупрозрачное затемнение с наклоном: сверху глубже,
+   снизу почти вровень с панелью, границы как таковой нет — есть переход.
+   Светлее делать нельзя: поле сравняется с кнопкой рядом. */
 .pm__cur, .pm__bonus { display: flex; align-items: center; gap: 12px; flex: 1 0 0; min-width: 0;
-                       box-sizing: border-box; height: 48px; padding: 0 14px;
-                       border: 1px solid var(--white-10, rgba(255, 255, 255, .1));
-                       border-radius: 12px;
-                       background: linear-gradient(180deg, rgba(0, 0, 0, .24) 0%,
+                       box-sizing: border-box; height: 56px; padding: 0 14px;
+                       border: 0; border-radius: 14px;
+                       background: linear-gradient(180deg, rgba(0, 0, 0, .22) 0%,
                                                            rgba(0, 0, 0, .08) 100%); }
-.pm__cur { height: 56px; cursor: pointer;
-           transition: background-color .16s ease, border-color .16s ease,
-                       box-shadow .16s ease; }
-.pm__cur:hover { border-color: var(--white-16);
-                 box-shadow: inset 0 0 0 40px rgba(255, 255, 255, .04); }
+.pm__cur { cursor: pointer; transition: box-shadow .16s ease; }
+.pm__cur:hover { box-shadow: inset 0 0 0 40px rgba(255, 255, 255, .05); }
 .pm__cur:active { box-shadow: inset 0 0 0 40px rgba(0, 0, 0, .12); }
 .pm__cur:hover .pm__cur-chev { opacity: 1; }
 .pm__coin-flag { display: block; flex: none; width: 26px; height: 26px; border-radius: 50%; }
@@ -4657,8 +4653,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__bonus-ico { display: grid; place-items: center; flex: none; width: 24px; height: 24px;
                  border-radius: 50%; border: 1px solid #d8b24a; color: #d8b24a;
                  font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 10px; }
-.pm__top, .pm__swap { flex: none; min-width: 124px; height: 48px; padding: 0 18px;
-                      border: 0; border-radius: 12px; cursor: pointer;
+.pm__top, .pm__swap { flex: none; min-width: 124px; height: 56px; padding: 0 18px;
+                      border: 0; border-radius: 14px; cursor: pointer;
                       font-family: 'Instrument Sans', sans-serif; font-weight: 700;
                       font-size: 15px; line-height: 20px;
                       transition: filter .16s ease, background-color .16s ease,
@@ -4667,15 +4663,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* Тот же лайм, что у кнопки депозита в шапке (2745): плоский --register
    рядом с ней читался как другая кнопка другого продукта. Постоянного
    блика, как в шапке, здесь нет — в открытой панели он бы мельтешил. */
-.pm__top { height: 56px; color: #00151f;
+.pm__top { color: #00151f;
            background: linear-gradient(to bottom, #cdfa50, #a6e22e); }
 .pm__top:hover { filter: brightness(1.06); transform: translateY(-1px);
                  box-shadow: 0 6px 18px -6px rgba(205, 250, 80, .55); }
 .pm__top:active { transform: translateY(0); filter: brightness(.96); }
-.pm__swap { background: var(--white-06, rgba(255, 255, 255, .06)); color: var(--white);
-            border: 1px solid var(--white-10, rgba(255, 255, 255, .1)); }
-.pm__swap:hover { background: var(--white-10, rgba(255, 255, 255, .1));
-                  border-color: var(--white-16); }
+/* Кант убран и здесь: кнопка светлее панели и отделяется заливкой */
+.pm__swap { background: var(--white-06, rgba(255, 255, 255, .06)); color: var(--white); }
+.pm__swap:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
 .pm__swap:active { background: var(--white-16); }
 
 /* Разделы. Волосяная линия отделяет «кто я и сколько у меня» от навигации:
@@ -4685,7 +4680,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             margin-top: 6px; padding-top: 14px;
             border-top: 1px solid var(--white-06, rgba(255, 255, 255, .06)); }
 .pm__item { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
-            width: 100%; min-height: 56px; padding: 0 12px; border: 0; border-radius: 12px;
+            width: 100%; min-height: 56px; padding: 0 12px; border: 0; border-radius: 14px;
             cursor: pointer; background: none; text-align: left;
             font-family: 'Instrument Sans', sans-serif; font-weight: 600;
             font-size: 16px; line-height: 22px; color: var(--white);
@@ -4712,11 +4707,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    рваным. Подписи подпунктов встают ровно под подписью раздела: 34 отступа
    списка плюс 12 внутри кнопки = те же 46, что у раздела (12 поля + 22
    иконка + 12 зазор). */
-.pm__item[aria-expanded="true"] { background: var(--white-04); border-radius: 12px 12px 0 0; }
+.pm__item[aria-expanded="true"] { background: var(--white-04); border-radius: 14px 14px 0 0; }
 .pm__item[aria-expanded="true"]:hover { background: var(--white-10); }
 .pm__item[aria-expanded="true"] + .pm__subs { margin-top: -2px; }
 .pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 0 0 8px 34px;
-            background: var(--white-04); border-radius: 0 0 12px 12px; }
+            background: var(--white-04); border-radius: 0 0 14px 14px; }
 .pm__subs[hidden] { display: none; }
 .pm__sub { display: flex; align-items: center; width: 100%; box-sizing: border-box;
            min-height: 44px; padding: 0 12px; text-align: left; cursor: pointer;
@@ -4743,7 +4738,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 
 /* выход прижат к низу панели */
 .pm__out { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box;
-           min-height: 56px; margin-top: auto; padding: 0 12px; border: 0; border-radius: 12px;
+           min-height: 56px; margin-top: auto; padding: 0 12px; border: 0; border-radius: 14px;
            cursor: pointer; background: none; text-align: left;
            font-family: 'Instrument Sans', sans-serif; font-weight: 600;
            font-size: 16px; line-height: 22px; color: var(--modal-text-1, #bbc6cd);
