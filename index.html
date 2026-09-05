@@ -4571,7 +4571,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    за ней явно недоступна — поэтому подложка и ловит клики. Раньше она их
    пропускала, и мимо панели нажималась кнопка под затемнением. */
 .pm__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .78);
-             pointer-events: auto; }
+             pointer-events: auto; animation: pm-scrim-in .22s ease both; }
+@keyframes pm-scrim-in { from { opacity: 0; } }
 /* ── Панель профиля: выезжает справа во всю высоту ──
    Прежнее окно 664 висело под шапкой и держало два столбца. Пунктов стало
    больше десятка, поэтому панель: разделы сворачиваются, а высоту даёт экран,
@@ -4583,10 +4584,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   background: #181e3b; border-left: 1px solid rgba(255, 255, 255, .12);
   box-shadow: -32px 0 80px -24px rgba(0, 0, 0, .9);
   overflow-y: auto;
-  animation: pm-in .2s cubic-bezier(.22, .61, .36, 1) both;
+  animation: pm-in .26s cubic-bezier(.22, .61, .36, 1) both;
 }
-@keyframes pm-in { from { transform: translateX(24px); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .pm__pop { animation: none; } }
+/* Панель именно выезжает из-за правого края, а не проявляется на месте:
+   сдвиг на 24px с прозрачностью читался как мигание, а не как движение.
+   Гаснуть ей не нужно — за неё это делает подложка. */
+@keyframes pm-in { from { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) {
+  .pm__pop, .pm__scrim { animation: none; }
+}
 
 /* шапка панели */
 .pm__head { display: flex; align-items: center; gap: 12px; padding: 4px 0 6px; }
@@ -4602,8 +4608,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__x { display: grid; place-items: center; flex: none; width: 32px; height: 32px;
          padding: 0; border: 0; border-radius: 8px; cursor: pointer;
          background: none; color: var(--dp-label, #8b93a8);
-         font-family: 'Work Sans', sans-serif; font-size: 22px; line-height: 1; }
-.pm__x:hover { background: var(--white-06); color: var(--white); }
+         font-family: 'Work Sans', sans-serif; font-size: 22px; line-height: 1;
+         transition: background-color .16s ease, color .16s ease; }
+.pm__x:hover { background: var(--white-10); color: var(--white); }
+.pm__x:active { background: var(--white-16); }
 
 /* баланс и очки: поле слева, действие справа */
 .pm__money { display: flex; align-items: center; gap: 10px; }
@@ -4611,26 +4619,34 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                        box-sizing: border-box; height: 48px; padding: 0 12px;
                        border: 1px solid var(--white-10, rgba(255, 255, 255, .1));
                        border-radius: 12px; background: #0e132a; }
-.pm__cur { cursor: pointer; }
-.pm__cur:hover { background: #121734; }
+.pm__cur { cursor: pointer;
+           transition: background-color .16s ease, border-color .16s ease; }
+.pm__cur:hover { background: #121734; border-color: var(--white-16); }
+.pm__cur:active { background: #0b1024; }
+.pm__cur:hover .pm__cur-chev { opacity: 1; }
 .pm__coin-flag { display: block; flex: none; width: 24px; height: 24px; border-radius: 50%; }
 .pm__cur-sum, .pm__bonus-sum { flex: 1 0 0; min-width: 0; text-align: left;
                                font-family: 'Instrument Sans', sans-serif; font-weight: 700;
                                font-size: 16px; line-height: 22px; color: var(--white);
                                font-variant-numeric: tabular-nums; }
-.pm__cur-chev { display: block; flex: none; opacity: .7; }
+.pm__cur-chev { display: block; flex: none; opacity: .7; transition: opacity .16s ease; }
 .pm__bonus-ico { display: grid; place-items: center; flex: none; width: 24px; height: 24px;
                  border-radius: 50%; border: 1px solid #d8b24a; color: #d8b24a;
                  font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 10px; }
 .pm__top, .pm__swap { flex: none; min-width: 120px; height: 48px; padding: 0 18px;
                       border: 0; border-radius: 12px; cursor: pointer;
                       font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-                      font-size: 15px; line-height: 20px; }
+                      font-size: 15px; line-height: 20px;
+                      transition: filter .16s ease, background-color .16s ease,
+                                  border-color .16s ease; }
 .pm__top { background: var(--register, #00c928); color: #06210d; }
 .pm__top:hover { filter: brightness(1.08); }
+.pm__top:active { filter: brightness(.94); }
 .pm__swap { background: var(--white-06, rgba(255, 255, 255, .06)); color: var(--white);
             border: 1px solid var(--white-10, rgba(255, 255, 255, .1)); }
-.pm__swap:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
+.pm__swap:hover { background: var(--white-10, rgba(255, 255, 255, .1));
+                  border-color: var(--white-16); }
+.pm__swap:active { background: var(--white-16); }
 
 /* разделы */
 .pm__menu { flex: 1 0 auto; display: flex; flex-direction: column; gap: 2px; margin-top: 6px; }
@@ -4638,45 +4654,89 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             width: 100%; min-height: 52px; padding: 0 12px; border: 0; border-radius: 12px;
             cursor: pointer; background: none; text-align: left;
             font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-            font-size: 15px; line-height: 20px; color: var(--white); }
+            font-size: 15px; line-height: 20px; color: var(--white);
+            transition: background-color .16s ease, color .16s ease; }
 .pm__item span { flex: 1 0 0; min-width: 0; }
-.pm__item:hover { background: var(--white-06); }
-.pm__ico { display: block; flex: none; opacity: .75; }
-.pm__chev { display: block; flex: none; opacity: .5; transition: transform .15s ease; }
-.pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); }
-@media (prefers-reduced-motion: reduce) { .pm__chev { transition: none; } }
-.pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 6px 44px; }
+.pm__item:hover { background: var(--white-10); }
+.pm__item:active { background: var(--white-16); }
+/* Иконки разделов нарисованы под разную ширину — 20, 18, 18, 20. Пока каждая
+   занимала свою, подписи начинались с разных мест и столбец текста ехал.
+   Держим их в одинаковой клетке 20x20, картинка вписывается внутрь. */
+.pm__ico { display: block; flex: none; width: 20px; height: 20px;
+           object-fit: contain; opacity: .75; transition: opacity .16s ease; }
+.pm__chev { display: block; flex: none; opacity: .5;
+            transition: transform .18s cubic-bezier(.22, .61, .36, 1), opacity .16s ease; }
+.pm__item:hover .pm__chev { opacity: .8; }
+.pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); opacity: .9; }
+
+/* Раскрытый раздел вместе со своими пунктами читается одним блоком: подсветка
+   идёт насквозь, углы скруглены только снаружи, шов между ними убран
+   отрицательным полем — иначе подпункты висели в пустоте и список выглядел
+   рваным. Подписи подпунктов встают ровно под подписью раздела: 32 отступа
+   списка плюс 12 внутри кнопки = те же 44, что у раздела. */
+.pm__item[aria-expanded="true"] { background: var(--white-04); border-radius: 12px 12px 0 0; }
+.pm__item[aria-expanded="true"]:hover { background: var(--white-10); }
+.pm__item[aria-expanded="true"] + .pm__subs { margin-top: -2px; }
+.pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 0 0 8px 32px;
+            background: var(--white-04); border-radius: 0 0 12px 12px; }
 .pm__subs[hidden] { display: none; }
-.pm__sub { display: flex; align-items: center; width: 100%; min-height: 40px;
-           padding: 0 12px; text-align: left; cursor: pointer;
+.pm__sub { display: flex; align-items: center; width: 100%; box-sizing: border-box;
+           min-height: 40px; padding: 0 12px; text-align: left; cursor: pointer;
            background: none; border: 0; border-radius: 10px;
-           font-family: 'Work Sans', sans-serif; font-weight: 500;
-           font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
-.pm__sub:hover { background: var(--white-06); color: var(--white); }
+           font-family: 'Instrument Sans', sans-serif; font-weight: 500;
+           font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd);
+           transition: background-color .16s ease, color .16s ease; }
+.pm__sub:hover { background: var(--white-10); color: var(--white); }
+.pm__sub:active { background: var(--white-16); }
+
+/* Список появляется мгновенно — раздел скрыт атрибутом hidden, а из
+   display: none ничего не анимируется. Поэтому проявляем его на показе:
+   сам блок гаснет-загорается, пункты выезжают по очереди с шагом 40 мс.
+   Задержка считается от последнего пункта, иначе длинный список
+   раскрывается заметно дольше короткого. */
+.pm__subs:not([hidden]) { animation: pm-subs-in .18s ease both; }
+.pm__subs:not([hidden]) .pm__sub { animation: pm-sub-in .22s cubic-bezier(.22, .61, .36, 1) both; }
+.pm__subs .pm__sub:nth-child(1) { animation-delay: .02s; }
+.pm__subs .pm__sub:nth-child(2) { animation-delay: .06s; }
+.pm__subs .pm__sub:nth-child(3) { animation-delay: .1s; }
+.pm__subs .pm__sub:nth-child(4) { animation-delay: .14s; }
+@keyframes pm-subs-in { from { opacity: 0; } }
+@keyframes pm-sub-in { from { opacity: 0; transform: translateY(-6px); } }
 
 /* выход прижат к низу панели */
 .pm__out { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box;
            min-height: 52px; margin-top: auto; padding: 0 12px; border: 0; border-radius: 12px;
            cursor: pointer; background: none; text-align: left;
            font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-           font-size: 15px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+           font-size: 15px; line-height: 20px; color: var(--modal-text-1, #bbc6cd);
+           transition: background-color .16s ease, color .16s ease; }
 .pm__out:hover { background: var(--white-06); color: var(--white); }
-.pm__item span { flex: 1 0 0; min-width: 0;
-                 font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-                 font-size: 14px; line-height: 18px; color: var(--white); }
+.pm__out:active { background: var(--white-10); }
 .pm__item:hover .pm__ico { opacity: 1; }
 /* Выход — единственное необратимое действие, поэтому не вровень с остальными:
    приглушён по умолчанию и краснеет под курсором. */
 .pm__out:hover span { color: #e5484d; }
+.pm__out span { transition: color .16s ease; }
 .pm__out:hover .pm__ico { opacity: 1;
   filter: brightness(0) saturate(100%) invert(38%) sepia(58%) saturate(3200%) hue-rotate(334deg) brightness(96%) contrast(92%); }
+
+/* Обвод с клавиатуры — тем же правилом, что у кнопок страницы (1271) */
+.pm__item:focus-visible, .pm__sub:focus-visible, .pm__out:focus-visible,
+.pm__cur:focus-visible, .pm__top:focus-visible, .pm__swap:focus-visible,
+.pm__x:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+/* Одна оговорка на всю панель: без движения остаются только смена цвета
+   и сам факт раскрытия. */
+@media (prefers-reduced-motion: reduce) {
+  .pm__chev { transition-property: opacity; }
+  .pm__subs:not([hidden]), .pm__subs:not([hidden]) .pm__sub { animation: none; }
+}
 
 /* На узком экране панель занимает всю ширину: 380 там уже не полоса сбоку,
    а почти весь экран, и полоска фона слева только мешает попасть мимо. */
 @media (max-width: 480px) {
   .pm__pop { width: 100%; max-width: 100%; border-left: 0; }
   .pm__top, .pm__swap { min-width: 96px; padding: 0 12px; font-size: 14px; }
-  .pm__subs { padding-left: 32px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -5334,21 +5394,12 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                                  font-weight: 400; font-size: 13px; line-height: 18px;
                                  color: var(--dp-label, #7c88a8); }
 
-/* Пункт «Transactions & Gaming History» раскрывается на две строки.
-   Правила перенесены из другой копии проекта, чтобы её работа не пропала
-   при выкладке: там этот пункт уже сделан. */
-.pm__item[aria-expanded] .pm__chev { transition: transform .15s ease; }
-.pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); }
-.pm__subs { display: flex; flex-direction: column; gap: 0; margin-top: -6px;
-            padding: 0 0 4px 26px; }
-.pm__subs[hidden] { display: none; }
-.pm__sub { display: flex; align-items: center; width: 100%; min-height: 30px;
-           padding: 0 10px; text-align: left; cursor: pointer;
-           background: none; border: 0; border-radius: 10px;
-           font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-           font-size: 13px; line-height: 18px; color: var(--modal-text-1, #bbc6cd); }
-.pm__sub:hover { background: var(--white-06); color: var(--white); }
-.pm__subs + .pm__item { border-top: 1px solid rgba(255, 255, 255, .08); }
+/* Пункт «Transactions & Gaming History» раскрывается на две строки — это
+   умеет разметка, отдельных правил ему не нужно. Копия правил панели,
+   перенесённая сюда из другой копии проекта, убрана: она шла после основной
+   и перебивала её, сжимая подпункты до 30px и подрисовывая линию над каждым
+   разделом после раскрытого. Всё, что в ней было полезного, теперь в блоке
+   .pm выше. */
 
 /* Блок с подтверждением возраста нужен только при регистрации — там человек
    заводит аккаунт и принимает условия. В окне входа он лишний, поэтому
