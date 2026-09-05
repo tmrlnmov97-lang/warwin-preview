@@ -4566,108 +4566,117 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm { position: fixed; inset: 0; z-index: 72; pointer-events: none; }
 .pm__pop { pointer-events: auto; }
 .pm[hidden] { display: none; }
-/* Едва заметная подложка: поп-ап того же тона, что страница (контраст 1.12:1),
-   и без неё сливается. Затемняем фон вокруг, но так, чтобы страница читалась. */
-.pm__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .38);
-             pointer-events: none; }
+/* Панель того же тона, что страница (контраст 1.12:1), и без подложки сливается
+   с ней. Гасим фон почти в чёрный: панель читается отдельным слоем, а страница
+   за ней явно недоступна — поэтому подложка и ловит клики. Раньше она их
+   пропускала, и мимо панели нажималась кнопка под затемнением. */
+.pm__scrim { position: absolute; inset: 0; background: rgba(4, 10, 26, .78);
+             pointer-events: auto; }
+/* ── Панель профиля: выезжает справа во всю высоту ──
+   Прежнее окно 664 висело под шапкой и держало два столбца. Пунктов стало
+   больше десятка, поэтому панель: разделы сворачиваются, а высоту даёт экран,
+   а не окно. */
 .pm__pop {
-  /* шапка 74, зазор 16 — раньше стояло 78, окно почти касалось шапки */
-  position: absolute; right: 20px; top: 90px; box-sizing: border-box;
-  display: flex; gap: 16px; width: 664px; max-width: calc(100vw - 32px); padding: 16px;
-  background: #181e3b; border: 0; border-radius: 20px;
-  /* Две тени: широкая тёмная отрывает окно от страницы, короткая держит
-     край; плюс светлый кант — на тёмном фоне он и есть граница. */
-  box-shadow: 0 32px 80px -24px rgba(0, 0, 0, .9),
-              0 8px 24px -10px rgba(0, 0, 0, .7);
-  animation: pm-in .18s cubic-bezier(.22, .61, .36, 1) both;
+  position: absolute; right: 0; top: 0; bottom: 0; box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 10px;
+  width: 380px; max-width: calc(100vw - 24px); padding: 16px;
+  background: #181e3b; border-left: 1px solid rgba(255, 255, 255, .12);
+  box-shadow: -32px 0 80px -24px rgba(0, 0, 0, .9);
+  overflow-y: auto;
+  animation: pm-in .2s cubic-bezier(.22, .61, .36, 1) both;
 }
-/* Кант слоем поверх: обычный border забирал 2px, и меню становилось 274
-   вместо макетных 276 — в Figma обводка рисуется внутрь. */
-.pm__pop::after { content: ''; position: absolute; inset: 0; pointer-events: none;
-                  border: 1px solid rgba(255, 255, 255, .14); border-radius: 20px; }
-@keyframes pm-in { from { opacity: 0; transform: translateY(-6px); } }
+@keyframes pm-in { from { transform: translateX(24px); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .pm__pop { animation: none; } }
 
-/* 1226:35559 — сводка: своя плита темнее окна */
-.pm__sum { position: relative; box-sizing: border-box; width: 340px; flex: none;
-           display: flex; flex-direction: column; gap: 10px; padding: 12px;
-           background: #0e132a; border: 0; border-radius: 12px; }
-/* кант слоем: внутри Figma он не занимает место, а border забирал по 1px */
-.pm__sum::after { content: ''; position: absolute; inset: 0; pointer-events: none;
-                  border: 1px solid #0f173c; border-radius: 12px; }
-/* Иерархия окна: главное здесь — сумма, поэтому заголовок раздела ужат до
-   подписи, а баланс поднят до 24. Раньше весь текст лежал в 12–18 и ничто
-   не вело взгляд, а сам баланс был мельче тикера рядом. */
-.pm__title { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-             font-size: 12px; line-height: 16px; letter-spacing: .06em;
-             text-transform: uppercase; color: var(--modal-text-1, #bbc6cd); }
-.pm__cap { font-family: 'Work Sans', sans-serif; font-weight: 500;
-           font-size: 11px; line-height: 16px; letter-spacing: .05em;
-           text-transform: uppercase; color: var(--dp-label); }
-.pm__balance { display: flex; flex-direction: column; gap: 8px; }
-/* 1226:35563 — строка валюты 56 высотой, кант #2f354f */
-.pm__coin { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
-            height: 56px; padding: 10px 14px; border: 1px solid #2f354f; border-radius: 12px; }
-.pm__coin-left { display: flex; align-items: center; gap: 8px; }
-.pm__coin-left img { display: block; }
-/* Баланс не крипта: на месте логотипа монеты флаг страны валюты */
-.pm__coin-flag { display: block; flex: none; width: 28px; height: 28px; border-radius: 50%; }
-.pm__coin-left b { font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-                   font-size: 20px; line-height: 26px; color: var(--white); }
-.pm__coin-right { display: flex; flex-direction: column; align-items: flex-end; }
-/* сам баланс — самое крупное в окне */
-.pm__coin-right b { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-                    font-size: 24px; line-height: 28px; color: var(--white);
-                    font-variant-numeric: tabular-nums; }
-.pm__coin-right i { font-style: normal; font-family: 'Instrument Sans', sans-serif;
-                    font-size: 13px; line-height: 17px; color: var(--dp-label); }
-/* 1226:35571 — две колонки, между ними зазор: без него подписи сливались */
-.pm__stats { display: flex; gap: 20px; }
-.pm__stat { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-/* Крупное число в окне одно — баланс. Bonus и Withdrawable ушли с 20 на 16,
-   иначе три одинаково больших числа спорили друг с другом. */
-.pm__stat b { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-              font-size: 16px; line-height: 22px; color: var(--white);
-              font-variant-numeric: tabular-nums; }
-/* 1226:35580 — сноска на подложке окна */
-.pm__note { box-sizing: border-box; display: flex; gap: 8px; padding: 9px 12px;
-            background: #181e3b; border: 1px solid #2f354f; border-radius: 12px; }
-.pm__note img { display: block; flex: none; opacity: .6; }
-.pm__note p { margin: 0; flex: 1 0 0; font-family: 'Instrument Sans', sans-serif;
-              font-size: 12px; line-height: 15px; color: var(--dp-label); }
+/* шапка панели */
+.pm__head { display: flex; align-items: center; gap: 12px; padding: 4px 0 6px; }
+.pm__ava { display: grid; place-items: center; flex: none; width: 40px; height: 40px;
+           border-radius: 50%; background: var(--white-10, rgba(255, 255, 255, .1)); }
+.pm__ava img { display: block; opacity: .8; }
+.pm__who { display: flex; flex-direction: column; flex: 1 0 0; min-width: 0; }
+.pm__name { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 15px; line-height: 20px; color: var(--white);
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm__status { font-family: 'Work Sans', sans-serif; font-weight: 500;
+              font-size: 13px; line-height: 18px; color: var(--dp-label, #8b93a8); }
+.pm__x { display: grid; place-items: center; flex: none; width: 32px; height: 32px;
+         padding: 0; border: 0; border-radius: 8px; cursor: pointer;
+         background: none; color: var(--dp-label, #8b93a8);
+         font-family: 'Work Sans', sans-serif; font-size: 22px; line-height: 1; }
+.pm__x:hover { background: var(--white-06); color: var(--white); }
 
-/* 1226:35583 — меню: пункты 44, между ними линия 10% белого.
-   Группа центрируется по высоте сводки, а не растягивается на неё: при
-   space-between пункты разъезжались, разделитель на верхней кромке пункта
-   оказывался в 11px от подписи под ним и в 33 от подписи над ним. И высоту
-   пункта тянуть под сводку нельзя — подсветка выходила втрое выше строки. */
-.pm__menu { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column;
-            justify-content: center; padding: 12px 8px; }
-.pm__item { box-sizing: border-box; display: flex; align-items: center; gap: 8px;
-            flex: 0 0 auto; height: 44px; min-height: 0; padding: 0 8px; width: 100%;
-            background: none; border: 0; border-radius: 12px; cursor: pointer; text-align: left; }
-.pm__item + .pm__item { border-top: 1px solid rgba(255, 255, 255, .08); border-radius: 0; }
-.pm__item:hover { background: var(--white-06); border-radius: 10px; }
-/* Подпись — это действие, она белая; иконка и шеврон тише её. Раньше было
-   наоборот: подписи приглушены, а шевроны ярче. */
+/* баланс и очки: поле слева, действие справа */
+.pm__money { display: flex; align-items: center; gap: 10px; }
+.pm__cur, .pm__bonus { display: flex; align-items: center; gap: 10px; flex: 1 0 0; min-width: 0;
+                       box-sizing: border-box; height: 48px; padding: 0 12px;
+                       border: 1px solid var(--white-10, rgba(255, 255, 255, .1));
+                       border-radius: 12px; background: #0e132a; }
+.pm__cur { cursor: pointer; }
+.pm__cur:hover { background: #121734; }
+.pm__coin-flag { display: block; flex: none; width: 24px; height: 24px; border-radius: 50%; }
+.pm__cur-sum, .pm__bonus-sum { flex: 1 0 0; min-width: 0; text-align: left;
+                               font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                               font-size: 16px; line-height: 22px; color: var(--white);
+                               font-variant-numeric: tabular-nums; }
+.pm__cur-chev { display: block; flex: none; opacity: .7; }
+.pm__bonus-ico { display: grid; place-items: center; flex: none; width: 24px; height: 24px;
+                 border-radius: 50%; border: 1px solid #d8b24a; color: #d8b24a;
+                 font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 10px; }
+.pm__top, .pm__swap { flex: none; min-width: 120px; height: 48px; padding: 0 18px;
+                      border: 0; border-radius: 12px; cursor: pointer;
+                      font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                      font-size: 15px; line-height: 20px; }
+.pm__top { background: var(--register, #00c928); color: #06210d; }
+.pm__top:hover { filter: brightness(1.08); }
+.pm__swap { background: var(--white-06, rgba(255, 255, 255, .06)); color: var(--white);
+            border: 1px solid var(--white-10, rgba(255, 255, 255, .1)); }
+.pm__swap:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
+
+/* разделы */
+.pm__menu { flex: 1 0 auto; display: flex; flex-direction: column; gap: 2px; margin-top: 6px; }
+.pm__item { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
+            width: 100%; min-height: 52px; padding: 0 12px; border: 0; border-radius: 12px;
+            cursor: pointer; background: none; text-align: left;
+            font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+            font-size: 15px; line-height: 20px; color: var(--white); }
+.pm__item span { flex: 1 0 0; min-width: 0; }
+.pm__item:hover { background: var(--white-06); }
 .pm__ico { display: block; flex: none; opacity: .75; }
+.pm__chev { display: block; flex: none; opacity: .5; transition: transform .15s ease; }
+.pm__item[aria-expanded="true"] .pm__chev { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .pm__chev { transition: none; } }
+.pm__subs { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 6px 44px; }
+.pm__subs[hidden] { display: none; }
+.pm__sub { display: flex; align-items: center; width: 100%; min-height: 40px;
+           padding: 0 12px; text-align: left; cursor: pointer;
+           background: none; border: 0; border-radius: 10px;
+           font-family: 'Work Sans', sans-serif; font-weight: 500;
+           font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+.pm__sub:hover { background: var(--white-06); color: var(--white); }
+
+/* выход прижат к низу панели */
+.pm__out { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box;
+           min-height: 52px; margin-top: auto; padding: 0 12px; border: 0; border-radius: 12px;
+           cursor: pointer; background: none; text-align: left;
+           font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+           font-size: 15px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+.pm__out:hover { background: var(--white-06); color: var(--white); }
 .pm__item span { flex: 1 0 0; min-width: 0;
                  font-family: 'Instrument Sans', sans-serif; font-weight: 600;
                  font-size: 14px; line-height: 18px; color: var(--white); }
-.pm__chev { display: block; flex: none; opacity: .35; transition: opacity .15s ease; }
-.pm__item:hover .pm__chev { opacity: .6; }
 .pm__item:hover .pm__ico { opacity: 1; }
-/* Log out — единственное необратимое действие, поэтому не вровень с остальными:
+/* Выход — единственное необратимое действие, поэтому не вровень с остальными:
    приглушён по умолчанию и краснеет под курсором. */
-.pm__item[data-go="logout"] span { color: var(--modal-text-1, #bbc6cd); }
-.pm__item[data-go="logout"]:hover span { color: #e5484d; }
-.pm__item[data-go="logout"]:hover .pm__ico { opacity: 1;
+.pm__out:hover span { color: #e5484d; }
+.pm__out:hover .pm__ico { opacity: 1;
   filter: brightness(0) saturate(100%) invert(38%) sepia(58%) saturate(3200%) hue-rotate(334deg) brightness(96%) contrast(92%); }
 
-@media (max-width: 720px) {
-  .pm__pop { right: 12px; left: 12px; width: auto; flex-direction: column; }
-  .pm__sum { width: auto; }
-  .pm__menu { padding: 0; }
+/* На узком экране панель занимает всю ширину: 380 там уже не полоса сбоку,
+   а почти весь экран, и полоска фона слева только мешает попасть мимо. */
+@media (max-width: 480px) {
+  .pm__pop { width: 100%; max-width: 100%; border-left: 0; }
+  .pm__top, .pm__swap { min-width: 96px; padding: 0 12px; font-size: 14px; }
+  .pm__subs { padding-left: 32px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -4976,22 +4985,19 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    на 90 и наполовину прятались за полосой кошелька. Ставим их под неё.
    Правило записано после базовых top: 90px — при равной силе побеждает оно. */
 @media (max-width: 767px) {
-  body.is-authed .pm__pop,
+  /* Панель профиля теперь во всю высоту справа, её эта поправка не касается */
   body.is-authed .nt__pop { top: 130px; }
 
-  /* Затемнение снова ловит нажатие. Сквозное оно было ради десктопа: там
-     клик по соседней иконке в шапке сразу переключал окно. На телефоне это
-     выходило боком — тап мимо меню закрывал его и заодно нажимал кнопку под
-     пальцем, чаще всего «Home» в нижней панели, и уводил на другую страницу. */
-  .pm__scrim, .nt__scrim { pointer-events: auto; }
+  /* Затемнение уведомлений снова ловит нажатие. Сквозное оно ради десктопа:
+     там клик по соседней иконке в шапке сразу переключает окно. На телефоне
+     это выходило боком — тап мимо меню закрывал его и заодно нажимал кнопку
+     под пальцем, чаще всего «Home» в нижней панели, и уводил на другую
+     страницу. У профиля подложка ловит нажатие на любой ширине. */
+  .nt__scrim { pointer-events: auto; }
 
   /* Высоту окон задаёт скрипт по замеру шапки и панели; что не поместилось,
      прокручивается внутри, а не уходит за нижний край экрана. */
-  .pm__pop { overflow-y: auto; overscroll-behavior: contain;
-             border: 1px solid rgba(255, 255, 255, .14); }
-  /* Кант рисовали слоем ради точной ширины по макету; в прокручиваемом окне
-     он растянулся бы на всю прокрутку, поэтому здесь обычная рамка. */
-  .pm__pop::after { display: none; }
+  .pm__pop { overscroll-behavior: contain; }
 
   /* Уведомления — не висящее окошко, а лист во весь экран под шапкой:
      заголовок со значком и крестиком, список во всю высоту, пустой экран
@@ -12748,61 +12754,87 @@ body.cur-open .wallet__balance { background: var(--white-16); }
   </div>
 </div>
 
+<!-- Профиль выезжает справа во всю высоту: сверху имя и статус, под ними
+     баланс с валютой и пополнением, дальше разделы, внизу выход. Разделы
+     свёрнуты и раскрываются по нажатию — пунктов больше десятка, списком
+     они бы не поместились. -->
 <div class="pm" id="profile-menu" hidden data-node-id="1226:35555">
   <div class="pm__scrim" data-close></div>
-  <div class="pm__pop" role="dialog" aria-modal="true" aria-label="Account">
-    <!-- 1226:35559 — сводка -->
-    <div class="pm__sum" data-node-id="1226:35559">
-      <h2 class="pm__title">Account Summary</h2>
-      <div class="pm__balance">
-        <div class="pm__coin" data-node-id="1226:35563">
-          <span class="pm__coin-left">
-            <!-- Флаг вместо значка доллара: два кружка подряд читались бы шумом,
-                 а страна валюты по флагу понятна сразу -->
-            <img loading="lazy" decoding="async" class="pm__coin-flag" src="a/21c85c9e5d.svg" alt="" width="28" height="28">
-            <b>USD</b>
-          </span>
-          <span class="pm__coin-right">
-            <!-- только сумма: тикер уже назван слева, а долларовый
-                 эквивалент второй строкой повторял бы её саму -->
-            <b>0.00</b>
-          </span>
-        </div>
+  <aside class="pm__pop" role="dialog" aria-modal="true" aria-label="Account">
+
+    <div class="pm__head">
+      <span class="pm__ava" aria-hidden="true"><img loading="lazy" decoding="async" src="a/1d12ab6211.svg" alt="" width="22" height="22"></span>
+      <div class="pm__who">
+        <b class="pm__name">Ricardo Destaole</b>
+        <span class="pm__status">Soldier</span>
       </div>
-      <div class="pm__stats" data-node-id="1226:35571">
-        <div class="pm__stat"><span class="pm__cap">Bonus</span><b>-</b></div>
-        <div class="pm__stat"><span class="pm__cap">Withdrawable</span><b>0.00</b></div>
-      </div>
-      <div class="pm__note" data-node-id="1226:35580">
-        <img loading="lazy" decoding="async" src="a/1d015c4521.svg" alt="" width="18" height="18">
-        <p>Deposit and&nbsp;withdraw in&nbsp;the&nbsp;Wallet section.</p>
-      </div>
+      <button class="pm__x" type="button" aria-label="Close" data-close>&#215;</button>
     </div>
-    <!-- 1226:35583 — меню, пункты 44 высотой с разделителями -->
-    <nav class="pm__menu" data-node-id="1226:35583">
-      <button class="pm__item" type="button" data-go="profile">
-        <img loading="lazy" decoding="async" class="pm__ico" src="a/5899700828.svg" alt="" width="18" height="20"><span>Profile</span>
+
+    <!-- Баланс и валюта те же, что в шапке: счёт один, показывать его двумя
+         независимыми блоками нельзя — разъедутся. -->
+    <div class="pm__money">
+      <button class="pm__cur" type="button" data-lang-none data-pm-cur aria-haspopup="listbox">
+        <img loading="lazy" decoding="async" class="pm__coin-flag" src="a/21c85c9e5d.svg" alt="" width="24" height="24">
+        <b class="pm__cur-sum">0.00</b>
+        <img loading="lazy" decoding="async" class="pm__cur-chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
+      </button>
+      <button class="pm__top" type="button" data-pm-go="wallet">Deposit</button>
+    </div>
+    <div class="pm__money">
+      <div class="pm__bonus">
+        <span class="pm__bonus-ico" aria-hidden="true">CP</span>
+        <b class="pm__bonus-sum">0</b>
+      </div>
+      <button class="pm__swap" type="button" data-pm-go="bonuses">Exchange</button>
+    </div>
+
+    <nav class="pm__menu">
+      <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-fin">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/62a19a7a9a.svg" alt="" width="20" height="20"><span>Finance</span>
         <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
       </button>
+      <div class="pm__subs" id="pm-fin" hidden>
+        <button class="pm__sub" type="button" data-pm-go="wallet">Deposit</button>
+        <button class="pm__sub" type="button" data-pm-go="withdraw">Withdraw</button>
+        <button class="pm__sub" type="button" data-pm-go="transactions">Transactions</button>
+      </div>
+
+      <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-acc">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/5899700828.svg" alt="" width="18" height="20"><span>My account</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+      </button>
+      <div class="pm__subs" id="pm-acc" hidden>
+        <button class="pm__sub" type="button" data-pm-go="profile">Profile</button>
+        <button class="pm__sub" type="button" data-pm-go="verification">Verification</button>
+        <button class="pm__sub" type="button" data-pm-go="responsible">Responsible Gaming</button>
+        <button class="pm__sub" type="button" data-pm-go="bonuses">Bonuses</button>
+      </div>
+
+      <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-sup">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/1d015c4521.svg" alt="" width="18" height="18"><span>Support</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
+      </button>
+      <div class="pm__subs" id="pm-sup" hidden>
+        <button class="pm__sub" type="button" data-pm-go="helpSup">Help Centre</button>
+        <button class="pm__sub" type="button" data-pm-go="legalTc">Terms &amp; Conditions</button>
+      </div>
+
       <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-hist-subs">
-        <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>Transactions &amp; Gaming History</span>
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>History</span>
         <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
       </button>
       <!-- Подпункты лежат рядом, а не внутри: кнопку в кнопку класть нельзя -->
       <div class="pm__subs" id="pm-hist-subs" hidden>
-        <button class="pm__sub" type="button" data-sub="transactions">Transactions</button>
-        <button class="pm__sub" type="button" data-sub="history">Gaming History</button>
+        <button class="pm__sub" type="button" data-pm-go="transactions">Transactions</button>
+        <button class="pm__sub" type="button" data-pm-go="history">Gaming History</button>
       </div>
-      <button class="pm__item" type="button" data-go="responsible">
-        <img loading="lazy" decoding="async" class="pm__ico" src="a/35a86a7526.svg" alt="" width="15" height="20"><span>Responsible Gaming</span>
-        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
-      </button>
-      <button class="pm__item" type="button" data-go="logout">
-        <img loading="lazy" decoding="async" class="pm__ico" src="a/5dec4c5566.svg" alt="" width="20" height="17"><span>Log out</span>
-        <img loading="lazy" decoding="async" class="pm__chev" src="a/2dadb5a3a7.svg" alt="" width="7" height="12">
-      </button>
     </nav>
-  </div>
+
+    <button class="pm__out" type="button" data-go="logout">
+      <img loading="lazy" decoding="async" class="pm__ico" src="a/5dec4c5566.svg" alt="" width="20" height="17"><span>Log out</span>
+    </button>
+  </aside>
 </div>
 
 <!-- 1180:32120 «My Wallet» — 600x570, поля 60 по бокам и 32 снизу, зазор 32 -->
@@ -14689,6 +14721,13 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       },
       on: function (fn) { subs.push(fn); },
       sync: function () {
+        /* Панель профиля показывает тот же счёт: пишем в неё из одного места,
+           иначе шапка и панель разъедутся после первого же пополнения. */
+        var pmSum = document.querySelector('.pm__cur-sum');
+        if (pmSum) pmSum.textContent = fix(bal[code]);
+        var pmFlag = document.querySelector('.pm__cur .pm__coin-flag');
+        var pmRow = document.querySelector('[data-set-cur="' + code + '"] .cur__flag');
+        if (pmFlag && pmRow) pmFlag.setAttribute('src', pmRow.getAttribute('src'));
         var btn = document.querySelector('.wallet__balance');
         if (btn) {
           var sum = btn.querySelector('span');
@@ -16435,32 +16474,16 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         pmPop.hidden = true; profBtn.setAttribute('aria-expanded', 'false'); popLock(false);
       };
       profBtn.setAttribute('aria-haspopup', 'dialog');
-      /* Правый край окна ставим по колонке контента, а не по краю экрана.
-         Считаем поправку замером: у страницы бывает zoom, и арифметика по
-         innerWidth в него не попадает. */
-      var pmAlign = function () {
-        var col = document.querySelector('.header-desktop');
-        var pop = pmPop.querySelector('.pm__pop');
-        if (!col || !pop) return;
-        /* на узком экране окно во всю ширину — там выравнивать не по чему,
-           и инлайн-стиль ломал бы раскладку из медиазапроса */
-        if (innerWidth <= 720) { pop.style.right = ''; return; }
-        pop.style.right = '20px';
-        var diff = pop.getBoundingClientRect().right - col.getBoundingClientRect().right;
-        pop.style.right = Math.max(12, 20 + diff) + 'px';
-      };
-      addEventListener('resize', function () {
-        if (pmPop.hidden) return;
-        pmAlign(); popFit(pmPop.querySelector('.pm__pop'));
-      });
+      /* Панель прижата к правому краю и тянется во всю высоту, поэтому ни
+         выравнивать её по колонке, ни подрезать по высоте больше не нужно —
+         это делали, пока она была висящим окном под шапкой. */
       profBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         var open = pmPop.hidden;
         if (open && typeof ntClose === 'function') ntClose();
         pmPop.hidden = !open;
         profBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) { pmAlign(); popFit(pmPop.querySelector('.pm__pop')); popLock(true); }
-        else popLock(false);
+        if (open) popLock(true); else popLock(false);
       });
       pmPop.addEventListener('click', function (e) {
         if (e.target.closest('[data-close]')) pmClose();
@@ -16522,23 +16545,56 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         });
       });
 
-      /* Пункт истории раскрывается на две строки. Приём тот же, что у
-         .br__row/.br__subs в меню Browse: aria-expanded на кнопке и hidden
-         на списке. Обе строки ведут на свои страницы. */
-      var pmHist = pmPop.querySelector('.pm__item[aria-controls="pm-hist-subs"]');
-      var pmSubs = document.getElementById('pm-hist-subs');
-      if (pmHist && pmSubs) {
-        pmHist.addEventListener('click', function (e) {
+      /* Разделы сворачиваются: пунктов больше десятка, списком они бы не
+         поместились. Приём тот же, что у .br__row/.br__subs в меню Browse:
+         aria-expanded на кнопке и hidden на списке. Открытый раздел один —
+         иначе панель уезжает за экран. */
+      pmPop.querySelectorAll('.pm__item[aria-controls]').forEach(function (head) {
+        var subs = document.getElementById(head.getAttribute('aria-controls'));
+        if (!subs) return;
+        head.addEventListener('click', function (e) {
           e.preventDefault();
-          var open = pmSubs.hidden;
-          pmSubs.hidden = !open;
-          pmHist.setAttribute('aria-expanded', open ? 'true' : 'false');
+          var open = subs.hidden;
+          pmPop.querySelectorAll('.pm__subs').forEach(function (o) { o.hidden = true; });
+          pmPop.querySelectorAll('.pm__item[aria-controls]').forEach(function (o) {
+            o.setAttribute('aria-expanded', 'false');
+          });
+          subs.hidden = !open;
+          head.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
-        pmSubs.addEventListener('click', function (e) {
-          var b = e.target.closest('.pm__sub');
-          if (!b) return;
-          pmClose();
-          showView(b.dataset.sub === 'transactions' ? 'transactions' : 'history');
+      });
+
+      /* Куда ведёт каждая строка. Кошелёк и вывод — это окно кассы, а не
+         страница, поэтому у них свой путь. */
+      pmPop.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-pm-go]');
+        if (!b) return;
+        var go = b.dataset.pmGo;
+        pmClose();
+        if (go === 'wallet' || go === 'withdraw') {
+          var dep = document.querySelector('.wallet__deposit');
+          if (dep) dep.click();
+          var seg = document.querySelector('.dp__seg-btn[data-seg="' + (go === 'withdraw' ? 'withdraw' : 'deposit') + '"]');
+          if (seg && !seg.classList.contains('is-active')) seg.click();
+          return;
+        }
+        if (go === 'verification' || go === 'responsible') {
+          showView('profile');
+          var tab = document.querySelector('.prof__tab[data-tab="' + go + '"]');
+          if (tab) tab.click();
+          return;
+        }
+        showView(go);
+      });
+
+      /* Баланс в панели — тот же счёт, что в шапке: подписываемся на смену
+         валюты, а нажатие открывает уже сделанный список валют. */
+      var pmCur = pmPop.querySelector('[data-pm-cur]');
+      if (pmCur) {
+        pmCur.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var head = document.querySelector('.wallet__balance');
+          if (head) head.click();
         });
       }
     }
