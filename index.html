@@ -4190,6 +4190,27 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .dp__toggle, .dp__toggle i { transition: none; }
 }
 
+/* ═══ Повторный депозит: сохранённая карта ═══
+   Прячем валюту, сеть, имя и тумблер «запомнить» — всё это спрашивали
+   в прошлый раз. Остаётся строка с картой, сумма и кнопка. */
+.dp__saved[hidden] { display: none; }
+.dp__fd.is-saved .dp__row, .dp__fd.is-saved .dp__save { display: none; }
+.dp__saved-row { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
+                 width: 100%; height: 48px; padding: 0 12px;
+                 background: #30354f; border-radius: 12px; }
+.dp__saved-ico { display: block; flex: none; opacity: .8; }
+.dp__saved-name { flex: 1 0 0; min-width: 0; overflow: hidden;
+                  text-overflow: ellipsis; white-space: nowrap;
+                  font-family: 'Work Sans', sans-serif; font-weight: 500;
+                  font-size: 13px; line-height: 16px; color: var(--white); }
+.dp__saved-change { flex: none; padding: 0; border: 0; background: none; cursor: pointer;
+                    font-family: 'Work Sans', sans-serif; font-weight: 600;
+                    font-size: 13px; line-height: 16px; color: var(--dp-accent, #3a9bf5);
+                    transition: color .16s ease; }
+.dp__saved-change:hover { color: var(--white); }
+.dp__saved-change:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px;
+                                  border-radius: 4px; }
+
 /* ═══ Вставка 2 — бонус первого депозита ═══
    Заголовок раздела и две равные карточки: отказ и предложение. Выбор
    показывает сама карточка — заливка и кант, — поэтому ни галочки, ни
@@ -13597,6 +13618,18 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           <!-- 1180:34805 — депозит фиатом: валюта и способ, имя, сумма
                с быстрыми значениями и кнопка оплаты. -->
           <div class="dp__fd">
+            <!-- Повторный депозит: способ уже сохранён с прошлого раза, поэтому
+                 вместо валюты, сети и имени — одна строка с картой. Спрашивать
+                 то же самое второй раз незачем, а сменить карту можно кнопкой. -->
+            <div class="dp__field dp__saved" hidden>
+              <span class="dp__label dp__label--dim">Payment method</span>
+              <div class="dp__saved-row">
+                <img loading="lazy" decoding="async" class="dp__saved-ico" src="a/64aeb080c4.svg" alt="" width="24" height="24">
+                <span class="dp__saved-name">Visa &bull;&bull;&bull;&bull;&nbsp;4242</span>
+                <button class="dp__saved-change" type="button" data-fd-change>Change</button>
+              </div>
+            </div>
+
             <div class="dp__row">
               <div class="dp__field">
                 <span class="dp__label dp__label--dim">Deposit Currency</span>
@@ -14484,8 +14517,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Only PNG, JPG or PDF are accepted.': 'Принимаются только PNG, JPG или PDF.',
       /* ── Касса: сохранение способа и бонус первого депозита ── */
       'Remember this payment method': 'Запомнить способ оплаты',
+      'Payment method': 'Способ оплаты',
       'First deposit bonus': 'Бонус первого депозита',
-      'Bonus': 'Бонус',
       'up to {sum} + {fs} FS': 'до {sum} + {fs} FS',
       'No bonus': 'Без бонуса',
       'the money is yours right away': 'деньги сразу свои',
@@ -15179,8 +15212,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Only PNG, JPG or PDF are accepted.': 'Solo se aceptan PNG, JPG o PDF.',
       /* ── Caja: guardar el método y bono del primer depósito ── */
       'Remember this payment method': 'Recordar este método de pago',
+      'Payment method': 'Método de pago',
       'First deposit bonus': 'Bono del primer depósito',
-      'Bonus': 'Bono',
       'up to {sum} + {fs} FS': 'hasta {sum} + {fs} FS',
       'No bonus': 'Sin bono',
       'the money is yours right away': 'la plata es tuya al toque',
@@ -16388,6 +16421,22 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             });
           }
 
+          /* ── Повторный депозит с сохранённой картой ──
+             Скрываем не только поля, но и тумблер «запомнить»: способ уже
+             запомнен, и предлагать это ещё раз бессмысленно. */
+          var fdBox = dp.querySelector('.dp__fd');
+          var fdSaved = dp.querySelector('.dp__saved');
+          if (fdBox && fdSaved) {
+            var fdSetSaved = function (on) {
+              fdBox.classList.toggle('is-saved', !!on);
+              fdSaved.hidden = !on;
+            };
+            fdSaved.querySelector('[data-fd-change]').addEventListener('click', function () {
+              fdSetSaved(false);
+            });
+            window.wwSaved = fdSetSaved;
+          }
+
           /* ── Вставка 2: бонус первого депозита ──
              Суммы бонуса — заглушки, но валюта берётся тем же money(), что и
              итог под блоком: иначе в одном окне стояли бы две разные валюты. */
@@ -17353,6 +17402,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           if (window.wwKyc) window.wwKyc.reset();
           /* Выбор бонуса и «запомнить способ» — тоже введённое, а не настройка */
           if (window.wwBonus) window.wwBonus('selected');
+          if (window.wwSaved) window.wwSaved(false);
           var swSave = document.querySelector('.dp__save');
           if (swSave) swSave.setAttribute('aria-checked', 'true');
           stClear();
@@ -19644,16 +19694,24 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── Касса: бонус первого депозита ── */
       var bonusAt = function (mode) {
         stOpen('deposit', 'fiat');
+        /* Сохранённую карту сбрасываем: иначе состояние из прошлого пункта
+           витрины оставалось бы на форме и мешало смотреть следующий. */
+        if (window.wwSaved) window.wwSaved(false);
         if (window.wwBonus) window.wwBonus(mode);
       };
       STATES.push(['Касса · бонус депозита', [
-        ['Бонус выбран', function () { bonusAt('selected'); }],
-        ['Бонус отклонён', function () { bonusAt('declined'); }],
-        ['Повторный деп — блока нет', function () { bonusAt('hidden'); }],
+        ['Первый деп · бонус выбран', function () { bonusAt('selected'); }],
+        ['Первый деп · бонус отклонён', function () { bonusAt('declined'); }],
         ['Способ оплаты не запоминаем', function () {
           bonusAt('selected');
           var sw = document.querySelector('.dp__save');
-          if (sw) sw.setAttribute('aria-checked', 'false'); }]
+          if (sw) sw.setAttribute('aria-checked', 'false'); }],
+        ['Повторный деп · карта сохранена', function () {
+          bonusAt('hidden');
+          if (window.wwSaved) window.wwSaved(true); }],
+        ['Повторный деп · карты нет', function () {
+          bonusAt('hidden');
+          if (window.wwSaved) window.wwSaved(false); }]
       ]]);
       STATES.push(['Верификация · исход', [
         ['Документы на проверке', function () {
