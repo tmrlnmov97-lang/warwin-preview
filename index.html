@@ -4191,18 +4191,21 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 }
 
 /* ═══ Вставка 2 — бонус первого депозита ═══
-   Рамка и скругление те же, что у выбранного поля модалки: 12 и кант
-   в 1px внутренней тенью (.dp__input:focus-within). Отказ от бонуса
-   лежит в том же контейнере под волосяной линией. */
-.dp__bonus { display: flex; flex-direction: column; width: 100%; border-radius: 12px;
-             box-shadow: inset 0 0 0 1px var(--primary, #0794ff);
-             transition: box-shadow .16s ease; }
-.dp__bonus[data-bonus="declined"] { box-shadow: inset 0 0 0 1px #252d56; }
+   Две отдельные карточки в ряд: слева предложение, справа отказ. Рамка и
+   скругление у выбранной — те же, что у выбранного поля модалки: 12 и кант
+   в 1px внутренней тенью (.dp__input:focus-within), у невыбранной кант
+   обычный. */
+.dp__bonus { display: flex; align-items: stretch; gap: 12px; width: 100%; }
 .dp__bonus[hidden] { display: none; }
 .dp__bonus-in { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
                 border: 0; clip: rect(0 0 0 0); overflow: hidden; }
-.dp__bonus-offer { display: flex; align-items: center; gap: 12px; padding: 12px;
-                   cursor: pointer; }
+.dp__bonus-offer { flex: 1 1 auto; min-width: 0;
+                   display: flex; align-items: center; gap: 12px; padding: 12px;
+                   border-radius: 12px; cursor: pointer;
+                   box-shadow: inset 0 0 0 1px #252d56;
+                   transition: box-shadow .16s ease; }
+.dp__bonus[data-bonus="selected"] .dp__bonus-offer {
+  box-shadow: inset 0 0 0 1px var(--primary, #0794ff); }
 .dp__bonus-art { flex: none; width: 56px; height: 56px; border-radius: 8px;
                  background: #22263c; position: relative; }
 /* Значок подарка маской, а не картинкой: файла в assets нет, а токен
@@ -4213,8 +4216,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                         -webkit-mask: var(--ico-gift) center / contain no-repeat;
                         mask: var(--ico-gift) center / contain no-repeat; }
 .dp__bonus-text { display: flex; flex-direction: column; gap: 4px; flex: 1 0 0; min-width: 0; }
+/* Заголовок не влезает в строку и рвался как «… USDT + / 100 FS» —
+   просим браузер делить его поровну, чтобы хвост не оставался один. */
 .dp__bonus-title { font-family: 'Work Sans', sans-serif; font-weight: 500;
-                   font-size: 13px; line-height: 18px; color: var(--white); }
+                   font-size: 13px; line-height: 18px; color: var(--white);
+                   text-wrap: balance; }
 .dp__bonus-cond { font-family: 'Work Sans', sans-serif; font-weight: 500;
                   font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
 .dp__bonus-link { color: var(--dp-accent, #3a9bf5); text-decoration: none; }
@@ -4231,8 +4237,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                          transition: opacity .16s ease; }
 .dp__bonus[data-bonus="declined"] .dp__bonus-tick { box-shadow: inset 0 0 0 1.5px #3a4064; }
 .dp__bonus[data-bonus="declined"] .dp__bonus-tick::after { opacity: 0; }
-.dp__bonus-none { display: flex; align-items: center; gap: 12px; padding: 12px;
-                  cursor: pointer; border-top: 1px solid #252d56; }
+/* Отказ — своя карточка. Ширину держим по содержимому: растянутая на
+   половину, она бы весила столько же, сколько предложение. */
+.dp__bonus-none { flex: 0 0 128px; box-sizing: border-box;
+                  display: flex; flex-direction: column; align-items: center;
+                  justify-content: center; gap: 8px; padding: 12px;
+                  border-radius: 12px; cursor: pointer; text-align: center;
+                  box-shadow: inset 0 0 0 1px #252d56;
+                  transition: box-shadow .16s ease; }
+.dp__bonus[data-bonus="declined"] .dp__bonus-none {
+  box-shadow: inset 0 0 0 1px var(--primary, #0794ff); }
 .dp__bonus-radio { position: relative; flex: none; width: 20px; height: 20px; border-radius: 50%;
                    box-shadow: inset 0 0 0 1.5px #3a4064; transition: box-shadow .16s ease; }
 .dp__bonus-radio::after { content: ''; position: absolute; left: 50%; top: 50%;
@@ -4248,8 +4262,15 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp__bonus-in:focus-visible + .dp__bonus-art,
 .dp__bonus-in:focus-visible + .dp__bonus-radio { outline: 2px solid var(--focus-ring);
                                                  outline-offset: 3px; }
+/* На листе во весь экран две карточки в ряд не помещаются: заголовок
+   предложения ломается по слогам. Ставим друг под друга, отказ — строкой. */
+@media (max-width: 767px) {
+  .dp__bonus { flex-direction: column; }
+  .dp__bonus-none { flex: none; width: 100%; flex-direction: row;
+                    justify-content: flex-start; gap: 12px; text-align: left; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .dp__bonus, .dp__bonus-tick, .dp__bonus-tick::after,
+  .dp__bonus-offer, .dp__bonus-none, .dp__bonus-tick, .dp__bonus-tick::after,
   .dp__bonus-radio, .dp__bonus-radio::after { transition: none; }
 }
 
