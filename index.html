@@ -4782,9 +4782,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    короткие заголовки делить поровну.
    ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-  p, li, dd, summary, .vf__desc, .bncard__body p, .prof__card-head p {
+  p, li, dd, summary, .vf__lead, .bncard__body p, .prof__card-head p {
     text-wrap: pretty; }
-  h1, h2, h3, .vf__title, .bncard__body h2, .bnact__title h2 {
+  h1, h2, h3, .vf__h3, .bncard__body h2, .bnact__title h2 {
     text-wrap: balance; }
   /* Вкладки профиля переносились, и «Responsible Gambling» уезжала вниз
      отдельной строкой. Теперь это лента с прокруткой, как чипы на сайте. */
@@ -4795,76 +4795,305 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Вкладка Verification. Данные — четыре документа; вид свой: те же
-   карточки и та же лесенка отступов, что на General
-   (32 между карточками > 24 поле > 16 внутри > 8 подпись).
+   Вкладка Verification — мастер из трёх шагов: почта, тип документа,
+   загрузка. Лесенка отступов та же, что на General: 32 между блоками,
+   24 поле, 16 внутри, 8 подпись.
    ═══════════════════════════════════════════════════════════════════ */
-.vf__head-row { display: flex; align-items: flex-end; gap: 24px; }
-.vf__intro { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.vf { display: flex; flex-direction: column; gap: 24px; }
+.vf__intro { display: flex; flex-direction: column; gap: 4px; }
 .vf__h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
           font-size: 20px; line-height: 26px; color: var(--white); }
 .vf__intro p { margin: 0; max-width: 640px; font-family: 'Work Sans', sans-serif;
                font-size: 13px; line-height: 18px; color: var(--dp-label); }
-/* Было «REQUIRED STEPS» + полоса на 50% + «1 of 2» — три обрывка, и полоса
-   врала: не загружено ничего. Стало одной фразой, полоса считает по факту. */
-.vf__steps { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-.vf__steps-text { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
-                  color: var(--dp-label); white-space: nowrap; }
-.vf__steps-text b { font-weight: 700; color: var(--white); }
-.vf__track { display: block; width: 140px; height: 6px; border-radius: 999px;
-             background: var(--white-10); overflow: hidden; }
-.vf__track i { display: block; width: 0; height: 100%; background: var(--register);
-               border-radius: 999px; transition: width .3s ease; }
-.vf__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-/* карточка — та же плита, что на General */
-.vf__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 16px;
-            padding: 24px; background: var(--chrome); border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, .12);
+
+/* ── Степпер ──
+   Номер шага и его состояние, между шагами — линия. Линию рисует ::after
+   у пункта, а не отдельный элемент: иначе последний шаг тянул бы хвост
+   в пустоту, и его пришлось бы прятать отдельным правилом. */
+.vfs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+       margin: 0; padding: 0; list-style: none; }
+.vfs__item { position: relative; min-width: 0; }
+.vfs__item + .vfs__item::after {
+  content: ''; position: absolute; left: -50%; right: 50%; top: 20px; height: 2px;
+  margin: 0 28px; border-radius: 2px; background: var(--white-10); }
+.vfs__item.is-done::after, .vfs__item.is-current::after { background: var(--register); }
+.vfs__btn { position: relative; z-index: 1; box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            width: 100%; padding: 0 8px; border: 0; background: none; cursor: pointer; }
+.vfs__btn[disabled] { cursor: default; }
+.vfs__mark { display: grid; place-items: center; width: 40px; height: 40px; flex: none;
+             border-radius: 50%; box-sizing: border-box;
+             background: var(--chrome); box-shadow: inset 0 0 0 2px var(--white-10);
+             font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 15px; line-height: 1; color: var(--dp-label);
+             transition: background-color .16s ease, color .16s ease, box-shadow .16s ease; }
+.vfs__item.is-current .vfs__mark { background: var(--primary); color: #05203a;
+                                   box-shadow: inset 0 0 0 2px var(--primary); }
+/* Пройденный шаг показывает галочку вместо номера: номер уже ничего
+   не сообщает, а галочка сразу читается как «сделано». */
+.vfs__item.is-done .vfs__mark { background: var(--register); color: #06210d;
+                                box-shadow: inset 0 0 0 2px var(--register); }
+.vfs__item.is-done .vfs__mark b { font-size: 0; }
+.vfs__item.is-done .vfs__mark b::after { content: '\2713'; font-size: 17px; }
+.vfs__item.is-bad .vfs__mark { background: #e5484d; color: #fff;
+                               box-shadow: inset 0 0 0 2px #e5484d; }
+.vfs__item.is-bad .vfs__mark b { font-size: 0; }
+.vfs__item.is-bad .vfs__mark b::after { content: '!'; font-size: 18px; }
+.vfs__btn:not([disabled]):hover .vfs__mark { box-shadow: inset 0 0 0 2px var(--white-16); }
+.vfs__item.is-done .vfs__btn:hover .vfs__mark,
+.vfs__item.is-current .vfs__btn:hover .vfs__mark { box-shadow: none; filter: brightness(1.08); }
+.vfs__text { display: flex; flex-direction: column; align-items: center; gap: 2px;
+             min-width: 0; text-align: center; }
+.vfs__name { font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+             font-size: 14px; line-height: 18px; color: var(--white); }
+.vfs__item.is-locked .vfs__name { color: var(--dp-label); }
+.vfs__state { font-family: 'Work Sans', sans-serif; font-style: normal;
+              font-size: 12px; line-height: 16px; color: var(--dp-label); }
+.vfs__btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 4px;
+                          border-radius: 12px; }
+
+/* ── Общая рамка шага ──
+   Тот же фон и кант, что у карточек на General: вкладки одной страницы,
+   и разной подложкой они разъезжались. --card-bg сюда не годится — это
+   чёрный для плиток игр, на нём вкладка выглядела дырой. */
+.vf__step { display: flex; flex-direction: column; gap: 16px;
+            padding: 24px; border-radius: 20px;
+            background: var(--chrome); border: 1px solid rgba(255, 255, 255, .12);
             box-shadow: 0 8px 24px -16px rgba(0, 0, 0, .8); }
-.vf__head { display: flex; align-items: center; gap: 12px; }
-.vf__tile { display: grid; place-items: center; width: 40px; height: 40px; flex: none;
-            border-radius: 12px; background: var(--white-06); }
-.vf__tile img { display: block; }
-/* Плитки одинаковые у всех документов: статус несёт значок справа,
-   а не цвет иконки — иначе в ряду четыре разных акцента. */
-.vf__title { flex: 1 0 0; min-width: 0; margin: 0;
-             font-family: 'Work Sans', sans-serif; font-weight: 700;
-             font-size: 16px; line-height: 22px; color: var(--white); }
-.vf__desc { margin: 0; font-family: 'Work Sans', sans-serif;
+.vf__step[hidden] { display: none; }
+.vf__h3 { margin: 0; font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+          font-size: 17px; line-height: 24px; color: var(--white); }
+.vf__lead { margin: -8px 0 0; max-width: 560px; font-family: 'Work Sans', sans-serif;
             font-size: 13px; line-height: 18px; color: var(--dp-label); }
-/* зона загрузки: пунктир, при наведении оживает */
-.vf__drop { display: flex; flex-direction: column; align-items: center; gap: 6px;
-            padding: 24px 16px; border-radius: 12px; cursor: pointer;
-            background: rgba(255, 255, 255, .02);
-            border: 1px dashed var(--dp-line); transition: border-color .15s ease, background .15s ease; }
-.vf__drop[hidden] { display: none; }
-.vf__drop:hover { background: rgba(255, 255, 255, .05); border-color: var(--primary); }
-.vf__drop img { display: block; opacity: .8; }
-.vf__drop b { font-family: 'Work Sans', sans-serif; font-weight: 600;
-              font-size: 14px; line-height: 20px; color: var(--white); }
-.vf__drop span { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
-                 color: var(--dp-label); }
-/* выбранный файл */
-.vf__file { display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-            background: var(--white-04); border: 1px solid var(--white-06); border-radius: 12px; }
-.vf__file[hidden] { display: none; }
-.vf__file img { display: block; flex: none; }
-.vf__file-name { flex: 1 0 0; min-width: 0; overflow: hidden; text-overflow: ellipsis;
-                 white-space: nowrap; font-family: 'Work Sans', sans-serif; font-weight: 500;
-                 font-size: 13px; line-height: 18px; color: var(--white); }
-.vf__replace { flex: none; padding: 0; background: none; border: 0; cursor: pointer;
-               font-family: 'Work Sans', sans-serif; font-weight: 600;
-               font-size: 13px; line-height: 18px; color: var(--primary); }
+.vf__acts { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.vf__go { flex: none; height: 44px; padding: 0 22px; border: 0; border-radius: 12px;
+          cursor: pointer; color: #00151f;
+          background: linear-gradient(to bottom, #cdfa50, #a6e22e);
+          font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+          font-size: 15px; line-height: 20px;
+          transition: filter .16s ease, transform .12s ease; }
+.vf__go:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.vf__go:active { transform: translateY(0); filter: brightness(.96); }
+.vf__go[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .4);
+                    cursor: default; filter: none; transform: none; }
+.vf__go[hidden] { display: none; }
+.vf__back { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: 12px;
+            cursor: pointer; background: var(--white-06); color: var(--white);
+            font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+            font-size: 15px; line-height: 20px;
+            transition: background-color .16s ease; }
+.vf__back:hover { background: var(--white-10); }
+.vf__back[hidden] { display: none; }
+.vf__go:focus-visible, .vf__back:focus-visible, .vf__ghost:focus-visible {
+  outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+/* ── Шаг 1: почта ── */
+.vf__field { display: flex; flex-direction: column; gap: 8px; max-width: 460px; }
+.vf__lab { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+           letter-spacing: .04em; text-transform: uppercase; color: var(--dp-label); }
+.vf__ro { display: flex; align-items: center; gap: 12px;
+          height: 48px; padding: 0 6px 0 14px; border-radius: 12px;
+          background: rgba(0, 0, 0, .18); }
+.vf__inp { flex: 1 0 0; min-width: 0; height: 100%; padding: 0; border: 0;
+           background: none; color: var(--white);
+           font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 20px; }
+.vf__inp:focus { outline: none; }
+.vf__inp[readonly] { color: var(--muted); }
+.vf__badge { flex: none; display: flex; align-items: center; gap: 6px;
+             height: 32px; padding: 0 12px; border-radius: 8px; font-style: normal;
+             font-family: 'Work Sans', sans-serif; font-weight: 600;
+             font-size: 12px; line-height: 16px; }
+.vf__badge img { display: block; }
+.vf__badge--ok { background: rgba(0, 201, 40, .14); color: var(--register); }
+.vf__badge--warn { background: rgba(229, 72, 77, .14); color: #ff8e91; }
+.vf__mail { display: flex; flex-direction: column; gap: 12px; max-width: 460px; }
+.vf__mail[hidden] { display: none; }
+.vf__note { margin: 0; font-family: 'Work Sans', sans-serif;
+            font-size: 13px; line-height: 18px; color: var(--dp-label); }
+.vf__code { display: flex; align-items: center; gap: 12px; }
+.vf__inp--code { box-sizing: border-box; flex: none; width: 148px; height: 48px;
+                 padding: 0 14px; border-radius: 12px; background: rgba(0, 0, 0, .18);
+                 font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                 font-size: 18px; letter-spacing: .18em; font-variant-numeric: tabular-nums; }
+.vf__inp--code.is-bad { box-shadow: inset 0 0 0 1px #e5484d; }
+.vf__inp--code:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.vf__ghost { flex: none; padding: 0; border: 0; background: none; cursor: pointer;
+             font-family: 'Work Sans', sans-serif; font-weight: 600;
+             font-size: 13px; line-height: 18px; color: var(--dp-accent);
+             text-decoration: underline; text-underline-offset: 3px; }
+.vf__ghost:hover { color: var(--white); }
+.vf__err { margin: 0; font-family: 'Work Sans', sans-serif;
+           font-size: 13px; line-height: 18px; color: #ff8e91; }
+.vf__err[hidden] { display: none; }
+
+/* ── Шаг 2: тип документа ──
+   Карточки-переключатели: настоящий radio внутри label, поэтому стрелки,
+   пробел и чтение с экрана работают сами, без ролей руками. */
+.vft { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.vft__card { display: block; cursor: pointer; }
+.vft__in { position: absolute; width: 1px; height: 1px; margin: -1px;
+           padding: 0; border: 0; clip: rect(0 0 0 0); overflow: hidden; }
+.vft__body { position: relative; box-sizing: border-box; display: flex; flex-direction: column;
+             gap: 6px; height: 100%; padding: 16px 44px 16px 16px; border-radius: 14px;
+             background: rgba(0, 0, 0, .16); box-shadow: inset 0 0 0 1px var(--white-06);
+             transition: background-color .16s ease, box-shadow .16s ease; }
+.vft__card:hover .vft__body { background: rgba(0, 0, 0, .08);
+                              box-shadow: inset 0 0 0 1px var(--white-16); }
+.vft__card.is-on .vft__body { background: rgba(7, 148, 255, .1);
+                              box-shadow: inset 0 0 0 2px var(--primary); }
+.vft__card.is-off { cursor: default; opacity: .7; }
+.vft__card.is-off:hover .vft__body { background: rgba(0, 0, 0, .16);
+                                     box-shadow: inset 0 0 0 1px var(--white-06); }
+.vft__in:focus-visible + .vft__body { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.vft__ico { display: block; margin-bottom: 2px; }
+.vft__ico img { display: block; opacity: .85; }
+.vft__card.is-on .vft__ico img { opacity: 1; }
+.vft__name { font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+             font-size: 15px; line-height: 20px; color: var(--white); }
+.vft__hint { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+             color: var(--dp-label); }
+.vft__tick { position: absolute; right: 14px; top: 16px; width: 20px; height: 20px;
+             border-radius: 50%; box-shadow: inset 0 0 0 2px var(--white-16);
+             transition: background-color .16s ease, box-shadow .16s ease; }
+.vft__card.is-on .vft__tick { background: var(--primary); box-shadow: none; }
+.vft__card.is-on .vft__tick::after { content: '\2713'; display: grid; place-items: center;
+                                     width: 100%; height: 100%; color: #05203a;
+                                     font-size: 12px; font-weight: 700; }
+
+/* ── Шаг 3: загрузка ── */
+.vf__work { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 20px;
+            align-items: start; }
+.vf__slots { display: flex; flex-direction: column; gap: 12px; }
+.vfd { position: relative; box-sizing: border-box; border-radius: 14px;
+       background: rgba(0, 0, 0, .16); }
+.vfd[hidden] { display: none; }
+.vfd__zone { box-sizing: border-box; display: flex; flex-direction: column;
+             align-items: center; justify-content: center; gap: 6px;
+             width: 100%; min-height: 132px; padding: 20px; cursor: pointer;
+             border: 1px dashed var(--white-16); border-radius: 14px;
+             background: none; transition: border-color .16s ease, background-color .16s ease; }
+.vfd__zone[hidden] { display: none; }
+.vfd__zone:hover { border-color: var(--primary); background: rgba(7, 148, 255, .06); }
+.vfd__zone:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.vfd.is-over .vfd__zone { border-color: var(--primary); border-style: solid;
+                          background: rgba(7, 148, 255, .12); }
+.vfd.is-off .vfd__zone { cursor: default; opacity: .6; }
+.vfd.is-off .vfd__zone:hover { border-color: var(--white-16); background: none; }
+.vfd__zone img { display: block; opacity: .8; }
+.vfd__title { font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+              font-size: 15px; line-height: 20px; color: var(--white); }
+.vfd__hint { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+             color: var(--dp-label); }
+/* Загруженный файл: превью, имя, размер и действия */
+.vfd__done { display: flex; align-items: center; gap: 14px; padding: 12px 14px; }
+.vfd__done[hidden] { display: none; }
+.vfd__prev { display: grid; place-items: center; flex: none;
+             width: 64px; height: 48px; overflow: hidden; border-radius: 8px;
+             background: rgba(0, 0, 0, .3); }
+.vfd__prev img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.vfd__prev img[hidden] { display: none; }
+.vfd__prev i { font-family: 'Instrument Sans', sans-serif; font-style: normal;
+               font-weight: 700; font-size: 12px; color: var(--dp-label); }
+.vfd__prev i[hidden] { display: none; }
+.vfd__meta { display: flex; flex-direction: column; gap: 2px; flex: 1 0 0; min-width: 0; }
+.vfd__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+             font-family: 'Work Sans', sans-serif; font-weight: 600;
+             font-size: 14px; line-height: 18px; color: var(--white); }
+.vfd__size { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+             color: var(--dp-label); }
+.vfd__acts { display: flex; align-items: center; gap: 10px; flex: none; }
+.vfd__act { padding: 0; border: 0; background: none; cursor: pointer;
+            font-family: 'Work Sans', sans-serif; font-weight: 600;
+            font-size: 13px; line-height: 18px; color: var(--dp-accent);
+            transition: color .16s ease; }
+.vfd__act:hover { color: var(--white); }
+.vfd__act--del { color: var(--dp-label); }
+.vfd__act--del:hover { color: #e5484d; }
+.vfd__act:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px;
+                          border-radius: 4px; }
+.vfd.is-off .vfd__acts { display: none; }
+/* Полоса отправки: без неё состояние загрузки проскакивало незаметно */
+.vfd__load { display: flex; align-items: center; gap: 12px; padding: 20px 14px; }
+.vfd__load[hidden] { display: none; }
+.vfd__bar { flex: 1 0 0; height: 6px; border-radius: 999px; overflow: hidden;
+            background: var(--white-10); }
+.vfd__bar i { display: block; width: 40%; height: 100%; border-radius: 999px;
+              background: var(--primary); animation: vfd-run 1s ease-in-out infinite; }
+@keyframes vfd-run { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
+.vfd__load-text { flex: none; font-family: 'Work Sans', sans-serif;
+                  font-size: 13px; line-height: 18px; color: var(--dp-label); }
+.vfd__err { display: flex; align-items: center; gap: 10px; margin: 0; padding: 0 14px 12px;
+            font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+            color: #ff8e91; }
+.vfd__err[hidden] { display: none; }
+.vfd.is-bad { box-shadow: inset 0 0 0 1px rgba(229, 72, 77, .5); }
+.vfd__retry { flex: none; padding: 0; border: 0; background: none; cursor: pointer;
+              font-family: 'Work Sans', sans-serif; font-weight: 600;
+              font-size: 13px; line-height: 18px; color: var(--dp-accent);
+              text-decoration: underline; text-underline-offset: 3px; }
+.vfd__retry[hidden] { display: none; }
+
+/* Требования: списком, без картинок-образцов */
+.vf__req { box-sizing: border-box; display: flex; flex-direction: column; gap: 8px;
+           padding: 16px 18px; border-radius: 14px; background: rgba(0, 0, 0, .16); }
+.vf__req-h { margin: 0; font-family: 'Instrument Sans', sans-serif; font-weight: 600;
+             font-size: 13px; line-height: 18px; color: var(--white); }
+.vf__req-h + .vf__list { margin-bottom: 6px; }
+.vf__list { margin: 0; padding: 0; list-style: none;
+            display: flex; flex-direction: column; gap: 6px; }
+.vf__list li { position: relative; padding-left: 24px;
+               font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+               color: var(--dp-text, #c5cde0); }
+.vf__list li::before { position: absolute; left: 0; top: 0; width: 16px; text-align: center;
+                       font-weight: 700; }
+.vf__list--ok li::before { content: '\2713'; color: var(--register); }
+.vf__list--no li::before { content: '\2717'; color: #e5484d; }
+.vf__req-foot { margin: 4px 0 0; padding-top: 10px;
+                border-top: 1px solid var(--white-06);
+                font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+                color: var(--dp-label); }
+
+/* ── Итог ── */
+.vf__res { display: flex; flex-direction: column; align-items: center; gap: 10px;
+           padding: 40px 24px; border-radius: 20px; text-align: center;
+           background: var(--chrome); border: 1px solid rgba(255, 255, 255, .12);
+           box-shadow: 0 8px 24px -16px rgba(0, 0, 0, .8); }
+.vf__res[hidden] { display: none; }
+.vf__res-ico { display: grid; place-items: center; width: 56px; height: 56px;
+               border-radius: 50%; font-size: 24px; line-height: 1; }
+.vf__res[data-res="review"] .vf__res-ico { background: rgba(7, 148, 255, .14); }
+.vf__res[data-res="ok"] .vf__res-ico { background: rgba(0, 201, 40, .14); color: var(--register); }
+.vf__res[data-res="no"] .vf__res-ico { background: rgba(229, 72, 77, .14); color: #ff8e91; }
+.vf__res-h { margin: 0; font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 18px; line-height: 24px; color: var(--white); }
+.vf__res-p { margin: 0; max-width: 440px; font-family: 'Work Sans', sans-serif;
+             font-size: 13px; line-height: 18px; color: var(--dp-label); }
+.vf__res-why { margin: 0; padding: 10px 16px; border-radius: 10px;
+               background: rgba(229, 72, 77, .1);
+               font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+               color: #ff8e91; }
+.vf__res-why[hidden] { display: none; }
+.vf__res .vf__go { margin-top: 6px; }
+
 .vf__foot { margin: 0; padding: 0 4px; font-family: 'Work Sans', sans-serif;
             font-size: 12px; line-height: 16px; color: var(--dp-label); }
-/* приглушённый значок для необязательных документов */
-.prof__badge--soft { background: var(--white-06); color: var(--dp-label); }
 
-@media (max-width: 720px) {
-  .vf__grid { grid-template-columns: 1fr; gap: 16px; }
-  .vf__card { padding: 16px; gap: 12px; }
-  .vf__head-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .vf__steps { align-items: flex-start; }
+/* На узком экране степпер сжимается в номера с подписями под ними,
+   карточки типов встают в колонку, требования уезжают под слоты. */
+@media (max-width: 900px) {
+  .vf__work { grid-template-columns: minmax(0, 1fr); }
+  .vft { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .vf__step { padding: 18px 16px; }
+  .vfs__mark { width: 34px; height: 34px; font-size: 14px; }
+  .vfs__item + .vfs__item::after { top: 17px; margin: 0 22px; }
+  .vfs__name { font-size: 13px; line-height: 17px; }
+  .vfs__state { font-size: 11px; }
+  .vf__acts { flex-wrap: wrap; }
+  .vf__acts .vf__go { flex: 1 0 100%; order: -1; }
+  .vfd__done { flex-wrap: wrap; }
+  .vfd__acts { flex: 1 0 100%; justify-content: flex-end; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -6484,96 +6713,205 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
         <!-- Верификация: четыре документа. Вид наш — те же карточки и та же
              лесенка отступов, что на General. -->
+        <!-- Верификация идёт тремя шагами: почта, тип документа, загрузка.
+             Одним экраном она была короче, но требования к снимку и слоты
+             загрузки зависят от типа документа, а его надо выбрать раньше. -->
         <div class="prof__panel" id="prof-verification" role="tabpanel" hidden>
-          <div class="vf__head-row">
+          <div class="vf" data-vf>
             <div class="vf__intro">
               <h2 class="vf__h2">Verification</h2>
-              <p>Needed once before your first withdrawal. The&nbsp;check takes up&nbsp;to&nbsp;15 minutes &mdash; you can play and&nbsp;deposit right now.</p>
+              <p>Needed once before your first withdrawal. Three steps, a&nbsp;couple of&nbsp;minutes.</p>
             </div>
-            <div class="vf__steps">
-              <span class="vf__steps-text"><b class="vf__done">0</b> of <b>2</b> required documents uploaded</span>
-              <span class="vf__track"><i></i></span>
-            </div>
+
+            <!-- Степпер. Кнопкой можно вернуться на пройденный шаг; на шаг
+                 вперёд кнопка выключена, пока текущий не пройден. -->
+            <ol class="vfs" aria-label="Verification steps">
+              <li class="vfs__item" data-vfs="email">
+                <button class="vfs__btn" type="button">
+                  <span class="vfs__mark" aria-hidden="true"><b>1</b></span>
+                  <span class="vfs__text"><b class="vfs__name">E-mail</b><em class="vfs__state">In progress</em></span>
+                </button>
+              </li>
+              <li class="vfs__item" data-vfs="type">
+                <button class="vfs__btn" type="button">
+                  <span class="vfs__mark" aria-hidden="true"><b>2</b></span>
+                  <span class="vfs__text"><b class="vfs__name">Document</b><em class="vfs__state">Not started</em></span>
+                </button>
+              </li>
+              <li class="vfs__item" data-vfs="upload">
+                <button class="vfs__btn" type="button">
+                  <span class="vfs__mark" aria-hidden="true"><b>3</b></span>
+                  <span class="vfs__text"><b class="vfs__name">Upload</b><em class="vfs__state">Not started</em></span>
+                </button>
+              </li>
+            </ol>
+
+            <!-- ── Шаг 1. Почта ── -->
+            <section class="vf__step" data-vfstep="email" aria-labelledby="vf-email-h">
+              <h3 class="vf__h3" id="vf-email-h">Confirm your e-mail</h3>
+              <p class="vf__lead">This is the&nbsp;address from your profile. Confirmation codes and&nbsp;withdrawal notices go&nbsp;here.</p>
+
+              <div class="vf__field">
+                <label class="vf__lab" for="vf-email">E-mail</label>
+                <div class="vf__ro">
+                  <input class="vf__inp" id="vf-email" type="email" value="user@warwin.com" readonly>
+                  <em class="vf__badge vf__badge--ok" data-vf-mailbadge>
+                    <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="14" height="14"><span>Verified</span>
+                  </em>
+                </div>
+              </div>
+
+              <!-- Запасной вид: адрес почему-то не подтверждён. Открывается
+                   с витрины состояний, в обычном потоке скрыт. -->
+              <div class="vf__mail" data-vf-mailbox hidden>
+                <p class="vf__note">We sent a&nbsp;six-digit code to&nbsp;this address. It&nbsp;is valid for&nbsp;15&nbsp;minutes.</p>
+                <div class="vf__code">
+                  <input class="vf__inp vf__inp--code" data-vf-code inputmode="numeric" autocomplete="one-time-code"
+                         maxlength="6" placeholder="000000" aria-label="Confirmation code">
+                  <button class="vf__ghost" type="button" data-vf-resend>Send the e-mail again</button>
+                </div>
+                <p class="vf__err" data-vf-mailerr hidden></p>
+              </div>
+
+              <div class="vf__acts">
+                <button class="vf__back" type="button" data-vf-edit hidden>Change</button>
+                <button class="vf__go" type="button" data-vf-next>Continue</button>
+              </div>
+            </section>
+
+            <!-- ── Шаг 2. Тип документа ── -->
+            <section class="vf__step" data-vfstep="type" hidden aria-labelledby="vf-type-h">
+              <h3 class="vf__h3" id="vf-type-h">Choose a document</h3>
+              <p class="vf__lead">What we&nbsp;ask for&nbsp;next depends on&nbsp;this choice.</p>
+
+              <div class="vft" role="radiogroup" aria-label="Document type">
+                <label class="vft__card">
+                  <input class="vft__in" type="radio" name="vf-doc" value="passport">
+                  <span class="vft__body">
+                    <span class="vft__ico"><img loading="lazy" decoding="async" src="a/3268f5deec.svg" alt="" width="24" height="24"></span>
+                    <b class="vft__name">Passport</b>
+                    <span class="vft__hint">One photo &mdash; the&nbsp;page with your details</span>
+                    <span class="vft__tick" aria-hidden="true"></span>
+                  </span>
+                </label>
+                <label class="vft__card">
+                  <input class="vft__in" type="radio" name="vf-doc" value="licence">
+                  <span class="vft__body">
+                    <span class="vft__ico"><img loading="lazy" decoding="async" src="a/61e1f360ac.svg" alt="" width="24" height="24"></span>
+                    <b class="vft__name">Driving licence</b>
+                    <span class="vft__hint">Two photos &mdash; front and&nbsp;back</span>
+                    <span class="vft__tick" aria-hidden="true"></span>
+                  </span>
+                </label>
+                <label class="vft__card">
+                  <input class="vft__in" type="radio" name="vf-doc" value="id">
+                  <span class="vft__body">
+                    <span class="vft__ico"><img loading="lazy" decoding="async" src="a/4f8ff11129.svg" alt="" width="24" height="24"></span>
+                    <b class="vft__name">ID card</b>
+                    <span class="vft__hint">Two photos &mdash; front and&nbsp;back</span>
+                    <span class="vft__tick" aria-hidden="true"></span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="vf__acts">
+                <button class="vf__back" type="button" data-vf-prev>Back</button>
+                <button class="vf__back" type="button" data-vf-edit hidden>Change</button>
+                <button class="vf__go" type="button" data-vf-next disabled>Continue</button>
+              </div>
+            </section>
+
+            <!-- ── Шаг 3. Загрузка ── -->
+            <section class="vf__step" data-vfstep="upload" hidden aria-labelledby="vf-up-h">
+              <h3 class="vf__h3" id="vf-up-h">Upload the document</h3>
+              <p class="vf__lead" data-vf-uplead>Two photos &mdash; front and&nbsp;back of&nbsp;the&nbsp;card.</p>
+
+              <div class="vf__work">
+                <div class="vf__slots">
+                  <div class="vfd" data-vfd="1">
+                    <input class="vfd__in" type="file" hidden
+                           accept="image/jpeg,image/png,application/pdf,.jpg,.jpeg,.png,.pdf">
+                    <button class="vfd__zone" type="button">
+                      <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
+                      <b class="vfd__title">Front side</b>
+                      <span class="vfd__hint">Drag the&nbsp;file here or&nbsp;click to&nbsp;choose</span>
+                    </button>
+                    <div class="vfd__done" hidden>
+                      <span class="vfd__prev"><img loading="lazy" decoding="async" alt="" hidden><i hidden>PDF</i></span>
+                      <span class="vfd__meta"><b class="vfd__name"></b><span class="vfd__size"></span></span>
+                      <span class="vfd__acts">
+                        <button class="vfd__act" type="button" data-vfd-replace>Replace</button>
+                        <button class="vfd__act vfd__act--del" type="button" data-vfd-del>Delete</button>
+                      </span>
+                    </div>
+                    <div class="vfd__load" hidden>
+                      <span class="vfd__bar"><i></i></span>
+                      <span class="vfd__load-text">Uploading&hellip;</span>
+                    </div>
+                    <p class="vfd__err" hidden><span></span>
+                      <button class="vfd__retry" type="button" data-vfd-retry hidden>Try again</button>
+                    </p>
+                  </div>
+                  <div class="vfd" data-vfd="2">
+                    <input class="vfd__in" type="file" hidden
+                           accept="image/jpeg,image/png,application/pdf,.jpg,.jpeg,.png,.pdf">
+                    <button class="vfd__zone" type="button">
+                      <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
+                      <b class="vfd__title">Back side</b>
+                      <span class="vfd__hint">Drag the&nbsp;file here or&nbsp;click to&nbsp;choose</span>
+                    </button>
+                    <div class="vfd__done" hidden>
+                      <span class="vfd__prev"><img loading="lazy" decoding="async" alt="" hidden><i hidden>PDF</i></span>
+                      <span class="vfd__meta"><b class="vfd__name"></b><span class="vfd__size"></span></span>
+                      <span class="vfd__acts">
+                        <button class="vfd__act" type="button" data-vfd-replace>Replace</button>
+                        <button class="vfd__act vfd__act--del" type="button" data-vfd-del>Delete</button>
+                      </span>
+                    </div>
+                    <div class="vfd__load" hidden>
+                      <span class="vfd__bar"><i></i></span>
+                      <span class="vfd__load-text">Uploading&hellip;</span>
+                    </div>
+                    <p class="vfd__err" hidden><span></span>
+                      <button class="vfd__retry" type="button" data-vfd-retry hidden>Try again</button>
+                    </p>
+                  </div>
+                </div>
+
+                <aside class="vf__req">
+                  <h4 class="vf__req-h">Make sure that</h4>
+                  <ul class="vf__list vf__list--ok">
+                    <li>all four corners are in&nbsp;the&nbsp;frame;</li>
+                    <li>the&nbsp;text is sharp and&nbsp;readable;</li>
+                    <li>the&nbsp;photo is in&nbsp;colour.</li>
+                  </ul>
+                  <h4 class="vf__req-h">We will send it back if</h4>
+                  <ul class="vf__list vf__list--no">
+                    <li>a&nbsp;corner is cut off or&nbsp;covered;</li>
+                    <li>there is glare or&nbsp;a&nbsp;shadow over the&nbsp;text;</li>
+                    <li>the&nbsp;image is edited or&nbsp;scanned in&nbsp;black and&nbsp;white.</li>
+                  </ul>
+                  <p class="vf__req-foot">JPG, PNG or&nbsp;PDF &middot; up&nbsp;to&nbsp;10&nbsp;MB &middot; at&nbsp;least 600&nbsp;px on&nbsp;the&nbsp;short side</p>
+                </aside>
+              </div>
+
+              <div class="vf__acts">
+                <button class="vf__back" type="button" data-vf-prev>Back</button>
+                <button class="vf__go" type="button" data-vf-send disabled>Send for review</button>
+              </div>
+            </section>
+
+            <!-- ── Итог: на проверке, принято, отклонено ── -->
+            <section class="vf__res" data-vfres hidden aria-live="polite">
+              <span class="vf__res-ico" aria-hidden="true"></span>
+              <h3 class="vf__res-h"></h3>
+              <p class="vf__res-p"></p>
+              <p class="vf__res-why" hidden></p>
+              <button class="vf__go" type="button" data-vf-again hidden>Upload again</button>
+            </section>
+
+            <p class="vf__foot">Documents are encrypted and&nbsp;visible only to&nbsp;the&nbsp;review team.</p>
           </div>
-          <div class="vf__grid">
-            <section class="vf__card" data-doc="front" data-required>
-              <div class="vf__head">
-                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/4f8ff11129.svg" alt="" width="20" height="20"></span>
-                <h3 class="vf__title">Proof of identity (front)</h3>
-                <em class="prof__badge prof__badge--warn">Required</em>
-              </div>
-              <p class="vf__desc">Passport, ID card or&nbsp;driver&rsquo;s licence &mdash; the&nbsp;side with your photo.</p>
-              <label class="vf__drop">
-                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
-                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
-                <b>Upload ID front</b>
-                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
-              </label>
-              <div class="vf__file" hidden>
-                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
-                <span class="vf__file-name"></span>
-                <button class="vf__replace" type="button">Replace</button>
-              </div>
-            </section>
-            <section class="vf__card" data-doc="back" data-required>
-              <div class="vf__head">
-                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/68da4afb63.svg" alt="" width="20" height="20"></span>
-                <h3 class="vf__title">Proof of identity (back)</h3>
-                <em class="prof__badge prof__badge--warn">Required</em>
-              </div>
-              <p class="vf__desc">The&nbsp;reverse side of&nbsp;the&nbsp;same document.</p>
-              <label class="vf__drop">
-                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
-                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
-                <b>Upload ID back</b>
-                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
-              </label>
-              <div class="vf__file" hidden>
-                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
-                <span class="vf__file-name"></span>
-                <button class="vf__replace" type="button">Replace</button>
-              </div>
-            </section>
-            <section class="vf__card" data-doc="address">
-              <div class="vf__head">
-                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/8014eb7df6.svg" alt="" width="20" height="20"></span>
-                <h3 class="vf__title">Proof of address</h3>
-                <em class="prof__badge prof__badge--soft">Not needed yet</em>
-              </div>
-              <p class="vf__desc">A&nbsp;utility bill or&nbsp;a&nbsp;bank statement no&nbsp;older than 3 months.</p>
-              <label class="vf__drop">
-                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
-                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
-                <b>Upload image</b>
-                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
-              </label>
-              <div class="vf__file" hidden>
-                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
-                <span class="vf__file-name"></span>
-                <button class="vf__replace" type="button">Replace</button>
-              </div>
-            </section>
-            <section class="vf__card" data-doc="funds">
-              <div class="vf__head">
-                <span class="vf__tile"><img loading="lazy" decoding="async" src="a/217c9cbb02.svg" alt="" width="20" height="20"></span>
-                <h3 class="vf__title">Source of funds</h3>
-                <em class="prof__badge prof__badge--soft">Not needed yet</em>
-              </div>
-              <p class="vf__desc">We ask separately if&nbsp;needed &mdash; you will get an&nbsp;e-mail.</p>
-              <label class="vf__drop">
-                <input type="file" accept="image/png,image/jpeg,application/pdf" hidden>
-                <img loading="lazy" decoding="async" src="a/21bbc13c6a.svg" alt="" width="24" height="24">
-                <b>Upload image</b>
-                <span>PNG, JPG or PDF &middot; up to 5 MB</span>
-              </label>
-              <div class="vf__file" hidden>
-                <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="18" height="18">
-                <span class="vf__file-name"></span>
-                <button class="vf__replace" type="button">Replace</button>
-              </div>
-            </section>
-          </div>
-          <p class="vf__foot">Documents are encrypted and&nbsp;visible only to&nbsp;the&nbsp;review team.</p>
         </div>
         <!-- 1335:18127 — Responsible Gambling: шесть карточек лимитов -->
         <div class="prof__panel prof__panel--rg" id="prof-responsible" role="tabpanel" hidden>
@@ -13982,6 +14320,93 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Only PNG, JPG or PDF are accepted.': 'Принимаются только PNG, JPG или PDF.',
       'The file is {size} — the limit is 5 MB.': 'Файл весит {size} — предел 5 МБ.',
       'Document sent for review.': 'Документ отправлен на проверку.',
+      /* ── Верификация: три шага ── */
+      'Needed once before your first withdrawal. Three steps, a couple of minutes.':
+        'Нужна один раз перед первым выводом. Три шага, пара минут.',
+      'Verification steps': 'Шаги верификации',
+      'Document': 'Документ',
+      'Upload': 'Загрузка',
+      'Done': 'Пройден',
+      'Sent': 'Отправлено',
+      'In progress': 'В работе',
+      'Not started': 'Не начат',
+      'Needs attention': 'Нужно вернуться',
+      'Continue': 'Продолжить',
+      'Forward': 'Вперёд',
+      'Back': 'Назад',
+      'Change': 'Изменить',
+      'Confirm your e-mail': 'Подтвердите почту',
+      'This is the address from your profile. Confirmation codes and withdrawal notices go here.':
+        'Это адрес из профиля. Сюда приходят коды подтверждения и уведомления о выводе.',
+      'Verified': 'Подтверждён',
+      'Not verified': 'Не подтверждён',
+      'We sent a six-digit code to this address. It is valid for 15 minutes.':
+        'Мы отправили на этот адрес код из шести цифр. Он действует 15 минут.',
+      'Confirmation code': 'Код подтверждения',
+      'Send the e-mail again': 'Отправить письмо ещё раз',
+      'The e-mail is on its way. Check the spam folder if it is not there.':
+        'Письмо отправлено. Если его нет, посмотрите в спаме.',
+      'Enter the six-digit code from the e-mail.': 'Введите код из шести цифр из письма.',
+      'The code does not match. Check the e-mail or ask for a new one.':
+        'Код не совпал. Проверьте письмо или запросите новый.',
+      'E-mail confirmed.': 'Почта подтверждена.',
+      'Choose a document': 'Выберите документ',
+      'What we ask for next depends on this choice.':
+        'От этого выбора зависит, что попросим дальше.',
+      'Document type': 'Тип документа',
+      'Passport': 'Паспорт',
+      'Driving licence': 'Водительское удостоверение',
+      'ID card': 'ID-карта',
+      'One photo — the page with your details': 'Один снимок — страница с данными',
+      'Two photos — front and back': 'Два снимка — лицевая и оборотная',
+      'Upload the document': 'Загрузите документ',
+      'One photo — the page with your photo and details.':
+        'Один снимок — страница с фотографией и данными.',
+      'Two photos — the front and the back of the licence.':
+        'Два снимка — лицевая и оборотная сторона прав.',
+      'Two photos — the front and the back of the card.':
+        'Два снимка — лицевая и оборотная сторона карты.',
+      'Photo page': 'Страница с фото',
+      'Front side': 'Лицевая сторона',
+      'Back side': 'Оборотная сторона',
+      'Drag the file here or click to choose': 'Перетащите файл сюда или нажмите, чтобы выбрать',
+      'Replace': 'Заменить',
+      'Delete': 'Удалить',
+      'Try again': 'Повторить',
+      'Uploading…': 'Загружаем…',
+      'Make sure that': 'Убедитесь, что',
+      'all four corners are in the frame;': 'в кадре все четыре угла;',
+      'the text is sharp and readable;': 'текст резкий и читается;',
+      'the photo is in colour.': 'снимок цветной.',
+      'We will send it back if': 'Вернём документ, если',
+      'a corner is cut off or covered;': 'угол обрезан или закрыт;',
+      'there is glare or a shadow over the text;': 'на тексте блик или тень;',
+      'the image is edited or scanned in black and white.':
+        'снимок отредактирован или отсканирован чёрно-белым.',
+      'JPG, PNG or PDF · up to 10 MB · at least 600 px on the short side':
+        'JPG, PNG или PDF · до 10 МБ · не меньше 600 px по короткой стороне',
+      'Only JPG, PNG or PDF are accepted.': 'Принимаются только JPG, PNG или PDF.',
+      'The file is {size} — the limit is 10 MB.': 'Файл весит {size} — предел 10 МБ.',
+      'The short side is {px} px — we need at least {min} px.':
+        'Короткая сторона {px} px — нужно не меньше {min} px.',
+      'The upload did not go through. Check the connection and try again.':
+        'Загрузка не прошла. Проверьте связь и попробуйте ещё раз.',
+      'Send for review': 'Отправить на проверку',
+      'Documents sent for review.': 'Документы отправлены на проверку.',
+      'Documents in review': 'Документы на проверке',
+      'Usually within 15 minutes. On weekends it can take up to 24 hours — the result comes by e-mail.':
+        'Обычно до 15 минут. В выходные — до суток; результат придёт письмом.',
+      'Verification complete': 'Верификация пройдена',
+      'Withdrawals are open. The documents stay encrypted and visible only to the review team.':
+        'Вывод открыт. Документы остаются зашифрованными и видны только проверяющим.',
+      'Documents were not accepted': 'Документы не приняты',
+      'Upload the document again — one clear photo is usually enough.':
+        'Загрузите документ заново — обычно хватает одного чёткого снимка.',
+      'Reason: {why}': 'Причина: {why}',
+      'the bottom corner is cut off on the back side': 'на обороте обрезан нижний угол',
+      'Upload again': 'Загрузить заново',
+      'Documents are encrypted and visible only to the review team.':
+        'Документы зашифрованы и видны только проверяющим.',
       'Fill in the country.': 'Укажите страну.',
       'Fill in the city — without it a card withdrawal will not go through': 'Заполните город — без него вывод на карту не пройдёт',
       'Fill in the street and house.': 'Укажите улицу и дом.',
@@ -14583,6 +15008,93 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Only PNG, JPG or PDF are accepted.': 'Solo se aceptan PNG, JPG o PDF.',
       'The file is {size} — the limit is 5 MB.': 'El archivo pesa {size}: el límite es 5 MB.',
       'Document sent for review.': 'Documento enviado a revisión.',
+      /* ── Verificación: tres pasos ── */
+      'Needed once before your first withdrawal. Three steps, a couple of minutes.':
+        'Se hace una sola vez, antes del primer retiro. Tres pasos, un par de minutos.',
+      'Verification steps': 'Pasos de verificación',
+      'Document': 'Documento',
+      'Upload': 'Carga',
+      'Done': 'Listo',
+      'Sent': 'Enviado',
+      'In progress': 'En curso',
+      'Not started': 'Sin empezar',
+      'Needs attention': 'Falta volver',
+      'Continue': 'Continuar',
+      'Forward': 'Adelante',
+      'Back': 'Atrás',
+      'Change': 'Cambiar',
+      'Confirm your e-mail': 'Confirmá tu correo',
+      'This is the address from your profile. Confirmation codes and withdrawal notices go here.':
+        'Es la dirección de tu perfil. Acá llegan los códigos y los avisos de retiro.',
+      'Verified': 'Confirmado',
+      'Not verified': 'Sin confirmar',
+      'We sent a six-digit code to this address. It is valid for 15 minutes.':
+        'Enviamos un código de seis dígitos a esta dirección. Vale por 15 minutos.',
+      'Confirmation code': 'Código de confirmación',
+      'Send the e-mail again': 'Reenviar el correo',
+      'The e-mail is on its way. Check the spam folder if it is not there.':
+        'El correo ya salió. Si no está, mirá en el spam.',
+      'Enter the six-digit code from the e-mail.': 'Ingresá el código de seis dígitos del correo.',
+      'The code does not match. Check the e-mail or ask for a new one.':
+        'El código no coincide. Revisá el correo o pedí uno nuevo.',
+      'E-mail confirmed.': 'Correo confirmado.',
+      'Choose a document': 'Elegí un documento',
+      'What we ask for next depends on this choice.':
+        'Lo que pedimos después depende de esta elección.',
+      'Document type': 'Tipo de documento',
+      'Passport': 'Pasaporte',
+      'Driving licence': 'Licencia de conducir',
+      'ID card': 'DNI',
+      'One photo — the page with your details': 'Una foto: la página con tus datos',
+      'Two photos — front and back': 'Dos fotos: frente y dorso',
+      'Upload the document': 'Cargá el documento',
+      'One photo — the page with your photo and details.':
+        'Una foto: la página con tu foto y tus datos.',
+      'Two photos — the front and the back of the licence.':
+        'Dos fotos: el frente y el dorso de la licencia.',
+      'Two photos — the front and the back of the card.':
+        'Dos fotos: el frente y el dorso del documento.',
+      'Photo page': 'Página con foto',
+      'Front side': 'Frente',
+      'Back side': 'Dorso',
+      'Drag the file here or click to choose': 'Arrastrá el archivo acá o hacé clic para elegirlo',
+      'Replace': 'Reemplazar',
+      'Delete': 'Eliminar',
+      'Try again': 'Reintentar',
+      'Uploading…': 'Subiendo…',
+      'Make sure that': 'Fijate que',
+      'all four corners are in the frame;': 'entren las cuatro esquinas;',
+      'the text is sharp and readable;': 'el texto esté nítido y se lea;',
+      'the photo is in colour.': 'la foto sea en color.',
+      'We will send it back if': 'Lo devolvemos si',
+      'a corner is cut off or covered;': 'una esquina está cortada o tapada;',
+      'there is glare or a shadow over the text;': 'hay brillo o sombra sobre el texto;',
+      'the image is edited or scanned in black and white.':
+        'la imagen está editada o escaneada en blanco y negro.',
+      'JPG, PNG or PDF · up to 10 MB · at least 600 px on the short side':
+        'JPG, PNG o PDF · hasta 10 MB · mínimo 600 px del lado corto',
+      'Only JPG, PNG or PDF are accepted.': 'Solo se aceptan JPG, PNG o PDF.',
+      'The file is {size} — the limit is 10 MB.': 'El archivo pesa {size}: el límite es 10 MB.',
+      'The short side is {px} px — we need at least {min} px.':
+        'El lado corto mide {px} px: necesitamos al menos {min} px.',
+      'The upload did not go through. Check the connection and try again.':
+        'La carga no salió. Revisá la conexión y probá de nuevo.',
+      'Send for review': 'Enviar a revisión',
+      'Documents sent for review.': 'Documentos enviados a revisión.',
+      'Documents in review': 'Documentos en revisión',
+      'Usually within 15 minutes. On weekends it can take up to 24 hours — the result comes by e-mail.':
+        'Normalmente hasta 15 minutos. Los fines de semana puede tardar hasta 24 horas; el resultado llega por correo.',
+      'Verification complete': 'Verificación completa',
+      'Withdrawals are open. The documents stay encrypted and visible only to the review team.':
+        'Los retiros quedan habilitados. Los documentos siguen cifrados y solo los ve el equipo de revisión.',
+      'Documents were not accepted': 'No aceptamos los documentos',
+      'Upload the document again — one clear photo is usually enough.':
+        'Cargá el documento de nuevo: suele alcanzar con una foto nítida.',
+      'Reason: {why}': 'Motivo: {why}',
+      'the bottom corner is cut off on the back side': 'en el dorso está cortada la esquina inferior',
+      'Upload again': 'Cargar de nuevo',
+      'Documents are encrypted and visible only to the review team.':
+        'Los documentos están cifrados y solo los ve el equipo de revisión.',
       'Fill in the country.': 'Completá el país.',
       'Fill in the city — without it a card withdrawal will not go through': 'Completá la ciudad: sin ella el retiro a tarjeta no sale',
       'Fill in the street and house.': 'Completá la calle y el número.',
@@ -16617,7 +17129,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           });
           /* Поставленные лимиты и загруженные документы */
           document.querySelectorAll('.rg__limit').forEach(function (l) { l.hidden = true; });
-          document.querySelectorAll('.vf__card .vf__replace').forEach(function (b) { b.click(); });
+          /* Верификация сбрасывается целиком: шаг, тип документа и снимки
+             лежат в localStorage и без этого достались бы следующему входу. */
+          if (window.wwKyc) window.wwKyc.reset();
           stClear();
           document.body.classList.remove('is-authed');
           showView('home');
@@ -16998,81 +17512,415 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         });
       }
 
-      /* Счётчик обязательных документов: считаем по факту загрузки, полоса
-         тянется следом. Раньше стояла статичная половина, хотя не загружено
-         ничего — и было непонятно, о чём она. */
-      var vfDone = profView.querySelector('.vf__done');
-      var vfBar = profView.querySelector('.vf__track i');
-      var vfSync = function () {
-        var req = profView.querySelectorAll('.vf__card[data-required]');
-        var done = 0;
-        req.forEach(function (c) { if (!c.querySelector('.vf__file').hidden) done++; });
-        if (vfDone) vfDone.textContent = done;
-        if (vfBar) vfBar.style.width = req.length ? (done / req.length * 100) + '%' : '0';
-      };
+      /* ═══ Верификация: три шага ═══
+         Шаги идут по порядку, вперёд — только пройдя текущий. Назад можно
+         вернуться в любой момент, но пройденный шаг открывается на просмотр:
+         поля выключены, пока не нажать «Change». Иначе человек правил тип
+         документа, уже загрузив снимки под прежний, и слоты расходились
+         с выбором.
 
-      profView.querySelectorAll('.vf__card').forEach(function (card) {
-        var input = card.querySelector('input[type=file]');
-        var drop = card.querySelector('.vf__drop');
-        var file = card.querySelector('.vf__file');
-        var name = card.querySelector('.vf__file-name');
-        var badge = card.querySelector('.prof__badge');
-        var badgeBase = { text: badge.textContent, cls: badge.className };
-        /* Ограничения написаны прямо под полем — «PNG, JPG or PDF · up to 5 MB»,
-           но не проверялись: файл на 50 МБ и .exe принимались и уходили
-           в «In review», где их никто не примет. */
-        var VF_MAX = 5 * 1024 * 1024;
-        var VF_TYPES = ['image/png', 'image/jpeg', 'application/pdf'];
-        var vfErr = function (text) {
-          var e = card.querySelector('.vf__err');
-          if (!e) {
-            e = document.createElement('p');
-            e.className = 'vf__err';
-            drop.parentNode.insertBefore(e, drop.nextSibling);
-          }
-          e.textContent = text || '';
-          e.hidden = !text;
+         Состояние держим в localStorage: перезагрузка посреди загрузки
+         документов возвращала на первый шаг, и всё приходилось начинать
+         заново. Файлы туда не кладём — только имя, размер и уменьшенное
+         превью: полноразмерный снимок в 10 МБ хранилище не примет. */
+      var vfRoot = profView.querySelector('[data-vf]');
+      if (vfRoot) (function () {
+        var KEY = 'ww-kyc';
+        var ORDER = ['email', 'type', 'upload'];
+        var MAX = 10 * 1024 * 1024;
+        var MIN_PX = 600;
+        var TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
+
+        /* Сколько снимков и как они называются — зависит от типа документа */
+        var SLOTS = {
+          passport: [{ id: 1, title: 'Photo page' }],
+          licence: [{ id: 1, title: 'Front side' }, { id: 2, title: 'Back side' }],
+          id: [{ id: 1, title: 'Front side' }, { id: 2, title: 'Back side' }]
         };
-        /* Размер: мелкий документ подписывался «0.0 MB» — показываем в КБ */
-        var vfSize = function (b) {
+        var LEAD = {
+          passport: 'One photo — the page with your photo and details.',
+          licence: 'Two photos — the front and the back of the licence.',
+          id: 'Two photos — the front and the back of the card.'
+        };
+
+        var st = { step: 'email', reached: 'email', mail: 'ok', type: '', slots: {}, res: '' };
+
+        var read = function () {
+          var raw = safeStore.get(KEY);
+          if (!raw) return;
+          try {
+            var o = JSON.parse(raw);
+            if (o && typeof o === 'object') {
+              if (ORDER.indexOf(o.step) >= 0) st.step = o.step;
+              if (ORDER.indexOf(o.reached) >= 0) st.reached = o.reached;
+              if (o.mail === 'ok' || o.mail === 'no') st.mail = o.mail;
+              if (SLOTS[o.type]) st.type = o.type;
+              if (o.slots && typeof o.slots === 'object') st.slots = o.slots;
+              if (typeof o.res === 'string') st.res = o.res;
+            }
+          } catch (e) {}
+        };
+        var write = function () { safeStore.set(KEY, JSON.stringify(st)); };
+
+        var idx = function (name) { return ORDER.indexOf(name); };
+        var steps = {};
+        vfRoot.querySelectorAll('[data-vfstep]').forEach(function (el) {
+          steps[el.dataset.vfstep] = el;
+        });
+        var resBox = vfRoot.querySelector('[data-vfres]');
+
+        /* ── Степпер ── */
+        var stepBtns = {};
+        vfRoot.querySelectorAll('.vfs__item').forEach(function (li) {
+          var name = li.dataset.vfs;
+          stepBtns[name] = li;
+          li.querySelector('.vfs__btn').addEventListener('click', function () {
+            if (idx(name) > idx(st.reached)) return;
+            st.step = name; write(); paint();
+          });
+        });
+
+        var stateWord = function (name) {
+          if (st.res && st.res !== 'no') return name === 'upload' ? 'Sent' : 'Done';
+          if (idx(name) < idx(st.reached)) return 'Done';
+          if (name === st.reached) return st.step === name ? 'In progress' : 'Needs attention';
+          return 'Not started';
+        };
+
+        var paintSteps = function () {
+          ORDER.forEach(function (name) {
+            var li = stepBtns[name];
+            if (!li) return;
+            var done = idx(name) < idx(st.reached) || (st.res && st.res !== 'no');
+            var cur = name === st.step && !st.res;
+            li.classList.toggle('is-done', !!done);
+            li.classList.toggle('is-current', cur);
+            li.classList.toggle('is-locked', idx(name) > idx(st.reached));
+            var btn = li.querySelector('.vfs__btn');
+            btn.disabled = idx(name) > idx(st.reached);
+            btn.setAttribute('aria-disabled', btn.disabled ? 'true' : 'false');
+            if (cur) btn.setAttribute('aria-current', 'step');
+            else btn.removeAttribute('aria-current');
+            var word = li.querySelector('.vfs__state');
+            if (word) word.textContent = T(stateWord(name));
+          });
+        };
+
+        /* ── Шаг 1: почта ── */
+        var mailBadge = vfRoot.querySelector('[data-vf-mailbadge]');
+        var mailBox = vfRoot.querySelector('[data-vf-mailbox]');
+        var mailCode = vfRoot.querySelector('[data-vf-code]');
+        var mailErr = vfRoot.querySelector('[data-vf-mailerr]');
+
+        var paintMail = function () {
+          var ok = st.mail === 'ok';
+          mailBadge.className = 'vf__badge ' + (ok ? 'vf__badge--ok' : 'vf__badge--warn');
+          mailBadge.querySelector('span').textContent = T(ok ? 'Verified' : 'Not verified');
+          mailBadge.querySelector('img').hidden = !ok;
+          mailBox.hidden = ok;
+        };
+        var mailSay = function (text) {
+          mailErr.textContent = text || '';
+          mailErr.hidden = !text;
+          mailCode.classList.toggle('is-bad', !!text);
+        };
+        mailCode.addEventListener('input', function () {
+          mailCode.value = mailCode.value.replace(/\D/g, '').slice(0, 6);
+          mailSay('');
+        });
+        vfRoot.querySelector('[data-vf-resend]').addEventListener('click', function () {
+          mailSay('');
+          notify(T('The e-mail is on its way. Check the spam folder if it is not there.'), 'ok');
+        });
+
+        /* ── Шаг 2: тип документа ── */
+        var typeIns = [].slice.call(vfRoot.querySelectorAll('.vft__in'));
+        typeIns.forEach(function (r) {
+          r.addEventListener('change', function () {
+            if (!r.checked) return;
+            /* Сменили тип — прежние снимки не подходят: у паспорта один слот,
+               у карты два, и оборот от прав в паспорт не годится. */
+            if (st.type && st.type !== r.value) { st.slots = {}; }
+            st.type = r.value;
+            write(); paint();
+          });
+        });
+
+        /* ── Шаг 3: загрузка ── */
+        var upLead = vfRoot.querySelector('[data-vf-uplead]');
+        var drops = {};
+        vfRoot.querySelectorAll('[data-vfd]').forEach(function (d) { drops[d.dataset.vfd] = d; });
+
+        var size = function (b) {
           return b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' KB'
                              : (b / 1048576).toFixed(1) + ' MB';
         };
-        input.addEventListener('change', function () {
-          var f = input.files && input.files[0];
-          if (!f) return;
-          var okType = VF_TYPES.indexOf(f.type) >= 0 || /\.(png|jpe?g|pdf)$/i.test(f.name);
-          if (!okType) {
-            vfErr(T('Only PNG, JPG or PDF are accepted.'));
-            input.value = '';
-            return;
-          }
-          if (f.size > VF_MAX) {
-            vfErr(T('The file is {size} — the limit is 5 MB.', { size: vfSize(f.size) }));
-            input.value = '';
-            return;
-          }
-          vfErr('');
-          name.textContent = f.name + '  ·  ' + vfSize(f.size);
-          file.hidden = false;
-          drop.hidden = true;
-          badge.textContent = T('In review');
-          badge.className = 'prof__badge prof__badge--ok';
-          vfSync();
-          notify(T('Document sent for review.'), 'ok');
-        });
-        card.querySelector('.vf__replace').addEventListener('click', function () {
-          input.value = '';
-          vfErr('');
-          file.hidden = true;
-          drop.hidden = false;
-          badge.textContent = badgeBase.text;
-          badge.className = badgeBase.cls;
-          vfSync();
-        });
-      });
 
-      vfSync();
+        var dropErr = function (box, text, retry) {
+          var p = box.querySelector('.vfd__err');
+          p.querySelector('span').textContent = text || '';
+          p.querySelector('.vfd__retry').hidden = !retry;
+          p.hidden = !text;
+          box.classList.toggle('is-bad', !!text);
+        };
+
+        /* Уменьшенное превью: полный снимок в хранилище не влезет, а без
+           картинки после перезагрузки не понять, что именно загружено. */
+        var thumb = function (file, done) {
+          if (file.type === 'application/pdf') { done(''); return; }
+          var url = URL.createObjectURL(file);
+          var img = new Image();
+          img.onload = function () {
+            var side = Math.min(img.naturalWidth, img.naturalHeight);
+            var k = Math.min(1, 240 / Math.max(img.naturalWidth, img.naturalHeight));
+            var c = document.createElement('canvas');
+            c.width = Math.max(1, Math.round(img.naturalWidth * k));
+            c.height = Math.max(1, Math.round(img.naturalHeight * k));
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            URL.revokeObjectURL(url);
+            var out = '';
+            try { out = c.toDataURL('image/jpeg', 0.6); } catch (e) {}
+            done(out, side);
+          };
+          img.onerror = function () { URL.revokeObjectURL(url); done('', 0); };
+          img.src = url;
+        };
+
+        /* Один и тот же путь для выбора файлом и переносом мышью */
+        var take = function (id, file) {
+          var box = drops[id];
+          if (!box || !file) return;
+          dropErr(box, '');
+          var okType = TYPES.indexOf(file.type) >= 0 || /\.(jpe?g|png|pdf)$/i.test(file.name);
+          if (!okType) { dropErr(box, T('Only JPG, PNG or PDF are accepted.')); return; }
+          if (file.size > MAX) {
+            dropErr(box, T('The file is {size} — the limit is 10 MB.', { size: size(file.size) }));
+            return;
+          }
+          thumb(file, function (data, side) {
+            if (side && side < MIN_PX) {
+              dropErr(box, T('The short side is {px} px — we need at least {min} px.',
+                             { px: side, min: MIN_PX }));
+              return;
+            }
+            /* Отправка на сервер: показываем полосу, чтобы состояние загрузки
+               не проскакивало мгновенно и его было видно. */
+            box.dataset.busy = '1';
+            paintSlot(id);
+            setTimeout(function () {
+              delete box.dataset.busy;
+              st.slots[id] = { name: file.name, size: file.size, thumb: data,
+                               pdf: file.type === 'application/pdf' };
+              write(); paint();
+            }, 700);
+          });
+        };
+
+        Object.keys(drops).forEach(function (id) {
+          var box = drops[id];
+          var input = box.querySelector('.vfd__in');
+          box.querySelector('.vfd__zone').addEventListener('click', function () {
+            if (box.classList.contains('is-off')) return;
+            input.click();
+          });
+          input.addEventListener('change', function () {
+            var f = input.files && input.files[0];
+            input.value = '';
+            take(id, f);
+          });
+          box.querySelector('[data-vfd-replace]').addEventListener('click', function () { input.click(); });
+          box.querySelector('[data-vfd-del]').addEventListener('click', function () {
+            delete st.slots[id]; dropErr(box, ''); write(); paint();
+          });
+          box.querySelector('[data-vfd-retry]').addEventListener('click', function () { input.click(); });
+          ['dragenter', 'dragover'].forEach(function (ev) {
+            box.addEventListener(ev, function (e) {
+              if (box.classList.contains('is-off')) return;
+              e.preventDefault(); box.classList.add('is-over');
+            });
+          });
+          ['dragleave', 'dragend'].forEach(function (ev) {
+            box.addEventListener(ev, function () { box.classList.remove('is-over'); });
+          });
+          box.addEventListener('drop', function (e) {
+            if (box.classList.contains('is-off')) return;
+            e.preventDefault();
+            box.classList.remove('is-over');
+            var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+            take(id, f);
+          });
+        });
+
+        var paintSlot = function (id) {
+          var box = drops[id];
+          var has = !!st.slots[id];
+          var busy = box.dataset.busy === '1';
+          box.querySelector('.vfd__zone').hidden = has || busy;
+          box.querySelector('.vfd__done').hidden = !has || busy;
+          box.querySelector('.vfd__load').hidden = !busy;
+          box.classList.toggle('is-full', has);
+          if (!has) return;
+          var f = st.slots[id];
+          box.querySelector('.vfd__name').textContent = f.name;
+          box.querySelector('.vfd__size').textContent = size(f.size);
+          var img = box.querySelector('.vfd__prev img');
+          var tag = box.querySelector('.vfd__prev i');
+          img.hidden = !f.thumb;
+          tag.hidden = !!f.thumb;
+          /* Превью нет у PDF, а ещё у снимка, который браузер не смог
+             уменьшить. Подписываем клетку расширением, а не словом PDF:
+             иначе jpg без превью выглядел бы документом другого вида. */
+          if (!f.thumb) {
+            tag.textContent = f.pdf ? 'PDF'
+              : (String(f.name).split('.').pop() || 'IMG').toUpperCase().slice(0, 4);
+          }
+          if (f.thumb) img.src = f.thumb;
+        };
+
+        /* ── Общая отрисовка ── */
+        var view = function () { return idx(st.step) < idx(st.reached); };
+
+        var paint = function () {
+          paintSteps();
+          paintMail();
+
+          var onRes = !!st.res;
+          ORDER.forEach(function (name) { steps[name].hidden = onRes || name !== st.step; });
+          resBox.hidden = !onRes;
+
+          if (onRes) {
+            var ico = resBox.querySelector('.vf__res-ico');
+            var head = { review: 'Documents in review', ok: 'Verification complete',
+                         no: 'Documents were not accepted' }[st.res];
+            var text = {
+              review: 'Usually within 15 minutes. On weekends it can take up to 24 hours — the result comes by e-mail.',
+              ok: 'Withdrawals are open. The documents stay encrypted and visible only to the review team.',
+              no: 'Upload the document again — one clear photo is usually enough.'
+            }[st.res];
+            resBox.dataset.res = st.res;
+            ico.textContent = st.res === 'ok' ? '✓' : st.res === 'no' ? '✕' : '⏳';
+            resBox.querySelector('.vf__res-h').textContent = T(head);
+            resBox.querySelector('.vf__res-p').textContent = T(text);
+            var why = resBox.querySelector('.vf__res-why');
+            why.hidden = st.res !== 'no';
+            if (st.res === 'no') {
+              why.textContent = T('Reason: {why}', { why: T('the bottom corner is cut off on the back side') });
+            }
+            resBox.querySelector('[data-vf-again]').hidden = st.res !== 'no';
+            return;
+          }
+
+          var ro = view();
+          vfRoot.classList.toggle('is-view', ro);
+
+          /* Шаг 2 */
+          typeIns.forEach(function (r) {
+            r.checked = r.value === st.type;
+            r.disabled = ro;
+            r.closest('.vft__card').classList.toggle('is-on', r.checked);
+            r.closest('.vft__card').classList.toggle('is-off', ro);
+          });
+
+          /* Шаг 3: слоты по типу */
+          var list = SLOTS[st.type] || SLOTS.id;
+          if (upLead) upLead.textContent = T(LEAD[st.type] || LEAD.id);
+          Object.keys(drops).forEach(function (id) {
+            var spec = null;
+            list.forEach(function (s2) { if (String(s2.id) === String(id)) spec = s2; });
+            var box = drops[id];
+            box.hidden = !spec;
+            box.classList.toggle('is-off', ro);
+            if (!spec) { delete st.slots[id]; return; }
+            box.querySelector('.vfd__title').textContent = T(spec.title);
+            paintSlot(id);
+          });
+
+          /* Кнопки */
+          var next = steps[st.step].querySelector('[data-vf-next]');
+          if (next) {
+            next.textContent = T(ro ? 'Forward' : 'Continue');
+            next.disabled = !ro && st.step === 'type' && !st.type;
+          }
+          var send = vfRoot.querySelector('[data-vf-send]');
+          if (send) {
+            var full = list.every(function (s2) { return !!st.slots[s2.id]; });
+            send.disabled = ro || !full;
+            send.hidden = ro;
+          }
+          vfRoot.querySelectorAll('[data-vf-edit]').forEach(function (el) { el.hidden = !ro; });
+        };
+
+        /* ── Переходы ── */
+        var go = function (name) { st.step = name; write(); paint(); };
+
+        vfRoot.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-vf-next], [data-vf-prev], [data-vf-send], [data-vf-again], [data-vf-edit]');
+          if (!b || b.disabled) return;
+
+          if (b.hasAttribute('data-vf-prev')) {
+            go(ORDER[Math.max(0, idx(st.step) - 1)]);
+            return;
+          }
+          if (b.hasAttribute('data-vf-edit')) {
+            /* Вернуть правку на пройденный шаг: всё, что после него, теряет
+               силу — иначе остались бы снимки под прежний тип документа. */
+            st.reached = st.step;
+            if (st.step !== 'upload') st.slots = {};
+            write(); paint();
+            return;
+          }
+          if (b.hasAttribute('data-vf-again')) {
+            st.res = ''; st.slots = {}; st.step = 'upload'; st.reached = 'upload';
+            write(); paint();
+            return;
+          }
+          if (b.hasAttribute('data-vf-send')) {
+            st.res = 'review'; write(); paint();
+            notify(T('Documents sent for review.'), 'ok');
+            return;
+          }
+
+          /* Continue */
+          if (view()) { go(ORDER[idx(st.step) + 1]); return; }
+          if (st.step === 'email' && st.mail !== 'ok') {
+            var code = (mailCode.value || '').trim();
+            if (code.length < 6) { mailSay(T('Enter the six-digit code from the e-mail.')); mailCode.focus(); return; }
+            if (code !== '123456') {
+              mailSay(T('The code does not match. Check the e-mail or ask for a new one.'));
+              mailCode.focus();
+              return;
+            }
+            st.mail = 'ok';
+            notify(T('E-mail confirmed.'), 'ok');
+          }
+          if (st.step === 'type' && !st.type) return;
+          var n = ORDER[idx(st.step) + 1];
+          if (!n) return;
+          st.reached = ORDER[Math.max(idx(st.reached), idx(n))];
+          go(n);
+        });
+
+        /* Витрина состояний и выход из аккаунта зовут это же — иначе
+           состояние на витрине и настоящее разъезжаются. */
+        window.wwKyc = {
+          set: function (patch) {
+            Object.keys(patch).forEach(function (k) { st[k] = patch[k]; });
+            write(); paint();
+          },
+          reset: function () {
+            st = { step: 'email', reached: 'email', mail: 'ok', type: '', slots: {}, res: '' };
+            Object.keys(drops).forEach(function (id) { dropErr(drops[id], ''); });
+            mailSay('');
+            if (mailCode) mailCode.value = '';
+            write(); paint();
+          },
+          slotErr: function (id, text, retry) { dropErr(drops[id], T(text), !!retry); }
+        };
+
+        read();
+        if (st.type) { var pick = null; typeIns.forEach(function (r) { if (r.value === st.type) pick = r; }); if (pick) pick.checked = true; }
+        paint();
+      })();
 
       var profFields = [].slice.call(profView.querySelectorAll('[data-prof-addr]'));
       var profSave = profView.querySelector('.prof__save');
@@ -18521,6 +19369,62 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         ['Данные на проверке', function () { profShow('review'); }],
         ['Ошибки в адресе', function () { profShow('bad'); }],
         ['Проверенный игрок', function () { profShow('ok'); }]
+      ]]);
+
+      /* ── Верификация ──
+         Шаги, ветки по типу документа, ошибки файла и три исхода проверки.
+         Всё через wwKyc, то есть через те же функции, что и настоящий поток:
+         иначе витрина показывала бы вид, которого в потоке не бывает. */
+      var kycAt = function (patch, after) {
+        if (!window.wwKyc) return;
+        showView('profile');
+        var tab = document.querySelector('.prof__tab[data-tab="verification"]');
+        if (tab) tab.click();
+        window.wwKyc.reset();
+        window.wwKyc.set(patch);
+        if (after) after();
+      };
+      STATES.push(['Верификация · шаги', [
+        ['Шаг 1 · почта подтверждена', function () { kycAt({}); }],
+        ['Шаг 1 · почта не подтверждена', function () { kycAt({ mail: 'no' }); }],
+        ['Шаг 2 · тип не выбран', function () { kycAt({ step: 'type', reached: 'type' }); }],
+        ['Шаг 2 · выбран паспорт', function () {
+          kycAt({ step: 'type', reached: 'type', type: 'passport' }); }],
+        ['Шаг 2 · просмотр пройденного', function () {
+          kycAt({ step: 'type', reached: 'upload', type: 'id' }); }],
+        ['Шаг 3 · паспорт, один слот', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'passport' }); }],
+        ['Шаг 3 · права, два слота', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'licence' }); }],
+        ['Шаг 3 · один из двух загружен', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id',
+                  slots: { 1: { name: 'id-front.jpg', size: 1834000, thumb: '' } } }); }],
+        ['Шаг 3 · оба загружены', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id',
+                  slots: { 1: { name: 'id-front.jpg', size: 1834000, thumb: '' },
+                           2: { name: 'id-back.jpg', size: 1610000, thumb: '' } } }); }]
+      ]]);
+      STATES.push(['Верификация · ошибки файла', [
+        ['Не тот формат', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+            window.wwKyc.slotErr(1, 'Only JPG, PNG or PDF are accepted.'); }); }],
+        ['Файл больше 10 МБ', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+            window.wwKyc.slotErr(1, 'The file is 14.2 MB — the limit is 10 MB.'); }); }],
+        ['Слишком низкое разрешение', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+            window.wwKyc.slotErr(1, 'The short side is 320 px — we need at least 600 px.'); }); }],
+        ['Загрузка не прошла', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+            window.wwKyc.slotErr(1, 'The upload did not go through. Check the connection and try again.', true); }); }]
+      ]]);
+      STATES.push(['Верификация · исход', [
+        ['Документы на проверке', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id', res: 'review' }); }],
+        ['Проверка пройдена', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id', res: 'ok' }); }],
+        ['Документы отклонены', function () {
+          kycAt({ step: 'upload', reached: 'upload', type: 'id', res: 'no' }); }]
       ]]);
 
       /* ── Состояния страницы бонусов ──
