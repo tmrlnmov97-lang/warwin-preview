@@ -4169,6 +4169,90 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp__chip.is-active,
 .dp__chip.is-active:hover { background: var(--primary, #0794ff); border-color: #252d56; }
 
+/* ═══ Вставка 1 — «запомнить способ оплаты» ═══
+   Строка на 32 идёт по левому краю полей: она такой же ребёнок .dp__fd,
+   как ряды полей, и зазор 20 между блоками ей достаётся сам. */
+.dp__save { display: flex; align-items: center; gap: 12px; width: 100%; height: 32px;
+            padding: 0; border: 0; background: none; cursor: pointer; text-align: left; }
+.dp__toggle { position: relative; flex: none; width: 44px; height: 24px; border-radius: 999px;
+              background: #3a4064; transition: background-color .16s ease; }
+.dp__toggle i { position: absolute; left: 3px; top: 3px; width: 18px; height: 18px;
+                border-radius: 50%; background: var(--white);
+                transition: transform .16s cubic-bezier(.22, .61, .36, 1); }
+.dp__save[aria-checked="true"] .dp__toggle { background: var(--primary, #0794ff); }
+.dp__save[aria-checked="true"] .dp__toggle i { transform: translateX(20px); }
+.dp__save-label { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                  font-size: 13px; line-height: 16px; color: var(--white); }
+.dp__save:hover .dp__toggle { filter: brightness(1.1); }
+.dp__save:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px;
+                          border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) {
+  .dp__toggle, .dp__toggle i { transition: none; }
+}
+
+/* ═══ Вставка 2 — бонус первого депозита ═══
+   Рамка и скругление те же, что у выбранного поля модалки: 12 и кант
+   в 1px внутренней тенью (.dp__input:focus-within). Отказ от бонуса
+   лежит в том же контейнере под волосяной линией. */
+.dp__bonus { display: flex; flex-direction: column; width: 100%; border-radius: 12px;
+             box-shadow: inset 0 0 0 1px var(--primary, #0794ff);
+             transition: box-shadow .16s ease; }
+.dp__bonus[data-bonus="declined"] { box-shadow: inset 0 0 0 1px #252d56; }
+.dp__bonus[hidden] { display: none; }
+.dp__bonus-in { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+                border: 0; clip: rect(0 0 0 0); overflow: hidden; }
+.dp__bonus-offer { display: flex; align-items: center; gap: 12px; padding: 12px;
+                   cursor: pointer; }
+.dp__bonus-art { flex: none; width: 56px; height: 56px; border-radius: 8px;
+                 background: #22263c; position: relative; }
+/* Значок подарка маской, а не картинкой: файла в assets нет, а токен
+   --ico-gift уже лежит в стилях и не даёт лишнего запроса. */
+.dp__bonus-art::after { content: ''; position: absolute; left: 50%; top: 50%;
+                        width: 26px; height: 26px; margin: -13px 0 0 -13px;
+                        background: var(--modal-text-1, #bbc6cd);
+                        -webkit-mask: var(--ico-gift) center / contain no-repeat;
+                        mask: var(--ico-gift) center / contain no-repeat; }
+.dp__bonus-text { display: flex; flex-direction: column; gap: 4px; flex: 1 0 0; min-width: 0; }
+.dp__bonus-title { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                   font-size: 13px; line-height: 18px; color: var(--white); }
+.dp__bonus-cond { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                  font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+.dp__bonus-link { color: var(--dp-accent, #3a9bf5); text-decoration: none; }
+.dp__bonus-link:hover { text-decoration: underline; }
+.dp__bonus-link:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px;
+                                border-radius: 4px; }
+/* Галочка в круге — акцентом; в отказе гаснет до пустого канта */
+.dp__bonus-tick { position: relative; flex: none; width: 20px; height: 20px; border-radius: 50%;
+                  box-shadow: inset 0 0 0 1.5px var(--primary, #0794ff);
+                  transition: box-shadow .16s ease; }
+.dp__bonus-tick::after { content: '\2713'; position: absolute; inset: 0;
+                         display: grid; place-items: center;
+                         font-size: 11px; font-weight: 700; color: var(--primary, #0794ff);
+                         transition: opacity .16s ease; }
+.dp__bonus[data-bonus="declined"] .dp__bonus-tick { box-shadow: inset 0 0 0 1.5px #3a4064; }
+.dp__bonus[data-bonus="declined"] .dp__bonus-tick::after { opacity: 0; }
+.dp__bonus-none { display: flex; align-items: center; gap: 12px; padding: 12px;
+                  cursor: pointer; border-top: 1px solid #252d56; }
+.dp__bonus-radio { position: relative; flex: none; width: 20px; height: 20px; border-radius: 50%;
+                   box-shadow: inset 0 0 0 1.5px #3a4064; transition: box-shadow .16s ease; }
+.dp__bonus-radio::after { content: ''; position: absolute; left: 50%; top: 50%;
+                          width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%;
+                          background: var(--primary, #0794ff);
+                          transform: scale(0); transition: transform .16s ease; }
+.dp__bonus[data-bonus="declined"] .dp__bonus-radio { box-shadow: inset 0 0 0 1.5px var(--primary, #0794ff); }
+.dp__bonus[data-bonus="declined"] .dp__bonus-radio::after { transform: scale(1); }
+.dp__bonus-none-text { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                       font-size: 13px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+.dp__bonus-offer:hover .dp__bonus-tick,
+.dp__bonus-none:hover .dp__bonus-radio { filter: brightness(1.2); }
+.dp__bonus-in:focus-visible + .dp__bonus-art,
+.dp__bonus-in:focus-visible + .dp__bonus-radio { outline: 2px solid var(--focus-ring);
+                                                 outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .dp__bonus, .dp__bonus-tick, .dp__bonus-tick::after,
+  .dp__bonus-radio, .dp__bonus-radio::after { transition: none; }
+}
+
 /* 1180:47918 — итог и кнопка, зазор 10 */
 .dp__wd-foot { flex-direction: column; gap: 10px; width: 100%; }
 .dp__sum-row { display: flex; align-items: center; justify-content: space-between;
@@ -13530,6 +13614,14 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               </div>
             </div>
 
+            <!-- Вставка 1: сохранить способ оплаты. Вся строка — один
+                 переключатель, поэтому подпись читается вслух вместе с ним,
+                 а не отдельной надписью рядом. -->
+            <button class="dp__save" type="button" role="switch" aria-checked="true">
+              <span class="dp__toggle" aria-hidden="true"><i></i></span>
+              <span class="dp__save-label">Remember this payment method</span>
+            </button>
+
             <div class="dp__fd-amount">
               <div class="dp__amount-box">
                 <div class="dp__amount-head">
@@ -13547,6 +13639,28 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 <button class="dp__chip" type="button" data-amount="500">500</button>
                 <button class="dp__chip" type="button" data-amount="1000">1000</button>
               </div>
+            </div>
+
+            <!-- Вставка 2: бонус первого депозита. Предложение и отказ — две
+                 радиокнопки одной группы: выбрать можно только одно, и
+                 стрелками это работает само. Для повторных депозитов блок
+                 скрывается целиком (data-bonus=hidden). -->
+            <div class="dp__bonus" data-bonus="selected" role="radiogroup" aria-label="First deposit bonus">
+              <label class="dp__bonus-offer">
+                <input class="dp__bonus-in" type="radio" name="dp-bonus" value="take" checked>
+                <span class="dp__bonus-art" aria-hidden="true"></span>
+                <span class="dp__bonus-text">
+                  <b class="dp__bonus-title">+100% up to 5000.00 USDT + 100 FS</b>
+                  <span class="dp__bonus-cond"><span class="dp__bonus-cond-text">Wagering x35 &middot; 7 days &middot;</span>
+                    <a class="dp__bonus-link" href="#">terms</a></span>
+                </span>
+                <span class="dp__bonus-tick" aria-hidden="true"></span>
+              </label>
+              <label class="dp__bonus-none">
+                <input class="dp__bonus-in" type="radio" name="dp-bonus" value="skip">
+                <span class="dp__bonus-radio" aria-hidden="true"></span>
+                <span class="dp__bonus-none-text">No bonus</span>
+              </label>
             </div>
 
             <div class="dp__fd-foot">
@@ -14349,6 +14463,13 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'The current password is wrong.': 'Текущий пароль неверен.',
       'Saving': 'Сохраняем',
       'Only PNG, JPG or PDF are accepted.': 'Принимаются только PNG, JPG или PDF.',
+      /* ── Касса: сохранение способа и бонус первого депозита ── */
+      'Remember this payment method': 'Запомнить способ оплаты',
+      'First deposit bonus': 'Бонус первого депозита',
+      '+{pct}% up to {sum} + {fs} FS': '+{pct}% до {sum} + {fs} FS',
+      'Wagering x35 · 7 days ·': 'Отыгрыш x35 · 7 дней ·',
+      'terms': 'условия',
+      'No bonus': 'Без бонуса',
       'The file is {size} — the limit is 5 MB.': 'Файл весит {size} — предел 5 МБ.',
       'Document sent for review.': 'Документ отправлен на проверку.',
       /* ── Верификация: три шага ── */
@@ -15037,6 +15158,13 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'The current password is wrong.': 'La contraseña actual es incorrecta.',
       'Saving': 'Guardando',
       'Only PNG, JPG or PDF are accepted.': 'Solo se aceptan PNG, JPG o PDF.',
+      /* ── Caja: guardar el método y bono del primer depósito ── */
+      'Remember this payment method': 'Recordar este método de pago',
+      'First deposit bonus': 'Bono del primer depósito',
+      '+{pct}% up to {sum} + {fs} FS': '+{pct}% hasta {sum} + {fs} FS',
+      'Wagering x35 · 7 days ·': 'Rollover x35 · 7 días ·',
+      'terms': 'condiciones',
+      'No bonus': 'Sin bono',
       'The file is {size} — the limit is 5 MB.': 'El archivo pesa {size}: el límite es 5 MB.',
       'Document sent for review.': 'Documento enviado a revisión.',
       /* ── Verificación: tres pasos ── */
@@ -16230,6 +16358,55 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               c.classList.toggle('is-active', parseFloat(c.dataset.amount) === v);
             });
           };
+          /* ── Вставка 1: тумблер сохранения способа оплаты ──
+             Состояние держим на aria-checked, а не на классе: у role=switch
+             это и есть состояние, и читалка берёт его оттуда же, что и вид. */
+          var fdSave = dp.querySelector('.dp__save');
+          if (fdSave) {
+            fdSave.addEventListener('click', function () {
+              fdSave.setAttribute('aria-checked',
+                fdSave.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+            });
+          }
+
+          /* ── Вставка 2: бонус первого депозита ──
+             Суммы бонуса — заглушки, но валюта берётся тем же money(), что и
+             итог под блоком: иначе в одном окне стояли бы две разные валюты. */
+          var fdBonus = dp.querySelector('.dp__bonus');
+          if (fdBonus) {
+            var BONUS = { pct: 100, cap: 5000, fs: 100 };
+            var bonusTitle = fdBonus.querySelector('.dp__bonus-title');
+            var bonusIns = [].slice.call(fdBonus.querySelectorAll('.dp__bonus-in'));
+            var bonusPaint = function () {
+              var take = fdBonus.querySelector('.dp__bonus-in[value="take"]').checked;
+              fdBonus.dataset.bonus = take ? 'selected' : 'declined';
+              bonusTitle.textContent = T('+{pct}% up to {sum} + {fs} FS',
+                { pct: BONUS.pct, sum: money(BONUS.cap), fs: BONUS.fs });
+            };
+            bonusIns.forEach(function (r) { r.addEventListener('change', bonusPaint); });
+            /* Ссылка на условия лежит внутри метки: без этого нажатие на неё
+               заодно выбирало бы бонус. */
+            var bonusLink = fdBonus.querySelector('.dp__bonus-link');
+            if (bonusLink) {
+              bonusLink.addEventListener('click', function (e) {
+                e.preventDefault(); e.stopPropagation();
+                closeDep();
+                showView('bonuses');
+              });
+            }
+            /* Заголовок собирается скриптом, поэтому обход i18n его не тронет —
+               пересобираем сами на смене языка. */
+            document.addEventListener('ww:lang', bonusPaint);
+            bonusPaint();
+            window.wwBonus = function (mode) {
+              fdBonus.hidden = mode === 'hidden';
+              var take = mode !== 'declined';
+              fdBonus.querySelector('.dp__bonus-in[value="take"]').checked = take;
+              fdBonus.querySelector('.dp__bonus-in[value="skip"]').checked = !take;
+              bonusPaint();
+            };
+          }
+
           fdInput.addEventListener('input', fdSync);
           fdChips.forEach(function (c) {
             c.addEventListener('click', function () { fdInput.value = c.dataset.amount; fdSync(); });
@@ -17163,6 +17340,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           /* Верификация сбрасывается целиком: шаг, тип документа и снимки
              лежат в localStorage и без этого достались бы следующему входу. */
           if (window.wwKyc) window.wwKyc.reset();
+          /* Выбор бонуса и «запомнить способ» — тоже введённое, а не настройка */
+          if (window.wwBonus) window.wwBonus('selected');
+          var swSave = document.querySelector('.dp__save');
+          if (swSave) swSave.setAttribute('aria-checked', 'true');
           stClear();
           document.body.classList.remove('is-authed');
           showView('home');
@@ -19448,6 +19629,20 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         ['Загрузка не прошла', function () {
           kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
             window.wwKyc.slotErr(1, 'The upload did not go through. Check the connection and try again.', true); }); }]
+      ]]);
+      /* ── Касса: бонус первого депозита ── */
+      var bonusAt = function (mode) {
+        stOpen('deposit', 'fiat');
+        if (window.wwBonus) window.wwBonus(mode);
+      };
+      STATES.push(['Касса · бонус депозита', [
+        ['Бонус выбран', function () { bonusAt('selected'); }],
+        ['Бонус отклонён', function () { bonusAt('declined'); }],
+        ['Повторный деп — блока нет', function () { bonusAt('hidden'); }],
+        ['Способ оплаты не запоминаем', function () {
+          bonusAt('selected');
+          var sw = document.querySelector('.dp__save');
+          if (sw) sw.setAttribute('aria-checked', 'false'); }]
       ]]);
       STATES.push(['Верификация · исход', [
         ['Документы на проверке', function () {
