@@ -4191,87 +4191,51 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 }
 
 /* ═══ Вставка 2 — бонус первого депозита ═══
-   Две отдельные карточки в ряд: слева предложение, справа отказ. Рамка и
-   скругление у выбранной — те же, что у выбранного поля модалки: 12 и кант
-   в 1px внутренней тенью (.dp__input:focus-within), у невыбранной кант
-   обычный. */
-.dp__bonus { display: flex; align-items: stretch; gap: 12px; width: 100%; }
+   Заголовок раздела и две равные карточки: отказ и предложение. Выбор
+   показывает сама карточка — заливка и кант, — поэтому ни галочки, ни
+   радиокружка рядом нет: два способа сказать одно и то же спорили бы. */
+.dp__bonus { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 .dp__bonus[hidden] { display: none; }
+.dp__bonus-h { font-family: 'Work Sans', sans-serif; font-weight: 500;
+               font-size: 13px; line-height: 16px; color: var(--white); }
+.dp__bonus-row { display: flex; align-items: stretch; gap: 12px; width: 100%; }
 .dp__bonus-in { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
                 border: 0; clip: rect(0 0 0 0); overflow: hidden; }
-.dp__bonus-offer { flex: 1 1 auto; min-width: 0;
-                   display: flex; align-items: center; gap: 12px; padding: 12px;
-                   border-radius: 12px; cursor: pointer;
-                   box-shadow: inset 0 0 0 1px #252d56;
-                   transition: box-shadow .16s ease; }
+.dp__bonus-offer, .dp__bonus-none {
+  flex: 1 1 0; min-width: 0; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; min-height: 76px; padding: 12px; border-radius: 12px;
+  cursor: pointer; text-align: center; background: #22263c;
+  box-shadow: inset 0 0 0 1px #252d56;
+  transition: background-color .16s ease, box-shadow .16s ease;
+}
+.dp__bonus-name { font-family: 'Work Sans', sans-serif; font-weight: 700;
+                  font-size: 15px; line-height: 20px; color: var(--white); }
+.dp__bonus-sub { font-family: 'Work Sans', sans-serif; font-weight: 500;
+                 font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd);
+                 text-wrap: balance; }
+/* Выбранный бонус — золотом. Это не обычный выбор в кассе, а награда, и синий
+   акцент модалки ставил бы её вровень с чипсами сумм. Тон тот же #d8b24a,
+   которым набран значок очков в панели профиля. */
 .dp__bonus[data-bonus="selected"] .dp__bonus-offer {
-  box-shadow: inset 0 0 0 1px var(--primary, #0794ff); }
-.dp__bonus-art { flex: none; width: 56px; height: 56px; border-radius: 8px;
-                 background: #22263c; position: relative; }
-/* Значок подарка маской, а не картинкой: файла в assets нет, а токен
-   --ico-gift уже лежит в стилях и не даёт лишнего запроса. */
-.dp__bonus-art::after { content: ''; position: absolute; left: 50%; top: 50%;
-                        width: 26px; height: 26px; margin: -13px 0 0 -13px;
-                        background: var(--modal-text-1, #bbc6cd);
-                        -webkit-mask: var(--ico-gift) center / contain no-repeat;
-                        mask: var(--ico-gift) center / contain no-repeat; }
-.dp__bonus-text { display: flex; flex-direction: column; gap: 4px; flex: 1 0 0; min-width: 0; }
-/* Заголовок не влезает в строку и рвался как «… USDT + / 100 FS» —
-   просим браузер делить его поровну, чтобы хвост не оставался один. */
-.dp__bonus-title { font-family: 'Work Sans', sans-serif; font-weight: 500;
-                   font-size: 13px; line-height: 18px; color: var(--white);
-                   text-wrap: balance; }
-.dp__bonus-cond { font-family: 'Work Sans', sans-serif; font-weight: 500;
-                  font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
-.dp__bonus-link { color: var(--dp-accent, #3a9bf5); text-decoration: none; }
-.dp__bonus-link:hover { text-decoration: underline; }
-.dp__bonus-link:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px;
-                                border-radius: 4px; }
-/* Галочка в круге — акцентом; в отказе гаснет до пустого канта */
-.dp__bonus-tick { position: relative; flex: none; width: 20px; height: 20px; border-radius: 50%;
-                  box-shadow: inset 0 0 0 1.5px var(--primary, #0794ff);
-                  transition: box-shadow .16s ease; }
-.dp__bonus-tick::after { content: '\2713'; position: absolute; inset: 0;
-                         display: grid; place-items: center;
-                         font-size: 11px; font-weight: 700; color: var(--primary, #0794ff);
-                         transition: opacity .16s ease; }
-.dp__bonus[data-bonus="declined"] .dp__bonus-tick { box-shadow: inset 0 0 0 1.5px #3a4064; }
-.dp__bonus[data-bonus="declined"] .dp__bonus-tick::after { opacity: 0; }
-/* Отказ — своя карточка. Ширину держим по содержимому: растянутая на
-   половину, она бы весила столько же, сколько предложение. */
-.dp__bonus-none { flex: 0 0 128px; box-sizing: border-box;
-                  display: flex; flex-direction: column; align-items: center;
-                  justify-content: center; gap: 8px; padding: 12px;
-                  border-radius: 12px; cursor: pointer; text-align: center;
-                  box-shadow: inset 0 0 0 1px #252d56;
-                  transition: box-shadow .16s ease; }
+  background: rgba(216, 178, 74, .12); box-shadow: inset 0 0 0 1px #d8b24a; }
+.dp__bonus[data-bonus="selected"] .dp__bonus-offer .dp__bonus-name { color: #f0d284; }
+.dp__bonus[data-bonus="selected"] .dp__bonus-offer .dp__bonus-sub { color: #d8b24a; }
+/* Отказ — не награда, поэтому выделяется обычным акцентом модалки */
 .dp__bonus[data-bonus="declined"] .dp__bonus-none {
   box-shadow: inset 0 0 0 1px var(--primary, #0794ff); }
-.dp__bonus-radio { position: relative; flex: none; width: 20px; height: 20px; border-radius: 50%;
-                   box-shadow: inset 0 0 0 1.5px #3a4064; transition: box-shadow .16s ease; }
-.dp__bonus-radio::after { content: ''; position: absolute; left: 50%; top: 50%;
-                          width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%;
-                          background: var(--primary, #0794ff);
-                          transform: scale(0); transition: transform .16s ease; }
-.dp__bonus[data-bonus="declined"] .dp__bonus-radio { box-shadow: inset 0 0 0 1.5px var(--primary, #0794ff); }
-.dp__bonus[data-bonus="declined"] .dp__bonus-radio::after { transform: scale(1); }
-.dp__bonus-none-text { font-family: 'Work Sans', sans-serif; font-weight: 500;
-                       font-size: 13px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
-.dp__bonus-offer:hover .dp__bonus-tick,
-.dp__bonus-none:hover .dp__bonus-radio { filter: brightness(1.2); }
-.dp__bonus-in:focus-visible + .dp__bonus-art,
-.dp__bonus-in:focus-visible + .dp__bonus-radio { outline: 2px solid var(--focus-ring);
-                                                 outline-offset: 3px; }
-/* На листе во весь экран две карточки в ряд не помещаются: заголовок
-   предложения ломается по слогам. Ставим друг под друга, отказ — строкой. */
-@media (max-width: 767px) {
-  .dp__bonus { flex-direction: column; }
-  .dp__bonus-none { flex: none; width: 100%; flex-direction: row;
-                    justify-content: flex-start; gap: 12px; text-align: left; }
-}
+.dp__bonus-offer:hover, .dp__bonus-none:hover { background: #2a3049; }
+.dp__bonus-in:focus-visible ~ .dp__bonus-name { outline: 2px solid var(--focus-ring);
+                                                outline-offset: 4px; border-radius: 4px; }
 @media (prefers-reduced-motion: reduce) {
-  .dp__bonus-offer, .dp__bonus-none, .dp__bonus-tick, .dp__bonus-tick::after,
-  .dp__bonus-radio, .dp__bonus-radio::after { transition: none; }
+  .dp__bonus-offer, .dp__bonus-none { transition: none; }
+}
+/* На листе во весь экран карточки остаются в ряд — они компактные, — но
+   подпись под суммой на 390 занимает три строки, поэтому чуть мельче. */
+@media (max-width: 767px) {
+  .dp__bonus-offer, .dp__bonus-none { min-height: 72px; padding: 10px; }
+  .dp__bonus-name { font-size: 14px; line-height: 18px; }
+  .dp__bonus-sub { font-size: 11px; line-height: 15px; }
 }
 
 /* 1180:47918 — итог и кнопка, зазор 10 */
@@ -13662,26 +13626,24 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               </div>
             </div>
 
-            <!-- Вставка 2: бонус первого депозита. Предложение и отказ — две
-                 радиокнопки одной группы: выбрать можно только одно, и
-                 стрелками это работает само. Для повторных депозитов блок
-                 скрывается целиком (data-bonus=hidden). -->
-            <div class="dp__bonus" data-bonus="selected" role="radiogroup" aria-label="First deposit bonus">
-              <label class="dp__bonus-offer">
-                <input class="dp__bonus-in" type="radio" name="dp-bonus" value="take" checked>
-                <span class="dp__bonus-art" aria-hidden="true"></span>
-                <span class="dp__bonus-text">
-                  <b class="dp__bonus-title">+100% up to 5000.00 USDT + 100 FS</b>
-                  <span class="dp__bonus-cond"><span class="dp__bonus-cond-text">Wagering x35 &middot; 7 days &middot;</span>
-                    <a class="dp__bonus-link" href="#">terms</a></span>
-                </span>
-                <span class="dp__bonus-tick" aria-hidden="true"></span>
-              </label>
-              <label class="dp__bonus-none">
-                <input class="dp__bonus-in" type="radio" name="dp-bonus" value="skip">
-                <span class="dp__bonus-radio" aria-hidden="true"></span>
-                <span class="dp__bonus-none-text">No bonus</span>
-              </label>
+            <!-- Вставка 2: бонус первого депозита. Предложение и отказ —
+                 две равные карточки одной радиогруппы: выбрать можно только
+                 одно, и стрелками это работает само. Для повторных депозитов
+                 блок скрывается целиком (data-bonus=hidden). -->
+            <div class="dp__bonus" data-bonus="selected">
+              <span class="dp__bonus-h">Bonus</span>
+              <div class="dp__bonus-row" role="radiogroup" aria-label="First deposit bonus">
+                <label class="dp__bonus-none">
+                  <input class="dp__bonus-in" type="radio" name="dp-bonus" value="skip">
+                  <b class="dp__bonus-name">No bonus</b>
+                  <span class="dp__bonus-sub">the money is yours right away</span>
+                </label>
+                <label class="dp__bonus-offer">
+                  <input class="dp__bonus-in" type="radio" name="dp-bonus" value="take" checked>
+                  <b class="dp__bonus-name dp__bonus-pct">+100%</b>
+                  <span class="dp__bonus-sub dp__bonus-cap">up to 5000.00 USDT + 100 FS</span>
+                </label>
+              </div>
             </div>
 
             <div class="dp__fd-foot">
@@ -14487,10 +14449,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── Касса: сохранение способа и бонус первого депозита ── */
       'Remember this payment method': 'Запомнить способ оплаты',
       'First deposit bonus': 'Бонус первого депозита',
-      '+{pct}% up to {sum} + {fs} FS': '+{pct}% до {sum} + {fs} FS',
-      'Wagering x35 · 7 days ·': 'Отыгрыш x35 · 7 дней ·',
-      'terms': 'условия',
+      'Bonus': 'Бонус',
+      'up to {sum} + {fs} FS': 'до {sum} + {fs} FS',
       'No bonus': 'Без бонуса',
+      'the money is yours right away': 'деньги сразу свои',
       'The file is {size} — the limit is 5 MB.': 'Файл весит {size} — предел 5 МБ.',
       'Document sent for review.': 'Документ отправлен на проверку.',
       /* ── Верификация: три шага ── */
@@ -15182,10 +15144,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── Caja: guardar el método y bono del primer depósito ── */
       'Remember this payment method': 'Recordar este método de pago',
       'First deposit bonus': 'Bono del primer depósito',
-      '+{pct}% up to {sum} + {fs} FS': '+{pct}% hasta {sum} + {fs} FS',
-      'Wagering x35 · 7 days ·': 'Rollover x35 · 7 días ·',
-      'terms': 'condiciones',
+      'Bonus': 'Bono',
+      'up to {sum} + {fs} FS': 'hasta {sum} + {fs} FS',
       'No bonus': 'Sin bono',
+      'the money is yours right away': 'la plata es tuya al toque',
       'The file is {size} — the limit is 5 MB.': 'El archivo pesa {size}: el límite es 5 MB.',
       'Document sent for review.': 'Documento enviado a revisión.',
       /* ── Verificación: tres pasos ── */
@@ -16396,26 +16358,18 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           var fdBonus = dp.querySelector('.dp__bonus');
           if (fdBonus) {
             var BONUS = { pct: 100, cap: 5000, fs: 100 };
-            var bonusTitle = fdBonus.querySelector('.dp__bonus-title');
+            var bonusPct = fdBonus.querySelector('.dp__bonus-pct');
+            var bonusCap = fdBonus.querySelector('.dp__bonus-cap');
             var bonusIns = [].slice.call(fdBonus.querySelectorAll('.dp__bonus-in'));
             var bonusPaint = function () {
               var take = fdBonus.querySelector('.dp__bonus-in[value="take"]').checked;
               fdBonus.dataset.bonus = take ? 'selected' : 'declined';
-              bonusTitle.textContent = T('+{pct}% up to {sum} + {fs} FS',
-                { pct: BONUS.pct, sum: money(BONUS.cap), fs: BONUS.fs });
+              bonusPct.textContent = T('+{pct}%', { pct: BONUS.pct });
+              bonusCap.textContent = T('up to {sum} + {fs} FS',
+                { sum: money(BONUS.cap), fs: BONUS.fs });
             };
             bonusIns.forEach(function (r) { r.addEventListener('change', bonusPaint); });
-            /* Ссылка на условия лежит внутри метки: без этого нажатие на неё
-               заодно выбирало бы бонус. */
-            var bonusLink = fdBonus.querySelector('.dp__bonus-link');
-            if (bonusLink) {
-              bonusLink.addEventListener('click', function (e) {
-                e.preventDefault(); e.stopPropagation();
-                closeDep();
-                showView('bonuses');
-              });
-            }
-            /* Заголовок собирается скриптом, поэтому обход i18n его не тронет —
+            /* Обе строки собирает скрипт, поэтому обход i18n их не тронет —
                пересобираем сами на смене языка. */
             document.addEventListener('ww:lang', bonusPaint);
             bonusPaint();
