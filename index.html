@@ -4193,7 +4193,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* ═══ Повторный депозит: сохранённая карта ═══
    Прячем валюту, сеть, имя и тумблер «запомнить» — всё это спрашивали
    в прошлый раз. Остаётся строка с картой, сумма и кнопка. */
-.dp__saved[hidden] { display: none; }
+/* Парное правило к hidden. Ниже стоит .dp__fd .dp__field с display: flex —
+   сила та же, а порядок позже, и атрибут переставал работать: строка
+   сохранённой карты висела на форме первого депозита. */
+.dp__fd .dp__saved[hidden] { display: none; }
 .dp__fd.is-saved .dp__row, .dp__fd.is-saved .dp__save { display: none; }
 .dp__saved-row { box-sizing: border-box; display: flex; align-items: center; gap: 12px;
                  width: 100%; height: 48px; padding: 0 12px;
@@ -13639,20 +13642,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               </div>
             </div>
 
-            <div class="dp__row">
-              <div class="dp__field">
-                <span class="dp__hint">Last Name*</span>
-                <label class="dp__input">
-                  <input class="dp__fd-last" type="text" placeholder="Rodrigez" aria-label="Last name">
-                </label>
-              </div>
-              <div class="dp__field">
-                <span class="dp__hint">First Name*</span>
-                <label class="dp__input">
-                  <input class="dp__fd-first" type="text" placeholder="Gabriel" aria-label="First name">
-                </label>
-              </div>
-            </div>
+            <!-- Имя и фамилию при пополнении не спрашиваем: деньги идут на
+                 свой же счёт, и получатель известен. На выводе они остаются —
+                 там платёж уходит наружу и получателя надо назвать. -->
 
             <!-- Вставка 1: сохранить способ оплаты. Вся строка — один
                  переключатель, поэтому подпись читается вслух вместе с ним,
@@ -16477,21 +16469,11 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           if (fdMax) fdMax.addEventListener('click', function () { fdInput.value = FD_CAP; fdSync(); });
           fdSync();
 
-          /* Отправка пополнения. Кнопка была активна и не делала ничего. */
-          var fdLast = dp.querySelector('.dp__fd-last');
-          var fdFirst = dp.querySelector('.dp__fd-first');
+          /* Отправка пополнения. Кнопка была активна и не делала ничего.
+             Проверки имени и фамилии здесь больше нет — самих полей нет. */
           fdSubmit.addEventListener('click', function () {
             if (fdSubmit.disabled) return;
             var v = parseFloat(fdInput.value.replace(',', '.')) || 0;
-            var bad = null;
-            if (fdLast && !fdLast.value.trim()) bad = [fdLast, T('Last name is required.')];
-            else if (fdFirst && !fdFirst.value.trim()) bad = [fdFirst, T('First name is required.')];
-            if (bad) {
-              bad[0].closest('.dp__input').classList.add('is-bad');
-              stError('fd', bad[1]);
-              bad[0].focus();
-              return;
-            }
             wwConfirm({
               title: T('Confirm the deposit'),
               text: T('Top up the balance by {sum}?', { sum: money(v) }),
@@ -17388,7 +17370,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           /* Поля ввода и подсказки об ошибках */
           document.querySelectorAll(
             '.dp__amount-input, .dp__addr-input, .dp__fd-input, .dp__fw-input,' +
-            '.dp__fd-last, .dp__fd-first, .dp__fw-last, .dp__fw-first,' +
+            '.dp__fw-last, .dp__fw-first,' +
             '#prof-responsible input, .bnpromo__input'
           ).forEach(function (i) { i.value = ''; i.dispatchEvent(new Event('input')); });
           document.querySelectorAll('.dp__error, .prof__err, .rg__err').forEach(function (e) {
