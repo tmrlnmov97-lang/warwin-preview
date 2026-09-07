@@ -2443,11 +2443,11 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
              background: rgba(229, 72, 77, .12); border: 1px solid rgba(229, 72, 77, .45); color: #ff9ea1; }
 .lg__alert[hidden] { display: none; }
 .lg__submit { position: relative; }
-/* Общий вид выключенной кнопки: приглушённая заливка и текст, а не
-   полупрозрачный акцент — тот читается как «чуть тусклее», а не «нельзя». */
-.lg__submit[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .45);
+/* Выключенная кнопка остаётся собой — тот же синий, только без силы.
+   Серая заливка читалась как другая кнопка, а не как та же в ожидании. */
+.lg__submit[disabled] { background: rgba(7, 148, 255, .3); color: rgba(255, 255, 255, .55);
                         cursor: default; box-shadow: none; }
-.lg__submit[disabled]:hover { background: var(--white-10); }
+.lg__submit[disabled]:hover { background: rgba(7, 148, 255, .3); }
 
 /* Загрузка: тонкая бегущая полоса по верхней кромке модалки, а не
    крутилка в кнопке. Поля и кнопки на это время приглушены. */
@@ -3687,9 +3687,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .rg__set { flex: 0 0 76px; display: flex; align-items: center; justify-content: center;
            background: var(--primary); color: var(--white); cursor: pointer; font-weight: 700; }
 .rg__set:hover { background: var(--primary-hover, #2da9ff); }
-.rg__set[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .45);
+.rg__set[disabled] { background: rgba(7, 148, 255, .3); color: rgba(255, 255, 255, .55);
                      cursor: default; }
-.rg__set[disabled]:hover { background: var(--white-10); }
+.rg__set[disabled]:hover { background: rgba(7, 148, 255, .3); }
 .rg__row--wide .rg__select, .rg__row--wide .rg__input { flex: 1 1 auto; }
 
 @media (max-width: 767px) {
