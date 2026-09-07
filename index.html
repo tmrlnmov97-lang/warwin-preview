@@ -26,13 +26,17 @@
   --dp-line: #2c3557;       /* канты полей и контейнеров */
   --dp-label: #8b93a8;      /* подписи и пассивный текст */
   --dp-text: #c5cde0;       /* текст сноски */
-  --dp-accent: #3a9bf5;     /* активная вкладка Crypto */
+  /* Ссылки и активные вкладки кассы — тот же синий, что везде. Отдельный
+     оттенок здесь делал ту же работу и только размывал правило. */
+  --dp-accent: var(--primary);
   --register: #00c928;      /* 851:2962 — CTA регистрации, взят из макета */
   --white: #ffffff;
   --white-10: rgba(255, 255, 255, 0.1);
   --white-04: rgba(255, 255, 255, 0.04);
   --muted: #bbc6cd;
-  --card-bg: #0c0c0c;
+  /* Подложка плиток. Был чистый #0c0c0c — единственный нейтральный чёрный
+     в синей системе; всё, что брало этот токен, выпадало из семьи. */
+  --card-bg: #0b0f1e;
   --banner-border: #464646;
   --hero-border: #262939;   /* канты баннера и карточек героя */
   --social-border: #314071;
@@ -49,6 +53,13 @@
   --white-16: rgba(255, 255, 255, 0.16);
   --white-06: rgba(255, 255, 255, 0.06);
   --focus-ring: #7cc4ff;
+  /* Ошибка мелким кеглем. #e5484d даёт 4.17 на тёмном — под порогом;
+     этот тон 5.89. Заливки и канты остаются на #e5484d, там контраст
+     текста ни при чём. */
+  --bad-text: #ff6b70;
+  /* Награды: очки, VIP, бонусные начисления. Отдельный слот, чтобы
+     не занимать под них зелёный (успех) и синий (интерактив). */
+  --reward: #d8b24a;
 
   /* Поверхности и канты. Раньше лежали литералами прямо в правилах —
      из-за этого правка палитры красила меньше половины страницы.
@@ -58,7 +69,11 @@
   --menu-hover: #333852;
   --menu-text: #ededed;
   --tab: #212743;                   /* вкладка CASINO/SPORTS в шапке */
-  --tab-active: #1bc904;
+  /* Выбранная категория — навигация, а не успех: зелёный тут спорил
+     с кнопкой регистрации и с зелёным «выполнено». */
+  --tab-active: var(--primary);
+  /* Живое и «скопировано» — вот где зелёный по смыслу */
+  --live: #1bc904;
   --chip-mobile: #272b40;
   --side-accent-hover: #283052;
   --footer-card: #1c1528;
@@ -69,9 +84,10 @@
   --banner-b: #192a57;
   --banner-c: #1a3164;
   /* Синяя кнопка мобильного баннера */
-  --cta-a: #1a73fa;
-  --cta-b: #1367e8;
-  --cta-c: #0755ca;
+  /* Градиент главной кнопки — та же лестница, что у --primary */
+  --cta-a: #2da9ff;
+  --cta-b: #0794ff;
+  --cta-c: #067cd6;
   /* Канты */
   --hairline: #142736;              /* линия над футером */
   --hairline-modal: #02293a;        /* попап поиска */
@@ -2211,7 +2227,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .hero .hero__copy--narrow .hero__title { width: 342px; }
   /* 1187:15587 — кнопка 114x40, тот же радиус, но синяя */
   .hero .hero__cta--join { width: 114px; background: var(--primary); }
-  .hero .hero__cta--join:hover  { background: var(--primary-hover, #279fff); }
+  .hero .hero__cta--join:hover  { background: var(--primary-hover, #2da9ff); }
   .hero .hero__cta--join:active { background: var(--primary-active, #0680dd); }
   /* 904:1982 — стрелки только после входа, в правом нижнем углу, отступы
      те же 32, что у копи-блока; поверх канта, у него z-index 5. */
@@ -2353,7 +2369,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 .lg__title { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
              font-size: 20px; line-height: 30px; color: var(--white); }
 .lg__sub { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 400;
-           font-size: 12px; line-height: 18px; color: #b1b1b1; }
+           font-size: 12px; line-height: 18px; color: var(--muted); }
 .lg__close { display: flex; align-items: center; padding: 12px; flex: none; cursor: pointer;
              background: none; border: .786px solid #393c43; border-radius: 12px; }
 .lg__close img { display: block; }
@@ -2366,7 +2382,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* 4:14365 — ссылка восстановления пароля, только в окне входа */
 .lg__forgot { display: flex; align-items: center; padding: 6px 20px; border-radius: 8px; }
 .lg__forgot a { font-weight: 600; font-size: 14px; line-height: 20px;
-                color: #b1b1b1; text-decoration: underline; }
+                color: var(--muted); text-decoration: underline; }
 .lg.is-reg .lg__forgot { display: none; }
 .lg.is-reg .lg__inputs { gap: 8px; }
 .lg__field  { display: flex; flex-direction: column; gap: 4px; }
@@ -2379,7 +2395,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   flex: 1 0 0; min-width: 0; border: 0; background: none; outline: none;
   font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 20px; color: var(--white);
 }
-.lg__input input::placeholder { color: #b1b1b1; }
+.lg__input input::placeholder { color: var(--muted); }
 .lg__input:focus-within { border-color: var(--primary); }
 .lg__eye { display: flex; padding: 0; border: 0; background: none; cursor: pointer; flex: none; }
 .lg__hint { margin: 0; padding: 0 10px; font-size: 12px; line-height: 18px; color: #6f6f6f; }
@@ -2410,13 +2426,13 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   font-size: 14px; line-height: 20px; color: var(--white);
 }
 .lg__submit:hover { background: var(--primary-hover); }
-.lg__switch { margin: 0; padding: 12px 0; text-align: center; font-size: 14px; line-height: 18px; color: #b1b1b1; }
+.lg__switch { margin: 0; padding: 12px 0; text-align: center; font-size: 14px; line-height: 18px; color: var(--muted); }
 .lg__switch a { color: var(--white); text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) { .lg__wrap { animation: none; } }
 
 /* Состояния входа */
 .lg__input.is-bad { border-color: #e5484d; }
-.lg__hint.is-bad  { color: #e5484d; }
+.lg__hint.is-bad  { color: var(--bad-text); }
 .lg__alert { margin: 0; padding: 10px 12px; border-radius: 8px; text-align: center;
              font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
              background: rgba(229, 72, 77, .12); border: 1px solid rgba(229, 72, 77, .45); color: #ff9ea1; }
@@ -2593,7 +2609,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .mslide .hero__cta { margin-top: 3px; width: 100px; height: 30px;
                        padding: 0; border-radius: 10px;
                        background: var(--primary); font-size: 12px; }
-  .mslide .hero__cta:hover  { background: var(--primary-hover, #279fff); }
+  .mslide .hero__cta:hover  { background: var(--primary-hover, #2da9ff); }
   .mslide .hero__cta:active { background: var(--primary-active, #0680dd); }
   /* 920:31068 — точки 5px с шагом 7 под лентой */
   body.is-authed .hero__dots { display: flex; justify-content: center; gap: 2px;
@@ -3017,7 +3033,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                  font-family: 'Work Sans', sans-serif; font-size: 14px;
                  line-height: 20px; color: var(--dp-label); }
 .bnpromo__note[hidden] { display: none; }
-.bnpromo__note.is-bad { color: #e5484d; }
+.bnpromo__note.is-bad { color: var(--bad-text); }
 .bnpromo__note.is-ok { color: #3ddc66; }
 .bn__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
           font-size: 32px; line-height: 40px; color: var(--white); }
@@ -3028,7 +3044,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
             line-height: 20px; transition: background .15s ease, color .15s ease; }
 .bn__chip:hover { background: #30354e; color: var(--white); }
-.bn__chip.is-active { background: #00c1ff; color: #000; }
+.bn__chip.is-active { background: var(--primary); color: #000; }
 .bn__chip.is-active:hover { background: #33cfff; color: #000; }
 .bn__count { margin-left: 8px; font-variant-numeric: tabular-nums; opacity: .65; }
 .bn__count:empty { display: none; }
@@ -3045,13 +3061,13 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bn__btn--primary:hover { background: var(--primary-hover); }
 .bn__btn--primary:active { background: var(--primary-active); }
 .bn__btn--ghost { color: var(--muted); }
-.bn__btn--bad { border-color: rgba(229, 72, 77, .5); color: #e5484d; }
+.bn__btn--bad { border-color: rgba(229, 72, 77, .5); color: var(--bad-text); }
 .bn__btn--bad:hover { background: rgba(229, 72, 77, .1); }
 .bn__btn[disabled] { opacity: .5; cursor: default; }
 /* Фокус с клавиатуры видно на всех органах управления страницы */
 .bn__btn:focus-visible, .bn__chip:focus-visible,
 .bnpromo__input:focus-visible, .bn__list:focus-visible {
-  outline: 2px solid #00c1ff; outline-offset: 2px; }
+  outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 /* ── гость: 1471:13193, карточка 1103x282 ── */
 .bn__guest { box-sizing: border-box; display: flex; flex-direction: column; align-items: center;
@@ -3203,7 +3219,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                text-decoration-thickness: 1px;
                text-decoration-color: rgba(255, 255, 255, .28);
                transition: color .15s ease, text-decoration-color .15s ease; }
-.bnact__drop:hover { color: #e5484d; text-decoration-color: rgba(229, 72, 77, .6); }
+.bnact__drop:hover { color: var(--bad-text); text-decoration-color: rgba(229, 72, 77, .6); }
 
 .bnact__ask { display: flex; align-items: center; justify-content: space-between; gap: 16px;
               padding: 14px 16px; border-radius: 12px;
@@ -3311,7 +3327,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                border: 0; border-radius: 999px; background: var(--white-10); color: var(--white);
                font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 16px; }
 .promo__chip:hover { background: var(--white-16); }
-.promo__chip.is-active { background: #00c1ff; color: #000; }
+.promo__chip.is-active { background: var(--primary); color: #000; }
 
 .promo__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: stretch; }
 .promo__card { display: flex; flex-direction: column; overflow: hidden; border-radius: 16px;
@@ -3460,7 +3476,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .gv__tool:hover::before { background: var(--white); }
 .gv__tool[aria-pressed="true"] { background: var(--surface); }
 .gv__tool[aria-pressed="true"]::before { background: var(--primary); }
-.gv__tool.is-copied::before { background: var(--tab-active); }
+.gv__tool.is-copied::before { background: var(--live); }
 /* Глифы нарисованы масками, чтобы цвет вёл CSS, а не сам файл */
 .gv__tool--full::before {
   -webkit-mask: var(--ico-full) center / contain no-repeat; mask: var(--ico-full) center / contain no-repeat; }
@@ -3564,7 +3580,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 /* Сколько играют и когда вышла — выдуманные значения, данных у нас нет */
 .gvrec__live { display: flex; align-items: center; gap: 6px; margin-top: 2px;
                font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--muted); }
-.gvrec__live i { width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--tab-active); }
+.gvrec__live i { width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--live); }
 .gvrec__when { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--dp-label); }
 
 /* До 1280 колонка рекомендаций уходит под кадр: рядом ему остаётся 332px
@@ -3661,7 +3677,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .rg__input:focus-within { box-shadow: inset 0 0 0 1px var(--primary); }
 .rg__set { flex: 0 0 76px; display: flex; align-items: center; justify-content: center;
            background: var(--primary); color: var(--white); cursor: pointer; font-weight: 700; }
-.rg__set:hover { background: var(--primary-hover, #279fff); }
+.rg__set:hover { background: var(--primary-hover, #2da9ff); }
 .rg__row--wide .rg__select, .rg__row--wide .rg__input { flex: 1 1 auto; }
 
 @media (max-width: 767px) {
@@ -3706,7 +3722,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
              border: 0; border-radius: 999px; background: var(--white-10); color: var(--white);
              font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 16px; }
 .hist__tab:hover { background: var(--white-16); }
-.hist__tab.is-active { background: #00c1ff; color: #000; }
+.hist__tab.is-active { background: var(--primary); color: #000; }
 
 .hist__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;
               width: 100%; padding: 24px; border-radius: 20px;
@@ -3764,7 +3780,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .hist__bet  { font-weight: 500; font-size: 14px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
 .hist__win  { font-weight: 600; font-size: 14px; line-height: 20px; color: var(--white); }
 .hist__win--up   { color: #7ee787; }
-.hist__win--down { color: #e5484d; }
+.hist__win--down { color: var(--bad-text); }
 .hist__date { font-weight: 400; font-size: 14px; line-height: 20px; color: var(--dp-label); }
 
 /* Ставки спортсбука: событий может быть несколько, у ставки один итог */
@@ -3784,7 +3800,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .hist__status { text-align: right; font-family: 'Work Sans', sans-serif; font-weight: 600;
                 font-size: 14px; line-height: 20px; }
 .hist__status--win  { color: #7ee787; }
-.hist__status--lose { color: #e5484d; }
+.hist__status--lose { color: var(--bad-text); }
 .hist__status--wait { color: #fabf2e; }
 .hist__result i { font-style: normal; }
 /* У выигранной ставки в колонке стоит сумма — слово «Won» дублировало бы её */
@@ -4004,8 +4020,8 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   font-size: 16px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); white-space: nowrap;
 }
 .dp__method-btn img { display: block; flex: none; }
-/* 1180:32132 — у активного подчёркивание #00c1ff, подпись со свечением */
-.dp__method-btn.is-active { color: #00c1ff; border-bottom-color: #00c1ff;
+/* 1180:32132 — активный метод подчёркнут акцентом, подпись со свечением */
+.dp__method-btn.is-active { color: var(--primary); border-bottom-color: var(--primary);
                             text-shadow: 0 0 20px rgba(0, 193, 255, .7); }
 /* Цвет иконок зашит в сами файлы: у крипты синий градиент, у фиата серый
    штрих, поэтому они не откликались на выбор вкладки. Рисуем их маской —
@@ -4028,7 +4044,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   -webkit-mask-image: url(a/05a2318baf.svg); mask-image: url(a/05a2318baf.svg);
   -webkit-mask-size: contain; mask-size: contain;
 }
-.dp__method-btn.is-active .dp__ico::after { background-color: #00c1ff; }
+.dp__method-btn.is-active .dp__ico::after { background-color: var(--primary); }
 /* 1180:32139 — поля и QR, между ними 20 */
 .dp__body { width: 100%; display: flex; flex-direction: column; gap: 20px; }
 .dp__row { display: flex; gap: 20px; }
@@ -4693,7 +4709,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                     box-shadow: inset 0 0 0 1px rgba(229, 72, 77, .35); }
 .prof__err { display: flex; align-items: center; gap: 6px; padding: 0;
              font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
-             color: #e5484d; }
+             color: var(--bad-text); }
 .prof__err[hidden] { display: none; }
 .prof__err::before { content: ''; width: 5px; height: 5px; flex: none;
                      border-radius: 50%; background: currentColor; }
@@ -4835,7 +4851,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__bonus-sum { font-size: 16px; line-height: 22px; }
 .pm__cur-chev { display: block; flex: none; opacity: .7; transition: opacity .16s ease; }
 .pm__bonus-ico { display: grid; place-items: center; flex: none; width: 24px; height: 24px;
-                 border-radius: 50%; border: 1px solid #d8b24a; color: #d8b24a;
+                 border-radius: 50%; border: 1px solid var(--reward); color: var(--reward);
                  font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 10px; }
 .pm__top, .pm__swap { flex: none; min-width: 124px; height: 56px; padding: 0 18px;
                       border: 0; border-radius: 14px; cursor: pointer;
@@ -4932,7 +4948,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__item:hover .pm__ico { opacity: 1; }
 /* Выход — единственное необратимое действие, поэтому не вровень с остальными:
    приглушён по умолчанию и краснеет под курсором. */
-.pm__out:hover span { color: #e5484d; }
+.pm__out:hover span { color: var(--bad-text); }
 .pm__out span { transition: color .16s ease; }
 .pm__out:hover .pm__ico { opacity: 1;
   filter: brightness(0) saturate(100%) invert(38%) sepia(58%) saturate(3200%) hue-rotate(334deg) brightness(96%) contrast(92%); }
@@ -5190,7 +5206,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
             transition: color .16s ease; }
 .vfd__act:hover { color: var(--white); }
 .vfd__act--del { color: var(--dp-label); }
-.vfd__act--del:hover { color: #e5484d; }
+.vfd__act--del:hover { color: var(--bad-text); }
 .vfd__act:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px;
                           border-radius: 4px; }
 .vfd.is-off .vfd__acts { display: none; }
@@ -5229,7 +5245,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .vf__list li::before { position: absolute; left: 0; top: 0; width: 16px; text-align: center;
                        font-weight: 700; }
 .vf__list--ok li::before { content: '\2713'; color: var(--register); }
-.vf__list--no li::before { content: '\2717'; color: #e5484d; }
+.vf__list--no li::before { content: '\2717'; color: var(--bad-text); }
 .vf__req-foot { margin: 4px 0 0; padding-top: 10px;
                 border-top: 1px solid var(--white-06);
                 font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
@@ -5322,7 +5338,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .sec__hint { margin: 0; flex: 1 0 0; min-width: 0;
              font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
              color: var(--dp-label); }
-.sec__hint.is-bad { color: #e5484d; }
+.sec__hint.is-bad { color: var(--bad-text); }
 .sec__hint.is-ok  { color: var(--register); }
 .prof__btn[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .45); cursor: default; }
 
@@ -5488,7 +5504,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            transition: opacity .16s ease, transform .16s ease, background .16s ease, color .16s ease; }
 .nt__item:hover .nt__del,
 .nt__del:focus-visible { opacity: 1; transform: none; }
-.nt__del:hover { background: rgba(229, 72, 77, .2); color: #e5484d; }
+.nt__del:hover { background: rgba(229, 72, 77, .2); color: var(--bad-text); }
 /* На сенсорном экране наводить нечем, и крестик не показывался никогда —
    удалить уведомление с телефона было нельзя. Место под него уже отведено
    отступом в .nt__main, поэтому текст он не задевает. */
@@ -5713,7 +5729,7 @@ html.cf-open, html.cf-open body { overflow: hidden; }
                   border: 1px solid var(--white-10, rgba(255, 255, 255, .1)); }
 .cf__btn--ghost:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
 .cf__btn--go { background: var(--primary, #0794ff); }
-.cf__btn--go:hover { background: var(--primary-hover, #279fff); }
+.cf__btn--go:hover { background: var(--primary-hover, #2da9ff); }
 /* Необратимое действие — красным, но по-прежнему без перевеса по размеру */
 .cf__btn--danger { background: #d93a3a; }
 .cf__btn--danger:hover { background: #e14b4b; }
