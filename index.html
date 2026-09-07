@@ -3089,10 +3089,10 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
    Обычная карточка предложения, как соседние. Внутри — три клетки ступеней:
    350% одним числом показывать нельзя, это три разных бонуса со своими
    потолками, и игрок прочтёт суммарный процент как процент на один депозит. */
-.bncard--wp .bncard__body { gap: 12px; }
+.bncard--wp .bncard__body { gap: 10px; }
 .bnwp__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .bnwp__step { box-sizing: border-box; display: flex; flex-direction: column;
-              align-items: center; gap: 2px; padding: 10px 6px; border-radius: 10px;
+              align-items: center; gap: 1px; padding: 8px 4px; border-radius: 10px;
               text-align: center; background: rgba(0, 0, 0, .18);
               box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
               transition: box-shadow .16s ease, background-color .16s ease; }
@@ -3103,15 +3103,15 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnwp__step[data-st="LOCKED"] { opacity: .5; }
 .bnwp__step[data-st="MISSED"] { box-shadow: inset 0 0 0 1px rgba(229, 72, 77, .4); }
 .bnwp__pct { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 16px; line-height: 20px; color: var(--white); }
+             font-size: 15px; line-height: 19px; color: var(--white); }
 /* «up to 150,000» в клетку одной строкой не влезает, а резать сумму
    многоточием нельзя — это деньги. Пусть переносится на две строки. */
 .bnwp__cap { font-style: normal; font-family: 'Work Sans', sans-serif;
-             font-size: 11px; line-height: 14px; color: var(--dp-label);
+             font-size: 10px; line-height: 13px; color: var(--dp-label);
              text-wrap: balance; }
-.bnwp__st { font-style: normal; margin-top: 2px;
+.bnwp__st { font-style: normal; margin-top: 1px;
             font-family: 'Work Sans', sans-serif; font-weight: 600;
-            font-size: 10px; line-height: 13px; letter-spacing: .04em;
+            font-size: 9px; line-height: 12px; letter-spacing: .04em;
             text-transform: uppercase; color: var(--dp-label); }
 .bnwp__step[data-st="AVAILABLE"] .bnwp__st { color: var(--primary); }
 .bnwp__step[data-st="MISSED"] .bnwp__st { color: #ff8e91; }
@@ -3132,9 +3132,10 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bncard.is-taken { border-color: rgba(0, 201, 40, .35); }
 .bncard.is-taken:hover { border-color: rgba(0, 201, 40, .5); }
 @media (prefers-reduced-motion: reduce) { .bncard, .bncard:hover { transform: none; } }
-.bncard__art { display: block; width: 100%; height: 150px; flex: none;
+/* 150 съедали треть карточки, а ряд тянется по самой высокой. */
+.bncard__art { display: block; width: 100%; height: 118px; flex: none;
                object-fit: cover; background: #07173d; }
-.bncard__body { flex: 1 0 auto; display: flex; flex-direction: column; gap: 12px; padding: 20px; }
+.bncard__body { flex: 1 0 auto; display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; }
 .bncard__tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .bncard__body h2 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
                    font-size: 18px; line-height: 24px; color: var(--white); }
@@ -7477,7 +7478,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                   <span class="bn__tag">Deposit</span><span class="bn__tag bnwp__meta"></span>
                 </div>
                 <h2>Casino Welcome Package</h2>
-                <p>Three deposits, three bonuses. Each one is a separate offer with its&nbsp;own cap.</p>
+                <p>Three deposits, three bonuses — each with its&nbsp;own cap.</p>
                 <div class="bnwp__grid">
                   <span class="bnwp__step" data-step="1">
                     <b class="bnwp__pct">+100%</b>
@@ -19837,8 +19838,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         wbPack.querySelector('.bnwp__meta').textContent =
           T('up to {sum}', { sum: wbFmt(total) });
         wbPack.querySelector('.bnwp__terms').textContent =
-          T('Min {min} · wagering x{mult} · {days} days', 
-            { min: wbFmt(C.MIN_DEPOSIT), mult: C.WAGER, days: C.DAYS });
+          T('Min {min} · x{mult} · {days} days',
+            { min: String(C.MIN_DEPOSIT).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + C.CUR,
+              mult: C.WAGER, days: C.DAYS });
         wbPack.querySelectorAll('.bnwp__step').forEach(function (el) {
           var n = parseInt(el.dataset.step, 10);
           var t = T3[n - 1];
