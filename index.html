@@ -4007,10 +4007,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
   font-size: 14px; line-height: 16px; color: var(--white); white-space: nowrap;
 }
-/* Активный сегмент — картинкой из макета: там голубой градиент со свечением */
-.dp__seg-btn.is-active { color: #161616;
-  background-image: url(a/e7cf9d85a2.webp); background-size: cover;
-  background-position: center; }
+/* Активный сегмент был картинкой из макета — голубым градиентом со свечением.
+   Это был последний оттенок мимо палитры, и ради него грузился отдельный файл.
+   Собран тем же акцентом; свечение осталось тенью. Заливку здесь оставляем:
+   это переключатель режима из двух половин, а не фильтр, и с лаймовой кнопкой
+   оплаты внизу окна он не спорит. */
+.dp__seg-btn.is-active { color: #06213a;
+  background: linear-gradient(180deg, var(--primary-hover), var(--primary));
+  box-shadow: 0 0 18px -6px rgba(7, 148, 255, .8); }
 /* 1180:32130 — Crypto и Fiat по центру, под ними линия на всю ширину */
 .dp__methods { position: relative; width: 100%; display: flex; flex-direction: column;
                align-items: center; justify-content: center; }
