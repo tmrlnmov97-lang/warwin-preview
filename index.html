@@ -53,6 +53,11 @@
   --white-16: rgba(255, 255, 255, 0.16);
   --white-06: rgba(255, 255, 255, 0.06);
   --focus-ring: #7cc4ff;
+  /* Выбранный чип, вкладка, фильтр. Залитый акцент оставлен только главному
+     действию на экране: когда им же залит каждый фильтр, кнопка перестаёт
+     быть главной. Здесь тот же тон, но подложкой и кантом. */
+  --pick-bg: rgba(7, 148, 255, .16);
+  --pick-line: rgba(7, 148, 255, .55);
   /* Ошибка мелким кеглем. #e5484d даёт 4.17 на тёмном — под порогом;
      этот тон 5.89. Заливки и канты остаются на #e5484d, там контраст
      текста ни при чём. */
@@ -241,7 +246,7 @@ body.nav-rail .nav-toggle::before { transform: scaleX(-1); }
   font-family: 'Work Sans', sans-serif; font-weight: 700;
   font-size: 12px; line-height: 24px; color: var(--white); white-space: nowrap;
 }
-.cat-tab.is-active { background: var(--tab-active); }
+.cat-tab.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 .cat-tab.is-active .cat-tab__label { color: var(--white); }
 
 .header-actions { display: flex; align-items: center; gap: var(--gap-md); }
@@ -1208,8 +1213,8 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
 /* --- Элементы на полупрозрачной подложке --- */
 .chip:hover, .view-all:hover, .slider-btn:hover { background: var(--white-16); }
 /* Активная категория */
-.chip.is-active { background: var(--primary); }
-.chip.is-active:hover { background: var(--primary); }
+.chip.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
+.chip.is-active:hover { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 .chip:active, .view-all:active, .slider-btn:active {
   background: var(--white-06); transform: translateY(1px);
 }
@@ -1875,7 +1880,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   transition: background-color .15s ease;
 }
 .srch__tag:hover { background: var(--white-16); }
-.srch__tag.is-active { background: var(--primary); }
+.srch__tag.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 
 /* 932:43145 — два выпадающих списка по 190 */
 .srch__filters { display: flex; gap: 8px; padding: 6px 0; }
@@ -2510,7 +2515,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
           transition: background .2s ease; }
 .spchip img { display: block; }
 .spchip:hover { background: var(--white-16); }
-.spchip.is-active { background: var(--primary); }
+.spchip.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 
 .sphead { display: flex; align-items: center; gap: 7px; }
 .sphead h2 { margin: 0; font-size: 16px; line-height: 21px; color: var(--white); }
@@ -2989,7 +2994,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .vfaq__tabs::-webkit-scrollbar { display: none; }
   .vfaq__tab { flex: none; white-space: nowrap; }
   .vfaq__tab { height: 36px; padding: 0 16px; border-radius: 999px; background: var(--white-06); }
-  .vfaq__tab.is-active { background: var(--primary); color: var(--white); }
+  .vfaq__tab.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
   .vsup { flex-direction: column; align-items: stretch; gap: 18px; padding: 20px; }
   .vsup__btns { flex: 1 1 auto; }
   .vsup__btn { flex: 1 1 0; padding: 0; }
@@ -3044,8 +3049,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
             line-height: 20px; transition: background .15s ease, color .15s ease; }
 .bn__chip:hover { background: #30354e; color: var(--white); }
-.bn__chip.is-active { background: var(--primary); color: #000; }
-.bn__chip.is-active:hover { background: #33cfff; color: #000; }
+.bn__chip.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
+.bn__chip.is-active:hover { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 .bn__count { margin-left: 8px; font-variant-numeric: tabular-nums; opacity: .65; }
 .bn__count:empty { display: none; }
 
@@ -3327,7 +3332,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                border: 0; border-radius: 999px; background: var(--white-10); color: var(--white);
                font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 16px; }
 .promo__chip:hover { background: var(--white-16); }
-.promo__chip.is-active { background: var(--primary); color: #000; }
+.promo__chip.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 
 .promo__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: stretch; }
 .promo__card { display: flex; flex-direction: column; overflow: hidden; border-radius: 16px;
@@ -3722,7 +3727,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
              border: 0; border-radius: 999px; background: var(--white-10); color: var(--white);
              font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 16px; }
 .hist__tab:hover { background: var(--white-16); }
-.hist__tab.is-active { background: var(--primary); color: #000; }
+.hist__tab.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 
 .hist__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;
               width: 100%; padding: 24px; border-radius: 20px;
@@ -4217,8 +4222,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* 1180:38835 — выбранная доля залита синим, кант остаётся общим.
    Цвет держим ровно #0794ff и под курсором: подсветка выбранного
    уводила его в светлый #2da9ff, а в макете он один. */
+/* Быстрая сумма — выбор, а не действие: заливка акцентом ставила её вровень
+   с кнопкой оплаты внизу окна. */
 .dp__chip.is-active,
-.dp__chip.is-active:hover { background: var(--primary, #0794ff); border-color: #252d56; }
+.dp__chip.is-active:hover { background: var(--pick-bg); border-color: var(--pick-line); }
 
 /* ═══ Вставка 1 — «запомнить способ оплаты» ═══
    Строка на 32 идёт по левому краю полей: она такой же ребёнок .dp__fd,
@@ -4617,7 +4624,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
              font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
              line-height: 20px; color: var(--white); }
 .prof__tab:hover { background: var(--white-16); }
-.prof__tab.is-active { background: var(--primary); }
+.prof__tab.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 /* Шапка профиля отделена от карточек линией — иначе имя висит в воздухе */
 .prof__who { display: flex; align-items: center; gap: 14px;
              padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, .07); }
@@ -5064,14 +5071,16 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .vf__lead { margin: -8px 0 0; max-width: 560px; font-family: 'Work Sans', sans-serif;
             font-size: 13px; line-height: 18px; color: var(--dp-label); }
 .vf__acts { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+/* Лайм в проекте означает деньги — пополнение и вывод. Шаг верификации
+   деньгами не двигает, поэтому обычный акцент. */
 .vf__go { flex: none; height: 44px; padding: 0 22px; border: 0; border-radius: 12px;
-          cursor: pointer; color: #00151f;
-          background: linear-gradient(to bottom, #cdfa50, #a6e22e);
+          cursor: pointer; color: var(--white);
+          background: var(--primary);
           font-family: 'Instrument Sans', sans-serif; font-weight: 700;
           font-size: 15px; line-height: 20px;
           transition: filter .16s ease, transform .12s ease; }
-.vf__go:hover { filter: brightness(1.06); transform: translateY(-1px); }
-.vf__go:active { transform: translateY(0); filter: brightness(.96); }
+.vf__go:hover { background: var(--primary-hover); transform: translateY(-1px); }
+.vf__go:active { transform: translateY(0); background: var(--primary-active); }
 .vf__go[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .4);
                     cursor: default; filter: none; transform: none; }
 .vf__go[hidden] { display: none; }
@@ -5380,7 +5389,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
              font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px;
              color: var(--white); }
 .sec__page:hover { background: var(--white-10); }
-.sec__page.is-active { background: var(--primary); }
+.sec__page.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 .sec__page[disabled] { opacity: .4; cursor: default; }
 .sec__gap { padding: 0 2px; color: var(--dp-label); }
 
@@ -5438,7 +5447,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
            line-height: 18px; color: var(--dp-label);
            transition: background-color .2s ease, color .2s ease; }
 .nt__tab:hover { color: var(--white); }
-.nt__tab.is-active { background: var(--primary); color: var(--white); }
+.nt__tab.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
 
 /* Список — строки с разделителями, а не стопка плотных карточек */
 .nt__list { display: flex; flex-direction: column; padding: 4px 8px 10px;
