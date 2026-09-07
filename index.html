@@ -4220,8 +4220,29 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    радиокружка рядом нет: два способа сказать одно и то же спорили бы. */
 .dp__bonus { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 .dp__bonus[hidden] { display: none; }
+.dp__bonus-head { display: flex; align-items: baseline; gap: 8px; }
 .dp__bonus-h { font-family: 'Work Sans', sans-serif; font-weight: 500;
                font-size: 13px; line-height: 16px; color: var(--white); }
+/* Номер ступени рядом с заголовком: игрок должен видеть, какой это по счёту
+   бонус из трёх, иначе «+120%» выглядит случайным числом. */
+.dp__bonus-tier { flex: 1 0 0; min-width: 0;
+                  font-family: 'Work Sans', sans-serif; font-weight: 500;
+                  font-size: 12px; line-height: 16px; color: var(--dp-label); }
+.dp__bonus-terms { flex: none; padding: 0; border: 0; background: none; cursor: pointer;
+                   font-family: 'Work Sans', sans-serif; font-weight: 600;
+                   font-size: 12px; line-height: 16px; color: var(--dp-accent, #3a9bf5); }
+.dp__bonus-terms:hover { text-decoration: underline; text-underline-offset: 3px; }
+.dp__bonus-terms:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px;
+                                 border-radius: 4px; }
+.dp__bonus-est { margin: 0; font-family: 'Work Sans', sans-serif;
+                 font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
+.dp__bonus-est[hidden] { display: none; }
+/* Расход ступени — не ошибка ввода, а последствие. Поэтому янтарный,
+   а не красный: красным в кассе помечено то, что мешает продолжить. */
+.dp__bonus-warn { margin: 0; font-family: 'Work Sans', sans-serif;
+                  font-size: 12px; line-height: 16px; color: #eaa640; }
+.dp__bonus-warn[hidden] { display: none; }
+.dp__bonus[hidden] { display: none; }
 .dp__bonus-row { display: flex; align-items: stretch; gap: 12px; width: 100%; }
 .dp__bonus-in { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
                 border: 0; clip: rect(0 0 0 0); overflow: hidden; }
@@ -4403,6 +4424,17 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                    font-size: 18px; line-height: 24px; color: var(--white); }
 .dp__state-text { margin: 0; max-width: 380px; font-family: 'Work Sans', sans-serif;
                   font-size: 13px; line-height: 20px; color: var(--modal-text-1, #bbc6cd); }
+/* Разбор начисления на экране результата: слева подпись, справа сумма.
+   Ширина по содержимому, чтобы колонка не разъезжалась на длинных строках. */
+.dp__state-rows { display: grid; grid-template-columns: auto auto; justify-content: center;
+                  gap: 6px 24px; margin: 4px 0 0; padding: 14px 18px;
+                  border-radius: 12px; background: rgba(0, 0, 0, .18); }
+.dp__state-rows[hidden] { display: none; }
+.dp__state-rows dt { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+                     color: var(--dp-label); text-align: left; }
+.dp__state-rows dd { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                     font-size: 13px; line-height: 18px; color: var(--white);
+                     text-align: right; font-variant-numeric: tabular-nums; }
 .dp__state-cta { margin-top: 10px; box-sizing: border-box; display: flex; align-items: center;
                  justify-content: center; height: 44px; padding: 0 24px; border: 0; border-radius: 12px;
                  background: linear-gradient(to bottom, #cdfa50, #a6e22e); color: #00151f; cursor: pointer;
@@ -7437,7 +7469,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             <!-- Отыгрыш. Числа живут в атрибутах, а процент, ширину полосы,
                  остаток и правую панель считает bnActPaint — иначе полоса и
                  подпись под ней могут молча разойтись. -->
-            <section class="bnact" hidden data-done="150" data-goal="1000" data-cur="USDT" data-days="3">
+            <section class="bnact" hidden data-done="150" data-goal="1000" data-cur="ARS" data-days="3">
               <div class="bnact__main">
                 <div class="bnact__head">
                   <img loading="lazy" decoding="async" class="bnact__art" src="a/824508be9a.webp" alt="" width="116" height="72">
@@ -13208,19 +13240,19 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       <button class="cur__x" type="button" aria-label="Close" data-close>&#215;</button>
     </div>
     <div class="cur__list" role="listbox">
-      <button class="cur__item" type="button" role="option" data-set-cur="USD">
-        <img loading="lazy" decoding="async" class="cur__flag" src="a/21c85c9e5d.svg" alt="" width="20" height="20">
-        <span class="cur__text"><b>US Dollar</b><em>USD</em></span>
-        <span class="cur__sum">0.00</span>
-        <i class="cur__tick" aria-hidden="true"></i>
-      </button>
-      <button class="cur__item" type="button" role="option" data-set-cur="ARS">
+            <button class="cur__item" type="button" role="option" data-set-cur="ARS">
         <img loading="lazy" decoding="async" class="cur__flag" src="a/863439dcc7.svg" alt="" width="20" height="20">
         <span class="cur__text"><b>Argentine Peso</b><em>ARS</em></span>
         <span class="cur__sum">0.00</span>
         <i class="cur__tick" aria-hidden="true"></i>
       </button>
-      <button class="cur__item" type="button" role="option" data-set-cur="RUB">
+            <button class="cur__item" type="button" role="option" data-set-cur="USD">
+        <img loading="lazy" decoding="async" class="cur__flag" src="a/21c85c9e5d.svg" alt="" width="20" height="20">
+        <span class="cur__text"><b>US Dollar</b><em>USD</em></span>
+        <span class="cur__sum">0.00</span>
+        <i class="cur__tick" aria-hidden="true"></i>
+      </button>
+<button class="cur__item" type="button" role="option" data-set-cur="RUB">
         <img loading="lazy" decoding="async" class="cur__flag" src="a/7c5675f1af.svg" alt="" width="20" height="20">
         <span class="cur__text"><b>Russian Ruble</b><em>RUB</em></span>
         <span class="cur__sum">0.00</span>
@@ -13529,7 +13561,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             <div class="dp__amount-box" data-node-id="1180:47898">
               <div class="dp__amount-head" data-node-id="1180:47899">
                 <span class="dp__hint">Withdrawal Amount</span>
-                <span class="dp__hint">Min <b>20USDT</b></span>
+                <span class="dp__hint">Min <b>2,000 ARS</b></span>
               </div>
               <label class="dp__input dp__input--amount" data-node-id="1180:47904">
                 <input class="dp__amount-input" type="text" inputmode="decimal" placeholder="0" aria-label="Withdrawal Amount">
@@ -13551,8 +13583,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               <div class="dp__field">
                 <span class="dp__label dp__label--dim">Deposit Currency</span>
                 <button class="dp__select" type="button">
-                  <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
-                  <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
+                  <img loading="lazy" decoding="async" class="dp__select-coin" src="a/863439dcc7.svg" alt="" width="24" height="24">
+                  <span class="dp__select-value" data-opts="ARS|USD|RUB">ARS</span>
                   <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
                 </button>
               </div>
@@ -13584,7 +13616,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               <div class="dp__amount-box">
                 <div class="dp__amount-head">
                   <span class="dp__hint">Withdrawal Amount</span>
-                  <span class="dp__hint">Min <b>20USDT</b></span>
+                  <span class="dp__hint">Min <b>2,000 ARS</b></span>
                 </div>
                 <label class="dp__input dp__input--amount">
                   <input class="dp__fw-input" type="text" inputmode="decimal" placeholder="0" aria-label="Withdrawal amount">
@@ -13595,16 +13627,16 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                    сообщение о выводе всплывало в чужом блоке -->
               <p class="dp__error dp__error--fw" hidden></p>
               <div class="dp__chips">
-                <button class="dp__chip" type="button" data-amount="100">100</button>
-                <button class="dp__chip" type="button" data-amount="150">150</button>
-                <button class="dp__chip" type="button" data-amount="200">200</button>
-                <button class="dp__chip" type="button" data-amount="250">250</button>
+                <button class="dp__chip" type="button" data-amount="2000">2 000</button>
+                <button class="dp__chip" type="button" data-amount="5000">5 000</button>
+                <button class="dp__chip" type="button" data-amount="10000">10 000</button>
+                <button class="dp__chip" type="button" data-amount="20000">20 000</button>
               </div>
             </div>
 
             <div class="dp__fd-foot">
-              <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fw-sum">0.00 USDT</b></div>
-              <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fw-fee">0.00 USDT</b></div>
+              <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fw-sum">0.00 ARS</b></div>
+              <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fw-fee">0.00 ARS</b></div>
               <button class="dp__submit dp__fw-submit" type="button" disabled>Withdraw with payphone</button>
             </div>
           </div>
@@ -13628,8 +13660,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               <div class="dp__field">
                 <span class="dp__label dp__label--dim">Deposit Currency</span>
                 <button class="dp__select" type="button">
-                  <img loading="lazy" decoding="async" class="dp__select-coin" src="a/35ac49e1a4.svg" alt="" width="24" height="24">
-                  <span class="dp__select-value" data-opts="RBL|TRY|AZN|USD">RBL</span>
+                  <img loading="lazy" decoding="async" class="dp__select-coin" src="a/863439dcc7.svg" alt="" width="24" height="24">
+                  <span class="dp__select-value" data-opts="ARS|USD|RUB">ARS</span>
                   <span class="dp__chev"><img loading="lazy" decoding="async" src="a/e139209072.svg" alt=""></span>
                 </button>
               </div>
@@ -13657,8 +13689,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             <div class="dp__fd-amount">
               <div class="dp__amount-box">
                 <div class="dp__amount-head">
-                  <span class="dp__hint">Fiat Amount (50 - 100,000 MXN)</span>
-                  <span class="dp__hint">Min <b>20USDT</b></span>
+                  <span class="dp__hint">Fiat Amount (1,000 - 1,000,000 ARS)</span>
+                  <span class="dp__hint">Min <b>2,000 ARS</b></span>
                 </div>
                 <label class="dp__input dp__input--amount">
                   <input class="dp__fd-input" type="text" inputmode="decimal" placeholder="0" aria-label="Fiat amount">
@@ -13667,9 +13699,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               </div>
               <p class="dp__error dp__error--fd" hidden></p>
               <div class="dp__chips">
-                <button class="dp__chip" type="button" data-amount="100">100</button>
-                <button class="dp__chip" type="button" data-amount="500">500</button>
-                <button class="dp__chip" type="button" data-amount="1000">1000</button>
+                <button class="dp__chip" type="button" data-amount="3500">3 500</button>
+                <button class="dp__chip" type="button" data-amount="20000">20 000</button>
+                <button class="dp__chip" type="button" data-amount="50000">50 000</button>
               </div>
             </div>
 
@@ -13678,8 +13710,12 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                  одно, и стрелками это работает само. Для повторных депозитов
                  блок скрывается целиком (data-bonus=hidden). -->
             <div class="dp__bonus" data-bonus="selected">
-              <span class="dp__bonus-h">Bonus</span>
-              <div class="dp__bonus-row" role="radiogroup" aria-label="First deposit bonus">
+              <div class="dp__bonus-head">
+                <span class="dp__bonus-h">Bonus</span>
+                <span class="dp__bonus-tier"></span>
+                <button class="dp__bonus-terms" type="button" data-dp-terms>View Full Terms</button>
+              </div>
+              <div class="dp__bonus-row" role="radiogroup" aria-label="Welcome package bonus">
                 <label class="dp__bonus-none">
                   <input class="dp__bonus-in" type="radio" name="dp-bonus" value="skip">
                   <span class="dp__bonus-pic dp__bonus-pic--no" aria-hidden="true"></span>
@@ -13694,14 +13730,20 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                     <img loading="lazy" decoding="async" src="a/3e64e7a598.webp" alt="" width="80" height="66">
                   </span>
                   <b class="dp__bonus-name dp__bonus-pct">+100%</b>
-                  <span class="dp__bonus-sub dp__bonus-cap">up to 5000.00 USDT + 100 FS</span>
+                  <span class="dp__bonus-sub dp__bonus-cap">up to 150,000.00 ARS</span>
                 </label>
               </div>
+              <!-- Оценка бонуса за введённую сумму. На бою её считает сервер;
+                   здесь тот же расчёт, что применится при подтверждении. -->
+              <p class="dp__bonus-est" hidden></p>
+              <!-- Предупреждение о расходе ступени. Отдельный элемент, а не
+                   .dp__error--fd: тот гасится на каждом нажатии клавиши. -->
+              <p class="dp__bonus-warn" hidden></p>
             </div>
 
             <div class="dp__fd-foot">
-              <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fd-sum">0.00 USDT</b></div>
-              <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fd-fee">0.00 USDT</b></div>
+              <div class="dp__sum-row"><span>Amount:</span><b class="dp__sum-amount dp__fd-sum">0.00 ARS</b></div>
+              <div class="dp__sum-row"><span>Withdrawal Fee</span><b class="dp__fd-fee">0.00 ARS</b></div>
               <button class="dp__submit dp__fd-submit" type="button" disabled>Deposit via Payphone</button>
             </div>
           </div>
@@ -13723,12 +13765,12 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         <!-- 1180:47917 — итог и кнопка, только на выводе -->
         <div class="dp__wd-foot" data-node-id="1180:47918">
           <div class="dp__sum-row" data-node-id="1180:47919">
-            <span>Amount:</span><b class="dp__sum-amount">0.00 USDT</b>
+            <span>Amount:</span><b class="dp__sum-amount">0.00 ARS</b>
           </div>
           <div class="dp__sum-row" data-node-id="1180:47922">
-            <span>Withdrawal Fee</span><b class="dp__sum-fee">0.00 USDT</b>
+            <span>Withdrawal Fee</span><b class="dp__sum-fee">0.00 ARS</b>
           </div>
-          <button class="dp__submit" type="button" disabled data-node-id="1180:47925">Withdraw 0 USDT</button>
+          <button class="dp__submit" type="button" disabled data-node-id="1180:47925">Withdraw 0 ARS</button>
         </div>
 
         <!-- 1180:32169 — сноска в рамке #747889 -->
@@ -13745,6 +13787,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         <span class="dp__state-ico" aria-hidden="true"></span>
         <b class="dp__state-title"></b>
         <p class="dp__state-text"></p>
+        <!-- Разбор начисления: сумма депозита, бонус, статус, отыгрыш, срок -->
+        <dl class="dp__state-rows" hidden></dl>
         <button class="dp__state-cta" type="button" hidden></button>
         <button class="dp__state-back" type="button">Back to wallet</button>
       </div>
@@ -15499,11 +15543,14 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       RUB: { name: 'Russian Ruble', flag: 'flag-ru' }
     };
     var bal = { USD: 0, ARS: 0, RUB: 0 };
-    var code = 'USD';
+    /* Песо по умолчанию: приветственный пакет считается и выдаётся только в
+       ARS, и держать кассу в другой валюте значило бы показывать в одном окне
+       депозит в долларах и бонус в песо. */
+    var code = 'ARS';
     var subs = [];
     var fix = function (v) { return (Math.round(Math.max(0, v) * 100) / 100).toFixed(2); };
     return {
-      codes: ['USD', 'ARS', 'RUB'],
+      codes: ['ARS', 'USD', 'RUB'],
       info: function (c) { return CUR[c] || CUR.USD; },
       code: function () { return code; },
       /* сумма активного счёта — на неё смотрят касса и кнопка в шапке */
@@ -15552,6 +15599,359 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         subs.forEach(function (fn) { fn(code); });
       }
     };
+  })();
+
+  /* ── Приветственный пакет казино: три ступени ──
+     Не 350% на один депозит, а три отдельных бонуса на первые три успешных
+     денежных депозита: 100% / 120% / 130% со своими потолками. Бекенда нет,
+     поэтому весь учёт ведётся здесь и переживает перезагрузку.
+
+     Что держит движок сам, чтобы это нельзя было нарушить снаружи:
+     — ступень равна id записи, поэтому одну и ту же выдать дважды нельзя;
+     — срок идёт только у активного бонуса, у стоящего в очереди он не течёт;
+     — активным может быть ровно один, замена требует отдельного согласия;
+     — закрытый бонус (отыгран, истёк, отменён) больше не меняется. */
+  var wwWelcome = (function () {
+    var KEY = 'ww-welcome';
+    var DAY = 864e5;
+    var WB = {
+      MIN_DEPOSIT: 3500,
+      WAGER: 30,
+      DAYS: 30,
+      RELEASE: 10,
+      QUEUE_DAYS: 30,          /* ЗАГЛУШКА: в ТЗ срок очереди помечен TBD */
+      MAX_BET: 5000,           /* ЗАГЛУШКА: max bonus bet в ТЗ помечен TBD */
+      CUR: 'ARS'
+    };
+    var TIERS = [
+      { tier: 1, pct: 100, cap: 150000 },
+      { tier: 2, pct: 120, cap: 150000 },
+      { tier: 3, pct: 130, cap: 300000 }
+    ];
+    /* Вклад категорий в отыгрыш. Неизвестная игра всегда 0 — так в ТЗ. */
+    var CONTRIB = { slots: 1, table: 0.05, live: 0, crash: 0, sports: 0, unknown: 0 };
+    var LIVE = { CREATED: 1, ACTIVE: 1, QUEUED: 1, FROZEN: 1 };
+    var TERMINAL = { COMPLETED: 1, EXPIRED: 1, CANCELED: 1 };
+    var STATUS = { MISSED_MIN_DEPOSIT: 1, DECLINED: 1, CREATED: 1, ACTIVE: 1,
+                   QUEUED: 1, COMPLETED: 1, EXPIRED: 1, CANCELED: 1, FROZEN: 1 };
+
+    var blank = function () { return { v: 1, deposits: 0, bonuses: [], refs: [], log: [] }; };
+    var st = blank();
+    var subs = [];
+
+    var num = function (v) { return typeof v === 'number' && isFinite(v) ? v : 0; };
+    /* Считаем через целые: 3500 * 1.2 даёт 4200.000000000001, и floor срезал бы
+       лишний песо на ровных суммах. */
+    var calc = function (dep, pct, cap) {
+      return Math.floor(Math.min(Math.round(dep * pct) / 100, cap));
+    };
+
+    var write = function () { safeStore.set(KEY, JSON.stringify(st)); };
+    var fire = function () { subs.forEach(function (fn) { try { fn(st); } catch (e) {} }); };
+    var save = function () { write(); fire(); };
+
+    var read = function () {
+      var raw = safeStore.get(KEY);
+      if (!raw) return;
+      try {
+        var o = JSON.parse(raw);
+        if (!o || typeof o !== 'object' || o.v !== 1) return;
+        var out = blank();
+        out.deposits = Math.max(0, Math.min(999, Math.round(num(o.deposits))));
+        if (Object.prototype.toString.call(o.bonuses) === '[object Array]') {
+          o.bonuses.slice(0, 3).forEach(function (b) {
+            if (!b || typeof b !== 'object' || !STATUS[b.status]) return;
+            var t = Math.round(num(b.tier));
+            if (t < 1 || t > 3) return;
+            out.bonuses.push({
+              id: 'wb' + t, tier: t, pct: num(b.pct), cap: num(b.cap),
+              status: b.status,
+              depositAmount: num(b.depositAmount), bonusAmount: num(b.bonusAmount),
+              wagerRequired: num(b.wagerRequired), wagered: num(b.wagered),
+              bucket: num(b.bucket), maxRelease: num(b.maxRelease), released: num(b.released),
+              createdAt: num(b.createdAt), activatedAt: num(b.activatedAt) || null,
+              expiresAt: num(b.expiresAt) || null, queueDeadline: num(b.queueDeadline) || null,
+              closedAt: num(b.closedAt) || null,
+              closeReason: typeof b.closeReason === 'string' ? b.closeReason : ''
+            });
+          });
+        }
+        if (Object.prototype.toString.call(o.refs) === '[object Array]') {
+          out.refs = o.refs.filter(function (r) { return typeof r === 'string'; }).slice(-20);
+        }
+        if (Object.prototype.toString.call(o.log) === '[object Array]') {
+          out.log = o.log.slice(-40);
+        }
+        st = out;
+      } catch (e) {}
+    };
+
+    var note = function (kind, b, extra) {
+      st.log.push({ ts: Date.now(), kind: kind, tier: b ? b.tier : 0,
+                    sum: b ? b.bonusAmount : 0, reason: extra || '' });
+      if (st.log.length > 40) st.log = st.log.slice(-40);
+    };
+
+    var byId = function (id) {
+      for (var i = 0; i < st.bonuses.length; i++) if (st.bonuses[i].id === id) return st.bonuses[i];
+      return null;
+    };
+    var active = function () {
+      for (var i = 0; i < st.bonuses.length; i++) if (st.bonuses[i].status === 'ACTIVE') return st.bonuses[i];
+      return null;
+    };
+    var queued = function () {
+      return st.bonuses.filter(function (b) { return b.status === 'QUEUED'; });
+    };
+    var closed = function () {
+      return st.bonuses.filter(function (b) { return TERMINAL[b.status]; });
+    };
+
+    var close = function (b, status, reason) {
+      if (!b || TERMINAL[b.status]) return false;
+      b.status = status;
+      b.closedAt = Date.now();
+      b.closeReason = reason || '';
+      if (status !== 'COMPLETED') b.bucket = 0;
+      note(status, b, reason);
+      return true;
+    };
+
+    var startActive = function (b) {
+      b.status = 'ACTIVE';
+      b.activatedAt = Date.now();
+      b.expiresAt = b.activatedAt + WB.DAYS * DAY;
+      b.queueDeadline = null;
+      note('ACTIVE', b);
+    };
+
+    /* Истечение проверяем не только по таймеру: если вкладка была закрыта,
+       ни один job не отработал, и бонус обязан догнать своё время при первом
+       же чтении. */
+    var sweep = function (quiet) {
+      var now = Date.now(), hit = false;
+      st.bonuses.forEach(function (b) {
+        if (b.status === 'ACTIVE' && b.expiresAt && now >= b.expiresAt) {
+          hit = close(b, 'EXPIRED', 'expired');
+        } else if (b.status === 'QUEUED' && b.queueDeadline && now >= b.queueDeadline) {
+          hit = close(b, 'EXPIRED', 'queue_expired') || hit;
+        }
+      });
+      if (hit && !quiet) save();
+      return hit;
+    };
+
+    var tierAt = function (n) { return n >= 1 && n <= 3 ? TIERS[n - 1] : null; };
+
+    var api = {
+      C: WB,
+      TIERS: TIERS,
+      CONTRIB: CONTRIB,
+
+      boot: function () { read(); sweep(true); fire(); return api; },
+      state: function () { sweep(true); return st; },
+      on: function (fn) { if (typeof fn === 'function') subs.push(fn); },
+
+      /* Ступень следующего депозита; null — пакет исчерпан */
+      nextTier: function () { return tierAt(st.deposits + 1); },
+
+      /* Что показывать на карточке ступени в пакете */
+      tierView: function (tier) {
+        var b = byId('wb' + tier);
+        if (b) {
+          if (b.status === 'MISSED_MIN_DEPOSIT' || b.status === 'DECLINED') return 'MISSED';
+          return 'USED';
+        }
+        return st.deposits + 1 === tier ? 'AVAILABLE' : 'LOCKED';
+      },
+
+      /* Предварительный расчёт для кассы — то, что в ТЗ названо server estimate */
+      estimate: function (amount) {
+        var v = num(amount), t = tierAt(st.deposits + 1);
+        if (!t) return { tier: 0, none: true };
+        var raw = Math.round(v * t.pct) / 100;
+        var bonus = v >= WB.MIN_DEPOSIT ? calc(v, t.pct, t.cap) : 0;
+        return {
+          tier: t.tier, pct: t.pct, cap: t.cap,
+          bonus: bonus, raw: raw, capped: v >= WB.MIN_DEPOSIT && raw > t.cap,
+          wagering: bonus * WB.WAGER, release: bonus * WB.RELEASE,
+          belowMin: v > 0 && v < WB.MIN_DEPOSIT,
+          willConsume: true,
+          hasActive: !!active(), queued: queued().length
+        };
+      },
+
+      /* Подтверждённый депозит. Счётчик растёт всегда — и когда бонус не дали. */
+      applyDeposit: function (amount, opt) {
+        opt = opt || {};
+        if (opt.ref && st.refs.indexOf(opt.ref) >= 0) return { kind: 'duplicate' };
+        sweep(true);
+        var v = num(amount);
+        st.deposits += 1;
+        if (opt.ref) { st.refs.push(opt.ref); if (st.refs.length > 20) st.refs = st.refs.slice(-20); }
+
+        var t = tierAt(st.deposits);
+        if (!t || byId('wb' + t.tier)) { save(); return { kind: 'no-tier', deposit: v }; }
+
+        var b = {
+          id: 'wb' + t.tier, tier: t.tier, pct: t.pct, cap: t.cap,
+          status: 'CREATED', depositAmount: v, bonusAmount: 0,
+          wagerRequired: 0, wagered: 0, bucket: 0, maxRelease: 0, released: 0,
+          createdAt: Date.now(), activatedAt: null, expiresAt: null,
+          queueDeadline: null, closedAt: null, closeReason: ''
+        };
+        st.bonuses.push(b);
+
+        if (opt.declined) {
+          close(b, 'DECLINED', 'declined');
+          save();
+          return { kind: 'declined', deposit: v, tier: t.tier, bonus: b };
+        }
+        if (v < WB.MIN_DEPOSIT) {
+          close(b, 'MISSED_MIN_DEPOSIT', 'below_min');
+          save();
+          return { kind: 'missed-min', deposit: v, tier: t.tier, bonus: b };
+        }
+
+        b.bonusAmount = calc(v, t.pct, t.cap);
+        b.wagerRequired = b.bonusAmount * WB.WAGER;
+        b.maxRelease = b.bonusAmount * WB.RELEASE;
+        b.bucket = b.bonusAmount;
+
+        if (active()) {
+          b.status = 'QUEUED';
+          b.queueDeadline = Date.now() + WB.QUEUE_DAYS * DAY;
+          note('QUEUED', b);
+          save();
+          return { kind: 'granted-queued', deposit: v, tier: t.tier, bonus: b };
+        }
+        startActive(b);
+        save();
+        return { kind: 'granted-active', deposit: v, tier: t.tier, bonus: b };
+      },
+
+      /* Ручная активация из очереди. Замена активного — только по согласию. */
+      activate: function (id, opt) {
+        sweep(true);
+        var b = byId(id);
+        if (!b || b.status !== 'QUEUED') return { ok: false, reason: 'not-queued' };
+        var cur = active();
+        if (cur && !(opt && opt.replace)) return { ok: false, reason: 'needs-replace', current: cur };
+        if (cur) close(cur, 'CANCELED', 'replaced_by_activation');
+        startActive(b);
+        save();
+        return { ok: true, bonus: b, replaced: cur || null };
+      },
+
+      cancel: function (id, reason) {
+        var b = byId(id);
+        if (!close(b, 'CANCELED', reason || 'canceled_by_player')) return { ok: false };
+        save();
+        return { ok: true, bonus: b };
+      },
+
+      /* Что заденет подтверждённый вывод — для предупреждения до заявки */
+      affectedByWithdrawal: function () {
+        sweep(true);
+        var a = active(), q = queued();
+        var bucket = (a ? a.bucket : 0) + q.reduce(function (s, b) { return s + b.bucket; }, 0);
+        return { active: !!a, queued: q.length, bucket: bucket, any: !!a || !!q.length };
+      },
+
+      /* Вызывается ПОСЛЕ создания заявки, а не при открытии вкладки вывода */
+      cancelAllForWithdrawal: function () {
+        var a = active(), q = queued(), n = 0;
+        if (close(a, 'CANCELED', 'canceled_by_withdrawal')) n++;
+        q.forEach(function (b) { if (close(b, 'CANCELED', 'canceled_by_withdrawal')) n++; });
+        if (n) save();
+        return { active: !!a, queued: q.length, count: n };
+      },
+
+      /* Ставка двигает отыгрыш по вкладу категории и тратит бонусный баланс */
+      wager: function (bet, cat) {
+        sweep(true);
+        var b = active();
+        var v = num(bet);
+        if (!b || v <= 0) return { ok: false };
+        var k = CONTRIB[cat] === undefined ? CONTRIB.unknown : CONTRIB[cat];
+        var over = v > WB.MAX_BET;
+        if (over) return { ok: false, reason: 'max-bet', max: WB.MAX_BET };
+        b.wagered = Math.min(b.wagerRequired, b.wagered + v * k);
+        b.bucket = Math.max(0, b.bucket - v + v * 0.96);
+        var done = b.wagered >= b.wagerRequired;
+        if (done) {
+          b.released = Math.min(b.bucket, b.maxRelease);
+          b.status = 'COMPLETED';
+          b.closedAt = Date.now();
+          b.closeReason = 'wagering_complete';
+          b.bucket = 0;
+          note('COMPLETED', b);
+        }
+        save();
+        return { ok: true, bonus: b, added: v * k, contribution: k, completed: done };
+      },
+
+      active: active,
+      queued: queued,
+      closed: closed,
+      byId: byId,
+      bonusBalance: function () {
+        return st.bonuses.reduce(function (s, b) { return s + (LIVE[b.status] ? b.bucket : 0); }, 0);
+      },
+      sweep: function () { return sweep(); },
+
+      reset: function () { st = blank(); save(); },
+
+      /* Только для витрины состояний: собрать нужную картинку без прохода
+         всего сценария руками. */
+      seed: function (patch) {
+        st = blank();
+        if (patch && typeof patch === 'object') {
+          if (patch.deposits) st.deposits = patch.deposits;
+          (patch.bonuses || []).forEach(function (p) {
+            var t = TIERS[p.tier - 1];
+            var dep = num(p.deposit), bonus = p.bonus === undefined ? calc(dep, t.pct, t.cap) : num(p.bonus);
+            var b = {
+              id: 'wb' + t.tier, tier: t.tier, pct: t.pct, cap: t.cap,
+              status: p.status, depositAmount: dep, bonusAmount: bonus,
+              wagerRequired: bonus * WB.WAGER, wagered: num(p.wagered),
+              bucket: p.bucket === undefined ? bonus : num(p.bucket),
+              maxRelease: bonus * WB.RELEASE, released: num(p.released),
+              createdAt: Date.now(), activatedAt: null, expiresAt: null,
+              queueDeadline: null, closedAt: null,
+              closeReason: p.reason || ''
+            };
+            if (p.status === 'ACTIVE') {
+              b.activatedAt = Date.now();
+              b.expiresAt = b.activatedAt + (p.daysLeft === undefined ? WB.DAYS : p.daysLeft) * DAY;
+            } else if (p.status === 'QUEUED') {
+              b.queueDeadline = Date.now() + WB.QUEUE_DAYS * DAY;
+            } else if (TERMINAL[p.status]) {
+              b.closedAt = Date.now();
+              b.bucket = p.status === 'COMPLETED' ? 0 : 0;
+              if (p.status === 'COMPLETED') b.released = Math.min(bonus, b.maxRelease);
+            } else if (p.status === 'MISSED_MIN_DEPOSIT' || p.status === 'DECLINED') {
+              b.bonusAmount = 0; b.wagerRequired = 0; b.bucket = 0; b.maxRelease = 0;
+              b.closedAt = Date.now();
+            }
+            st.bonuses.push(b);
+          });
+          if (!patch.deposits) st.deposits = st.bonuses.length;
+        }
+        save();
+      }
+    };
+
+    /* Открытая вкладка должна сама перекрасить бонус в «истёк». Пока живых
+       бонусов нет, проход выходит на первой же проверке. */
+    setInterval(function () {
+      for (var i = 0; i < st.bonuses.length; i++) {
+        var s = st.bonuses[i].status;
+        if (s === 'ACTIVE' || s === 'QUEUED') { sweep(); return; }
+      }
+    }, 60000);
+
+    return api;
   })();
 
   /* Добавить строку в список транзакций. Присваивается ниже, когда страница
@@ -15731,6 +16131,21 @@ body.cur-open .wallet__balance { background: var(--white-16); }
     dp.classList.add('is-state');
   };
 
+  /* Строки под заголовком экрана результата. Отдельная функция, а не шестой
+     аргумент stScreen: её сигнатуру зовут восемь пунктов витрины. */
+  var stRows = function (pairs) {
+    var dp = dpBox(); if (!dp) return;
+    var box = dp.querySelector('.dp__state-rows');
+    if (!box) return;
+    box.innerHTML = '';
+    box.hidden = !pairs || !pairs.length;
+    (pairs || []).forEach(function (pair) {
+      var dt = document.createElement('dt'); dt.textContent = pair[0];
+      var dd = document.createElement('dd'); dd.textContent = pair[1];
+      box.appendChild(dt); box.appendChild(dd);
+    });
+  };
+
   var stClear = function () {
     var dp = dpBox(); if (!dp) return;
     dp.classList.remove('is-state');
@@ -15739,6 +16154,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
     dp.querySelectorAll('.dp__submit').forEach(function (b) { b.classList.remove('is-busy'); });
     var st = dp.querySelector('.dp__state');
     if (st) st.className = 'dp__state';
+    var rows = dp.querySelector('.dp__state-rows');
+    if (rows) { rows.innerHTML = ''; rows.hidden = true; }
   };
 
   /* Состояния истории: карточка та же, меняется её содержимое. Ищем открытую
@@ -16237,16 +16654,24 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             var sg = dp.querySelector('[data-seg="deposit"]');
             if (sg) sg.click(); return; }
           if (go === 'support') { closeDep(); showView('helpSup'); return; }
+          /* «Открыть бонус» после начисления — сразу во вкладку с отыгрышем */
+          if (go === 'bonus') { closeDep(); showView('bonuses');
+            var bc = document.querySelector('[data-bn="active"]');
+            if (bc) bc.click(); return; }
         });
 
-        var wdMin = 20, wdFeeRate = 0.0167;
+        var wdMin = 2000, wdFeeRate = 0.0167;
         /* Деньги живут в wwCur: у каждой валюты счёта своя сумма, а касса
            работает с активной. Пополнение её увеличивает, вывод уменьшает —
            иначе проверке достаточности не на чем стоять и «Not enough
            balance» остаётся нарисованным вхолостую. */
         var getBalance = function () { return wwCur.get(); };
         var setBalance = function (v) { wwCur.set(v); };
-        var money = function (v, cur) { return v.toFixed(2) + ' ' + (cur || 'USDT'); };
+        /* Суммы в ARS длинные: 150000.00 без разделителей не читается.
+             Валюта берётся из выбранного счёта, а не зашита строкой. */
+        var money = function (v, cur) {
+          return v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + (cur || wwCur.code());
+        };
         var amountInput = dp.querySelector('.dp__amount-input');
         if (amountInput) {
           var addrInput = dp.querySelector('.dp__addr-input');
@@ -16261,7 +16686,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           var maxBtn = dp.querySelector('.dp__max');
           /* В макете весь этот блок считается в USDT независимо от выбранной
              валюты — минимум, итог, комиссия и подпись кнопки. */
-          var WD_CUR = 'USDT';
+          /* Валюту можно сменить, не закрывая кассу, поэтому читаем её в
+             момент отрисовки, а не один раз при загрузке. */
+          var WD_CUR = function () { return wwCur.code(); };
           var wdBalance = getBalance;
           var wdPart = function (c) {
             return Math.round(wdBalance() * parseFloat(c.dataset.part) / 100 * 100) / 100;
@@ -16283,17 +16710,17 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             var v = parseFloat(amountInput.value.replace(',', '.'));
             if (!isFinite(v) || v < 0) v = 0;
             var bal = wdBalance();
-            sumAmount.textContent = money(v, WD_CUR);
-            sumFee.textContent = money(v * wdFeeRate, WD_CUR);
-            wdSubmit.textContent = T('Withdraw {sum} {cur}', { sum: (v ? v : 0), cur: WD_CUR });
+            sumAmount.textContent = money(v, WD_CUR());
+            sumFee.textContent = money(v * wdFeeRate, WD_CUR());
+            wdSubmit.textContent = T('Withdraw {sum} {cur}', { sum: (v ? v : 0), cur: WD_CUR() });
             /* Проверка суммы идёт живьём под полем, а не молча в кнопке:
                раньше при балансе 0.00 можно было ввести 900 и кнопка
                становилась активной, а состояние «Not enough balance» было
                нарисовано и никогда не показывалось. */
             var err = dp.querySelector('.dp__error--crypto');
             var bad = '';
-            if (v > 0 && v < wdMin) bad = T('Minimum withdrawal is {sum}.', { sum: money(wdMin, WD_CUR) });
-            else if (v > bal) bad = T('Not enough balance. Available: {sum}.', { sum: money(bal, WD_CUR) });
+            if (v > 0 && v < wdMin) bad = T('Minimum withdrawal is {sum}.', { sum: money(wdMin, WD_CUR()) });
+            else if (v > bal) bad = T('Not enough balance. Available: {sum}.', { sum: money(bal, WD_CUR()) });
             if (bad) stError('crypto', bad);
             else if (err) { err.hidden = true; err.textContent = ''; }
             wdSubmit.disabled = !(v >= wdMin && v <= bal);
@@ -16341,11 +16768,11 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 done: function () {
                   setBalance(getBalance() - v - v * wdFeeRate);
                   wdSync();
-                  if (txAdd) txAdd('withdraw', '-' + money(v, WD_CUR),
+                  if (txAdd) txAdd('withdraw', '-' + money(v, WD_CUR()),
                     'Crypto · ' + (wdNetName() || 'ERC20'), 'wait');
                   stScreen('wait', '\u23F3', T('Withdrawal requested'),
                     T('{sum} is on the way to {addr}. It usually takes up to 30 minutes.',
-                      { sum: money(v, WD_CUR), addr: addr.slice(0, 10) + '…' }),
+                      { sum: money(v, WD_CUR()), addr: addr.slice(0, 10) + '…' }),
                     T('Back to wallet'), 'back');
                 }
               });
@@ -16354,7 +16781,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               wwConfirm({
                 title: T('Confirm the withdrawal'),
                 text: T('{sum} to {addr}, fee {fee}. Transfers cannot be undone.',
-                  { sum: money(v, WD_CUR), addr: addr, fee: money(v * wdFeeRate, WD_CUR) }),
+                  { sum: money(v, WD_CUR()), addr: addr, fee: money(v * wdFeeRate, WD_CUR()) }),
                 ok: T('Withdraw'),
                 cancel: T('Cancel')
               }, function (yes) { if (yes) send(); });
@@ -16390,7 +16817,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
              переписывало поле депозита. Берём только свой блок. */
           var fdChips = [].slice.call(dp.querySelectorAll('.dp__fd .dp__chip'));
           var fdMax = dp.querySelector('.dp__fd-max');
-          var FD_MIN = 20, FD_CAP = 100000;
+          /* Ниже минимума бонуса (3 500): иначе депозит, расходующий ступень
+             без бонуса, невозможно было бы даже ввести. */
+          var FD_MIN = 1000, FD_CAP = 1000000;
           var fdSync = function () {
             var v = parseFloat(fdInput.value.replace(',', '.'));
             if (!isFinite(v) || v < 0) v = 0;
@@ -16431,29 +16860,73 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             window.wwSaved = fdSetSaved;
           }
 
-          /* ── Вставка 2: бонус первого депозита ──
-             Суммы бонуса — заглушки, но валюта берётся тем же money(), что и
-             итог под блоком: иначе в одном окне стояли бы две разные валюты. */
+          /* ── Бонус приветственного пакета ──
+             Показываем ТЕКУЩУЮ ступень: процент и потолок берём у движка, а не
+             зашиваем в разметку. Когда все три ступени израсходованы, блок
+             исчезает целиком — предлагать нечего. */
           var fdBonus = dp.querySelector('.dp__bonus');
           if (fdBonus) {
-            var BONUS = { pct: 100, cap: 5000, fs: 100 };
             var bonusPct = fdBonus.querySelector('.dp__bonus-pct');
             var bonusCap = fdBonus.querySelector('.dp__bonus-cap');
+            var bonusTier = fdBonus.querySelector('.dp__bonus-tier');
+            var bonusEst = fdBonus.querySelector('.dp__bonus-est');
+            var bonusWarn = fdBonus.querySelector('.dp__bonus-warn');
             var bonusIns = [].slice.call(fdBonus.querySelectorAll('.dp__bonus-in'));
+            var bonusDeclined = function () {
+              return fdBonus.querySelector('.dp__bonus-in[value="skip"]').checked;
+            };
             var bonusPaint = function () {
-              var take = fdBonus.querySelector('.dp__bonus-in[value="take"]').checked;
+              var t = wwWelcome.nextTier();
+              fdBonus.hidden = !t;
+              if (!t) return;
+              var take = !bonusDeclined();
               fdBonus.dataset.bonus = take ? 'selected' : 'declined';
-              bonusPct.textContent = T('+{pct}%', { pct: BONUS.pct });
-              bonusCap.textContent = T('up to {sum} + {fs} FS',
-                { sum: money(BONUS.cap), fs: BONUS.fs });
+              bonusPct.textContent = T('+{pct}%', { pct: t.pct });
+              bonusCap.textContent = T('up to {sum}', { sum: money(t.cap, wwWelcome.C.CUR) });
+              bonusTier.textContent = T('Bonus {n} of 3', { n: t.tier });
+
+              /* Оценка появляется, только когда сумма введена и бонус выбран */
+              var v = parseFloat((fdInput.value || '').replace(',', '.'));
+              if (!isFinite(v) || v < 0) v = 0;
+              var e = wwWelcome.estimate(v);
+              var showEst = take && v > 0 && e.bonus > 0;
+              bonusEst.hidden = !showEst;
+              if (showEst) {
+                bonusEst.textContent = T('Bonus for this deposit: {sum} · wagering {wager}',
+                  { sum: money(e.bonus, wwWelcome.C.CUR), wager: money(e.wagering, wwWelcome.C.CUR) });
+              }
+
+              /* Три взаимоисключающих предупреждения по убыванию важности.
+                 Первые два про то, что ступень сгорит без бонуса — это главное,
+                 чего игрок не ожидает. */
+              var warn = '';
+              if (v > 0 && v < wwWelcome.C.MIN_DEPOSIT) {
+                warn = T('This deposit is below the {min} minimum. It still uses up bonus {n} of 3 — you will not get it back.',
+                  { min: money(wwWelcome.C.MIN_DEPOSIT, wwWelcome.C.CUR), n: t.tier });
+              } else if (!take) {
+                warn = T('Declining still uses up bonus {n} of 3.', { n: t.tier });
+              } else if (wwWelcome.active()) {
+                warn = T('You already have an active bonus. This one goes to the queue and you activate it yourself.');
+              }
+              bonusWarn.textContent = warn;
+              bonusWarn.hidden = !warn;
             };
             bonusIns.forEach(function (r) { r.addEventListener('change', bonusPaint); });
-            /* Обе строки собирает скрипт, поэтому обход i18n их не тронет —
-               пересобираем сами на смене языка. */
+            /* Обе строки собирает скрипт, обход i18n их не тронет */
             document.addEventListener('ww:lang', bonusPaint);
+            wwWelcome.on(bonusPaint);
+            var bonusTerms = fdBonus.querySelector('[data-dp-terms]');
+            if (bonusTerms) {
+              bonusTerms.addEventListener('click', function () {
+                closeDep();
+                showView('promo');
+                var card = document.querySelector('.promo__card[data-key="welcomepack"]');
+                if (card) card.click();
+              });
+            }
             bonusPaint();
             window.wwBonus = function (mode) {
-              fdBonus.hidden = mode === 'hidden';
+              fdBonus.hidden = mode === 'hidden' || !wwWelcome.nextTier();
               var take = mode !== 'declined';
               fdBonus.querySelector('.dp__bonus-in[value="take"]').checked = take;
               fdBonus.querySelector('.dp__bonus-in[value="skip"]').checked = !take;
@@ -16461,7 +16934,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             };
           }
 
-          fdInput.addEventListener('input', fdSync);
+          fdInput.addEventListener('input', function () { fdSync(); if (fdBonus) bonusPaint(); });
           fdChips.forEach(function (c) {
             c.addEventListener('click', function () { fdInput.value = c.dataset.amount; fdSync(); });
           });
@@ -16471,14 +16944,31 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
           /* Отправка пополнения. Кнопка была активна и не делала ничего.
              Проверки имени и фамилии здесь больше нет — самих полей нет. */
+          /* Дата в подписи — короткая, как в карточке отыгрыша */
+          var fdDate = function (ts) {
+            var d = new Date(ts);
+            var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+          };
           fdSubmit.addEventListener('click', function () {
             if (fdSubmit.disabled) return;
             var v = parseFloat(fdInput.value.replace(',', '.')) || 0;
+            var declined = !!(fdBonus && bonusDeclined());
+            var est = wwWelcome.estimate(v);
+            var A = wwWelcome.C.CUR;
+            /* Когда ступень сгорает без бонуса, спрашиваем об этом прямо:
+               после подтверждения вернуть её нельзя. */
+            var burns = !est.none && (declined || est.belowMin);
             wwConfirm({
               title: T('Confirm the deposit'),
-              text: T('Top up the balance by {sum}?', { sum: money(v) }),
+              text: burns
+                ? T('Top up the balance by {sum}? Bonus {n} of 3 will be used up without a bonus.',
+                    { sum: money(v), n: est.tier })
+                : T('Top up the balance by {sum}?', { sum: money(v) }),
               ok: T('Deposit'),
-              cancel: T('Cancel')
+              cancel: T('Cancel'),
+              danger: burns
             }, function (yes) {
               if (!yes) return;
               withPending(fdSubmit, {
@@ -16486,12 +16976,30 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 busy: T('Sending'),
                 done: function () {
                   setBalance(getBalance() + v);
+                  var res = wwWelcome.applyDeposit(v, { declined: declined, ref: 'fd-' + Date.now() });
                   if (txAdd) txAdd('deposit', '+' + money(v), 'Card · Visa', 'done');
                   fdInput.value = ''; fdSync();
                   if (typeof wdSync === 'function') wdSync();
+
+                  var rows = [[T('Deposit amount'), money(v)]];
+                  var b = res.bonus, cta = T('View Bonus'), go = 'bonus';
+                  if (res.kind === 'granted-active' || res.kind === 'granted-queued') {
+                    rows.push([T('Bonus amount'), money(b.bonusAmount, A)]);
+                    rows.push([T('Bonus status'),
+                               T(res.kind === 'granted-active' ? 'Active' : 'In queue')]);
+                    rows.push([T('Wagering required'), money(b.wagerRequired, A)]);
+                    rows.push([res.kind === 'granted-active' ? T('Expires on') : T('Activate before'),
+                               fdDate(res.kind === 'granted-active' ? b.expiresAt : b.queueDeadline)]);
+                  } else if (res.kind === 'missed-min' || res.kind === 'declined') {
+                    rows.push([T('Bonus amount'), money(0, A)]);
+                    rows.push([T('Bonus status'), T('Bonus {n} of 3 is used up.', { n: res.tier })]);
+                  } else {
+                    cta = T('Back to wallet'); go = 'back';
+                  }
                   stScreen('ok', '\u2713', T('Deposit credited'),
                     T('{sum} is already on the balance — the games are open.', { sum: money(v) }),
-                    T('Back to wallet'), 'back');
+                    cta, go);
+                  stRows(rows);
                 }
               });
             });
@@ -17387,6 +17895,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           /* Выбор бонуса и «запомнить способ» — тоже введённое, а не настройка */
           if (window.wwBonus) window.wwBonus('selected');
           if (window.wwSaved) window.wwSaved(false);
+          /* Ступени пакета и отыгрыш лежат в localStorage — без сброса
+             они достались бы следующему входу. */
+          wwWelcome.reset();
           var swSave = document.querySelector('.dp__save');
           if (swSave) swSave.setAttribute('aria-checked', 'true');
           stClear();
@@ -19799,6 +20310,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         }
         if (e.target.closest('.states__reset')) {
           stClear();
+          /* Пакет бонусов держит состояние в localStorage: без сброса каждый
+             следующий пункт витрины наследовал бы ступени предыдущего. */
+          wwWelcome.reset();
           panel.querySelectorAll('.states__item').forEach(function (b) { b.classList.remove('is-current'); });
         }
         if (e.target.closest('.states__x')) panel.hidden = true;
