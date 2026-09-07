@@ -3085,54 +3085,39 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bn__empty .bn__btn { margin-top: 8px; }
 
 /* ── карточка доступного бонуса ── */
-/* ── Приветственный пакет: три ступени ──
-   Секция во всю ширину сетки .bn__list, внутри своя сетка из трёх карточек.
-   Суммарного процента здесь нет намеренно: 350% читается как процент на один
-   депозит, а это три отдельных бонуса. */
-.bnwp { grid-column: 1 / -1; box-sizing: border-box; display: flex; flex-direction: column;
-        gap: 16px; padding: 20px; border-radius: 18px; background: var(--chrome);
-        border: 1px solid rgba(255, 255, 255, .12);
-        box-shadow: 0 8px 24px -16px rgba(0, 0, 0, .8); }
-.bnwp[hidden] { display: none; }
-.bnwp__head { display: flex; align-items: flex-start; gap: 20px; }
-.bnwp__intro { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.bnwp__intro h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif;
-                  font-weight: 700; font-size: 20px; line-height: 26px; color: var(--white); }
-.bnwp__intro p { margin: 0; font-family: 'Work Sans', sans-serif;
-                 font-size: 13px; line-height: 18px; color: var(--dp-label); }
-.bnwp__meta { font-family: 'Work Sans', sans-serif; font-weight: 600;
-              font-size: 13px; line-height: 18px; color: var(--white); }
-.bnwp__head .bn__btn { flex: none; }
-.bnwp__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+/* ── Приветственный пакет ──
+   Обычная карточка предложения, как соседние. Внутри — три клетки ступеней:
+   350% одним числом показывать нельзя, это три разных бонуса со своими
+   потолками, и игрок прочтёт суммарный процент как процент на один депозит. */
+.bncard--wp .bncard__body { gap: 12px; }
+.bnwp__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .bnwp__step { box-sizing: border-box; display: flex; flex-direction: column;
-              align-items: center; gap: 4px; padding: 16px 12px; border-radius: 14px;
-              text-align: center; background: rgba(0, 0, 0, .16);
-              box-shadow: inset 0 0 0 1px #252d56;
+              align-items: center; gap: 2px; padding: 10px 6px; border-radius: 10px;
+              text-align: center; background: rgba(0, 0, 0, .18);
+              box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
               transition: box-shadow .16s ease, background-color .16s ease; }
-/* Текущая ступень выделена акцентом, будущие приглушены, пропущенная
-   помечена — иначе три одинаковые плитки не говорят, где игрок сейчас. */
-.bnwp__step[data-st="AVAILABLE"] { background: rgba(7, 148, 255, .1);
+/* Текущая ступень выделена, будущие приглушены, пропущенная помечена —
+   иначе три одинаковые клетки не говорят, где игрок сейчас. */
+.bnwp__step[data-st="AVAILABLE"] { background: rgba(7, 148, 255, .12);
                                    box-shadow: inset 0 0 0 1px var(--primary); }
-.bnwp__step[data-st="LOCKED"] { opacity: .55; }
-.bnwp__step[data-st="MISSED"] { box-shadow: inset 0 0 0 1px rgba(229, 72, 77, .45); }
-.bnwp__no { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
-            color: var(--dp-label); }
-.bnwp__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 26px; line-height: 32px; color: var(--white); }
-.bnwp__cap { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
-             color: var(--modal-text-1, #bbc6cd); }
-.bnwp__st { margin-top: 4px; }
+.bnwp__step[data-st="LOCKED"] { opacity: .5; }
+.bnwp__step[data-st="MISSED"] { box-shadow: inset 0 0 0 1px rgba(229, 72, 77, .4); }
+.bnwp__pct { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 16px; line-height: 20px; color: var(--white); }
+/* «up to 150,000» в клетку одной строкой не влезает, а резать сумму
+   многоточием нельзя — это деньги. Пусть переносится на две строки. */
+.bnwp__cap { font-style: normal; font-family: 'Work Sans', sans-serif;
+             font-size: 11px; line-height: 14px; color: var(--dp-label);
+             text-wrap: balance; }
+.bnwp__st { font-style: normal; margin-top: 2px;
+            font-family: 'Work Sans', sans-serif; font-weight: 600;
+            font-size: 10px; line-height: 13px; letter-spacing: .04em;
+            text-transform: uppercase; color: var(--dp-label); }
+.bnwp__step[data-st="AVAILABLE"] .bnwp__st { color: var(--primary); }
+.bnwp__step[data-st="MISSED"] .bnwp__st { color: #ff8e91; }
+.bnwp__terms { margin: 0; font-family: 'Work Sans', sans-serif;
+               font-size: 12px; line-height: 16px; color: var(--dp-label); }
 .bn__tag--bad { background: rgba(229, 72, 77, .16); color: #ff8e91; }
-.bnwp__go { width: 100%; margin-top: 8px; }
-.bnwp__go[hidden] { display: none; }
-.bnwp__terms { margin: 0; padding-top: 14px; border-top: 1px solid var(--white-06);
-               font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 17px;
-               color: var(--dp-label); }
-@media (max-width: 1279px) {
-  .bnwp__grid { grid-template-columns: minmax(0, 1fr); }
-  .bnwp__head { flex-direction: column; gap: 12px; }
-  .bnwp__head .bn__btn { width: 100%; }
-}
 
 .bncard { box-sizing: border-box; height: 100%; display: flex; flex-direction: column;
           border-radius: 16px; overflow: hidden; background: var(--card, #181e3b);
@@ -7465,45 +7450,6 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               </div>
               <p class="bnpromo__note" hidden role="status"></p>
             </div>
-            <!-- Приветственный пакет: ТРИ отдельные ступени, а не один бонус
-                 на 350%. Суммарный процент здесь показывать нельзя — игрок
-                 прочтёт его как процент на один депозит. В шапке только
-                 суммарный потолок и оговорка «за три депозита». -->
-            <section class="bnwp" data-wp>
-              <header class="bnwp__head">
-                <div class="bnwp__intro">
-                  <h2>Casino Welcome Package</h2>
-                  <p>Three deposits, three bonuses. Each one is a separate offer with its own cap.</p>
-                  <span class="bnwp__meta"></span>
-                </div>
-                <button class="bn__btn" type="button" data-bn-terms="welcomepack">View Full Terms</button>
-              </header>
-              <div class="bnwp__grid">
-                <article class="bnwp__step" data-step="1">
-                  <span class="bnwp__no">Bonus 1 of 3</span>
-                  <b class="bnwp__pct">+100%</b>
-                  <span class="bnwp__cap"></span>
-                  <em class="bn__tag bnwp__st"></em>
-                  <button class="bn__btn bn__btn--primary bnwp__go" type="button" data-wp-go>Deposit</button>
-                </article>
-                <article class="bnwp__step" data-step="2">
-                  <span class="bnwp__no">Bonus 2 of 3</span>
-                  <b class="bnwp__pct">+120%</b>
-                  <span class="bnwp__cap"></span>
-                  <em class="bn__tag bnwp__st"></em>
-                  <button class="bn__btn bn__btn--primary bnwp__go" type="button" data-wp-go>Deposit</button>
-                </article>
-                <article class="bnwp__step" data-step="3">
-                  <span class="bnwp__no">Bonus 3 of 3</span>
-                  <b class="bnwp__pct">+130%</b>
-                  <span class="bnwp__cap"></span>
-                  <em class="bn__tag bnwp__st"></em>
-                  <button class="bn__btn bn__btn--primary bnwp__go" type="button" data-wp-go>Deposit</button>
-                </article>
-              </div>
-              <p class="bnwp__terms"></p>
-            </section>
-
             <!-- Старая карточка «100% up to 500 USDT» противоречит пакету:
                  первый депозит описан теперь ступенью 1. Оставлена скрытой,
                  чтобы витрина состояний и промокод на неё не спотыкались. -->
@@ -7521,17 +7467,38 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 </div>
               </div>
             </article>
-            <article class="bncard" data-key="welcome" data-days="3">
+            <!-- Приветственный пакет обычной карточкой, как остальные предложения.
+                 Внутри — три ступени отдельными клетками: показывать 350% одним
+                 числом нельзя, это три разных бонуса со своими потолками. -->
+            <article class="bncard bncard--wp" data-key="welcome" data-wp>
               <img loading="lazy" decoding="async" class="bncard__art" src="a/824508be9a.webp" alt="" width="354" height="150">
               <div class="bncard__body">
                 <div class="bncard__tags">
-                  <span class="bn__tag">Free Spins</span><span class="bn__tag">3 days</span>
+                  <span class="bn__tag">Deposit</span><span class="bn__tag bnwp__meta"></span>
                 </div>
-                <h2>Welcome Free Spins</h2>
-                <p>100 Free Spins right after registration, no&nbsp;deposit needed.</p>
+                <h2>Casino Welcome Package</h2>
+                <p>Three deposits, three bonuses. Each one is a separate offer with its&nbsp;own cap.</p>
+                <div class="bnwp__grid">
+                  <span class="bnwp__step" data-step="1">
+                    <b class="bnwp__pct">+100%</b>
+                    <em class="bnwp__cap"></em>
+                    <i class="bnwp__st"></i>
+                  </span>
+                  <span class="bnwp__step" data-step="2">
+                    <b class="bnwp__pct">+120%</b>
+                    <em class="bnwp__cap"></em>
+                    <i class="bnwp__st"></i>
+                  </span>
+                  <span class="bnwp__step" data-step="3">
+                    <b class="bnwp__pct">+130%</b>
+                    <em class="bnwp__cap"></em>
+                    <i class="bnwp__st"></i>
+                  </span>
+                </div>
+                <p class="bnwp__terms"></p>
                 <div class="bncard__foot">
-                  <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
-                  <button class="bn__btn" type="button" data-bn-terms="welcome">View Details</button>
+                  <button class="bn__btn bn__btn--primary" type="button" data-wp-go>Deposit</button>
+                  <button class="bn__btn" type="button" data-bn-terms="welcomepack">View Details</button>
                 </div>
               </div>
             </article>
@@ -19868,26 +19835,27 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         var C = wwWelcome.C, T3 = wwWelcome.TIERS;
         var total = T3.reduce(function (n, t) { return n + t.cap; }, 0);
         wbPack.querySelector('.bnwp__meta').textContent =
-          T('Up to {sum} across three deposits', { sum: wbFmt(total) });
+          T('up to {sum}', { sum: wbFmt(total) });
         wbPack.querySelector('.bnwp__terms').textContent =
-          T('Min {min} · wagering x{mult} · {days} days · Slots 100% · Table Games 5% · Live Dealer 0% · Crash 0% · Sports 0%',
+          T('Min {min} · wagering x{mult} · {days} days', 
             { min: wbFmt(C.MIN_DEPOSIT), mult: C.WAGER, days: C.DAYS });
         wbPack.querySelectorAll('.bnwp__step').forEach(function (el) {
           var n = parseInt(el.dataset.step, 10);
           var t = T3[n - 1];
           var view = wwWelcome.tierView(n);
           el.dataset.st = view;
-          el.querySelector('.bnwp__no').textContent = T('Bonus {n} of 3', { n: n });
           el.querySelector('.bnwp__pct').textContent = T('+{pct}%', { pct: t.pct });
-          el.querySelector('.bnwp__cap').textContent = T('up to {sum}', { sum: wbFmt(t.cap) });
-          var tag = el.querySelector('.bnwp__st');
-          tag.textContent = T({ AVAILABLE: 'Available', LOCKED: 'Locked',
-                                MISSED: 'Missed', USED: 'Used' }[view]);
-          tag.className = 'bn__tag bnwp__st' +
-            (view === 'AVAILABLE' ? ' bn__tag--live' : view === 'MISSED' ? ' bn__tag--bad' : '');
-          /* Кнопка только у текущей ступени: перепрыгнуть вперёд нельзя */
-          el.querySelector('.bnwp__go').hidden = view !== 'AVAILABLE';
+          /* В клетке только число: копейки и код валюты не влезают, а валюта
+             уже стоит тегом над карточкой. */
+          el.querySelector('.bnwp__cap').textContent =
+            T('up to {sum}', { sum: String(t.cap).replace(/\B(?=(\d{3})+(?!\d))/g, ',') });
+          el.querySelector('.bnwp__st').textContent =
+            T({ AVAILABLE: 'Now', LOCKED: 'Locked', MISSED: 'Missed', USED: 'Used' }[view]);
         });
+        /* Когда все три ступени израсходованы, предлагать нечего */
+        var done = !wwWelcome.nextTier();
+        wbPack.querySelector('[data-wp-go]').hidden = done;
+        wbPack.hidden = done;
         bnSync();
       };
       wwWelcome.on(wbPaint);
@@ -19977,7 +19945,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           var mine = bnView.querySelector('.bncard[data-key="welcome"]');
           if (code === 'WELCOME' && mine && !mine.hidden) {
             note.classList.add('is-ok');
-            note.textContent = T('Code applied \u2014 Welcome Free Spins is ready to receive.');
+            note.textContent = T('Code applied \u2014 the Welcome Package is ready.');
             inp.value = '';
           } else {
             note.classList.add('is-bad');
