@@ -62,9 +62,6 @@
      этот тон 5.89. Заливки и канты остаются на #e5484d, там контраст
      текста ни при чём. */
   --bad-text: #ff6b70;
-  /* Награды: очки, VIP, бонусные начисления. Отдельный слот, чтобы
-     не занимать под них зелёный (успех) и синий (интерактив). */
-  --reward: #d8b24a;
 
   /* Поверхности и канты. Раньше лежали литералами прямо в правилах —
      из-за этого правка палитры красила меньше половины страницы.
@@ -4865,12 +4862,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__cur-sum, .pm__bonus-sum { flex: 1 0 0; min-width: 0; text-align: left;
                                font-family: 'Instrument Sans', sans-serif; font-weight: 700;
                                color: var(--white); font-variant-numeric: tabular-nums; }
-.pm__cur-sum { font-size: 20px; line-height: 26px; }
-.pm__bonus-sum { font-size: 16px; line-height: 22px; }
+/* Оба числа одного кегля: очки — такой же баланс, как деньги, и разный
+   размер читался как «это не совсем баланс». */
+.pm__cur-sum, .pm__bonus-sum { font-size: 20px; line-height: 26px; }
 .pm__cur-chev { display: block; flex: none; opacity: .7; transition: opacity .16s ease; }
-.pm__bonus-ico { display: grid; place-items: center; flex: none; width: 24px; height: 24px;
-                 border-radius: 50%; border: 1px solid var(--reward); color: var(--reward);
-                 font-family: 'Instrument Sans', sans-serif; font-weight: 700; font-size: 10px; }
+.pm__bonus-ico { display: block; flex: none; width: 26px; height: 26px; object-fit: contain; }
 .pm__top, .pm__swap { flex: none; min-width: 124px; height: 56px; padding: 0 18px;
                       border: 0; border-radius: 14px; cursor: pointer;
                       font-family: 'Instrument Sans', sans-serif; font-weight: 700;
@@ -13490,7 +13486,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
     </div>
     <div class="pm__money">
       <div class="pm__bonus">
-        <span class="pm__bonus-ico" aria-hidden="true">CP</span>
+        <!-- Монета очков картинкой: нарисованный кружок с буквами не читался
+             наградой и выпадал из ряда с флагом валюты слева. -->
+        <img loading="lazy" decoding="async" class="pm__bonus-ico" src="a/3183da3c56.webp" alt="" width="26" height="26">
         <b class="pm__bonus-sum">0</b>
       </div>
       <button class="pm__swap" type="button" data-pm-go="bonuses">Exchange</button>
