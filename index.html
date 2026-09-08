@@ -14709,7 +14709,6 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
-      'Exchange {sum}': 'Обменять {sum}',
       'Available after the wagering is complete': 'Будет доступно после отыгрыша',
       'Bonus moved to your balance.': 'Бонус переведён на баланс.',
       'Wagered {done} of {goal}': 'Отыграно {done} из {goal}',
@@ -15413,7 +15412,6 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
-      'Exchange {sum}': 'Canjear {sum}',
       'Available after the wagering is complete': 'Disponible cuando termines el rollover',
       'Bonus moved to your balance.': 'El bono pasó a tu saldo.',
       'Wagered {done} of {goal}': 'Apostado {done} de {goal}',
@@ -16198,12 +16196,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
     if (swap) {
       swap.disabled = !!b && !done;
       swap.dataset.claim = done ? '1' : '';
-      /* Сумма на кнопке — без кода валюты: с ним подпись растягивала кнопку
-         так, что блоку бонуса не хватало места и число ломалось на две строки.
-         Валюта всё равно названа строкой ниже. */
-      swap.textContent = done
-        ? T('Exchange {sum}', { sum: sum(done.released).replace(' ' + cur, '') })
-        : T('Exchange');
+      /* Подпись одна на все состояния: сумма и так стоит строкой ниже, а на
+         кнопке она растягивала её и ломала число бонуса на две строки. */
+      swap.textContent = T('Exchange');
       swap.title = (b && !done)
         ? T('Available after the wagering is complete')
         : '';
