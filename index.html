@@ -4866,7 +4866,12 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    размер читался как «это не совсем баланс». */
 .pm__cur-sum, .pm__bonus-sum { font-size: 20px; line-height: 26px; }
 .pm__cur-chev { display: block; flex: none; opacity: .7; transition: opacity .16s ease; }
-.pm__bonus-ico { display: block; flex: none; width: 26px; height: 26px; object-fit: contain; }
+/* Коробка остаётся 26 — как у флага, иначе текст в двух строках начнётся
+   с разных мест. А сам диск занимает лишь 85% картинки (остальное прозрачные
+   поля и лучи), поэтому монету увеличиваем масштабом: на раскладку он не
+   влияет, и золотой круг встаёт ровно в размер флага. */
+.pm__bonus-ico { display: block; flex: none; width: 26px; height: 26px;
+                 object-fit: contain; transform: scale(1.18); }
 .pm__top, .pm__swap { flex: none; min-width: 124px; height: 56px; padding: 0 18px;
                       border: 0; border-radius: 14px; cursor: pointer;
                       font-family: 'Instrument Sans', sans-serif; font-weight: 700;
