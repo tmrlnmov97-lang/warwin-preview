@@ -4840,6 +4840,35 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__x:hover img { opacity: 1; }
 .pm__x:active { background: var(--white-16); }
 
+/* Подпись над рядом: без неё «0.00» и «0» — два числа без объяснения,
+   и какое из них деньги, а какое очки, приходилось угадывать по значку. */
+.pm__lab { margin-bottom: -4px;
+           font-family: 'Work Sans', sans-serif; font-weight: 500;
+           font-size: 11px; line-height: 14px; letter-spacing: .06em;
+           text-transform: uppercase; color: var(--dp-label, #8b93a8); }
+
+/* Состояние отыгрыша под бонусом */
+.pm__wager { display: flex; flex-direction: column; gap: 6px;
+             margin-top: -4px; padding: 10px 14px 12px; border-radius: 12px;
+             background: rgba(0, 0, 0, .18); }
+.pm__wager[hidden] { display: none; }
+.pm__wager-top { display: flex; align-items: baseline; gap: 8px; }
+.pm__wager-text { flex: 1 0 0; min-width: 0;
+                  font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 16px;
+                  color: var(--modal-text-1, #bbc6cd); }
+.pm__wager-pct { flex: none; font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                 font-size: 13px; line-height: 16px; color: var(--white);
+                 font-variant-numeric: tabular-nums; }
+.pm__wager-track { display: block; height: 5px; border-radius: 999px; overflow: hidden;
+                   background: var(--white-10); }
+/* Полоса едет плавно: отыгрыш идёт ставками, и прыжок ширины читается сбоем */
+.pm__wager-track i { display: block; width: 0; height: 100%; border-radius: 999px;
+                     background: var(--primary);
+                     transition: width .5s cubic-bezier(.22, .61, .36, 1); }
+@media (prefers-reduced-motion: reduce) { .pm__wager-track i { transition: none; } }
+.pm__wager-note { font-family: 'Work Sans', sans-serif; font-size: 11px; line-height: 15px;
+                  color: var(--dp-label, #8b93a8); }
+
 /* Баланс и очки: поле слева, действие справа. Строки не равны по весу —
    деньги это то, за чем панель открывают, а очки лежат рядом справочно.
    Поэтому верхняя строка выше и с крупным числом, нижняя — обычная. */
@@ -13481,6 +13510,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
     <!-- Баланс и валюта те же, что в шапке: счёт один, показывать его двумя
          независимыми блоками нельзя — разъедутся. -->
+    <span class="pm__lab">Balance</span>
     <div class="pm__money">
       <button class="pm__cur" type="button" data-lang-none data-pm-cur aria-haspopup="listbox">
         <img loading="lazy" decoding="async" class="pm__coin-flag" src="a/21c85c9e5d.svg" alt="" width="24" height="24">
@@ -13489,6 +13519,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       </button>
       <button class="pm__top" type="button" data-pm-go="wallet">Deposit</button>
     </div>
+    <span class="pm__lab">Bonus</span>
     <div class="pm__money">
       <div class="pm__bonus">
         <!-- Монета очков картинкой: нарисованный кружок с буквами не читался
@@ -13497,6 +13528,16 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         <b class="pm__bonus-sum">0</b>
       </div>
       <button class="pm__swap" type="button" data-pm-go="bonuses">Exchange</button>
+    </div>
+    <!-- Состояние отыгрыша. Пока активного бонуса нет, блок скрыт: пустая
+         полоса на нуле читалась бы как «бонус есть, но не двигается». -->
+    <div class="pm__wager" data-pm-wager hidden>
+      <div class="pm__wager-top">
+        <span class="pm__wager-text"></span>
+        <b class="pm__wager-pct"></b>
+      </div>
+      <span class="pm__wager-track"><i></i></span>
+      <span class="pm__wager-note"></span>
     </div>
 
     <nav class="pm__menu">
@@ -14644,6 +14685,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── Касса: сохранение способа и бонус первого депозита ── */
       'Remember this payment method': 'Запомнить способ оплаты',
       'Payment method': 'Способ оплаты',
+      'Balance': 'Баланс',
+      'Wagered {done} of {goal}': 'Отыграно {done} из {goal}',
+      'Left to wager {sum} · {n} days left': 'Осталось отыграть {sum} · {n} дн.',
       'First deposit bonus': 'Бонус первого депозита',
       'up to {sum} + {fs} FS': 'до {sum} + {fs} FS',
       'No bonus': 'Без бонуса',
@@ -15339,6 +15383,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       /* ── Caja: guardar el método y bono del primer depósito ── */
       'Remember this payment method': 'Recordar este método de pago',
       'Payment method': 'Método de pago',
+      'Balance': 'Saldo',
+      'Wagered {done} of {goal}': 'Apostado {done} de {goal}',
+      'Left to wager {sum} · {n} days left': 'Falta apostar {sum} · {n} días',
       'First deposit bonus': 'Bono del primer depósito',
       'up to {sum} + {fs} FS': 'hasta {sum} + {fs} FS',
       'No bonus': 'Sin bono',
@@ -16051,6 +16098,34 @@ body.cur-open .wallet__balance { background: var(--white-16); }
 
     return api;
   })();
+
+  /* ── Состояние отыгрыша в панели профиля ──
+     Игрок видит бонусный баланс, но не видит, сколько ещё нужно отыграть,
+     чтобы он стал деньгами. Без этого числа бонус выглядит как обычный
+     счёт, которым нельзя воспользоваться без объяснения причины. */
+  var pmWagerPaint = function () {
+    var box = document.querySelector('[data-pm-wager]');
+    if (!box || typeof wwWelcome === 'undefined') return;
+    var b = wwWelcome.active();
+    box.hidden = !b;
+    if (!b) return;
+    var cur = wwWelcome.C.CUR;
+    var sum = function (v) {
+      return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + cur;
+    };
+    var pct = b.wagerRequired ? Math.min(100, Math.round(b.wagered / b.wagerRequired * 100)) : 0;
+    box.querySelector('.pm__wager-text').textContent =
+      T('Wagered {done} of {goal}', { done: sum(b.wagered), goal: sum(b.wagerRequired) });
+    box.querySelector('.pm__wager-pct').textContent = pct + '%';
+    box.querySelector('.pm__wager-track i').style.width = pct + '%';
+    /* Срок важнее остатка: бонус сгорает по времени, а не по недобору */
+    var left = Math.max(0, Math.ceil((b.expiresAt - Date.now()) / 864e5));
+    box.querySelector('.pm__wager-note').textContent =
+      T('Left to wager {sum} · {n} days left',
+        { sum: sum(Math.max(0, b.wagerRequired - b.wagered)), n: left });
+  };
+  if (typeof wwWelcome !== 'undefined') wwWelcome.on(pmWagerPaint);
+  document.addEventListener('ww:lang', pmWagerPaint);
 
   /* Добавить строку в список транзакций. Присваивается ниже, когда страница
      найдена; касса зовёт её через проверку — без страницы операция просто не
@@ -17973,7 +18048,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         if (open && typeof ntClose === 'function') ntClose();
         pmPop.hidden = !open;
         profBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) popLock(true); else popLock(false);
+        if (open) { pmWagerPaint(); popLock(true); } else popLock(false);
       });
       pmPop.addEventListener('click', function (e) {
         if (e.target.closest('[data-close]')) pmClose();
