@@ -2835,7 +2835,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .vipro__who b { font-family: 'Work Sans', sans-serif; font-weight: 600;
                 font-size: 18px; line-height: 23px; color: var(--white); }
 .vipro__lvl { display: inline-flex; align-items: center; height: 25px; padding: 0 10px;
-              border-radius: 999px; background: #30283c; color: #b15d3c;
+              border-radius: 999px; background: rgba(214, 124, 66, .16); color: #e0a172;
               font-family: 'Work Sans', sans-serif; font-weight: 600;
               font-size: 14px; line-height: 17px; white-space: nowrap; }
 .vipro__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
@@ -2846,6 +2846,11 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .vipro__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
 .vipro__next { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 19px;
                color: var(--dp-label); }
+/* Те же металлы, что у чипов в лестнице: иначе шапка на Captain оставалась
+   бронзовой и спорила с карточкой уровня ниже. */
+.vipro__lvl--captain { background: rgba(159, 182, 217, .16); color: #c8d6ea; }
+.vipro__lvl--general { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
+.vipro__lvl--warlord { background: rgba(7, 148, 255, .18); color: #6bb8ff; }
 .vipro__badge { position: absolute; right: 31px; top: 31px; width: 217px; height: 217px; }
 
 /* Чипы уровней в карточках — металл своего уровня */
@@ -2877,6 +2882,10 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
                   border: 2px solid #333a5c; }
 .vlvl__i.is-now::after { background: var(--primary); border-color: var(--primary);
                          box-shadow: 0 0 0 4px rgba(7, 148, 255, .16); }
+/* Пройденное — залитой точкой без ореола: видно, что ступень позади, но
+   внимание остаётся на текущей. */
+.vlvl__i.is-done::after { background: rgba(7, 148, 255, .45); border-color: rgba(7, 148, 255, .45); }
+.vlvl__i.is-done::before { background: rgba(7, 148, 255, .45); }
 .vlvl__card { box-sizing: border-box; width: 100%; display: flex; flex-direction: column; gap: 10px;
               padding: 18px; border-radius: 16px; background: var(--card, #181e3b);
               border: 1px solid rgba(255, 255, 255, .05); }
@@ -3045,6 +3054,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
           font-size: 32px; line-height: 40px; color: var(--white); }
 .bn__chips { display: flex; gap: 8px; flex-wrap: wrap; }
 .bn__chips[hidden], .bn__body[hidden] { display: none; }
+/* display у чипа и промокода перебивает атрибут hidden, поэтому прячем явно:
+   гостю личные вкладки и поле промокода показывать нечем. */
+.bn__chip[hidden], .bnpromo[hidden] { display: none; }
 .bn__chip { display: flex; align-items: center; height: 40px; padding: 0 18px; cursor: pointer;
             border: 0; border-radius: 999px; background: #272b40; color: var(--muted);
             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
@@ -3076,20 +3088,24 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 /* ── гость: 1471:13193, карточка 1103x282 ── */
-.bn__guest { box-sizing: border-box; display: flex; flex-direction: column; align-items: center;
-             padding: 54px 32px; border-radius: 16px; background: var(--card, #181e3b);
-             text-align: center; }
+/* Полоса-приглашение над списком: карточки гость теперь видит, и заглушка
+   во весь кадр здесь больше не нужна — нужен повод завести аккаунт. */
+.bn__guest { box-sizing: border-box; display: flex; align-items: center; gap: 16px;
+             margin-bottom: 20px; padding: 18px 20px; border-radius: 16px;
+             background: linear-gradient(90deg, rgba(7, 148, 255, .16), rgba(7, 148, 255, .04));
+             border: 1px solid rgba(7, 148, 255, .28); }
 .bn__guest[hidden] { display: none; }
-.bn__guest-ico { display: grid; place-items: center; width: 44px; height: 44px;
-                 border-radius: 12px; background: #282e49; }
-.bn__guest-ico::after { content: ''; width: 24px; height: 24px; background: var(--muted);
-  -webkit-mask: var(--ico-gift) center / contain no-repeat;
-          mask: var(--ico-gift) center / contain no-repeat; }
-.bn__guest b { margin-top: 10px; font-family: 'Work Sans', sans-serif; font-weight: 600;
-               font-size: 18px; line-height: 26px; color: var(--white); }
-.bn__guest > span { margin-top: 10px; font-family: 'Work Sans', sans-serif;
-                    font-size: 14px; line-height: 20px; color: var(--dp-label); }
-.bn__guest-btns { display: flex; gap: 10px; margin-top: 20px; }
+.bn__guest-ico { display: grid; place-items: center; flex: none; width: 44px; height: 44px;
+                 border-radius: 50%; background: rgba(7, 148, 255, .18); }
+.bn__guest-ico::after { content: ''; width: 24px; height: 24px; background: var(--primary);
+                        -webkit-mask: var(--ico-gift) center / contain no-repeat;
+                                mask: var(--ico-gift) center / contain no-repeat; }
+.bn__guest-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.bn__guest b { font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 18px; line-height: 24px; color: var(--white); }
+.bn__guest-text span { font-family: 'Work Sans', sans-serif; font-size: 15px;
+                       line-height: 21px; color: var(--muted); }
+.bn__guest-btns { display: flex; flex: none; gap: 10px; }
 
 /* ── списки вкладок ── */
 .bn__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;
@@ -3291,7 +3307,9 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
      раздвигала страницу на 360. */
   .bnpromo__input { flex: 1 1 auto; width: auto; min-width: 0; }
   .bnpromo__note { padding-left: 0; }
-  .bn__guest { padding: 36px 20px; }
+  /* На узком экране полоса складывается в столбец: три колонки в 390 не живут */
+  .bn__guest { flex-wrap: wrap; padding: 16px; }
+  .bn__guest-text { flex-basis: calc(100% - 60px); }
   .bn__guest-btns { width: 100%; }
   .bn__guest-btns .bn__btn { flex: 1 1 0; padding: 0; }
   .bnact { padding: 18px; gap: 16px; }
@@ -5975,6 +5993,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
    проекта, чтобы её работа не пропала при выкладке. */
 .lg:not(.is-reg) .lg__terms { display: none; }
 
+/* VIP — клуб по собственной игре: гостю на странице нечего смотреть, поэтому
+   и вход в неё не показываем, чтобы не вести в тупик с формой входа. */
+body:not(.is-authed) [data-auth-only] { display: none !important; }
+
 </style>
 </head>
 <body>
@@ -6223,7 +6245,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
             <img class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='8.1' cy='4.4' r='2.7'/%3E%3Ccircle cx='15.9' cy='4.4' r='2.7'/%3E%3Crect x='2.4' y='6.6' width='19.2' height='4.2' rx='1.3'/%3E%3Cpath d='M4 12.2h16v7.2a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19.4Z'/%3E%3Crect x='10.4' y='3.6' width='3.2' height='17.4' rx='.8' fill='%23222a45'/%3E%3C/svg%3E" alt="">
             <span class="side-item__label">Bonuses</span>
           </div>
-          <div class="side-item">
+          <div class="side-item" data-auth-only>
             <img class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Cpath d='M2.4 6.9 6.6 11.6 12 4l5.4 7.6 4.2-4.7v10.6a1.6 1.6 0 0 1-1.6 1.6H4A1.6 1.6 0 0 1 2.4 17.5Z'/%3E%3C/svg%3E" alt="">
             <span class="side-item__label">VIP Club</span>
           </div>
@@ -7510,14 +7532,19 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           </div>
         </div>
 
-        <!-- 1471:13193 — гость: карточка 1103x282, поля 54 сверху и снизу -->
+        <!-- 1471:13193 — гостю: раньше здесь стояла заглушка вместо списка, и
+             человек до регистрации не видел ни одного предложения. Теперь это
+             полоса-приглашение НАД карточками: сами бонусы видны всем, ради
+             них сюда и заходят, а закрыто только личное. -->
         <div class="bn__guest" hidden>
           <span class="bn__guest-ico" aria-hidden="true"></span>
-          <b>Bonuses are available after sign in</b>
-          <span>Current offers are in Promotions</span>
+          <div class="bn__guest-text">
+            <b>Sign up and take the welcome package</b>
+            <span>Three deposits, three bonuses — the first one lands on your first deposit.</span>
+          </div>
           <div class="bn__guest-btns">
-            <button class="bn__btn bn__btn--primary" type="button" data-bn-go="signin">Sign in</button>
-            <button class="bn__btn" type="button" data-bn-go="promo">Promotions</button>
+            <button class="bn__btn bn__btn--primary" type="button" data-bn-go="signup">Sign up</button>
+            <button class="bn__btn" type="button" data-bn-go="signin">Log in</button>
           </div>
         </div>
 
@@ -13102,7 +13129,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               <ul class="fnav__list">
                 <li><button class="fnav__link" type="button" data-fgo="view:bonuses">Bonuses</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:promo">Promotions</button></li>
-                <li><button class="fnav__link" type="button" data-fgo="view:vip">VIP Club</button></li>
+                <li data-auth-only><button class="fnav__link" type="button" data-fgo="view:vip">VIP Club</button></li>
                 <li><button class="fnav__link" type="button">Affiliate Program</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:about">About Us</button></li>
               </ul>
@@ -13262,7 +13289,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         <img loading="lazy" decoding="async" class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='8.1' cy='4.4' r='2.7'/%3E%3Ccircle cx='15.9' cy='4.4' r='2.7'/%3E%3Crect x='2.4' y='6.6' width='19.2' height='4.2' rx='1.3'/%3E%3Cpath d='M4 12.2h16v7.2a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19.4Z'/%3E%3Crect x='10.4' y='3.6' width='3.2' height='17.4' rx='.8' fill='%23222a45'/%3E%3C/svg%3E" alt="" width="20" height="20">
         <span class="br__row-label">Bonuses</span>
       </button>
-      <button class="br__row" type="button">
+      <button class="br__row" type="button" data-auth-only>
         <img loading="lazy" decoding="async" class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Cpath d='M2.4 6.9 6.6 11.6 12 4l5.4 7.6 4.2-4.7v10.6a1.6 1.6 0 0 1-1.6 1.6H4A1.6 1.6 0 0 1 2.4 17.5Z'/%3E%3C/svg%3E" alt="" width="20" height="20">
         <span class="br__row-label">VIP Club</span>
       </button>
@@ -14709,6 +14736,15 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      'Sign up and take the welcome package': 'Зарегистрируйтесь и заберите приветственный пакет',
+      'Three deposits, three bonuses — the first one lands on your first deposit.':
+        'Три депозита, три бонуса — первый приходит на первый же депозит.',
+      'Sign up': 'Регистрация',
+      'Log in': 'Войти',
+      'Next level: {name}': 'Следующий уровень: {name}',
+      'Top level reached': 'Верх лестницы — выше уровней нет',
+      'VIP Club is for signed-in players — the menu entry is hidden.':
+        'VIP-клуб — для вошедших: пункта в меню у гостя нет.',
       'Available after the wagering is complete': 'Будет доступно после отыгрыша',
       'Bonus moved to your balance.': 'Бонус переведён на баланс.',
       'Wagered {done} of {goal}': 'Отыграно {done} из {goal}',
@@ -15412,6 +15448,15 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      'Sign up and take the welcome package': 'Registrate y llevate el paquete de bienvenida',
+      'Three deposits, three bonuses — the first one lands on your first deposit.':
+        'Tres depósitos, tres bonos: el primero llega con tu primer depósito.',
+      'Sign up': 'Registrarse',
+      'Log in': 'Entrar',
+      'Next level: {name}': 'Siguiente nivel: {name}',
+      'Top level reached': 'Nivel máximo alcanzado',
+      'VIP Club is for signed-in players — the menu entry is hidden.':
+        'El Club VIP es para jugadores con cuenta: el acceso no se muestra.',
       'Available after the wagering is complete': 'Disponible cuando termines el rollover',
       'Bonus moved to your balance.': 'El bono pasó a tu saldo.',
       'Wagered {done} of {goal}': 'Apostado {done} de {goal}',
@@ -17813,8 +17858,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
     /* Страницы, которые нельзя показывать гостю: там чужие данные. Раньше
        showView переключал что угодно без проверки, и по ссылке из подвала
        неавторизованный открывал профиль с чужим адресом и документами.
-       Бонусы в список не входят: у них свой экран приглашения войти. */
-    var NEEDS_AUTH = { profile: 1, history: 1, transactions: 1 };
+       Бонусы в список не входят: их витрина открыта всем, ради неё и
+       регистрируются. VIP входит: там нет ничего, кроме собственного уровня
+       игрока, и гостю страница показала бы чужой прогресс. */
+    var NEEDS_AUTH = { profile: 1, history: 1, transactions: 1, vip: 1 };
     var showView = function (key) {
       if (NEEDS_AUTH[key] && !document.body.classList.contains('is-authed')) {
         var enter = document.querySelector('.header-actions .btn--ghost');
@@ -17844,7 +17891,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         el.classList.toggle('is-active',
           chipView[(el.textContent || '').trim().toLowerCase()] === key);
       });
-      /* Гостю на бонусах показываем приглашение войти, а не пустые вкладки */
+      /* На бонусах гостю оставляем витрину предложений и убираем личные вкладки */
       if (key === 'bonuses' && bnSync) bnSync();
       /* Переход по ссылке — это новая страница, а не прокрутка к её началу:
          из подвала длинного документа плавный скролл летел через весь текст. */
@@ -20034,11 +20081,27 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       var bnChipsBox = bnView.querySelector('.bn__chips');
       var bnBody = bnView.querySelector('.bn__body');
 
+      var bnPromoBox = bnView.querySelector('.bnpromo');
       bnSync = function () {
         var guest = !document.body.classList.contains('is-authed');
+        /* Гостю показываем сами предложения: это витрина, и прятать её значит
+           прятать главный повод завести аккаунт. Закрыто только личное —
+           вкладки со своими бонусами и промокод, которому некуда лечь. */
         bnGuest.hidden = !guest;
+        /* Строку вкладок гостю прячем целиком: одна вкладка — не переключатель */
         bnChipsBox.hidden = guest;
-        bnBody.hidden = guest;
+        bnBody.hidden = false;
+        if (bnPromoBox) bnPromoBox.hidden = guest;
+        bnChips.forEach(function (c) {
+          var only = c.dataset.bn === 'available';
+          c.hidden = guest && !only;
+          /* Гость стоит на «Доступных» всегда: своих бонусов у него нет.
+             Вкладку переключаем здесь, а не через bnShow — тот зовёт bnSync. */
+          if (!guest) return;
+          c.classList.toggle('is-active', only);
+          c.setAttribute('aria-selected', only ? 'true' : 'false');
+        });
+        if (guest) bnLists.forEach(function (l) { l.hidden = l.dataset.bnset !== 'available'; });
         bnLists.forEach(function (l) {
           var items = l.querySelectorAll('.bnwp:not([hidden]), .bncard:not([hidden]),' +
                                          '.bnact:not([hidden]):not([data-tpl]),' +
@@ -20163,6 +20226,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         var b = c.querySelector('[data-bn-act], [data-bn-goactive]');
         var tag = c.querySelector('.bn__tag');
         c.classList.toggle('is-taken', on);
+        /* Приветственный пакет живёт своей кнопкой «Депозит» и статусами
+           ступеней: переключать ему «Получить / Открыть в Active» нечего,
+           и витрина на этой карточке падала. */
+        if (!b || !tag) return;
         if (on) {
           tag.textContent = T('In progress');
           tag.classList.add('bn__tag--live');
@@ -20180,6 +20247,12 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         }
       };
 
+      /* Формы входа и регистрации живут в шапке; отсюда их только зовут */
+      var bnAuthForm = function (want) {
+        var btn = [].slice.call(document.querySelectorAll('.header-actions .btn'))
+          .filter(function (b) { return (b.textContent || '').trim().toLowerCase() === want; })[0];
+        if (btn) btn.click();
+      };
       bnView.addEventListener('click', function (e) {
         var t = e.target.closest('button');
         if (!t) return;
@@ -20191,10 +20264,19 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           if (card) { showView('promo'); card.click(); }
           return;
         }
-        if (t.dataset.bnGo === 'signin') {
-          var lgBtn = [].slice.call(document.querySelectorAll('.header-actions .btn'))
-            .filter(function (b) { return (b.textContent || '').trim().toLowerCase() === 'login'; })[0];
-          if (lgBtn) lgBtn.click();
+        if (t.dataset.bnGo === 'signin' || t.dataset.bnGo === 'signup') {
+          bnAuthForm(t.dataset.bnGo === 'signup' ? 'register' : 'login');
+          return;
+        }
+        /* Кнопка пакета вела в никуда: обработчика у неё не было вовсе.
+           Гостю — регистрация, вошедшему — касса на депозите, ради которого
+           пакет и берут. */
+        if (t.hasAttribute('data-wp-go')) {
+          if (!document.body.classList.contains('is-authed')) { bnAuthForm('register'); return; }
+          var dep = document.querySelector('.wallet__deposit');
+          if (dep) dep.click();
+          var seg = document.querySelector('.dp__seg-btn[data-seg="deposit"]');
+          if (seg && !seg.classList.contains('is-active')) seg.click();
           return;
         }
         if (t.dataset.bnGo === 'promo') { showView('promo'); return; }
@@ -20230,6 +20312,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
            и сама показывает, что уже активна. Так видно и что произошло, и где
            бонус теперь искать — кнопка ведёт на вкладку Active. */
         if (t.hasAttribute('data-bn-act')) {
+          /* Гостю бонус класть некуда: сначала аккаунт, иначе «Receive» молча
+             заводил бы отыгрыш на несуществующем балансе. */
+          if (!document.body.classList.contains('is-authed')) { bnAuthForm('register'); return; }
           var c = t.closest('.bncard');
           bnActFill(c);
           bnView.querySelector('.bnact').hidden = false;
@@ -20336,6 +20421,45 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         });
       }
 
+
+      /* ── VIP: уровень, прогресс, лестница ──
+         Раньше блок был прибит гвоздями: Soldier, 0.00 % и «Next level: Silver»,
+         хотя уровня Silver в лестнице нет вовсе. Держим уровень в одном месте,
+         чтобы страница умела показать всю дорожку, а не один кадр. */
+      var VIP_LVL = [
+        { key: 'soldier', name: 'Soldier',       next: 'Captain' },
+        { key: 'captain', name: 'Captain',       next: 'General' },
+        { key: 'general', name: 'General',       next: 'Warlord' },
+        { key: 'warlord', name: 'Warlord I\u2013III', next: '' }
+      ];
+      var vipAt = 0, vipPct = 0;
+      var vipPaint = function (i, pct) {
+        vipAt = i; vipPct = pct;
+        if (!vipView) return;
+        var lv = VIP_LVL[i] || VIP_LVL[0];
+        var top = !lv.next;
+        if (top) pct = 100;
+        /* Имя берём из панели профиля: в разметке стояло слово username */
+        var who = document.querySelector('.pm__name');
+        vipView.querySelector('.vipro__who b').textContent =
+          (who && who.textContent.trim()) || 'username';
+        var chip = vipView.querySelector('.vipro__lvl');
+        chip.textContent = lv.name;
+        chip.className = 'vipro__lvl vipro__lvl--' + lv.key;
+        vipView.querySelector('.vipro__pct').textContent = pct.toFixed(2) + ' %';
+        vipView.querySelector('.vipro__track i').style.width = pct + '%';
+        vipView.querySelector('.vipro__next').textContent =
+          top ? T('Top level reached') : T('Next level: {name}', { name: lv.next });
+        vipView.querySelector('.vipro__badge').src = 'assets/vip-lvl-' + lv.key + '.png';
+        /* Пройденные ступени гасим отдельно от текущей: «здесь я» стояло на
+           первой карточке при любом уровне, и лестница ничего не сообщала. */
+        [].slice.call(vipView.querySelectorAll('.vlvl__i')).forEach(function (li, n) {
+          li.classList.toggle('is-now', n === i);
+          li.classList.toggle('is-done', n < i);
+        });
+      };
+      vipPaint(0, 0);
+      document.addEventListener('ww:lang', function () { vipPaint(vipAt, vipPct); });
 
       var STATES = [
         ['Кошелёк · ввод', [
@@ -20678,6 +20802,26 @@ body.cur-open .wallet__balance { background: var(--white-16); }
                 : what === 'history' ? 'history' : 'available';
         bnView.querySelector('[data-bn="' + tab + '"]').click();
       };
+      /* ── VIP-клуб ──
+         Клуб закрыт для гостя, поэтому каждое состояние сначала вводит игрока
+         в аккаунт: иначе showView увёл бы на форму входа вместо страницы. */
+      var vipAt2 = function (i, pct) {
+        document.body.classList.add('is-authed');
+        vipPaint(i, pct);
+        showView('vip');
+      };
+      STATES.push(['VIP-клуб', [
+        ['Soldier · только вошёл', function () { vipAt2(0, 0); }],
+        ['Soldier · почти Captain', function () { vipAt2(0, 78.4); }],
+        ['Captain · вторая ступень', function () { vipAt2(1, 34.5); }],
+        ['General · есть менеджер', function () { vipAt2(2, 12.8); }],
+        ['Warlord · верх лестницы', function () { vipAt2(3, 100); }],
+        ['Гость · клуба в меню нет', function () {
+          document.body.classList.remove('is-authed');
+          showView('home');
+          notify(T('VIP Club is for signed-in players — the menu entry is hidden.'));
+        }]
+      ]]);
       STATES.push(['Бонусы', [
         ['Гость', function () { bnState('guest'); }],
         ['Пусто', function () { bnState('empty'); }],
