@@ -4866,8 +4866,26 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                      background: var(--primary);
                      transition: width .5s cubic-bezier(.22, .61, .36, 1); }
 @media (prefers-reduced-motion: reduce) { .pm__wager-track i { transition: none; } }
-.pm__wager-note { font-family: 'Work Sans', sans-serif; font-size: 11px; line-height: 15px;
-                  color: var(--dp-label, #8b93a8); }
+/* 11px было мелко для строки, которую читают ради конкретного числа */
+.pm__wager-note { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+                  color: var(--modal-text-1, #bbc6cd); }
+
+/* Отыгрыш закончен — блок меняет тон с нейтрального на зелёный: это уже не
+   ход дела, а готовые деньги. */
+.pm__wager[data-state="done"] { background: rgba(0, 201, 40, .1);
+                                box-shadow: inset 0 0 0 1px rgba(0, 201, 40, .35); }
+.pm__wager[data-state="done"] .pm__wager-track i { background: var(--register); }
+.pm__wager[data-state="done"] .pm__wager-note { color: var(--white); }
+.pm__wager-take { width: 100%; margin-top: 2px; height: 40px; padding: 0 14px;
+                  border: 0; border-radius: 10px; cursor: pointer;
+                  background: var(--register); color: #06210d;
+                  font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                  font-size: 14px; line-height: 18px;
+                  transition: filter .16s ease; }
+.pm__wager-take:hover { filter: brightness(1.07); }
+.pm__wager-take:active { filter: brightness(.95); }
+.pm__wager-take[hidden] { display: none; }
+.pm__wager-take:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 /* Баланс и очки: поле слева, действие справа. Строки не равны по весу —
    деньги это то, за чем панель открывают, а очки лежат рядом справочно.
@@ -13538,6 +13556,9 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       </div>
       <span class="pm__wager-track"><i></i></span>
       <span class="pm__wager-note"></span>
+      <!-- Отыгрыш закончен: бонус можно перевести в деньги. Кнопка появляется
+           только здесь — до этого переводить нечего. -->
+      <button class="pm__wager-take" type="button" data-pm-claim hidden></button>
     </div>
 
     <nav class="pm__menu">
@@ -14686,6 +14707,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Remember this payment method': 'Запомнить способ оплаты',
       'Payment method': 'Способ оплаты',
       'Balance': 'Баланс',
+      'Wagering complete': 'Отыгрыш выполнен',
+      '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
+      'Move {sum} to balance': 'Перевести {sum} на баланс',
+      'Bonus moved to your balance.': 'Бонус переведён на баланс.',
       'Wagered {done} of {goal}': 'Отыграно {done} из {goal}',
       'Left to wager {sum} · {n} days left': 'Осталось отыграть {sum} · {n} дн.',
       'First deposit bonus': 'Бонус первого депозита',
@@ -15384,6 +15409,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Remember this payment method': 'Recordar este método de pago',
       'Payment method': 'Método de pago',
       'Balance': 'Saldo',
+      'Wagering complete': 'Apuesta completada',
+      '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
+      'Move {sum} to balance': 'Pasar {sum} al saldo',
+      'Bonus moved to your balance.': 'El bono pasó a tu saldo.',
       'Wagered {done} of {goal}': 'Apostado {done} de {goal}',
       'Left to wager {sum} · {n} days left': 'Falta apostar {sum} · {n} días',
       'First deposit bonus': 'Bono del primer depósito',
@@ -15819,6 +15848,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               depositAmount: num(b.depositAmount), bonusAmount: num(b.bonusAmount),
               wagerRequired: num(b.wagerRequired), wagered: num(b.wagered),
               bucket: num(b.bucket), maxRelease: num(b.maxRelease), released: num(b.released),
+              collected: !!b.collected,
               createdAt: num(b.createdAt), activatedAt: num(b.activatedAt) || null,
               expiresAt: num(b.expiresAt) || null, queueDeadline: num(b.queueDeadline) || null,
               closedAt: num(b.closedAt) || null,
@@ -15947,6 +15977,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           id: 'wb' + t.tier, tier: t.tier, pct: t.pct, cap: t.cap,
           status: 'CREATED', depositAmount: v, bonusAmount: 0,
           wagerRequired: 0, wagered: 0, bucket: 0, maxRelease: 0, released: 0,
+          collected: false,
           createdAt: Date.now(), activatedAt: null, expiresAt: null,
           queueDeadline: null, closedAt: null, closeReason: ''
         };
@@ -16027,7 +16058,12 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         var over = v > WB.MAX_BET;
         if (over) return { ok: false, reason: 'max-bet', max: WB.MAX_BET };
         b.wagered = Math.min(b.wagerRequired, b.wagered + v * k);
-        b.bucket = Math.max(0, b.bucket - v + v * 0.96);
+        /* Бонусный кошелёк на ставке не меняем. Списывать процент бессмысленно:
+           отыграть нужно тридцать сумм бонуса, так что при любом удержании
+           кошелёк обнулится задолго до конца, и забирать после отыгрыша будет
+           нечего — состояние «отыграл, можно перевести» становится
+           недостижимым. Выигрыши и проигрыши потребовали бы генератора
+           случайных чисел, а он сделал бы прогон неповторяемым. */
         var done = b.wagered >= b.wagerRequired;
         if (done) {
           b.released = Math.min(b.bucket, b.maxRelease);
@@ -16039,6 +16075,24 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         }
         save();
         return { ok: true, bonus: b, added: v * k, contribution: k, completed: done };
+      },
+
+      /* Отыгранный бонус ждёт, пока игрок его заберёт. Раньше сумма
+         считалась и оставалась висеть: статус COMPLETED, деньги нигде. */
+      pendingClaim: function () {
+        for (var i = 0; i < st.bonuses.length; i++) {
+          var b = st.bonuses[i];
+          if (b.status === 'COMPLETED' && b.released > 0 && !b.collected) return b;
+        }
+        return null;
+      },
+      claim: function (id) {
+        var b = byId(id) || api.pendingClaim();
+        if (!b || b.status !== 'COMPLETED' || b.collected || b.released <= 0) return { ok: false };
+        b.collected = true;
+        note('CLAIMED', b);
+        save();
+        return { ok: true, amount: b.released, bonus: b };
       },
 
       active: active,
@@ -16078,8 +16132,11 @@ body.cur-open .wallet__balance { background: var(--white-16); }
               b.queueDeadline = Date.now() + WB.QUEUE_DAYS * DAY;
             } else if (TERMINAL[p.status]) {
               b.closedAt = Date.now();
-              b.bucket = p.status === 'COMPLETED' ? 0 : 0;
-              if (p.status === 'COMPLETED') b.released = Math.min(bonus, b.maxRelease);
+              b.bucket = 0;
+              if (p.status === 'COMPLETED') {
+                b.released = Math.min(bonus, b.maxRelease);
+                b.collected = !!p.collected;
+              }
             } else if (p.status === 'MISSED_MIN_DEPOSIT' || p.status === 'DECLINED') {
               b.bonusAmount = 0; b.wagerRequired = 0; b.bucket = 0; b.maxRelease = 0;
               b.closedAt = Date.now();
@@ -16118,13 +16175,32 @@ body.cur-open .wallet__balance { background: var(--white-16); }
     var sumEl = document.querySelector('.pm__bonus-sum');
     if (sumEl) sumEl.textContent = wwCur.text(wwWelcome.bonusBalance());
 
-    var b = wwWelcome.active();
-    box.hidden = !b;
-    if (!b) return;
     var cur = wwWelcome.C.CUR;
     var sum = function (v) {
       return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + cur;
     };
+    var take = box.querySelector('[data-pm-claim]');
+    var b = wwWelcome.active();
+    var done = wwWelcome.pendingClaim();
+
+    /* Отыгранный и ещё не забранный бонус важнее идущего: это готовые деньги,
+       и человек должен увидеть их первым делом, а не в конце списка. */
+    if (done) {
+      box.hidden = false;
+      box.dataset.state = 'done';
+      box.querySelector('.pm__wager-text').textContent = T('Wagering complete');
+      box.querySelector('.pm__wager-pct').textContent = '100%';
+      box.querySelector('.pm__wager-track i').style.width = '100%';
+      box.querySelector('.pm__wager-note').textContent =
+        T('{sum} is ready to move to your balance', { sum: sum(done.released) });
+      take.hidden = false;
+      take.textContent = T('Move {sum} to balance', { sum: sum(done.released) });
+      return;
+    }
+    take.hidden = true;
+    box.hidden = !b;
+    if (!b) return;
+    box.dataset.state = 'run';
     var pct = b.wagerRequired ? Math.min(100, Math.round(b.wagered / b.wagerRequired * 100)) : 0;
     box.querySelector('.pm__wager-text').textContent =
       T('Wagered {done} of {goal}', { done: sum(b.wagered), goal: sum(b.wagerRequired) });
@@ -16136,6 +16212,19 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       T('Left to wager {sum} · {n} days left',
         { sum: sum(Math.max(0, b.wagerRequired - b.wagered)), n: left });
   };
+  /* Перевод в деньги делает панель, а не движок: движок ведёт учёт бонусов
+     и не должен сам трогать кошелёк. */
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('[data-pm-claim]');
+    if (!t || typeof wwWelcome === 'undefined') return;
+    var r = wwWelcome.claim();
+    if (!r.ok) return;
+    wwCur.add(r.amount);
+    pmWagerPaint();
+    if (typeof notify === 'function') {
+      notify(T('Bonus moved to your balance.'), 'ok');
+    }
+  });
   if (typeof wwWelcome !== 'undefined') { wwWelcome.on(pmWagerPaint); pmWagerPaint(); }
   document.addEventListener('ww:lang', pmWagerPaint);
 
