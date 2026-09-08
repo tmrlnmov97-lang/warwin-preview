@@ -15693,7 +15693,12 @@ body.cur-open .wallet__balance { background: var(--white-16); }
        депозит в долларах и бонус в песо. */
     var code = 'ARS';
     var subs = [];
-    var fix = function (v) { return (Math.round(Math.max(0, v) * 100) / 100).toFixed(2); };
+    /* Разделители разрядов: счёт ведётся в песо, и «20000.00» без них
+       не читается. Никто эти строки обратно не разбирает — только пишет. */
+    var fix = function (v) {
+      return (Math.round(Math.max(0, v) * 100) / 100).toFixed(2)
+             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    };
     return {
       codes: ['ARS', 'USD', 'RUB'],
       info: function (c) { return CUR[c] || CUR.USD; },
@@ -16106,6 +16111,13 @@ body.cur-open .wallet__balance { background: var(--white-16); }
   var pmWagerPaint = function () {
     var box = document.querySelector('[data-pm-wager]');
     if (!box || typeof wwWelcome === 'undefined') return;
+
+    /* Бонусные деньги — отдельный слой, в денежный баланс они не попадают:
+       до конца отыгрыша их нельзя вывести. Но показывать их надо, иначе
+       после депозита с бонусом строка «Бонус» оставалась нулём. */
+    var sumEl = document.querySelector('.pm__bonus-sum');
+    if (sumEl) sumEl.textContent = wwCur.text(wwWelcome.bonusBalance());
+
     var b = wwWelcome.active();
     box.hidden = !b;
     if (!b) return;
@@ -16124,7 +16136,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       T('Left to wager {sum} · {n} days left',
         { sum: sum(Math.max(0, b.wagerRequired - b.wagered)), n: left });
   };
-  if (typeof wwWelcome !== 'undefined') wwWelcome.on(pmWagerPaint);
+  if (typeof wwWelcome !== 'undefined') { wwWelcome.on(pmWagerPaint); pmWagerPaint(); }
   document.addEventListener('ww:lang', pmWagerPaint);
 
   /* Добавить строку в список транзакций. Присваивается ниже, когда страница
