@@ -3107,38 +3107,6 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bn__empty .bn__btn { margin-top: 8px; }
 
 /* ── карточка доступного бонуса ── */
-/* ── Бонусы пакета: активный, в очереди, отыгранный ──
-   Карточки узкие и одинаковые: разница между ними — тег, подпись и набор
-   кнопок, а не форма. Так видно, что это один и тот же объект в разных
-   состояниях, а не три разные сущности. */
-.bnq { grid-column: 1 / -1; display: grid;
-       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
-.bnq[hidden] { display: none; }
-.bnq__card { box-sizing: border-box; display: flex; flex-direction: column; gap: 8px;
-             padding: 16px 18px; border-radius: 14px; background: var(--chrome);
-             border: 1px solid rgba(255, 255, 255, .08); }
-.bnq__card[data-kind="active"] { border-color: rgba(7, 148, 255, .45); }
-.bnq__card[data-kind="done"] { border-color: rgba(0, 201, 40, .4);
-                               background: rgba(0, 201, 40, .07); }
-.bnq__head { display: flex; align-items: center; gap: 10px; }
-.bnq__name { flex: 1 0 0; min-width: 0; font-family: 'Work Sans', sans-serif;
-             font-weight: 600; font-size: 14px; line-height: 18px; color: var(--white); }
-.bnq__tag { flex: none; font-style: normal; }
-.bnq__card[data-kind="active"] .bnq__tag { background: rgba(7, 148, 255, .16); color: var(--primary); }
-.bnq__card[data-kind="done"] .bnq__tag { background: rgba(0, 201, 40, .16); color: var(--register); }
-.bnq__sum { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-            font-size: 22px; line-height: 28px; color: var(--white);
-            font-variant-numeric: tabular-nums; }
-.bnq__track { display: block; height: 5px; border-radius: 999px; overflow: hidden;
-              background: var(--white-10); }
-.bnq__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary);
-                transition: width .5s cubic-bezier(.22, .61, .36, 1); }
-@media (prefers-reduced-motion: reduce) { .bnq__track i { transition: none; } }
-.bnq__note { font-family: 'Work Sans', sans-serif; font-size: 12px; line-height: 17px;
-             color: var(--dp-label); }
-.bnq__foot { display: flex; gap: 8px; margin-top: 4px; }
-.bnq__foot .bn__btn { flex: 1 0 0; }
-
 /* ── Приветственный пакет ──
    Обычная карточка предложения, как соседние. Внутри — три клетки ступеней:
    350% одним числом показывать нельзя, это три разных бонуса со своими
@@ -4908,16 +4876,6 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
                                 box-shadow: inset 0 0 0 1px rgba(0, 201, 40, .35); }
 .pm__wager[data-state="done"] .pm__wager-track i { background: var(--register); }
 .pm__wager[data-state="done"] .pm__wager-note { color: var(--white); }
-.pm__wager-take { width: 100%; margin-top: 2px; height: 40px; padding: 0 14px;
-                  border: 0; border-radius: 10px; cursor: pointer;
-                  background: var(--register); color: #06210d;
-                  font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-                  font-size: 14px; line-height: 18px;
-                  transition: filter .16s ease; }
-.pm__wager-take:hover { filter: brightness(1.07); }
-.pm__wager-take:active { filter: brightness(.95); }
-.pm__wager-take[hidden] { display: none; }
-.pm__wager-take:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 /* Баланс и очки: поле слева, действие справа. Строки не равны по весу —
    деньги это то, за чем панель открывают, а очки лежат рядом справочно.
@@ -4970,6 +4928,18 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .pm__swap { background: var(--white-06, rgba(255, 255, 255, .06)); color: var(--white); }
 .pm__swap:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
 .pm__swap:active { background: var(--white-16); }
+/* Пока отыгрыш не закрыт, менять нечего. Кнопка остаётся собой — приглушённой,
+   а не серой: серую заливку уже отклоняли. */
+.pm__swap[disabled] { background: rgba(7, 148, 255, .18); color: rgba(255, 255, 255, .45);
+                      cursor: default; }
+.pm__swap[disabled]:hover { background: rgba(7, 148, 255, .18); }
+/* Готов к обмену — синим, как остальные основные действия. Лайм рядом занят
+   депозитом, а две ярких кнопки в одной строке спорили бы за нажатие. */
+.pm__swap[data-claim="1"] { color: var(--white);
+                            background: linear-gradient(180deg, var(--cta-a), var(--cta-c)); }
+.pm__swap[data-claim="1"]:hover { filter: brightness(1.07); transform: translateY(-1px);
+                                  box-shadow: 0 6px 18px -6px rgba(7, 148, 255, .55); }
+.pm__swap[data-claim="1"]:active { transform: translateY(0); filter: brightness(.96); }
 
 /* Разделы. Волосяная линия отделяет «кто я и сколько у меня» от навигации:
    без неё панель шла одним потоком строк и разница между деньгами и
@@ -7641,11 +7611,6 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           </div>
 
           <div class="bn__list" id="bn-active" role="tabpanel" tabindex="0" data-bnset="active" hidden>
-            <!-- Бонусы приветственного пакета: активный, стоящие в очереди и
-                 отыгранный. Рисуются скриптом из движка — состояние живёт там,
-                 а не в разметке, иначе панель профиля и эта страница разойдутся. -->
-            <div class="bnq" data-bnq></div>
-
             <!-- Отыгрыш. Числа живут в атрибутах, а процент, ширину полосы,
                  остаток и правую панель считает bnActPaint — иначе полоса и
                  подпись под ней могут молча разойтись. -->
@@ -13593,9 +13558,6 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       </div>
       <span class="pm__wager-track"><i></i></span>
       <span class="pm__wager-note"></span>
-      <!-- Отыгрыш закончен: бонус можно перевести в деньги. Кнопка появляется
-           только здесь — до этого переводить нечего. -->
-      <button class="pm__wager-take" type="button" data-pm-claim hidden></button>
     </div>
 
     <nav class="pm__menu">
@@ -14745,24 +14707,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Payment method': 'Способ оплаты',
       'Balance': 'Баланс',
       'Wagering complete': 'Отыгрыш выполнен',
-      'In queue': 'В очереди',
-      'Activate': 'Активировать',
-      'Cancel bonus': 'Отменить бонус',
-      'Keep it': 'Оставить',
-      'Move to balance': 'Перевести на баланс',
-      '{n} days left': '{n} дн. осталось',
-      'Activate within {n} days · wagering {sum}': 'Активировать за {n} дн. · отыгрыш {sum}',
-      'Bonus activated.': 'Бонус активирован.',
-      'Replace the active bonus?': 'Заменить активный бонус?',
-      'Bonus {n} of 3 will be cancelled and its bonus money dropped. Your cash balance is not touched.':
-        'Бонус {n} из 3 будет отменён, его бонусные деньги списаны. Денежный баланс не затрагивается.',
-      'Replace': 'Заменить',
-      'Keep the current one': 'Оставить текущий',
-      'Cancel the bonus?': 'Отменить бонус?',
-      'Bonus money and the wagering done so far will be dropped. Your cash balance is not touched.':
-        'Бонусные деньги и уже сделанный отыгрыш будут списаны. Денежный баланс не затрагивается.',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
-      'Move {sum} to balance': 'Перевести {sum} на баланс',
+      'Exchange': 'Обменять',
+      'Exchange {sum}': 'Обменять {sum}',
+      'Available after the wagering is complete': 'Будет доступно после отыгрыша',
       'Bonus moved to your balance.': 'Бонус переведён на баланс.',
       'Wagered {done} of {goal}': 'Отыграно {done} из {goal}',
       'Left to wager {sum} · {n} days left': 'Осталось отыграть {sum} · {n} дн.',
@@ -15463,24 +15411,10 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       'Payment method': 'Método de pago',
       'Balance': 'Saldo',
       'Wagering complete': 'Apuesta completada',
-      'In queue': 'En cola',
-      'Activate': 'Activar',
-      'Cancel bonus': 'Cancelar el bono',
-      'Keep it': 'Dejarlo',
-      'Move to balance': 'Pasar al saldo',
-      '{n} days left': 'quedan {n} días',
-      'Activate within {n} days · wagering {sum}': 'Activar en {n} días · rollover {sum}',
-      'Bonus activated.': 'Bono activado.',
-      'Replace the active bonus?': '¿Reemplazar el bono activo?',
-      'Bonus {n} of 3 will be cancelled and its bonus money dropped. Your cash balance is not touched.':
-        'El bono {n} de 3 se cancela y su dinero de bono se pierde. Tu saldo en efectivo no se toca.',
-      'Replace': 'Reemplazar',
-      'Keep the current one': 'Dejar el actual',
-      'Cancel the bonus?': '¿Cancelar el bono?',
-      'Bonus money and the wagering done so far will be dropped. Your cash balance is not touched.':
-        'El dinero del bono y el rollover hecho se pierden. Tu saldo en efectivo no se toca.',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
-      'Move {sum} to balance': 'Pasar {sum} al saldo',
+      'Exchange': 'Canjear',
+      'Exchange {sum}': 'Canjear {sum}',
+      'Available after the wagering is complete': 'Disponible cuando termines el rollover',
       'Bonus moved to your balance.': 'El bono pasó a tu saldo.',
       'Wagered {done} of {goal}': 'Apostado {done} de {goal}',
       'Left to wager {sum} · {n} days left': 'Falta apostar {sum} · {n} días',
@@ -16242,15 +16176,38 @@ body.cur-open .wallet__balance { background: var(--white-16); }
        до конца отыгрыша их нельзя вывести. Но показывать их надо, иначе
        после депозита с бонусом строка «Бонус» оставалась нулём. */
     var sumEl = document.querySelector('.pm__bonus-sum');
-    if (sumEl) sumEl.textContent = wwCur.text(wwWelcome.bonusBalance());
+    var ready = wwWelcome.pendingClaim();
+    /* Отыгранный бонус ещё не обменяли — деньги по-прежнему бонусные, и строка
+       не должна обнуляться раньше самого обмена: иначе рядом с нулём висела бы
+       кнопка «Обменять 20 000». */
+    if (sumEl) {
+      sumEl.textContent = wwCur.text(ready ? ready.released : wwWelcome.bonusBalance());
+    }
 
     var cur = wwWelcome.C.CUR;
     var sum = function (v) {
       return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + cur;
     };
-    var take = box.querySelector('[data-pm-claim]');
     var b = wwWelcome.active();
-    var done = wwWelcome.pendingClaim();
+    var done = ready;
+
+    /* Кнопка обмена рядом с бонусом. Три состояния: бонуса нет — она ведёт на
+       страницу бонусов, как раньше; отыгрыш идёт — выключена, менять нечего;
+       отыгрыш закрыт — оживает и показывает сумму, которую переведёт. */
+    var swap = document.querySelector('.pm__swap');
+    if (swap) {
+      swap.disabled = !!b && !done;
+      swap.dataset.claim = done ? '1' : '';
+      /* Сумма на кнопке — без кода валюты: с ним подпись растягивала кнопку
+         так, что блоку бонуса не хватало места и число ломалось на две строки.
+         Валюта всё равно названа строкой ниже. */
+      swap.textContent = done
+        ? T('Exchange {sum}', { sum: sum(done.released).replace(' ' + cur, '') })
+        : T('Exchange');
+      swap.title = (b && !done)
+        ? T('Available after the wagering is complete')
+        : '';
+    }
 
     /* Отыгранный и ещё не забранный бонус важнее идущего: это готовые деньги,
        и человек должен увидеть их первым делом, а не в конце списка. */
@@ -16262,11 +16219,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       box.querySelector('.pm__wager-track i').style.width = '100%';
       box.querySelector('.pm__wager-note').textContent =
         T('{sum} is ready to move to your balance', { sum: sum(done.released) });
-      take.hidden = false;
-      take.textContent = T('Move {sum} to balance', { sum: sum(done.released) });
       return;
     }
-    take.hidden = true;
     box.hidden = !b;
     if (!b) return;
     box.dataset.state = 'run';
@@ -16281,19 +16235,20 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       T('Left to wager {sum} · {n} days left',
         { sum: sum(Math.max(0, b.wagerRequired - b.wagered)), n: left });
   };
-  /* Перевод в деньги делает панель, а не движок: движок ведёт учёт бонусов
-     и не должен сам трогать кошелёк. */
+  /* Обмен делает панель, а не движок: движок ведёт учёт бонусов и кошелёк
+     не трогает. Слушаем на перехвате, чтобы сработать раньше делегированного
+     [data-pm-go] — иначе кнопка успела бы увести на страницу бонусов. */
   document.addEventListener('click', function (e) {
-    var t = e.target.closest && e.target.closest('[data-pm-claim]');
-    if (!t || typeof wwWelcome === 'undefined') return;
+    var t = e.target.closest && e.target.closest('.pm__swap');
+    if (!t || t.dataset.claim !== '1' || typeof wwWelcome === 'undefined') return;
+    e.preventDefault();
+    e.stopPropagation();
     var r = wwWelcome.claim();
     if (!r.ok) return;
     wwCur.add(r.amount);
     pmWagerPaint();
-    if (typeof notify === 'function') {
-      notify(T('Bonus moved to your balance.'), 'ok');
-    }
-  });
+    if (typeof notify === 'function') notify(T('Bonus moved to your balance.'), 'ok');
+  }, true);
   if (typeof wwWelcome !== 'undefined') { wwWelcome.on(pmWagerPaint); pmWagerPaint(); }
   document.addEventListener('ww:lang', pmWagerPaint);
 
@@ -20091,7 +20046,7 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         bnBody.hidden = guest;
         bnLists.forEach(function (l) {
           var items = l.querySelectorAll('.bnwp:not([hidden]), .bncard:not([hidden]),' +
-                                         '.bnq__card, .bnact:not([hidden]):not([data-tpl]),' +
+                                         '.bnact:not([hidden]):not([data-tpl]),' +
                                          '.bnhist__row:not(.bnhist__row--head):not([hidden])');
           var e = l.querySelector('.bn__empty');
           if (e) e.hidden = !!items.length;
@@ -20189,103 +20144,8 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         wbPack.hidden = done;
         bnSync();
       };
-      /* ── Бонусы пакета на вкладке «Active» ──
-         Активный, стоящие в очереди и отыгранный. Одновременно активен ровно
-         один: следующий активируется вручную, и если один уже идёт — только
-         с заменой, о которой спрашиваем отдельно. */
-      var bnqBox = bnView.querySelector('[data-bnq]');
-      var bnqSum = function (v) {
-        return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + wwWelcome.C.CUR;
-      };
-      var bnqDays = function (ts) {
-        return Math.max(0, Math.ceil((ts - Date.now()) / 864e5));
-      };
-      var bnqPaint = function () {
-        if (!bnqBox) return;
-        var list = [];
-        var done = wwWelcome.pendingClaim();
-        if (done) list.push({ b: done, kind: 'done' });
-        var act = wwWelcome.active();
-        if (act) list.push({ b: act, kind: 'active' });
-        wwWelcome.queued().forEach(function (q) { list.push({ b: q, kind: 'queued' }); });
-
-        bnqBox.innerHTML = '';
-        bnqBox.hidden = !list.length;
-        list.forEach(function (it) {
-          var b = it.b;
-          var card = document.createElement('article');
-          card.className = 'bnq__card';
-          card.dataset.kind = it.kind;
-
-          var head = document.createElement('div');
-          head.className = 'bnq__head';
-          var name = document.createElement('b');
-          name.className = 'bnq__name';
-          name.textContent = T('Bonus {n} of 3', { n: b.tier });
-          var tag = document.createElement('em');
-          tag.className = 'bn__tag bnq__tag';
-          tag.textContent = T(it.kind === 'active' ? 'In progress'
-                            : it.kind === 'queued' ? 'In queue' : 'Wagering complete');
-          head.appendChild(name); head.appendChild(tag);
-          card.appendChild(head);
-
-          var sum = document.createElement('span');
-          sum.className = 'bnq__sum';
-          sum.textContent = bnqSum(it.kind === 'done' ? b.released : b.bonusAmount);
-          card.appendChild(sum);
-
-          if (it.kind === 'active') {
-            var pct = b.wagerRequired ? Math.min(100, Math.round(b.wagered / b.wagerRequired * 100)) : 0;
-            var track = document.createElement('span');
-            track.className = 'bnq__track';
-            var i = document.createElement('i'); i.style.width = pct + '%';
-            track.appendChild(i); card.appendChild(track);
-            var note = document.createElement('span');
-            note.className = 'bnq__note';
-            note.textContent = T('Wagered {done} of {goal}',
-              { done: bnqSum(b.wagered), goal: bnqSum(b.wagerRequired) })
-              + ' · ' + T('{n} days left', { n: bnqDays(b.expiresAt) });
-            card.appendChild(note);
-          } else if (it.kind === 'queued') {
-            var qn = document.createElement('span');
-            qn.className = 'bnq__note';
-            qn.textContent = T('Activate within {n} days · wagering {sum}',
-              { n: bnqDays(b.queueDeadline), sum: bnqSum(b.wagerRequired) });
-            card.appendChild(qn);
-          } else {
-            var dn = document.createElement('span');
-            dn.className = 'bnq__note';
-            dn.textContent = T('{sum} is ready to move to your balance', { sum: bnqSum(b.released) });
-            card.appendChild(dn);
-          }
-
-          var foot = document.createElement('div');
-          foot.className = 'bnq__foot';
-          var mk = function (label, attr, primary) {
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'bn__btn' + (primary ? ' bn__btn--primary' : '');
-            btn.setAttribute(attr, b.id);
-            btn.textContent = label;
-            return btn;
-          };
-          if (it.kind === 'active') foot.appendChild(mk(T('Cancel bonus'), 'data-bnq-cancel', false));
-          if (it.kind === 'queued') {
-            foot.appendChild(mk(T('Activate'), 'data-bnq-activate', true));
-            foot.appendChild(mk(T('Cancel bonus'), 'data-bnq-cancel', false));
-          }
-          if (it.kind === 'done') foot.appendChild(mk(T('Move to balance'), 'data-bnq-claim', true));
-          card.appendChild(foot);
-          bnqBox.appendChild(card);
-        });
-        if (window.WW_I18N && WW_I18N.apply) WW_I18N.apply(bnqBox);
-        bnSync();
-      };
-
       wwWelcome.on(wbPaint);
-      wwWelcome.on(bnqPaint);
       document.addEventListener('ww:lang', wbPaint);
-      document.addEventListener('ww:lang', bnqPaint);
 
       /* Перенос бонуса в отыгрыш: имя, обложка, условия и срок — из карточки */
       var bnActFill = function (c) {
@@ -20343,64 +20203,6 @@ body.cur-open .wallet__balance { background: var(--white-16); }
           return;
         }
         if (t.dataset.bnGo === 'promo') { showView('promo'); return; }
-
-        /* ── Действия над бонусами пакета ── */
-        var act = t.closest('[data-bnq-activate]');
-        if (act) {
-          var id = act.getAttribute('data-bnq-activate');
-          var r = wwWelcome.activate(id);
-          if (r.ok) { bnqPaint(); notify(T('Bonus activated.'), 'ok'); return; }
-          if (r.reason === 'needs-replace') {
-            /* Замена необратима: текущий бонус отменяется, его бонусные деньги
-               списываются. Спрашиваем отдельно и говорим об этом прямо. */
-            wwConfirm({
-              title: T('Replace the active bonus?'),
-              text: T('Bonus {n} of 3 will be cancelled and its bonus money dropped. Your cash balance is not touched.',
-                      { n: r.current.tier }),
-              ok: T('Replace'), cancel: T('Keep the current one'), danger: true
-            }, function (yes) {
-              if (!yes) return;
-              if (wwWelcome.activate(id, { replace: true }).ok) {
-                bnqPaint(); notify(T('Bonus activated.'), 'ok');
-              }
-            });
-          }
-          return;
-        }
-        var can = t.closest('[data-bnq-cancel]');
-        if (can) {
-          var cid = can.getAttribute('data-bnq-cancel');
-          wwConfirm({
-            title: T('Cancel the bonus?'),
-            text: T('Bonus money and the wagering done so far will be dropped. Your cash balance is not touched.'),
-            ok: T('Cancel bonus'), cancel: T('Keep it'), danger: true
-          }, function (yes) {
-            if (!yes) return;
-            wwWelcome.cancel(cid, 'canceled_by_player');
-            bnqPaint();
-          });
-          return;
-        }
-        var clm = t.closest('[data-bnq-claim]');
-        if (clm) {
-          var res = wwWelcome.claim(clm.getAttribute('data-bnq-claim'));
-          if (res.ok) {
-            wwCur.add(res.amount);
-            bnqPaint();
-            notify(T('Bonus moved to your balance.'), 'ok');
-          }
-          return;
-        }
-
-        /* «Deposit» на ступени пакета ведёт прямо в кассу на фиатный депозит:
-           ступень выдаётся только по подтверждённому платежу. */
-        if (t.hasAttribute('data-wp-go')) {
-          var dep = document.querySelector('.wallet__deposit');
-          if (dep) dep.click();
-          var fiat = document.querySelector('[data-method="fiat"]');
-          if (fiat && !fiat.classList.contains('is-active')) fiat.click();
-          return;
-        }
 
         /* Промокод: пустое поле и неизвестный код — разные ответы, иначе
            кнопка выглядит сломанной */
@@ -20486,7 +20288,6 @@ body.cur-open .wallet__balance { background: var(--white-16); }
       }
 
       if (wbPack) wbPaint();
-      bnqPaint();
       bnSync();
     }
 
@@ -20790,6 +20591,55 @@ body.cur-open .wallet__balance { background: var(--white-16); }
         ['Повторный деп · карты нет', function () {
           bonusAt('hidden');
           if (window.wwSaved) window.wwSaved(false); }]
+      ]]);
+      /* ── Бонус · отыгрыш ──
+         Полосу отыгрыша в интерфейсе двигать нечем: ставок на страницах нет.
+         Поэтому витрина доводит бонус до нужной доли сама, но настоящими
+         вызовами wager() порциями по максимальной ставке — состояние выходит
+         тем же путём, что и в игре, а не подрисованным. */
+      var wagerAt = function (part, opt) {
+        if (typeof wwWelcome === 'undefined') return;
+        opt = opt || {};
+        document.body.classList.add('is-authed');
+        wwWelcome.seed(opt.seed || { bonuses: [
+          { tier: 1, deposit: 20000, status: 'ACTIVE' }
+        ] });
+        var b = wwWelcome.active();
+        if (b && part > 0) {
+          var goal = b.wagerRequired * part;
+          /* Предохранитель от вечного цикла: доля может не сойтись копейка
+             в копейку, и условие «меньше цели» осталось бы верным навсегда. */
+          for (var i = 0; i < 4000; i++) {
+            var cur = wwWelcome.active();
+            if (!cur || cur.wagered >= goal) break;
+            if (!wwWelcome.wager(Math.min(wwWelcome.C.MAX_BET, goal - cur.wagered), 'slots').ok) break;
+          }
+        }
+        /* Панель профиля — единственное место, где видно и бонус, и полосу,
+           и кнопку обмена. Без неё пункт витрины менял бы то, чего не видно. */
+        var pop = document.getElementById('profile-menu');
+        var btn = document.querySelector('.authed__btn:not(.authed__btn--bell)');
+        /* Следующим тиком: клик по пункту витрины ещё всплывает, и обработчик
+           «нажали мимо панели» закрыл бы её сразу после открытия. */
+        setTimeout(function () { if (pop && pop.hidden && btn) btn.click(); }, 0);
+      };
+      STATES.push(['Бонус · отыгрыш', [
+        ['Бонус получен · 0%', function () { wagerAt(0); }],
+        ['Отыграно половина', function () { wagerAt(0.5); }],
+        ['Отыграно полностью · обмен открыт', function () { wagerAt(1); }],
+        ['Бонус обменян', function () {
+          wagerAt(0, { seed: { bonuses: [
+            { tier: 1, deposit: 20000, status: 'COMPLETED', collected: true }
+          ] } });
+          /* Деньги уже в кошельке — иначе обмен выглядел бы как пропажа бонуса */
+          if (typeof wwCur !== 'undefined') wwCur.add(20000);
+        }],
+        ['Бонус истёк · обменивать нечего', function () {
+          wagerAt(0, { seed: { bonuses: [
+            { tier: 1, deposit: 20000, status: 'EXPIRED', wagered: 180000 }
+          ] } });
+        }],
+        ['Бонуса нет · обмен ведёт в бонусы', function () { wagerAt(0, { seed: {} }); }]
       ]]);
       STATES.push(['Верификация · исход', [
         ['Документы на проверке', function () {
