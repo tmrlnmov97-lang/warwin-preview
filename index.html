@@ -2244,12 +2244,11 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .hero .hero__copy--authed .hero__title { margin: 0; width: 368px; font-size: 40px;
                                            line-height: 36px; font-weight: 500;
                                            color: #fff; }
-  /* 1647:19538 — 20/18, две строки ровно 36 */
-  /* Отрицательные поля базового правила гасили компенсацию капительной
-     высоты у гостевого баннера; здесь интерлиньяж уже даёт ровные 72 и 36,
-     и поля только съедали бы зазоры. */
+  /* 1647:19538 — кегль 20, интерлиньяж 120%: на 90% строки слипались.
+     Отрицательные поля базового правила гасили компенсацию капительной
+     высоты у гостевого баннера — здесь они только съедали бы зазоры. */
   .hero .hero__copy--authed .hero__sub { margin: 0; width: 360px; font-size: 20px;
-                                         line-height: 18px; font-weight: 400;
+                                         line-height: 1.2; font-weight: 400;
                                          color: #dcdcdc; }
   /* 1647:19641 — у беттингового баннера копи-блок и обе строки по 342 */
   .hero .hero__copy--soc { width: 342px; }
@@ -2651,7 +2650,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
      разметка одна на три языка. */
   .mslide .hero__sub { width: 160px; margin: 0;
                        font-family: 'Instrument Sans', sans-serif; font-weight: 500;
-                       font-size: 14px; line-height: 14px; color: #eaeaea; }
+                       font-size: 14px; line-height: 1.2; color: #eaeaea; }
   /* 1647:19977 — у беттингового баннера заголовок 266, подпись 148 */
   .mslide .hero__copy--soc .hero__title { width: 266px; }
   .mslide .hero__copy--soc .hero__sub { width: 148px; }
