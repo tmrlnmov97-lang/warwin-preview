@@ -2226,11 +2226,15 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .hero__copy--mob-authed { display: none; }
   /* 1187:15585 — 360, 1187:15586 — 372, цвет #dcdcdc вместо акцентного */
   .hero .hero__copy--authed .hero__title { width: 360px; }
-  .hero .hero__copy--authed .hero__sub { width: 420px; color: #dcdcdc; }
+  /* Подпись держим в 340: в макете она стоит двумя строками, а на 420 первая
+     строка доезжала до арта справа и упиралась в подарки. */
+  .hero .hero__copy--authed .hero__sub { width: 340px; color: #dcdcdc; }
   /* 1186:15020 — у баннера Soccer копи-блок 342, а не 368 */
-  .hero .hero__copy--narrow .hero__title { width: 342px; }
   /* 1187:15587 — кнопка 114x40, тот же радиус, но синяя */
-  .hero .hero__cta--join { width: 114px; background: var(--primary); }
+  /* Ширина была прибита под «Join now»: «Присоединиться» упиралось в края.
+     Кнопка теперь тянется по подписи и не уже 114. */
+  .hero .hero__cta--join { width: auto; min-width: 114px; padding: 0 20px;
+                           background: var(--primary); }
   .hero .hero__cta--join:hover  { background: var(--primary-hover, #2da9ff); }
   .hero .hero__cta--join:active { background: var(--primary-active, #0680dd); }
   /* 904:1982 — стрелки только после входа, в правом нижнем углу, отступы
@@ -6417,41 +6421,28 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
              баннер входа отделён от гостевого. -->
         <div class="hero__slides">
           <div class="hslide is-current">
-            <!-- 1187:15482 — баннер главной после входа (904:1821) -->
-            <img class="hero__bg hero__bg--authed" src="a/8fa09f7715.webp" alt="" data-node-id="1187:15482">
-            <div class="hero__copy hero__copy--authed" data-node-id="1187:15583">
+            <!-- 1647:19434 — приветственный пакет -->
+            <img class="hero__bg hero__bg--authed" src="a/c04edfeafe.webp" alt="">
+            <div class="hero__copy hero__copy--authed">
               <div class="hero__text">
-                <h1 class="hero__title" data-node-id="1187:15585">20 FREE SPINS WAITING FOR YOU</h1>
-                <p class="hero__sub" data-node-id="1187:15586">20 free spins on&nbsp;Gates of&nbsp;Olympus 1000</p>
+                <h1 class="hero__title">TRIPLE WELCOME PACKAGE</h1>
+                <p class="hero__sub">UP&nbsp;TO&nbsp;350% ON&nbsp;YOUR FIRST THREE DEPOSITS</p>
               </div>
               <div class="hero__row">
-                <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15587" data-fgo="auth:reg">Join now</button>
+                <button class="hero__cta hero__cta--join" type="button" data-fgo="view:bonuses">Join now</button>
               </div>
             </div>
           </div>
           <div class="hslide">
-            <!-- 1186:14477 -->
-            <img class="hero__bg hero__bg--authed" src="a/516b5f9a52.webp" alt="" data-node-id="1186:14477">
-            <div class="hero__copy hero__copy--authed" data-node-id="1187:15705">
+            <!-- 1647:19541 — беттинг, без предложения -->
+            <img class="hero__bg hero__bg--authed" src="a/825eb8e950.webp" alt="">
+            <div class="hero__copy hero__copy--authed">
               <div class="hero__text">
-                <h1 class="hero__title" data-node-id="1187:15707">WAR ARENA TOURNAMENT</h1>
-                <p class="hero__sub" data-node-id="1187:15708">UP&nbsp;TO&nbsp;20.000$ PRIZE now!</p>
+                <h1 class="hero__title">SOCCER NIGHT BET&amp;WIN</h1>
+                <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY MATCH, EVERY DAY</p>
               </div>
               <div class="hero__row">
-                <button class="hero__cta hero__cta--join" type="button" data-node-id="1187:15709" data-fgo="auth:reg">Join now</button>
-              </div>
-            </div>
-          </div>
-          <div class="hslide">
-            <!-- 1186:14919 — копи-блок 342, а не 368 -->
-            <img class="hero__bg hero__bg--authed" src="a/bc2a6c63b4.webp" alt="" data-node-id="1186:14919">
-            <div class="hero__copy hero__copy--authed hero__copy--narrow" data-node-id="1186:15020">
-              <div class="hero__text">
-                <h1 class="hero__title" data-node-id="1186:15022">SOCCER PARTY BET&amp;WIN</h1>
-                <p class="hero__sub" data-node-id="1186:15023">WIN UP&nbsp;TO $500</p>
-              </div>
-              <div class="hero__row">
-                <button class="hero__cta hero__cta--join" type="button" data-node-id="1186:15024" data-fgo="auth:reg">Join now</button>
+                <button class="hero__cta hero__cta--join" type="button" data-fgo="view:sport">Join now</button>
               </div>
             </div>
           </div>
@@ -6481,34 +6472,24 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       <!-- 920:31062 — баннеры после входа на мобильной: лента со свайпом,
            под ней точки (920:31068). На десктопе своя карусель выше. -->
       <div class="hero__mslides">
-        <article class="mslide" data-node-id="920:31062">
-          <img class="mslide__art" src="a/e8baa7a321.webp" alt="">
+        <article class="mslide" data-node-id="1647:19648">
+          <img class="mslide__art" src="a/640fe88b75.webp" alt="">
           <div class="hero__copy hero__copy--mob-authed">
             <div class="hero__text">
-              <h2 class="hero__title">FREE SPINS GIVEAWAY</h2>
-              <p class="hero__sub">20 FREE SPINS ON&nbsp;FIRE IN&nbsp;GET OF&nbsp;OLYMPUS</p>
+              <h2 class="hero__title">TRIPLE WELCOME PACKAGE</h2>
+              <p class="hero__sub">UP&nbsp;TO&nbsp;350% ON&nbsp;YOUR FIRST THREE DEPOSITS</p>
             </div>
-            <button class="hero__cta hero__cta--join" type="button" data-fgo="auth:reg">Join now</button>
+            <button class="hero__cta hero__cta--join" type="button" data-fgo="view:bonuses">Join now</button>
           </div>
         </article>
-        <article class="mslide">
-          <img class="mslide__art" src="a/3a28766704.webp" alt="">
+        <article class="mslide" data-node-id="1647:19873">
+          <img class="mslide__art" src="a/9231d9800b.webp" alt="">
           <div class="hero__copy hero__copy--mob-authed">
             <div class="hero__text">
-              <h2 class="hero__title">WAR ARENA TOURNAMENT</h2>
-              <p class="hero__sub">UP&nbsp;TO&nbsp;20.000$ PRIZE now!</p>
+              <h2 class="hero__title">SOCCER NIGHT BET&amp;WIN</h2>
+              <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY MATCH, EVERY DAY</p>
             </div>
-            <button class="hero__cta hero__cta--join" type="button" data-fgo="auth:reg">Join now</button>
-          </div>
-        </article>
-        <article class="mslide">
-          <img class="mslide__art" src="a/73fa5913c9.webp" alt="">
-          <div class="hero__copy hero__copy--mob-authed">
-            <div class="hero__text">
-              <h2 class="hero__title">SOCCER PARTY BET&amp;WIN</h2>
-              <p class="hero__sub">WIN UP&nbsp;TO $500</p>
-            </div>
-            <button class="hero__cta hero__cta--join" type="button" data-fgo="auth:reg">Join now</button>
+            <button class="hero__cta hero__cta--join" type="button" data-fgo="view:sport">Join now</button>
           </div>
         </article>
       </div>
@@ -14421,15 +14402,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'MMA': 'ММА',
 
       /* ── баннеры и герой ── */
-      '20 FREE SPINS WAITING FOR YOU': '20 ФРИСПИНОВ ЖДУТ ВАС',
-      '20 FREE SPINS ON FIRE IN GET OF OLYMPUS': '20 ФРИСПИНОВ В GATES OF OLYMPUS',
-      'FREE SPINS GIVEAWAY': 'РАЗДАЧА ФРИСПИНОВ',
       '100% CASINO BONUS': 'БОНУС 100% В КАЗИНО',
       '+100% up to $500 and 200 free spins': '+100% до $500 и 200 фриспинов',
-      'WIN UP TO $500': 'ВЫИГРАЙ ДО $500',
-      'UP TO 20.000$ PRIZE now!': 'ПРИЗ ДО 20 000$ прямо сейчас!',
-      'WAR ARENA TOURNAMENT': 'ТУРНИР WAR ARENA',
-      'SOCCER PARTY BET&WIN': 'SOCCER PARTY: СТАВЬ И ВЫИГРЫВАЙ',
       'BUY BONUS NOW!': 'КУПИ БОНУС!',
       'Buy Bonus Buys': 'Покупка бонусов',
       'Before You Play': 'Перед игрой',
@@ -14666,7 +14640,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         'Бонус 100% до 150 AZN на первый успешный депозит.',
       'Play 50 spins of 1.00 AZN on Gates of Olympus — get 20 Free Spins.':
         'Сделайте 50 спинов по 1.00 AZN в Gates of Olympus — получите 20 фриспинов.',
-      '20 free spins on Gates of Olympus 1000': '20 фриспинов в Gates of Olympus 1000',
 
       /* ── VIP ── */
       'Your VIP progress': 'Ваш VIP-прогресс',
@@ -14907,6 +14880,11 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      /* ── Баннеры после входа (макет 1647:19434 и 1647:19541) ── */
+      'TRIPLE WELCOME PACKAGE': 'ТРОЙНОЙ БОНУС НОВИЧКАМ',
+      'UP TO 350% ON YOUR FIRST THREE DEPOSITS': 'ДО 350% НА ПЕРВЫЕ ТРИ ДЕПОЗИТА',
+      'SOCCER NIGHT BET&WIN': 'ФУТБОЛЬНАЯ НОЧЬ СТАВЬ&ВЫИГРЫВАЙ',
+      'LIVE ODDS ON EVERY MATCH, EVERY DAY': 'ЖИВЫЕ КОЭФФИЦИЕНТЫ НА КАЖДЫЙ МАТЧ',
       /* ── Витрина бонусов по макету 1377:18464 ── */
       'All': 'Все',
       'Referral': 'Рефералы',
@@ -15195,15 +15173,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'MMA': 'MMA',
 
       /* ── баннеры и герой ── */
-      '20 FREE SPINS WAITING FOR YOU': '20 GIROS GRATIS TE ESPERAN',
-      '20 FREE SPINS ON FIRE IN GET OF OLYMPUS': '20 GIROS GRATIS EN GATES OF OLYMPUS',
-      'FREE SPINS GIVEAWAY': 'SORTEO DE GIROS GRATIS',
       '100% CASINO BONUS': 'BONO DE CASINO 100%',
       '+100% up to $500 and 200 free spins': '+100% hasta $500 y 200 giros gratis',
-      'WIN UP TO $500': 'GANÁ HASTA $500',
-      'UP TO 20.000$ PRIZE now!': '¡PREMIO DE HASTA 20.000$ ahora!',
-      'WAR ARENA TOURNAMENT': 'TORNEO WAR ARENA',
-      'SOCCER PARTY BET&WIN': 'SOCCER PARTY: APOSTÁ Y GANÁ',
       'BUY BONUS NOW!': '¡COMPRÁ EL BONO!',
       'Buy Bonus Buys': 'Compra de bonos',
       'Before You Play': 'Antes de jugar',
@@ -15440,7 +15411,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         'Bono del 100% hasta 150 AZN en tu primer depósito exitoso.',
       'Play 50 spins of 1.00 AZN on Gates of Olympus — get 20 Free Spins.':
         'Jugá 50 giros de 1,00 AZN en Gates of Olympus y llevate 20 giros gratis.',
-      '20 free spins on Gates of Olympus 1000': '20 giros gratis en Gates of Olympus 1000',
 
       /* ── VIP ── */
       'Your VIP progress': 'Tu progreso VIP',
@@ -15681,6 +15651,11 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      /* ── Banners tras iniciar sesión (diseño 1647:19434 y 1647:19541) ── */
+      'TRIPLE WELCOME PACKAGE': 'TRIPLE PAQUETE DE BIENVENIDA',
+      'UP TO 350% ON YOUR FIRST THREE DEPOSITS': 'HASTA 350% EN TUS TRES PRIMEROS DEPÓSITOS',
+      'SOCCER NIGHT BET&WIN': 'NOCHE DE FÚTBOL APOSTÁ&GANÁ',
+      'LIVE ODDS ON EVERY MATCH, EVERY DAY': 'CUOTAS EN VIVO DEL PRIMER AL ÚLTIMO MINUTO',
       /* ── Vitrina de bonos según el diseño 1377:18464 ── */
       'All': 'Todos',
       'Referral': 'Referidos',
