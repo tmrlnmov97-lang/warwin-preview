@@ -1678,9 +1678,12 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
      содержимое тает, не доезжая до панели, а форма выступа остаётся читаемой. */
   .bnav::before {
     content: ''; position: absolute; left: 0; right: 0; bottom: 0;
-    height: 150px; z-index: -1; pointer-events: none;
+    /* Ровно по высоте панели, не выше: подложка была 150 и на 43px заходила
+       поверх содержимого — при прокрутке это читалось как тень, наезжающая
+       на карточки. Теперь затемняется только вырез под диском. */
+    height: 107px; z-index: -1; pointer-events: none;
     background: linear-gradient(to top,
-      var(--page) 0%, var(--page) 46%, rgba(var(--page-rgb), .82) 66%, rgba(var(--page-rgb), 0) 100%);
+      var(--page) 0%, var(--page) 62%, rgba(var(--page-rgb), .7) 82%, rgba(var(--page-rgb), 0) 100%);
   }
 
   /* Контур нарисован под 402; на других ширинах тянется по горизонтали,
@@ -2238,9 +2241,12 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
      интерлиньяж 36, а не «normal». С normal блок вырастал на 20 и кнопка
      уезжала к нижнему краю. */
   /* Переносы стоят в самой строке: в макете они на своих местах, а поймать их
-     шириной нельзя — Figma рисует Cora подстановкой, метрики другие. */
+     шириной нельзя — Figma рисует Cora подстановкой, метрики другие.
+     pre, а не pre-line: WebKit под pre-line отдаёт переносу отдельную пустую
+     строку, подпись становилась трёхстрочной и кнопка упиралась в нижний край.
+     Автопереноса тут и не нужно — боксы обжаты по тексту. */
   .hero .hero__copy--authed .hero__title,
-  .hero .hero__copy--authed .hero__sub { white-space: pre-line; }
+  .hero .hero__copy--authed .hero__sub { white-space: pre; }
   /* Ширина — по тексту, как в макете: там бокс обжат по содержимому и в каждом
      языке свой (368 в английском, 375 и 422 в русском). Жёсткие 368 и 342 резали
      «СТАВЬ&ВЫИГРЫВАЙ» на третью строку, и она уезжала на арт. */
@@ -2646,7 +2652,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .mslide .hero__text { gap: 8px; width: 100%; }
   /* 1647:19751 — Cora Bold 24, интерлиньяж 1, ширина 236: заголовок нарочно
      шире копи-блока и заходит на арт. */
-  .mslide .hero__title, .mslide .hero__sub { white-space: pre-line; }
+  .mslide .hero__title, .mslide .hero__sub { white-space: pre; }
   .mslide .hero__title { width: max-content; max-width: 300px; margin: 0;
                          font-weight: 700; font-size: 24px; line-height: 1; }
   /* 1647:19752 — Instrument Sans Medium 14/14, ширина 160: две строки ровно
