@@ -114,6 +114,8 @@
   --ico-wide: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.5' y='5.5' width='19' height='13' rx='2.5'/%3E%3C/svg%3E");
   --ico-fav: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20.3 4.6 13a4.6 4.6 0 1 1 6.5-6.5l.9.9.9-.9A4.6 4.6 0 1 1 19.4 13Z'/%3E%3C/svg%3E");
   --ico-share: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-8.5 8.5M18 14v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10'/%3E%3C/svg%3E");
+  --ico-lock: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4.5' y='10.5' width='15' height='10' rx='2.5'/%3E%3Cpath d='M8 10.5V7.6a4 4 0 0 1 8 0v2.9'/%3E%3C/svg%3E");
+  --ico-info: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 2.6A9.4 9.4 0 1 0 21.4 12 9.41 9.41 0 0 0 12 2.6Zm0 4a1.35 1.35 0 1 1-1.35 1.35A1.35 1.35 0 0 1 12 6.6Zm1.6 11.1h-3.2v-1.5h.8v-3.6h-.8v-1.5h2.4v5.1h.8Z'/%3E%3C/svg%3E");
 
   /* Типографика */
   --label: 12px;
@@ -3127,34 +3129,119 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
    Обычная карточка предложения, как соседние. Внутри — три клетки ступеней:
    350% одним числом показывать нельзя, это три разных бонуса со своими
    потолками, и игрок прочтёт суммарный процент как процент на один депозит. */
-.bncard--wp .bncard__body { gap: 10px; }
-.bnwp__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.bnwp__step { box-sizing: border-box; display: flex; flex-direction: column;
-              align-items: center; gap: 1px; padding: 8px 4px; border-radius: 10px;
-              text-align: center; background: rgba(0, 0, 0, .18);
-              box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
-              transition: box-shadow .16s ease, background-color .16s ease; }
-/* Текущая ступень выделена, будущие приглушены, пропущенная помечена —
-   иначе три одинаковые клетки не говорят, где игрок сейчас. */
-.bnwp__step[data-st="AVAILABLE"] { background: rgba(7, 148, 255, .12);
-                                   box-shadow: inset 0 0 0 1px var(--primary); }
-.bnwp__step[data-st="LOCKED"] { opacity: .5; }
-.bnwp__step[data-st="MISSED"] { box-shadow: inset 0 0 0 1px rgba(229, 72, 77, .4); }
-.bnwp__pct { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 15px; line-height: 19px; color: var(--white); }
-/* «up to 150,000» в клетку одной строкой не влезает, а резать сумму
-   многоточием нельзя — это деньги. Пусть переносится на две строки. */
-.bnwp__cap { font-style: normal; font-family: 'Work Sans', sans-serif;
-             font-size: 10px; line-height: 13px; color: var(--dp-label);
-             text-wrap: balance; }
-.bnwp__st { font-style: normal; margin-top: 1px;
-            font-family: 'Work Sans', sans-serif; font-weight: 600;
-            font-size: 9px; line-height: 12px; letter-spacing: .04em;
-            text-transform: uppercase; color: var(--dp-label); }
-.bnwp__step[data-st="AVAILABLE"] .bnwp__st { color: var(--primary); }
-.bnwp__step[data-st="MISSED"] .bnwp__st { color: #ff8e91; }
-.bnwp__terms { margin: 0; font-family: 'Work Sans', sans-serif;
-               font-size: 12px; line-height: 16px; color: var(--dp-label); }
+/* ── Приветственный пакет: три ступени тремя карточками ──
+   Ступени открываются по очереди, поэтому у каждой своя карточка со своим
+   состоянием. Цвет идёт лестницей внутри нашей семьи — синий, индиго,
+   фиолетовый: три разных предложения видно сразу, и ни одно не спорит с
+   лаймовой кнопкой депозита. */
+/* auto-fit вместо жёстких трёх колонок: на узком экране ступени встают
+   друг под друга сами, и отдельная точка перелома под них не нужна */
+.bnwp { grid-column: 1 / -1; display: grid; gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.bnwp[hidden] { display: none; }
+.bnwp__c { position: relative; box-sizing: border-box;
+           display: flex; flex-direction: column; align-items: center;
+           /* Место сверху — под сундук: он выходит за верхний край карточки */
+           padding: 58px 18px 18px; border-radius: 18px; overflow: hidden;
+           background: linear-gradient(160deg, #2da9ff, #0663c8);
+           transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+.bnwp__c[data-step="2"] { background: linear-gradient(160deg, #6a8bff, #2f43c9); }
+.bnwp__c[data-step="3"] { background: linear-gradient(160deg, #9a6cf5, #5b2fb8); }
+/* Лучи из-под сундука — тем же приёмом, что в макете: светлое пятно сверху */
+.bnwp__c::before { content: ''; position: absolute; left: 50%; top: -70px;
+                   width: 260px; height: 200px; margin-left: -130px;
+                   background: radial-gradient(closest-side, rgba(255, 255, 255, .5), transparent);
+                   pointer-events: none; }
+.bnwp__c > * { position: relative; }
+/* Монета, а не сундук: в сундук запечён «+100% BONUS», и на ступенях 120
+   и 130 картинка спорила бы с собственной подписью карточки. */
+.bnwp__art { display: block; width: 104px; height: 104px; object-fit: contain;
+             margin-top: -46px; margin-bottom: 4px;
+             filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .38)); }
+.bnwp__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 30px; line-height: 38px; color: #fff; text-align: center; }
+.bnwp__cap { margin-top: 2px; font-family: 'Work Sans', sans-serif; font-size: 14px;
+             line-height: 20px; color: rgba(255, 255, 255, .8); text-align: center; }
+/* Часы: разряды отдельными клетками, иначе цифры прыгают по ширине каждую секунду */
+.bnwp__time { display: inline-flex; align-items: center; gap: 2px; margin-top: 12px;
+              padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, .22);
+              font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+              font-size: 14px; line-height: 20px; color: #fff;
+              font-variant-numeric: tabular-nums; }
+.bnwp__time[hidden] { display: none; }
+.bnwp__time i { font-style: normal; min-width: 20px; text-align: center; }
+.bnwp__time em { font-style: normal; color: rgba(255, 255, 255, .5); }
+.bnwp__go { margin-top: 16px; align-self: stretch; height: 48px; border: 0;
+            border-radius: 12px; cursor: pointer; background: #fff; color: #0e132a;
+            font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 15px; line-height: 20px;
+            transition: filter .16s ease, background-color .16s ease; }
+.bnwp__go:hover:not([disabled]) { filter: brightness(.94); }
+/* Закрытая ступень: замок вместо подписи — в макете так же, и это честнее
+   пустой кнопки, по которой непонятно, сломана она или ждёт своей очереди. */
+.bnwp__go[disabled] { cursor: default; background: rgba(255, 255, 255, .18);
+                      color: rgba(255, 255, 255, .75); }
+.bnwp__c[data-st="LOCKED"] .bnwp__go::after,
+.bnwp__c[data-st="MISSED"] .bnwp__go::after {
+  content: ''; display: inline-block; width: 18px; height: 18px; vertical-align: -4px;
+  background: rgba(255, 255, 255, .8);
+  -webkit-mask: var(--ico-lock) center / contain no-repeat;
+          mask: var(--ico-lock) center / contain no-repeat; }
+/* Закрытая ступень цвет сохраняет: она не потеряна, а ждёт своей очереди,
+   и гасить её значило бы прятать предложение. Гасим только то, чего уже нет. */
+.bnwp__c[data-st="MISSED"], .bnwp__c[data-st="USED"] { filter: saturate(.4) brightness(.7); }
+.bnwp__c[data-st="AVAILABLE"]:hover { transform: translateY(-2px);
+                                      box-shadow: 0 14px 30px -14px rgba(7, 148, 255, .7); }
+/* «i» — только там, где условия ещё можно применить к себе */
+.bnwp__i { position: absolute; right: 14px; top: 62px; width: 24px; height: 24px;
+           display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+           cursor: pointer; background: rgba(255, 255, 255, .28); }
+.bnwp__i::after { content: ''; width: 16px; height: 16px; background: #fff;
+                  -webkit-mask: var(--ico-info) center / contain no-repeat;
+                          mask: var(--ico-info) center / contain no-repeat; }
+.bnwp__i:hover { background: rgba(255, 255, 255, .45); }
+.bnwp__go:focus-visible, .bnwp__i:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ── Окно с условиями ступени ── */
+.bnfo { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center;
+        padding: 20px; }
+.bnfo[hidden] { display: none; }
+.bnfo__scrim { position: absolute; inset: 0; background: rgba(4, 8, 22, .72); }
+.bnfo__card { position: relative; box-sizing: border-box; width: 100%; max-width: 440px;
+              max-height: 86vh; overflow: auto; padding: 26px; border-radius: 18px;
+              background: var(--card, #181e3b);
+              box-shadow: 0 30px 70px -30px rgba(0, 0, 0, .8); }
+.bnfo__x { position: absolute; right: 16px; top: 16px; width: 32px; height: 32px;
+           display: grid; place-items: center; padding: 0; border: 0; border-radius: 10px;
+           cursor: pointer; background: var(--white-06, rgba(255, 255, 255, .06)); }
+.bnfo__x::after { content: ''; width: 14px; height: 14px; background: var(--muted);
+                  -webkit-mask: url(a/0d8f4b7b91.svg) center / contain no-repeat;
+                          mask: url(a/0d8f4b7b91.svg) center / contain no-repeat; }
+.bnfo__x:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
+.bnfo__kicker { display: block; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                font-size: 13px; line-height: 18px; letter-spacing: .04em;
+                text-transform: uppercase; color: var(--primary); }
+.bnfo__title { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+               font-size: 22px; line-height: 29px; color: var(--white); }
+/* Две колонки: слева что, справа сколько — так строки читаются парами */
+.bnfo__list { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 16px;
+              margin: 18px 0 0; }
+.bnfo__list dt { font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 21px;
+                 color: var(--dp-label); }
+.bnfo__list dd { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                 font-size: 15px; line-height: 21px; color: var(--white); text-align: right; }
+.bnfo__note { margin: 16px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+              line-height: 20px; color: var(--muted); }
+.bnfo__ok { width: 100%; margin-top: 20px; }
+/* На узком экране пары встают строками: в две колонки длинная подпись
+   съедала всё место, и значение справа ломалось по одному слову в строку. */
+@media (max-width: 560px) {
+  .bnfo__card { padding: 22px 18px; }
+  .bnfo__list { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .bnfo__list dt { margin-top: 12px; }
+  .bnfo__list dt:first-child { margin-top: 0; }
+  .bnfo__list dd { text-align: left; }
+}
 .bn__tag--bad { background: rgba(229, 72, 77, .16); color: #ff8e91; }
 
 .bncard { box-sizing: border-box; height: 100%; display: flex; flex-direction: column;
@@ -7564,6 +7651,37 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               </div>
               <p class="bnpromo__note" hidden role="status"></p>
             </div>
+            <!-- Приветственный пакет тремя карточками: ступени открываются
+                 по очереди, и клетками внутри одной карточки не было видно,
+                 что доступна ровно одна, а две другие ждут своего депозита.
+                 Проценты, потолки, состояние ступени и общий срок пакета
+                 приходят из движка — в разметке чисел нет. -->
+            <div class="bnwp" data-wp>
+              <article class="bnwp__c" data-step="1">
+                <img loading="lazy" decoding="async" class="bnwp__art" src="a/3183da3c56.webp" alt="" width="104" height="104">
+                <b class="bnwp__pct"></b>
+                <span class="bnwp__cap"></span>
+                <span class="bnwp__time" role="timer" aria-live="off"></span>
+                <button class="bnwp__go" type="button" data-wp-go="1"></button>
+                <button class="bnwp__i" type="button" data-wp-info="1" aria-label="Bonus details"></button>
+              </article>
+              <article class="bnwp__c" data-step="2">
+                <img loading="lazy" decoding="async" class="bnwp__art" src="a/3183da3c56.webp" alt="" width="104" height="104">
+                <b class="bnwp__pct"></b>
+                <span class="bnwp__cap"></span>
+                <span class="bnwp__time" role="timer" aria-live="off"></span>
+                <button class="bnwp__go" type="button" data-wp-go="2"></button>
+                <button class="bnwp__i" type="button" data-wp-info="2" aria-label="Bonus details"></button>
+              </article>
+              <article class="bnwp__c" data-step="3">
+                <img loading="lazy" decoding="async" class="bnwp__art" src="a/3183da3c56.webp" alt="" width="104" height="104">
+                <b class="bnwp__pct"></b>
+                <span class="bnwp__cap"></span>
+                <span class="bnwp__time" role="timer" aria-live="off"></span>
+                <button class="bnwp__go" type="button" data-wp-go="3"></button>
+                <button class="bnwp__i" type="button" data-wp-info="3" aria-label="Bonus details"></button>
+              </article>
+            </div>
             <!-- Старая карточка «100% up to 500 USDT» противоречит пакету:
                  первый депозит описан теперь ступенью 1. Оставлена скрытой,
                  чтобы витрина состояний и промокод на неё не спотыкались. -->
@@ -7578,41 +7696,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                 <div class="bncard__foot">
                   <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
                   <button class="bn__btn" type="button" data-bn-terms="deposit">View Details</button>
-                </div>
-              </div>
-            </article>
-            <!-- Приветственный пакет обычной карточкой, как остальные предложения.
-                 Внутри — три ступени отдельными клетками: показывать 350% одним
-                 числом нельзя, это три разных бонуса со своими потолками. -->
-            <article class="bncard bncard--wp" data-key="welcome" data-wp>
-              <img loading="lazy" decoding="async" class="bncard__art" src="a/824508be9a.webp" alt="" width="354" height="150">
-              <div class="bncard__body">
-                <div class="bncard__tags">
-                  <span class="bn__tag">Deposit</span><span class="bn__tag bnwp__meta"></span>
-                </div>
-                <h2>Casino Welcome Package</h2>
-                <p>Three deposits, three bonuses — each with its&nbsp;own cap.</p>
-                <div class="bnwp__grid">
-                  <span class="bnwp__step" data-step="1">
-                    <b class="bnwp__pct">+100%</b>
-                    <em class="bnwp__cap"></em>
-                    <i class="bnwp__st"></i>
-                  </span>
-                  <span class="bnwp__step" data-step="2">
-                    <b class="bnwp__pct">+120%</b>
-                    <em class="bnwp__cap"></em>
-                    <i class="bnwp__st"></i>
-                  </span>
-                  <span class="bnwp__step" data-step="3">
-                    <b class="bnwp__pct">+130%</b>
-                    <em class="bnwp__cap"></em>
-                    <i class="bnwp__st"></i>
-                  </span>
-                </div>
-                <p class="bnwp__terms"></p>
-                <div class="bncard__foot">
-                  <button class="bn__btn bn__btn--primary" type="button" data-wp-go>Deposit</button>
-                  <button class="bn__btn" type="button" data-bn-terms="welcomepack">View Details</button>
                 </div>
               </div>
             </article>
@@ -14736,6 +14819,44 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      /* Месяцы в коротких датах */
+      'Jan': 'янв',
+      'Feb': 'фев',
+      'Mar': 'мар',
+      'Apr': 'апр',
+      'May': 'мая',
+      'Jun': 'июн',
+      'Jul': 'июл',
+      'Aug': 'авг',
+      'Sep': 'сен',
+      'Oct': 'окт',
+      'Nov': 'ноя',
+      'Dec': 'дек',
+      /* ── Приветственный пакет: три ступени ── */
+      'Casino Welcome Package': 'Приветственный пакет казино',
+      '{ord} deposit · up to {sum}': '{ord} депозит · до {sum}',
+      '1st': '1-й',
+      '2nd': '2-й',
+      '3rd': '3-й',
+      'Get bonus': 'Получить',
+      'Received': 'Получен',
+      'Missed': 'Упущен',
+      'Offer ended': 'Срок вышел',
+      'Bonus details': 'Условия бонуса',
+      'Step {n} of {all}': 'Ступень {n} из {all}',
+      '+{pct}% of the deposit, up to {sum}': '+{pct}% от депозита, до {sum}',
+      'Minimum deposit': 'Минимальный депозит',
+      'Wagering': 'Отыгрыш',
+      'x{mult} of the bonus': 'x{mult} от суммы бонуса',
+      'Term': 'Срок',
+      '{days} days from activation': '{days} дней с активации',
+      'Max bet while wagering': 'Максимальная ставка в отыгрыше',
+      'Game contribution': 'Вклад игр',
+      'Slots 100%, table 5%, live and sports 0%':
+        'Слоты 100%, настольные 5%, live и спорт 0%',
+      'Offer valid until': 'Предложение действует до',
+      'Steps open one after another: the next one unlocks with your next deposit.':
+        'Ступени открываются по очереди: следующая — со следующим депозитом.',
       'Sign up and take the welcome package': 'Зарегистрируйтесь и заберите приветственный пакет',
       'Three deposits, three bonuses — the first one lands on your first deposit.':
         'Три депозита, три бонуса — первый приходит на первый же депозит.',
@@ -15448,6 +15569,44 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      /* Meses en fechas cortas */
+      'Jan': 'ene',
+      'Feb': 'feb',
+      'Mar': 'mar',
+      'Apr': 'abr',
+      'May': 'may',
+      'Jun': 'jun',
+      'Jul': 'jul',
+      'Aug': 'ago',
+      'Sep': 'sep',
+      'Oct': 'oct',
+      'Nov': 'nov',
+      'Dec': 'dic',
+      /* ── Paquete de bienvenida: tres pasos ── */
+      'Casino Welcome Package': 'Paquete de bienvenida del casino',
+      '{ord} deposit · up to {sum}': '{ord} depósito · hasta {sum}',
+      '1st': '1.º',
+      '2nd': '2.º',
+      '3rd': '3.º',
+      'Get bonus': 'Obtener',
+      'Received': 'Recibido',
+      'Missed': 'Perdido',
+      'Offer ended': 'Oferta terminada',
+      'Bonus details': 'Condiciones del bono',
+      'Step {n} of {all}': 'Paso {n} de {all}',
+      '+{pct}% of the deposit, up to {sum}': '+{pct}% del depósito, hasta {sum}',
+      'Minimum deposit': 'Depósito mínimo',
+      'Wagering': 'Rollover',
+      'x{mult} of the bonus': 'x{mult} del bono',
+      'Term': 'Plazo',
+      '{days} days from activation': '{days} días desde la activación',
+      'Max bet while wagering': 'Apuesta máxima durante el rollover',
+      'Game contribution': 'Aporte de los juegos',
+      'Slots 100%, table 5%, live and sports 0%':
+        'Tragamonedas 100%, mesa 5%, live y deportes 0%',
+      'Offer valid until': 'La oferta vale hasta',
+      'Steps open one after another: the next one unlocks with your next deposit.':
+        'Los pasos se abren en orden: el siguiente llega con tu próximo depósito.',
       'Sign up and take the welcome package': 'Registrate y llevate el paquete de bienvenida',
       'Three deposits, three bonuses — the first one lands on your first deposit.':
         'Tres depósitos, tres bonos: el primero llega con tu primer depósito.',
@@ -15846,6 +16005,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       RELEASE: 10,
       QUEUE_DAYS: 30,          /* ЗАГЛУШКА: в ТЗ срок очереди помечен TBD */
       MAX_BET: 5000,           /* ЗАГЛУШКА: max bonus bet в ТЗ помечен TBD */
+      OFFER_DAYS: 7,           /* ЗАГЛУШКА: срока действия пакета в ТЗ нет */
       CUR: 'ARS'
     };
     var TIERS = [
@@ -15860,7 +16020,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
     var STATUS = { MISSED_MIN_DEPOSIT: 1, DECLINED: 1, CREATED: 1, ACTIVE: 1,
                    QUEUED: 1, COMPLETED: 1, EXPIRED: 1, CANCELED: 1, FROZEN: 1 };
 
-    var blank = function () { return { v: 1, deposits: 0, bonuses: [], refs: [], log: [] }; };
+    var blank = function () { return { v: 1, deposits: 0, bonuses: [], refs: [], log: [], offerEndsAt: 0 }; };
     var st = blank();
     var subs = [];
 
@@ -15883,6 +16043,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         if (!o || typeof o !== 'object' || o.v !== 1) return;
         var out = blank();
         out.deposits = Math.max(0, Math.min(999, Math.round(num(o.deposits))));
+        out.offerEndsAt = num(o.offerEndsAt);
         if (Object.prototype.toString.call(o.bonuses) === '[object Array]') {
           o.bonuses.slice(0, 3).forEach(function (b) {
             if (!b || typeof b !== 'object' || !STATUS[b.status]) return;
@@ -15916,6 +16077,16 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       st.log.push({ ts: Date.now(), kind: kind, tier: b ? b.tier : 0,
                     sum: b ? b.bonusAmount : 0, reason: extra || '' });
       if (st.log.length > 40) st.log = st.log.slice(-40);
+    };
+
+    /* Ступени открываются по очереди, поэтому у пакета есть общий срок: без
+       него третья висела бы «заблокированной» бесконечно, и обратный отсчёт
+       на карточках было бы не от чего вести. */
+    var armOffer = function () {
+      if (!st.offerEndsAt) st.offerEndsAt = Date.now() + WB.OFFER_DAYS * DAY;
+    };
+    var offerOver = function () {
+      return st.offerEndsAt > 0 && Date.now() >= st.offerEndsAt;
     };
 
     var byId = function (id) {
@@ -15974,12 +16145,18 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       TIERS: TIERS,
       CONTRIB: CONTRIB,
 
-      boot: function () { read(); sweep(true); fire(); return api; },
+      boot: function () { read(); armOffer(); sweep(true); fire(); return api; },
       state: function () { sweep(true); return st; },
       on: function (fn) { if (typeof fn === 'function') subs.push(fn); },
 
       /* Ступень следующего депозита; null — пакет исчерпан */
-      nextTier: function () { return tierAt(st.deposits + 1); },
+      nextTier: function () { return offerOver() ? null : tierAt(st.deposits + 1); },
+
+      /* Сколько осталось до конца пакета — карточки ведут по этому обратный
+         отсчёт, и по нулю ступени становятся упущенными. */
+      offerLeft: function () { return Math.max(0, st.offerEndsAt - Date.now()); },
+      offerEndsAt: function () { return st.offerEndsAt; },
+      offerOver: offerOver,
 
       /* Что показывать на карточке ступени в пакете */
       tierView: function (tier) {
@@ -15988,6 +16165,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           if (b.status === 'MISSED_MIN_DEPOSIT' || b.status === 'DECLINED') return 'MISSED';
           return 'USED';
         }
+        if (offerOver()) return 'MISSED';
         return st.deposits + 1 === tier ? 'AVAILABLE' : 'LOCKED';
       },
 
@@ -16150,13 +16328,15 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       },
       sweep: function () { return sweep(); },
 
-      reset: function () { st = blank(); save(); },
+      reset: function () { st = blank(); armOffer(); save(); },
 
       /* Только для витрины состояний: собрать нужную картинку без прохода
          всего сценария руками. */
       seed: function (patch) {
         st = blank();
+        armOffer();
         if (patch && typeof patch === 'object') {
+          if (patch.offerLeft !== undefined) st.offerEndsAt = Date.now() + num(patch.offerLeft);
           if (patch.deposits) st.deposits = patch.deposits;
           (patch.bonuses || []).forEach(function (p) {
             var t = TIERS[p.tier - 1];
@@ -16203,6 +16383,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         if (s === 'ACTIVE' || s === 'QUEUED') { sweep(); return; }
       }
     }, 60000);
+
+    /* Срок пакета заводим сразу: boot() снаружи никто не зовёт, а без срока
+       обратный отсчёт на карточках стоял бы на нулях. */
+    armOffer();
 
     return api;
   })();
@@ -20161,7 +20345,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         var till = new Date(Date.now() + days * 864e5);
         var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var short = till.getDate() + ' ' + MON[till.getMonth()];
+        var short = till.getDate() + ' ' + T(MON[till.getMonth()]);
         var when = a.querySelector('.bnact__when');
         when.textContent = T('Expires {date} \u00B7 {left}', { date: short, left: T(days === 1 ? '{n} day left' : '{n} days left', { n: days }) });
         when.classList.toggle('is-soon', days <= 1);
@@ -20169,38 +20353,143 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       /* ── Приветственный пакет ──
          Статус каждой ступени спрашиваем у движка, а не храним в разметке:
          ступень расходуется депозитом, и разметка о нём не знает. */
-      var wbFmt = function (v) {
-        return v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + wwWelcome.C.CUR;
+      var wbNum = function (v) {
+        return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       };
       var wbPack = bnView.querySelector('[data-wp]');
+      /* Обратный отсчёт до конца пакета. Разряды рисуем отдельными клетками,
+         как в макете: одной строкой цифры прыгают по ширине на каждой секунде. */
+      var wbClock = function (ms) {
+        var t = Math.max(0, Math.floor(ms / 1000));
+        var p = [Math.floor(t / 86400), Math.floor(t / 3600) % 24,
+                 Math.floor(t / 60) % 60, t % 60];
+        return p.map(function (n, i) {
+          return '<i>' + (i ? (n < 10 ? '0' + n : n) : n) + '</i>';
+        }).join('<em>:</em>');
+      };
       var wbPaint = function () {
         if (!wbPack) return;
-        var C = wwWelcome.C, T3 = wwWelcome.TIERS;
-        var total = T3.reduce(function (n, t) { return n + t.cap; }, 0);
-        wbPack.querySelector('.bnwp__meta').textContent =
-          T('up to {sum}', { sum: wbFmt(total) });
-        wbPack.querySelector('.bnwp__terms').textContent =
-          T('Min {min} · x{mult} · {days} days',
-            { min: String(C.MIN_DEPOSIT).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + C.CUR,
-              mult: C.WAGER, days: C.DAYS });
-        wbPack.querySelectorAll('.bnwp__step').forEach(function (el) {
+        var T3 = wwWelcome.TIERS;
+        var over = wwWelcome.offerOver();
+        var clock = wbClock(wwWelcome.offerLeft());
+        var used = 0;
+        [].slice.call(wbPack.querySelectorAll('.bnwp__c')).forEach(function (el) {
           var n = parseInt(el.dataset.step, 10);
           var t = T3[n - 1];
           var view = wwWelcome.tierView(n);
+          if (view === 'USED') used++;
           el.dataset.st = view;
           el.querySelector('.bnwp__pct').textContent = T('+{pct}%', { pct: t.pct });
-          /* В клетке только число: копейки и код валюты не влезают, а валюта
-             уже стоит тегом над карточкой. */
           el.querySelector('.bnwp__cap').textContent =
-            T('up to {sum}', { sum: String(t.cap).replace(/\B(?=(\d{3})+(?!\d))/g, ',') });
-          el.querySelector('.bnwp__st').textContent =
-            T({ AVAILABLE: 'Now', LOCKED: 'Locked', MISSED: 'Missed', USED: 'Used' }[view]);
+            T('{ord} deposit · up to {sum}',
+              { ord: T(['1st', '2nd', '3rd'][n - 1]), sum: wbNum(t.cap) });
+          /* Время показываем, пока ступень можно взять: на израсходованной
+             отсчитывать нечего, а по истечении срока вместо часов стоит слово. */
+          var time = el.querySelector('.bnwp__time');
+          time.hidden = view === 'USED';
+          time.innerHTML = over ? '' : clock;
+          if (over) time.textContent = T('Offer ended');
+          var go = el.querySelector('.bnwp__go');
+          go.disabled = view !== 'AVAILABLE';
+          go.textContent = view === 'USED' ? T('Received')
+                         : view === 'MISSED' ? T('Missed')
+                         : view === 'AVAILABLE' ? T('Get bonus') : '';
         });
         /* Когда все три ступени израсходованы, предлагать нечего */
-        var done = !wwWelcome.nextTier();
-        wbPack.querySelector('[data-wp-go]').hidden = done;
-        wbPack.hidden = done;
+        wbPack.hidden = used === T3.length;
         bnSync();
+      };
+      /* Секунда — шаг самого мелкого разряда. Пока страница бонусов закрыта,
+         часы не трогаем: перерисовывать невидимое незачем. */
+      setInterval(function () {
+        if (!wbPack || wbPack.hidden || bnView.hidden) return;
+        var over = wwWelcome.offerOver();
+        if (over) { wbPaint(); return; }
+        var clock = wbClock(wwWelcome.offerLeft());
+        [].slice.call(wbPack.querySelectorAll('.bnwp__time')).forEach(function (el) {
+          if (!el.hidden) el.innerHTML = clock;
+        });
+      }, 1000);
+
+      /* ── Подробности ступени ──
+         По «i» на карточке. Все числа — из движка: карточка показывает только
+         процент и потолок, а решают ещё минимум, отыгрыш, срок и вклад игр. */
+      var wbInfo = function (n) {
+        var C = wwWelcome.C, t = wwWelcome.TIERS[n - 1];
+        if (!t) return;
+        /* Дата коротко и на языке интерфейса: toLocaleDateString дал бы формат
+           браузера, и в русской сборке стояло бы 9/16/2026. */
+        var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var e = new Date(wwWelcome.offerEndsAt());
+        var end = e.getDate() + ' ' + T(MON[e.getMonth()]);
+        var rows = [
+          [T('Bonus'), T('+{pct}% of the deposit, up to {sum}',
+                         { pct: t.pct, sum: wbNum(t.cap) + ' ' + C.CUR })],
+          [T('Minimum deposit'), wbNum(C.MIN_DEPOSIT) + ' ' + C.CUR],
+          [T('Wagering'), T('x{mult} of the bonus', { mult: C.WAGER })],
+          [T('Term'), T('{days} days from activation', { days: C.DAYS })],
+          [T('Max bet while wagering'), wbNum(C.MAX_BET) + ' ' + C.CUR],
+          [T('Game contribution'), T('Slots 100%, table 5%, live and sports 0%')],
+          [T('Offer valid until'), end]
+        ];
+        wbModal(T('Step {n} of {all}', { n: n, all: wwWelcome.TIERS.length }),
+                T('Casino Welcome Package'), rows,
+                T('Steps open one after another: the next one unlocks with your next deposit.'));
+      };
+      var wbBox = null;
+      var wbModal = function (kicker, title, rows, note) {
+        if (!wbBox) {
+          wbBox = document.createElement('div');
+          wbBox.className = 'bnfo';
+          wbBox.hidden = true;
+          wbBox.innerHTML =
+            '<div class="bnfo__scrim" data-bnfo-close></div>' +
+            '<div class="bnfo__card" role="dialog" aria-modal="true" aria-labelledby="bnfo-t">' +
+              '<button class="bnfo__x" type="button" data-bnfo-close aria-label="Close"></button>' +
+              '<span class="bnfo__kicker"></span>' +
+              '<h2 class="bnfo__title" id="bnfo-t"></h2>' +
+              '<dl class="bnfo__list"></dl>' +
+              '<p class="bnfo__note"></p>' +
+              '<button class="bn__btn bn__btn--primary bnfo__ok" type="button" data-bnfo-close></button>' +
+            '</div>';
+          document.body.appendChild(wbBox);
+          /* Клик дальше не пускаем: панель профиля и уведомления закрываются
+             по клику мимо себя и приняли бы ответ в этом окне за «мимо». */
+          wbBox.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (e.target.closest('[data-bnfo-close]')) wbClose();
+          });
+          addEventListener('keydown', function (e) {
+            if (!wbBox.hidden && e.key === 'Escape') { e.preventDefault(); wbClose(); }
+          });
+        }
+        wbBox.querySelector('.bnfo__kicker').textContent = kicker;
+        wbBox.querySelector('.bnfo__title').textContent = title;
+        wbBox.querySelector('.bnfo__note').textContent = note;
+        wbBox.querySelector('.bnfo__ok').textContent = T('Got it');
+        var list = wbBox.querySelector('.bnfo__list');
+        list.innerHTML = '';
+        rows.forEach(function (r) {
+          var dt = document.createElement('dt'); dt.textContent = r[0];
+          var dd = document.createElement('dd'); dd.textContent = r[1];
+          list.appendChild(dt); list.appendChild(dd);
+        });
+        wbOpener = document.activeElement;
+        wbBox.hidden = false;
+        document.documentElement.classList.add('cf-open');
+        /* Фокус на крестик, а не на кнопку внизу: на невысоком экране окно
+           прокручивалось к ней, и заголовок с первой строкой уезжали. */
+        wbBox.querySelector('.bnfo__card').scrollTop = 0;
+        wbBox.querySelector('.bnfo__x').focus();
+      };
+      var wbOpener = null;
+      var wbClose = function () {
+        if (!wbBox || wbBox.hidden) return;
+        wbBox.hidden = true;
+        document.documentElement.classList.remove('cf-open');
+        if (wbOpener && wbOpener.focus) wbOpener.focus();
+        wbOpener = null;
       };
       wwWelcome.on(wbPaint);
       document.addEventListener('ww:lang', wbPaint);
@@ -20271,6 +20560,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         /* Кнопка пакета вела в никуда: обработчика у неё не было вовсе.
            Гостю — регистрация, вошедшему — касса на депозите, ради которого
            пакет и берут. */
+        if (t.dataset.wpInfo) { wbInfo(parseInt(t.dataset.wpInfo, 10)); return; }
         if (t.hasAttribute('data-wp-go')) {
           if (!document.body.classList.contains('is-authed')) { bnAuthForm('register'); return; }
           var dep = document.querySelector('.wallet__deposit');
@@ -20821,6 +21111,32 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           showView('home');
           notify(T('VIP Club is for signed-in players — the menu entry is hidden.'));
         }]
+      ]]);
+      /* ── Пакет: ступени ──
+         Всё через seed движка: ступени расходуются депозитами, и подделывать
+         их в разметке значило бы показывать вид, которого в потоке не бывает. */
+      var wpAt = function (patch) {
+        document.body.classList.add('is-authed');
+        wwWelcome.seed(patch);
+        showView('bonuses');
+        var tab = bnView && bnView.querySelector('[data-bn="available"]');
+        if (tab) tab.click();
+      };
+      STATES.push(['Пакет · ступени', [
+        ['Ничего не внесено · открыта первая', function () { wpAt({}); }],
+        ['Первая взята · открыта вторая', function () {
+          wpAt({ bonuses: [{ tier: 1, deposit: 20000, status: 'ACTIVE' }] }); }],
+        ['Две взяты · открыта третья', function () {
+          wpAt({ bonuses: [{ tier: 1, deposit: 20000, status: 'COMPLETED', collected: true },
+                           { tier: 2, deposit: 20000, status: 'ACTIVE' }] }); }],
+        ['Первая упущена · депозит ниже минимума', function () {
+          wpAt({ bonuses: [{ tier: 1, deposit: 1000, status: 'MISSED_MIN_DEPOSIT' }] }); }],
+        ['Все три израсходованы · пакет скрыт', function () {
+          wpAt({ bonuses: [{ tier: 1, deposit: 20000, status: 'COMPLETED', collected: true },
+                           { tier: 2, deposit: 20000, status: 'COMPLETED', collected: true },
+                           { tier: 3, deposit: 20000, status: 'COMPLETED', collected: true }] }); }],
+        ['Осталось меньше часа', function () { wpAt({ offerLeft: 47 * 60000 }); }],
+        ['Срок вышел · ступени упущены', function () { wpAt({ offerLeft: -1000 }); }]
       ]]);
       STATES.push(['Бонусы', [
         ['Гость', function () { bnState('guest'); }],
