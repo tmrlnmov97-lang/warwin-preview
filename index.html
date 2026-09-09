@@ -2224,16 +2224,28 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
                 display: flex; flex-direction: column; gap: 32px; }
   /* Правило выше по весу равно базовому и включало бы мобильный блок входа */
   .hero__copy--mob-authed { display: none; }
-  /* 1187:15585 — 360, 1187:15586 — 372, цвет #dcdcdc вместо акцентного */
-  .hero .hero__copy--authed .hero__title { width: 360px; }
-  /* Подпись держим в 340: в макете она стоит двумя строками, а на 420 первая
-     строка доезжала до арта справа и упиралась в подарки. */
-  .hero .hero__copy--authed .hero__sub { width: 340px; color: #dcdcdc; }
-  /* 1186:15020 — у баннера Soccer копи-блок 342, а не 368 */
-  /* 1187:15587 — кнопка 114x40, тот же радиус, но синяя */
-  /* Ширина была прибита под «Join now»: «Присоединиться» упиралось в края.
-     Кнопка теперь тянется по подписи и не уже 114. */
-  .hero .hero__cta--join { width: auto; min-width: 114px; padding: 0 20px;
+  /* 1647:19535 — копи-блок баннеров после входа: слева 23, по центру высоты,
+     ширина 357, шаг 20 между текстом и кнопкой. Числа из макета, не подобраны. */
+  .hero .hero__copy--authed { position: absolute; left: 23px; top: 50%; right: auto;
+                              transform: translateY(-50%); width: 357px;
+                              align-items: flex-start; gap: 20px; }
+  /* 1647:19536 — заголовок и подпись, шаг 16 */
+  .hero .hero__copy--authed .hero__text { display: flex; flex-direction: column;
+                                          gap: 16px; width: 360px; }
+  /* 1647:19537 — Cora Medium 40, ширина 368 */
+  .hero .hero__copy--authed .hero__title { width: 368px; font-size: 40px;
+                                           line-height: normal; font-weight: 500;
+                                           color: #fff; }
+  /* 1647:19538 — Cora Regular 20, #dcdcdc. В макете перенос стоит вручную;
+     здесь его держит ширина 360 — разметка одна на три языка. */
+  .hero .hero__copy--authed .hero__sub { width: 360px; font-size: 20px;
+                                         line-height: normal; font-weight: 400;
+                                         color: #dcdcdc; }
+  /* 1653:13042 — кнопка 141x40, радиус 10, Instrument Sans Bold 14 */
+  .hero .hero__cta--join { box-sizing: border-box; width: 141px; height: 40px;
+                           padding: 12px; border-radius: 10px;
+                           font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                           font-size: 14px; line-height: normal;
                            background: var(--primary); }
   .hero .hero__cta--join:hover  { background: var(--primary-hover, #2da9ff); }
   .hero .hero__cta--join:active { background: var(--primary-active, #0680dd); }
@@ -2604,23 +2616,32 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
             scroll-snap-align: center; }
   .mslide__art { position: absolute; inset: 0; display: block;
                  width: 100%; height: 100%; object-fit: cover; }
-  /* 920:31048 — копи-блок на (20,35): заголовок 158x48, подпись на 91,
-     кнопка 100x30 на 134. Чипа в макете больше нет. */
+  /* 1647:19748 — копи-блок слева 19, по центру высоты, ширина 158,
+     шаг 32 до кнопки. Все числа из макета. */
   .mslide .hero__copy--mob-authed {
-    display: flex; position: absolute; left: 20px; top: 35px; width: 200px;
-    flex-direction: column; align-items: flex-start; gap: 8px;
+    /* 18, а не 19: у карточки кант в 1px внутри, и абсолютная позиция
+       отсчитывается уже за ним — от края кадра получается ровно 19. */
+    display: flex; position: absolute; left: 18px; top: 50%; width: 158px;
+    transform: translateY(-50%);
+    flex-direction: column; align-items: flex-start; gap: 32px;
   }
-  .mslide .hero__text { gap: 8px; }
-  .mslide .hero__title { width: 158px; margin: 0;
-                         font-weight: 700; font-size: 24px; line-height: 24px; }
-  .mslide .hero__sub { width: 160px; margin: 0;
+  /* 1647:19750 — заголовок и подпись, шаг 8 */
+  .mslide .hero__text { gap: 8px; width: 100%; }
+  /* 1647:19751 — Cora Bold 24, интерлиньяж 1, ширина 236: заголовок нарочно
+     шире копи-блока и заходит на арт. */
+  .mslide .hero__title { width: 236px; margin: 0;
+                         font-weight: 700; font-size: 24px; line-height: 1; }
+  /* 1647:19752 — Instrument Sans Medium 14, #eaeaea. В макете перенос ручной;
+     здесь его держит ширина — разметка одна на три языка. */
+  .mslide .hero__sub { width: 168px; margin: 0;
                        font-family: 'Instrument Sans', sans-serif; font-weight: 500;
-                       font-size: 14px; line-height: 16px; color: #eaeaea; }
-  /* Зазор подобран под координату из макета: подпись у нас на 5px ниже
-     фигмовской (та мерена по капительной высоте), поэтому не 16, а 3. */
-  .mslide .hero__cta { margin-top: 3px; width: 100px; height: 30px;
-                       padding: 0; border-radius: 10px;
-                       background: var(--primary); font-size: 12px; }
+                       font-size: 14px; line-height: normal; color: #eaeaea; }
+  /* 1653:13046 — кнопка 140x30, радиус 10, Instrument Sans Bold 14 */
+  .mslide .hero__cta { box-sizing: border-box; margin-top: 0; width: 140px; height: 30px;
+                       padding: 12px; border-radius: 10px;
+                       background: var(--primary);
+                       font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+                       font-size: 14px; line-height: normal; }
   .mslide .hero__cta:hover  { background: var(--primary-hover, #2da9ff); }
   .mslide .hero__cta:active { background: var(--primary-active, #0680dd); }
   /* 920:31068 — точки 5px с шагом 7 под лентой */
