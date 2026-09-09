@@ -3074,17 +3074,16 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bn__chips[hidden], .bn__body[hidden] { display: none; }
 /* display перебивает атрибут hidden, поэтому прячем явно */
 .bn__chip[hidden] { display: none; }
-/* Фильтры категорий. Выбранный — сплошной голубой с тёмной подписью, как
-   в макете: это переключатель витрины, а не второстепенная кнопка рядом
-   с основным действием. */
-.bn__chip { display: flex; align-items: center; padding: 8px 16px; cursor: pointer;
-            border: 0; border-radius: 999px; background: rgba(255, 255, 255, .1);
-            color: var(--white);
-            font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 16px;
+.bn__chip { display: flex; align-items: center; height: 40px; padding: 0 18px; cursor: pointer;
+            border: 0; border-radius: 999px; background: #272b40; color: var(--muted);
+            font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
             line-height: 20px; transition: background .15s ease, color .15s ease; }
-.bn__chip:hover { background: rgba(255, 255, 255, .18); }
+.bn__chip:hover { background: #30354e; color: var(--white); }
 .bn__chip.is-active,
-.bn__chip.is-active:hover { background: #00c1ff; color: #05121f; }
+.bn__chip.is-active:hover { background: var(--pick-bg);
+                            box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
+.bn__count { margin-left: 8px; font-variant-numeric: tabular-nums; opacity: .65; }
+.bn__count:empty { display: none; }
 
 /* ── кнопки страницы ── */
 .bn__btn { display: inline-grid; place-items: center; height: 44px; padding: 0 20px; flex: none;
@@ -3138,47 +3137,14 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnsec[hidden] { display: none; }
 .bnsec__h { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 700;
             font-size: 20px; line-height: 26px; color: var(--white); }
-/* Четыре колонки по 261 при ширине колонки 1104 — ровно как в макете.
-   Карточек пока три, четвёртое место остаётся под будущее предложение. */
-.bnwp, .bnp { display: grid; gap: 20px;
-              grid-template-columns: repeat(4, minmax(0, 1fr)); }
+/* Ступени пакета — четыре колонки по 261, как в макете: карточек три,
+   четвёртое место остаётся под будущую. Обычные карточки предложений живут
+   по-прежнему втроём в ряд и шире. */
+.bnwp, .bnp { display: grid; gap: 20px; }
+.bnwp { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.bnp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .bnp[hidden], .bnwp[hidden] { display: none; }
 
-/* ── Карточка предложения ──
-   Кнопок в ней нет: акцию берут не отсюда, поэтому низ занимает условие
-   доступности, а не действие. */
-.bnp__c { display: flex; flex-direction: column; overflow: hidden;
-          border-radius: 16px; background: var(--card, #181e3b);
-          border: 1px solid rgba(255, 255, 255, .08);
-          transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
-.bnp__c[hidden] { display: none; }
-.bnp__c:hover { transform: translateY(-2px); border-color: rgba(7, 148, 255, .35);
-                box-shadow: 0 16px 34px -18px rgba(0, 0, 0, .8); }
-/* Обложка: градиент фоном, поверх водяной знак и свечение под предметом */
-.bnp__art { position: relative; height: 150px; flex: none; overflow: hidden;
-            background: linear-gradient(184deg, #041b4b 3%, #061537 28%, #0a1b49 87%); }
-.bnp__art::before { content: ''; position: absolute; inset: 0 0 0 28%;
-                    background: url(a/db1d74136d.svg) center / contain no-repeat;
-                    opacity: .5; }
-.bnp__art::after { content: ''; position: absolute; left: 50%; bottom: -14px;
-                   width: 119px; height: 48px; margin-left: -66px; border-radius: 50%;
-                   background: radial-gradient(closest-side, rgba(7, 148, 255, .55), transparent); }
-.bnp__pic { position: relative; display: block; width: 100%; height: 100%;
-            object-fit: contain; }
-/* Условие прижато к низу: у карточек разной длины описания низ должен
-   стоять на одной линии, иначе ряд выглядит рваным. */
-.bnp__body { flex: 1 0 auto; display: flex; flex-direction: column;
-             justify-content: space-between; gap: 16px; padding: 16px; }
-.bnp__head { display: flex; flex-direction: column; gap: 4px; }
-.bnp__h { font-family: 'Work Sans', sans-serif; font-weight: 700;
-          font-size: 16px; line-height: 22px; color: var(--white); }
-.bnp__p { margin: 0; font-family: 'Work Sans', sans-serif;
-          font-size: 13px; line-height: 18px; color: var(--muted); }
-.bnp__meta { display: flex; flex-direction: column; gap: 2px; }
-.bnp__lab { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
-            color: var(--dp-label); }
-.bnp__val { font-family: 'Work Sans', sans-serif; font-weight: 600;
-            font-size: 14px; line-height: 20px; color: var(--white); }
 .bn__empty { grid-column: 1 / -1; box-sizing: border-box; display: flex; flex-direction: column;
              align-items: center; gap: 8px; padding: 48px 32px; border-radius: 16px;
              background: var(--card, #181e3b); text-align: center; }
@@ -3431,7 +3397,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 @media (max-width: 1279px) {
   .bn__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* Четыре колонки живут только на полной ширине: ниже 261 карточка ломается */
-  .bnwp, .bnp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bnwp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bnp { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* 300 на панель из узкой колонки уже не выкроить */
   .bnact { grid-template-columns: 1fr; gap: 18px; }
   /* Панель ложится строкой: два денежных блока рядом */
@@ -7727,15 +7694,14 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       <div class="view view--bonus" id="view-bonuses" hidden data-node-id="1471:13191">
         <div class="bn__head">
           <h1 class="bn__h1">Bonuses</h1>
-          <!-- Фильтры по типу предложения. На их месте стояли вкладки
-               Available / Active / History; в макете 1377:18628 страница
-               оставлена одной витриной, а личные вкладки с неё ушли. -->
-          <div class="bn__chips" role="tablist" aria-label="Bonus categories">
-            <button class="bn__chip is-active" type="button" role="tab" aria-selected="true" data-bncat="all">All</button>
-            <button class="bn__chip" type="button" role="tab" aria-selected="false" data-bncat="casino">Casino</button>
-            <button class="bn__chip" type="button" role="tab" aria-selected="false" data-bncat="deposit">Deposit</button>
-            <button class="bn__chip" type="button" role="tab" aria-selected="false" data-bncat="cashback">Cashback</button>
-            <button class="bn__chip" type="button" role="tab" aria-selected="false" data-bncat="referral">Referral</button>
+          <!-- Счётчик у вкладки отвечает на первый вопрос: ждёт ли что-то -->
+          <div class="bn__chips" role="tablist">
+            <button class="bn__chip is-active" type="button" role="tab" aria-selected="true"
+                    aria-controls="bn-available" data-bn="available">Available<span class="bn__count"></span></button>
+            <button class="bn__chip" type="button" role="tab" aria-selected="false"
+                    aria-controls="bn-active" data-bn="active">Active<span class="bn__count"></span></button>
+            <button class="bn__chip" type="button" role="tab" aria-selected="false"
+                    aria-controls="bn-history" data-bn="history">History<span class="bn__count"></span></button>
           </div>
         </div>
 
@@ -7789,54 +7755,50 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               </div>
             </section>
 
-            <!-- Остальные предложения. Кнопок в карточке нет: акция берётся
-                 не отсюда, а в кассе или сама, поэтому внизу стоит условие
-                 доступности, а не действие. -->
+            <!-- Остальные предложения обычными карточками: арт, теги, описание
+                 и два действия — как было до перевода витрины на макет. -->
             <section class="bnsec" data-bnsec="offers">
               <h2 class="bnsec__h">Available bonuses</h2>
               <div class="bnp">
-              <article class="bnp__c" data-cat="deposit">
-                <div class="bnp__art">
-                  <img loading="lazy" decoding="async" class="bnp__pic" src="a/58c4987a22.webp" alt="">
-                </div>
-                <div class="bnp__body">
-                  <div class="bnp__head">
-                    <b class="bnp__h">5% Bonus Unlock</b>
-                    <p class="bnp__p">From the second deposit, move 5%&nbsp;of it to&nbsp;the main balance.</p>
+              <article class="bncard" data-key="unlock" data-days="30">
+                <img loading="lazy" decoding="async" class="bncard__art" src="a/58c4987a22.webp" alt="" width="354" height="150">
+                <div class="bncard__body">
+                  <div class="bncard__tags">
+                    <span class="bn__tag">Deposit</span><span class="bn__tag">From 2nd deposit</span>
                   </div>
-                  <div class="bnp__meta">
-                    <span class="bnp__lab">Availability</span>
-                    <b class="bnp__val">From 2nd deposit</b>
-                  </div>
-                </div>
-              </article>
-              <article class="bnp__c" data-cat="referral">
-                <div class="bnp__art">
-                  <img loading="lazy" decoding="async" class="bnp__pic" src="a/a9d50cbbcf.webp" alt="">
-                </div>
-                <div class="bnp__body">
-                  <div class="bnp__head">
-                    <b class="bnp__h">Invite a Friend</b>
-                    <p class="bnp__p">5% of&nbsp;each invited friend&rsquo;s net loss for&nbsp;30&nbsp;days.</p>
-                  </div>
-                  <div class="bnp__meta">
-                    <span class="bnp__lab">Availability</span>
-                    <b class="bnp__val">Up to 5 friends</b>
+                  <h2>5% Bonus Unlock</h2>
+                  <p>From the second deposit, move 5%&nbsp;of it to&nbsp;the main balance.</p>
+                  <div class="bncard__foot">
+                    <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
+                    <button class="bn__btn" type="button" data-bn-terms="unlock">View Details</button>
                   </div>
                 </div>
               </article>
-              <article class="bnp__c" data-cat="cashback casino">
-                <div class="bnp__art">
-                  <img loading="lazy" decoding="async" class="bnp__pic" src="a/391a058436.webp" alt="">
-                </div>
-                <div class="bnp__body">
-                  <div class="bnp__head">
-                    <b class="bnp__h">Weekly Loss Cashback</b>
-                    <p class="bnp__p">10% back from last week&rsquo;s deposit-funded net loss.</p>
+              <article class="bncard" data-key="invite" data-days="30">
+                <img loading="lazy" decoding="async" class="bncard__art" src="a/a9d50cbbcf.webp" alt="" width="354" height="150">
+                <div class="bncard__body">
+                  <div class="bncard__tags">
+                    <span class="bn__tag">Referral</span><span class="bn__tag">Up to 5 friends</span>
                   </div>
-                  <div class="bnp__meta">
-                    <span class="bnp__lab">Availability</span>
-                    <b class="bnp__val">Every Monday &middot; UTC</b>
+                  <h2>Invite a Friend</h2>
+                  <p>5% of&nbsp;each invited friend&rsquo;s net loss for&nbsp;30&nbsp;days.</p>
+                  <div class="bncard__foot">
+                    <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
+                    <button class="bn__btn" type="button" data-bn-terms="invite">View Details</button>
+                  </div>
+                </div>
+              </article>
+              <article class="bncard" data-key="cash" data-days="7">
+                <img loading="lazy" decoding="async" class="bncard__art" src="a/391a058436.webp" alt="" width="354" height="150">
+                <div class="bncard__body">
+                  <div class="bncard__tags">
+                    <span class="bn__tag">Cashback</span><span class="bn__tag">Every Monday</span>
+                  </div>
+                  <h2>Weekly Loss Cashback</h2>
+                  <p>10% back from last week&rsquo;s deposit-funded net loss.</p>
+                  <div class="bncard__foot">
+                    <button class="bn__btn bn__btn--primary" type="button" data-bn-act>Receive</button>
+                    <button class="bn__btn" type="button" data-bn-terms="cash">View Details</button>
                   </div>
                 </div>
               </article>
@@ -7861,7 +7823,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                   <div class="bnact__title">
                     <div class="bnact__name">
                       <h2>Welcome Free Spins</h2>
-                      <span class="bn__tag bn__tag--live">In progress</span>
+                      <span class="bn__tag bn__tag--live">Wagering now</span>
                     </div>
                     <span class="bnact__when"></span>
                   </div>
@@ -13818,15 +13780,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         <button class="pm__sub" type="button" data-pm-go="bonuses">Bonuses</button>
       </div>
 
-      <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-sup">
-        <img loading="lazy" decoding="async" class="pm__ico" src="a/1d015c4521.svg" alt="" width="18" height="18"><span>Support</span>
-        <img loading="lazy" decoding="async" class="pm__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
-      </button>
-      <div class="pm__subs" id="pm-sup" hidden>
-        <button class="pm__sub" type="button" data-pm-go="helpSup">Help Centre</button>
-        <button class="pm__sub" type="button" data-pm-go="legalTc">Terms &amp; Conditions</button>
-      </div>
-
       <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-hist-subs">
         <img loading="lazy" decoding="async" class="pm__ico" src="a/a7bd385498.svg" alt="" width="20" height="20"><span>History</span>
         <img loading="lazy" decoding="async" class="pm__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
@@ -13835,6 +13788,15 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       <div class="pm__subs" id="pm-hist-subs" hidden>
         <button class="pm__sub" type="button" data-pm-go="transactions">Transactions</button>
         <button class="pm__sub" type="button" data-pm-go="history">Gaming History</button>
+      </div>
+
+      <button class="pm__item" type="button" aria-expanded="false" aria-controls="pm-sup">
+        <img loading="lazy" decoding="async" class="pm__ico" src="a/1d015c4521.svg" alt="" width="18" height="18"><span>Support</span>
+        <img loading="lazy" decoding="async" class="pm__chev" src="a/9c4db94715.svg" alt="" width="12" height="12">
+      </button>
+      <div class="pm__subs" id="pm-sup" hidden>
+        <button class="pm__sub" type="button" data-pm-go="helpSup">Help Centre</button>
+        <button class="pm__sub" type="button" data-pm-go="legalTc">Terms &amp; Conditions</button>
       </div>
     </nav>
 
@@ -14487,7 +14449,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'First Name*': 'Имя*',
       'Last Name*': 'Фамилия*',
       'Available': 'Доступно',
-      'Availability': 'Доступность',
       'Bonus balance': 'Бонусный баланс',
       'Account Summary': 'Сводка по счёту',
       'Withdrawable': 'К выводу',
@@ -14625,7 +14586,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Credited': 'Начислен',
       'Wagered': 'Отыгран',
       'Expired': 'Истёк',
-      'In progress': 'В отыгрыше',
       'Activate bonus': 'Активировать бонус',
       'Play bonus': 'Играть с бонусом',
       'Cancel bonus': 'Отменить бонус',
@@ -14927,6 +14887,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      'Receive': 'Получить',
+      'View Details': 'Подробнее',
+      'Wagering now': 'В отыгрыше',
+      'Open in Active': 'Открыть в Active',
       /* ── Баннеры после входа (макет 1647:19434 и 1647:19541) ── */
       'TRIPLE WELCOME\nPACKAGE': 'ТРОЙНОЙ БОНУС\nНОВИЧКАМ',
       'UP TO 350% ON YOUR\nFIRST THREE DEPOSITS': 'ДО 350% НА ПЕРВЫЕ\nТРИ ДЕПОЗИТА',
@@ -14937,17 +14901,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Referral': 'Рефералы',
       'Up to {pct}% bonuses': 'Бонусы до {pct}%',
       'Available bonuses': 'Доступные бонусы',
-      'Availability': 'Доступность',
-      '5% Bonus Unlock': 'Разблокировка 5%',
-      'From the second deposit, move 5% of it to the main balance.':
-        'Со второго депозита переводите 5% от него на основной баланс.',
       'From 2nd deposit': 'Со второго депозита',
-      'Invite a Friend': 'Пригласи друга',
-      '5% of each invited friend’s net loss for 30 days.':
-        '5% от чистого проигрыша каждого приглашённого друга в течение 30 дней.',
       'Up to 5 friends': 'До 5 друзей',
-      'Weekly Loss Cashback': 'Недельный кэшбэк за проигрыш',
-      'Every Monday · UTC': 'Каждый понедельник · UTC',
       'Bonus {n} of 3 is credited with this deposit automatically.':
         'Бонус {n} из 3 начислится с этим депозитом автоматически.',
       /* ── Верификация: шаг телефона и степпер ── */
@@ -14967,8 +14922,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Phone confirmed.': 'Телефон подтверждён.',
       'Step {n} of {all} · {name}': 'Шаг {n} из {all} · {name}',
       'All steps done': 'Все шаги пройдены',
-      'verified': 'подтверждён',
-      'not verified': 'не подтверждён',
       /* Месяцы в коротких датах */
       'Jan': 'янв',
       'Feb': 'фев',
@@ -15258,7 +15211,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'First Name*': 'Nombre*',
       'Last Name*': 'Apellido*',
       'Available': 'Disponibles',
-      'Availability': 'Disponibilidad',
       'Bonus balance': 'Saldo de bono',
       'Account Summary': 'Resumen de la cuenta',
       'Withdrawable': 'Retirable',
@@ -15698,6 +15650,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      'Receive': 'Obtener',
+      'View Details': 'Ver detalles',
+      'Wagering now': 'En rollover',
+      'Open in Active': 'Abrir en Activos',
       /* ── Banners tras iniciar sesión (diseño 1647:19434 y 1647:19541) ── */
       'TRIPLE WELCOME\nPACKAGE': 'TRIPLE PAQUETE\nDE BIENVENIDA',
       'UP TO 350% ON YOUR\nFIRST THREE DEPOSITS': 'HASTA 350% EN TUS\nTRES PRIMEROS DEPÓSITOS',
@@ -15708,17 +15664,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Referral': 'Referidos',
       'Up to {pct}% bonuses': 'Bonos de hasta {pct}%',
       'Available bonuses': 'Bonos disponibles',
-      'Availability': 'Disponibilidad',
-      '5% Bonus Unlock': 'Desbloqueo del 5%',
-      'From the second deposit, move 5% of it to the main balance.':
-        'Desde el segundo depósito, pasá el 5% al saldo principal.',
       'From 2nd deposit': 'Desde el 2.º depósito',
-      'Invite a Friend': 'Invitá a un amigo',
-      '5% of each invited friend’s net loss for 30 days.':
-        '5% de la pérdida neta de cada amigo invitado durante 30 días.',
       'Up to 5 friends': 'Hasta 5 amigos',
-      'Weekly Loss Cashback': 'Cashback semanal por pérdidas',
-      'Every Monday · UTC': 'Cada lunes · UTC',
       'Bonus {n} of 3 is credited with this deposit automatically.':
         'El bono {n} de 3 se acredita con este depósito automáticamente.',
       /* ── Verificación: paso del teléfono y stepper ── */
@@ -20528,72 +20475,53 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
     var bnView = document.getElementById('view-bonuses');
     var bnSync = null;
     if (bnView) {
-      var bnChips = [].slice.call(bnView.querySelectorAll('[data-bncat]'));
+      var bnChips = [].slice.call(bnView.querySelectorAll('[data-bn]'));
       var bnLists = [].slice.call(bnView.querySelectorAll('[data-bnset]'));
-      var bnSecs = [].slice.call(bnView.querySelectorAll('[data-bnsec]'));
       var bnGuest = bnView.querySelector('.bn__guest');
       var bnChipsBox = bnView.querySelector('.bn__chips');
       var bnBody = bnView.querySelector('.bn__body');
-      var bnCat = 'all';
-
-      /* Совпадение карточки с фильтром. Категорий у предложения может быть
-         несколько: недельный кэшбэк — и Cashback, и Casino. */
-      var bnFits = function (el) {
-        if (bnCat === 'all') return true;
-        var list = (el.dataset.cat || '').split(/\s+/);
-        return list.indexOf(bnCat) >= 0;
-      };
 
       bnSync = function () {
         var guest = !document.body.classList.contains('is-authed');
         /* Гостю показываем сами предложения: это витрина, и прятать её значит
-           прятать главный повод завести аккаунт. */
+           прятать главный повод завести аккаунт. Закрыты только личные вкладки —
+           своих бонусов и своей истории у него нет. */
         bnGuest.hidden = !guest;
-        bnChipsBox.hidden = false;
+        bnChipsBox.hidden = guest;
         bnBody.hidden = false;
-
-        /* Фильтр прячет карточки, а вместе с ними и заголовок секции, если
-           под ним ничего не осталось: заголовок над пустотой читался бы
-           как «здесь что-то не загрузилось». */
-        var shown = 0;
-        bnSecs.forEach(function (sec) {
-          var cards = [].slice.call(sec.querySelectorAll('.bnp__c'));
-          var n = 0;
-          cards.forEach(function (c) { c.hidden = !bnFits(c); if (!c.hidden) n++; });
-          if (!cards.length) n = bnFits(sec) ? 1 : 0;   /* секция пакета целиком */
-          sec.hidden = !n;
-          shown += n;
+        bnChips.forEach(function (c) {
+          var only = c.dataset.bn === 'available';
+          c.hidden = guest && !only;
+          if (!guest) return;
+          c.classList.toggle('is-active', only);
+          c.setAttribute('aria-selected', only ? 'true' : 'false');
         });
-        var empty = bnView.querySelector('#bn-available .bn__empty');
-        if (empty) empty.hidden = !!shown;
-
-        /* Вкладки отыгрыша и истории со страницы ушли по макету, но их разметка
-           жива: пустое состояние там считается по своим строкам. */
+        if (guest) bnLists.forEach(function (l) { l.hidden = l.dataset.bnset !== 'available'; });
         bnLists.forEach(function (l) {
-          if (l.id === 'bn-available') return;
-          var items = l.querySelectorAll('.bnact:not([hidden]):not([data-tpl]),' +
+          var items = l.querySelectorAll('.bnwp:not([hidden]), .bncard:not([hidden]),' +
+                                         '.bnact:not([hidden]):not([data-tpl]),' +
                                          '.bnhist__row:not(.bnhist__row--head):not([hidden])');
           var e = l.querySelector('.bn__empty');
           if (e) e.hidden = !!items.length;
           var box = l.querySelector('.bnhist');
           if (box) box.hidden = !items.length;
+          /* Счётчик на вкладке: сколько бонусов там сейчас лежит */
+          var chip = bnView.querySelector('[data-bn="' + l.dataset.bnset + '"] .bn__count');
+          if (chip) chip.textContent = items.length ? String(items.length) : '';
         });
       };
 
       var bnShow = function (key) {
+        bnChips.forEach(function (c) {
+          var on = c.dataset.bn === key;
+          c.classList.toggle('is-active', on);
+          c.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
         bnLists.forEach(function (l) { l.hidden = l.dataset.bnset !== key; });
         bnSync();
       };
       bnChips.forEach(function (c) {
-        c.addEventListener('click', function () {
-          bnCat = c.dataset.bncat;
-          bnChips.forEach(function (o) {
-            var on = o === c;
-            o.classList.toggle('is-active', on);
-            o.setAttribute('aria-selected', on ? 'true' : 'false');
-          });
-          bnSync();
-        });
+        c.addEventListener('click', function () { bnShow(c.dataset.bn); });
       });
 
       /* Прогресс, остаток и срок считаем в одном месте: раньше ширина полосы
@@ -20783,6 +20711,48 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       wwWelcome.on(wbPaint);
       document.addEventListener('ww:lang', wbPaint);
 
+      /* Перенос бонуса в отыгрыш: имя, обложка, условия и срок — из карточки */
+      var bnActFill = function (c) {
+        var a = bnView.querySelector('.bnact');
+        a.querySelector('h2').textContent = c.querySelector('h2').textContent;
+        var art = c.querySelector('.bncard__art');
+        var slot = a.querySelector('.bnact__art');
+        if (art && slot) slot.src = art.currentSrc || art.src;
+        var terms = a.querySelector('[data-bn-terms]');
+        if (terms) terms.dataset.bnTerms = c.dataset.key;
+        a.dataset.from = c.dataset.key;
+        a.dataset.days = c.dataset.days || '3';
+        bnActPaint();
+      };
+
+      /* Карточка полученного бонуса остаётся в списке, но меняет вид: тег
+         становится зелёным, а кнопка вместо повторного получения ведёт
+         на вкладку, где бонус отыгрывается. */
+      var bnTake = function (c, on) {
+        var b = c.querySelector('[data-bn-act], [data-bn-goactive]');
+        var tag = c.querySelector('.bn__tag');
+        c.classList.toggle('is-taken', on);
+        if (!b || !tag) return;
+        if (on) {
+          tag.textContent = T('Wagering now');
+          tag.classList.add('bn__tag--live');
+          b.textContent = T('Open in Active');
+          b.classList.remove('bn__btn--primary');
+          b.removeAttribute('data-bn-act');
+          b.setAttribute('data-bn-goactive', '');
+        } else {
+          /* Исходные подписи хранятся по-английски, поэтому возвращаем их
+             через перевод: иначе на русской странице карточка откатывалась
+             к «Receive». */
+          tag.textContent = T(tag.dataset.base || tag.textContent);
+          tag.classList.remove('bn__tag--live');
+          b.textContent = T(b.dataset.base || 'Receive');
+          b.classList.add('bn__btn--primary');
+          b.removeAttribute('data-bn-goactive');
+          b.setAttribute('data-bn-act', '');
+        }
+      };
+
       /* Формы входа и регистрации живут в шапке; отсюда их только зовут */
       var bnAuthForm = function (want) {
         var btn = [].slice.call(document.querySelectorAll('.header-actions .btn'))
@@ -20820,6 +20790,23 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
 
         if (t.dataset.bnGo === 'available') { bnShow('available'); return; }
 
+        /* Получение: бонус заводится в отыгрыш, но карточка остаётся в списке
+           и сама показывает, что уже активна. Так видно и что произошло, и где
+           бонус теперь искать — кнопка ведёт на вкладку Active. */
+        if (t.hasAttribute('data-bn-act')) {
+          /* Гостю бонус класть некуда: сначала аккаунт */
+          if (!document.body.classList.contains('is-authed')) { bnAuthForm('register'); return; }
+          var c = t.closest('.bncard');
+          bnActFill(c);
+          bnView.querySelector('.bnact').hidden = false;
+          bnView.querySelector('.bnact__ask').hidden = true;
+          bnView.querySelector('.bnact__acts').hidden = false;
+          bnTake(c, true);
+          bnSync();
+          return;
+        }
+        /* С активной карточки уходим туда, где бонус отыгрывается */
+        if (t.hasAttribute('data-bn-goactive')) { bnShow('active'); return; }
         /* Отыгрывают ставками, поэтому главное действие ведёт в лобби */
         if (t.hasAttribute('data-bn-play')) { showView('casino'); return; }
 
@@ -20836,6 +20823,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         }
         if (t.hasAttribute('data-bn-drop')) {
           var dropped = bnView.querySelector('.bnact');
+          /* Отменённый бонус возвращается в доступные — иначе он исчезал совсем */
+          var back = dropped.dataset.from &&
+                     bnView.querySelector('.bncard[data-key="' + dropped.dataset.from + '"]');
+          if (back) bnTake(back, false);
           dropped.hidden = true;
           bnView.querySelector('.bnact__ask').hidden = true;
           bnView.querySelector('.bnact__acts').hidden = false;
@@ -20844,6 +20835,14 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         }
       });
 
+      /* Исходные подписи запоминаем на старте: если снять их позже,
+         в память попадёт уже изменённое «In progress» */
+      bnView.querySelectorAll('.bncard').forEach(function (c) {
+        var tag = c.querySelector('.bn__tag');
+        var act = c.querySelector('[data-bn-act]');
+        if (tag) tag.dataset.base = tag.textContent;
+        if (act) act.dataset.base = act.textContent;
+      });
       var bnActCard = bnView.querySelector('.bnact');
       if (bnActCard) {
         bnActCard.dataset.baseTitle = bnActCard.querySelector('h2').textContent;
@@ -21279,11 +21278,15 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
          витрина — единственный вход в эти два вида. */
       var bnState = function (what) {
         if (!bnView) return;
+        var cards = [].slice.call(bnView.querySelectorAll('.bncard'));
         document.body.classList.toggle('is-authed', what !== 'guest');
         showView('bonuses');
 
         var empty = what === 'empty';
-        bnView.querySelectorAll('.bnp__c').forEach(function (c) { c.hidden = empty; });
+        cards.forEach(function (c) {
+          c.hidden = empty;
+          bnTake(c, what === 'active' && c.dataset.key === 'unlock');
+        });
         bnView.querySelector('[data-bnsec="wp"]').hidden = empty;
         var act = bnView.querySelector('.bnact');
         act.hidden = what !== 'active';
