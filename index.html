@@ -2179,7 +2179,9 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
        Градиент закрывает полосу слева на ширинах больше 1440 и взят из
        крайнего левого столбца самой картинки, чтобы стык совпал по цвету. */
     border-radius: 24px; border: 0;
-    background-image: linear-gradient(182.46deg, #031741 0%, #06163b 35%, #081a48 100%);
+    /* 1647:19434 — тот же градиент, что залит в кадре: на ширинах больше 737
+       картинка прижата вправо, и другим оттенком слева был бы виден стык. */
+    background-image: linear-gradient(182.18deg, #041b4b 2.83%, #061537 28.46%, #0a1b49 86.84%);
   }
   /* image 597 — 522x317 на 350,3, низ уходит под обрез */
   /* Арт вписан по высоте баннера: в макете бокс 522x317 уходит на 45px под
@@ -2224,23 +2226,32 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
                 display: flex; flex-direction: column; gap: 32px; }
   /* Правило выше по весу равно базовому и включало бы мобильный блок входа */
   .hero__copy--mob-authed { display: none; }
-  /* 1647:19535 — копи-блок баннеров после входа: слева 23, по центру высоты,
-     ширина 357, шаг 20 между текстом и кнопкой. Числа из макета, не подобраны. */
-  .hero .hero__copy--authed { position: absolute; left: 23px; top: 50%; right: auto;
-                              transform: translateY(-50%); width: 357px;
+  /* 1647:19535 — копи-блок баннеров после входа: 24 слева, 27 сверху,
+     ширина 357, высота 184, шаг 20 между текстом и кнопкой. */
+  .hero .hero__copy--authed { position: absolute; left: 24px; top: 27px; right: auto;
+                              transform: none; width: 357px;
                               align-items: flex-start; gap: 20px; }
   /* 1647:19536 — заголовок и подпись, шаг 16 */
   .hero .hero__copy--authed .hero__text { display: flex; flex-direction: column;
                                           gap: 16px; width: 360px; }
-  /* 1647:19537 — Cora Medium 40, ширина 368 */
-  .hero .hero__copy--authed .hero__title { width: 368px; font-size: 40px;
-                                           line-height: normal; font-weight: 500;
+  /* 1647:19537 — 40/36: в макете две строки занимают ровно 72, поэтому
+     интерлиньяж 36, а не «normal». С normal блок вырастал на 20 и кнопка
+     уезжала к нижнему краю. */
+  .hero .hero__copy--authed .hero__title { margin: 0; width: 368px; font-size: 40px;
+                                           line-height: 36px; font-weight: 500;
                                            color: #fff; }
-  /* 1647:19538 — Cora Regular 20, #dcdcdc. В макете перенос стоит вручную;
-     здесь его держит ширина 360 — разметка одна на три языка. */
-  .hero .hero__copy--authed .hero__sub { width: 360px; font-size: 20px;
-                                         line-height: normal; font-weight: 400;
+  /* 1647:19538 — 20/18, две строки ровно 36 */
+  /* Отрицательные поля базового правила гасили компенсацию капительной
+     высоты у гостевого баннера; здесь интерлиньяж уже даёт ровные 72 и 36,
+     и поля только съедали бы зазоры. */
+  .hero .hero__copy--authed .hero__sub { margin: 0; width: 360px; font-size: 20px;
+                                         line-height: 18px; font-weight: 400;
                                          color: #dcdcdc; }
+  /* 1647:19641 — у беттингового баннера копи-блок и обе строки по 342 */
+  .hero .hero__copy--soc { width: 342px; }
+  .hero .hero__copy--soc .hero__text,
+  .hero .hero__copy--soc .hero__title,
+  .hero .hero__copy--soc .hero__sub { width: 342px; }
   /* 1653:13042 — кнопка 141x40, радиус 10, Instrument Sans Bold 14 */
   .hero .hero__cta--join { box-sizing: border-box; width: 141px; height: 40px;
                            padding: 12px; border-radius: 10px;
@@ -2616,13 +2627,12 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
             scroll-snap-align: center; }
   .mslide__art { position: absolute; inset: 0; display: block;
                  width: 100%; height: 100%; object-fit: cover; }
-  /* 1647:19748 — копи-блок слева 19, по центру высоты, ширина 158,
-     шаг 32 до кнопки. Все числа из макета. */
+  /* 1647:19748 — копи-блок 20 слева, 27 сверху, ширина 158, высота 145,
+     шаг 32 до кнопки. Слева 19, а не 20: у карточки кант в 1px внутри, и
+     абсолютная позиция считается уже за ним. */
   .mslide .hero__copy--mob-authed {
-    /* 18, а не 19: у карточки кант в 1px внутри, и абсолютная позиция
-       отсчитывается уже за ним — от края кадра получается ровно 19. */
-    display: flex; position: absolute; left: 18px; top: 50%; width: 158px;
-    transform: translateY(-50%);
+    display: flex; position: absolute; left: 19px; top: 26px; width: 158px;
+    transform: none;
     flex-direction: column; align-items: flex-start; gap: 32px;
   }
   /* 1647:19750 — заголовок и подпись, шаг 8 */
@@ -2631,11 +2641,15 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
      шире копи-блока и заходит на арт. */
   .mslide .hero__title { width: 236px; margin: 0;
                          font-weight: 700; font-size: 24px; line-height: 1; }
-  /* 1647:19752 — Instrument Sans Medium 14, #eaeaea. В макете перенос ручной;
-     здесь его держит ширина — разметка одна на три языка. */
-  .mslide .hero__sub { width: 168px; margin: 0;
+  /* 1647:19752 — Instrument Sans Medium 14/14, ширина 160: две строки ровно
+     28, как в макете. В макете перенос ручной, здесь его держит ширина —
+     разметка одна на три языка. */
+  .mslide .hero__sub { width: 160px; margin: 0;
                        font-family: 'Instrument Sans', sans-serif; font-weight: 500;
-                       font-size: 14px; line-height: normal; color: #eaeaea; }
+                       font-size: 14px; line-height: 14px; color: #eaeaea; }
+  /* 1647:19977 — у беттингового баннера заголовок 266, подпись 148 */
+  .mslide .hero__copy--soc .hero__title { width: 266px; }
+  .mslide .hero__copy--soc .hero__sub { width: 148px; }
   /* 1653:13046 — кнопка 140x30, радиус 10, Instrument Sans Bold 14 */
   .mslide .hero__cta { box-sizing: border-box; margin-top: 0; width: 140px; height: 30px;
                        padding: 12px; border-radius: 10px;
@@ -6457,7 +6471,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           <div class="hslide">
             <!-- 1647:19541 — беттинг, без предложения -->
             <img class="hero__bg hero__bg--authed" src="a/825eb8e950.webp" alt="">
-            <div class="hero__copy hero__copy--authed">
+            <div class="hero__copy hero__copy--authed hero__copy--soc">
               <div class="hero__text">
                 <h1 class="hero__title">SOCCER NIGHT BET&amp;WIN</h1>
                 <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY MATCH, EVERY DAY</p>
@@ -6505,7 +6519,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         </article>
         <article class="mslide" data-node-id="1647:19873">
           <img class="mslide__art" src="a/9231d9800b.webp" alt="">
-          <div class="hero__copy hero__copy--mob-authed">
+          <div class="hero__copy hero__copy--mob-authed hero__copy--soc">
             <div class="hero__text">
               <h2 class="hero__title">SOCCER NIGHT BET&amp;WIN</h2>
               <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY MATCH, EVERY DAY</p>
