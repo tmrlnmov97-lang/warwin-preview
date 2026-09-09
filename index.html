@@ -3188,6 +3188,17 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
               font-size: 14px; line-height: 20px; color: #fff;
               font-variant-numeric: tabular-nums; }
 .bnwp__time[hidden] { display: none; }
+/* Взятая ступень: вместо часов полоса отыгрыша и подпись под ней. Раньше
+   карточка после депозита просто гасла и про отыгрыш ничего не говорила. */
+.bnwp__bar { display: block; align-self: stretch; height: 6px; margin-top: 14px;
+             border-radius: 999px; background: rgba(0, 0, 0, .28); overflow: hidden; }
+.bnwp__bar[hidden] { display: none; }
+.bnwp__bar i { display: block; width: 0; height: 100%; border-radius: 999px;
+               background: #fff; transition: width .32s cubic-bezier(.4, 0, .2, 1); }
+.bnwp__note { margin-top: 6px; font-family: 'Work Sans', sans-serif;
+              font-size: 13px; line-height: 18px; text-align: center;
+              color: rgba(255, 255, 255, .85); }
+.bnwp__note[hidden] { display: none; }
 .bnwp__time i { font-style: normal; min-width: 20px; text-align: center; }
 .bnwp__time em { font-style: normal; color: rgba(255, 255, 255, .5); }
 .bnwp__go { margin-top: 16px; align-self: stretch; height: 48px; border: 0;
@@ -3209,8 +3220,12 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 /* Закрытая ступень цвет сохраняет: она не потеряна, а ждёт своей очереди,
    и гасить её значило бы прятать предложение. Гасим только то, чего уже нет. */
 .bnwp__c[data-st="MISSED"], .bnwp__c[data-st="USED"] { filter: saturate(.4) brightness(.7); }
-.bnwp__c[data-st="AVAILABLE"]:hover { transform: translateY(-2px);
-                                      box-shadow: 0 14px 30px -14px rgba(7, 148, 255, .7); }
+.bnwp__c[data-st="AVAILABLE"]:hover,
+.bnwp__c[data-st="ACTIVE"]:hover,
+.bnwp__c[data-st="READY"]:hover { transform: translateY(-2px);
+                                  box-shadow: 0 14px 30px -14px rgba(7, 148, 255, .7); }
+/* Отыгранная ступень ждёт одного действия — обмена, и подсвечена под него */
+.bnwp__c[data-st="READY"] { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .55); }
 /* «i» — только там, где условия ещё можно применить к себе */
 .bnwp__i { position: absolute; right: 14px; top: 14px; width: 24px; height: 24px;
            display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
@@ -7733,6 +7748,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                 <b class="bnwp__pct"></b>
                 <span class="bnwp__cap"></span>
                 <span class="bnwp__time" role="timer" aria-live="off"></span>
+                <span class="bnwp__bar" hidden><i></i></span>
+                <span class="bnwp__note" hidden></span>
                 <button class="bnwp__go" type="button" data-wp-go="1"></button>
                 <button class="bnwp__i" type="button" data-wp-info="1" aria-label="Bonus details"></button>
               </article>
@@ -7741,6 +7758,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                 <b class="bnwp__pct"></b>
                 <span class="bnwp__cap"></span>
                 <span class="bnwp__time" role="timer" aria-live="off"></span>
+                <span class="bnwp__bar" hidden><i></i></span>
+                <span class="bnwp__note" hidden></span>
                 <button class="bnwp__go" type="button" data-wp-go="2"></button>
                 <button class="bnwp__i" type="button" data-wp-info="2" aria-label="Bonus details"></button>
               </article>
@@ -7749,6 +7768,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                 <b class="bnwp__pct"></b>
                 <span class="bnwp__cap"></span>
                 <span class="bnwp__time" role="timer" aria-live="off"></span>
+                <span class="bnwp__bar" hidden><i></i></span>
+                <span class="bnwp__note" hidden></span>
                 <button class="bnwp__go" type="button" data-wp-go="3"></button>
                 <button class="bnwp__i" type="button" data-wp-info="3" aria-label="Bonus details"></button>
               </article>
@@ -14887,6 +14908,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      'Exchange {sum}': 'Обменять {sum}',
+      '{done} of {goal} · {n} days left': '{done} из {goal} · {n} дн.',
+      'Wagered · {sum} to move': 'Отыграно · {sum} к переводу',
       'Receive': 'Получить',
       'View Details': 'Подробнее',
       'Wagering now': 'В отыгрыше',
@@ -15650,6 +15674,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      'Exchange {sum}': 'Canjear {sum}',
+      '{done} of {goal} · {n} days left': '{done} de {goal} · {n} días',
+      'Wagered · {sum} to move': 'Apostado · {sum} para pasar',
       'Receive': 'Obtener',
       'View Details': 'Ver detalles',
       'Wagering now': 'En rollover',
@@ -16281,6 +16308,12 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         var b = byId('wb' + tier);
         if (b) {
           if (b.status === 'MISSED_MIN_DEPOSIT' || b.status === 'DECLINED') return 'MISSED';
+          /* Взятая ступень живёт дальше: сначала отыгрывается, потом ждёт
+             обмена и только затем становится просто израсходованной. Раньше
+             все три случая возвращали USED, и карточка гасла сразу после
+             депозита, ничего не сказав про отыгрыш. */
+          if (LIVE[b.status]) return 'ACTIVE';
+          if (b.status === 'COMPLETED' && b.released > 0 && !b.collected) return 'READY';
           return 'USED';
         }
         if (offerOver()) return 'MISSED';
@@ -20598,17 +20631,47 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           el.querySelector('.bnwp__cap').textContent =
             T('{ord} deposit · up to {sum}',
               { ord: T(['1st', '2nd', '3rd'][n - 1]), sum: wbNum(t.cap) });
-          /* Время показываем, пока ступень можно взять: на израсходованной
-             отсчитывать нечего, а по истечении срока вместо часов стоит слово. */
+          var live = view === 'ACTIVE' || view === 'READY';
+          var b = live ? wwWelcome.byId('wb' + n) : null;
+
+          /* Часы до конца пакета нужны, только пока ступень можно взять.
+             На взятой их место занимает полоса отыгрыша. */
           var time = el.querySelector('.bnwp__time');
-          time.hidden = view === 'USED';
-          time.innerHTML = over ? '' : clock;
-          if (over) time.textContent = T('Offer ended');
+          time.hidden = live || view === 'USED';
+          if (!time.hidden) {
+            time.innerHTML = over ? '' : clock;
+            if (over) time.textContent = T('Offer ended');
+          }
+
+          /* Полоса и подпись: сколько отыграно из нужного и сколько дней
+             осталось. Без них взятая ступень молчала о главном — что бонус
+             ещё надо отыграть. */
+          var bar = el.querySelector('.bnwp__bar');
+          var note = el.querySelector('.bnwp__note');
+          bar.hidden = !b;
+          note.hidden = !b;
+          if (b) {
+            var pct = b.wagerRequired
+              ? Math.min(100, Math.round(b.wagered / b.wagerRequired * 100)) : 0;
+            if (view === 'READY') pct = 100;
+            bar.querySelector('i').style.width = pct + '%';
+            if (view === 'READY') {
+              note.textContent = T('Wagered · {sum} to move', { sum: wbNum(b.released) });
+            } else {
+              var days = Math.max(0, Math.ceil((b.expiresAt - Date.now()) / 864e5));
+              note.textContent = T('{done} of {goal} · {n} days left',
+                { done: wbNum(b.wagered), goal: wbNum(b.wagerRequired), n: days });
+            }
+          }
+
           var go = el.querySelector('.bnwp__go');
-          go.disabled = view !== 'AVAILABLE';
+          go.disabled = view === 'USED' || view === 'MISSED' || view === 'LOCKED';
           go.textContent = view === 'USED' ? T('Received')
                          : view === 'MISSED' ? T('Missed')
-                         : view === 'AVAILABLE' ? T('Get bonus') : '';
+                         : view === 'AVAILABLE' ? T('Get bonus')
+                         : view === 'ACTIVE' ? T('Play')
+                         : view === 'READY' ? T('Exchange {sum}', { sum: wbNum(b.released) })
+                         : '';
         });
         /* Когда все три ступени израсходованы, предлагать нечего — уходит
            вся секция вместе с заголовком, а не один ряд карточек. */
@@ -20780,6 +20843,20 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         if (t.dataset.wpInfo) { wbInfo(parseInt(t.dataset.wpInfo, 10)); return; }
         if (t.hasAttribute('data-wp-go')) {
           if (!document.body.classList.contains('is-authed')) { bnAuthForm('register'); return; }
+          var step = parseInt(t.dataset.wpGo, 10);
+          var view = wwWelcome.tierView(step);
+          /* Отыгрывают ставками, поэтому идущая ступень ведёт в лобби */
+          if (view === 'ACTIVE') { showView('casino'); return; }
+          /* Отыгранная — переводит бонус в деньги тут же, не заставляя идти
+             в панель профиля за той же кнопкой. */
+          if (view === 'READY') {
+            var r = wwWelcome.claim('wb' + step);
+            if (r.ok) {
+              wwCur.add(r.amount);
+              notify(T('Bonus moved to your balance.'), 'ok');
+            }
+            return;
+          }
           var dep = document.querySelector('.wallet__deposit');
           if (dep) dep.click();
           var seg = document.querySelector('.dp__seg-btn[data-seg="deposit"]');
@@ -21343,6 +21420,14 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           wpAt({ bonuses: [{ tier: 1, deposit: 20000, status: 'COMPLETED', collected: true },
                            { tier: 2, deposit: 20000, status: 'COMPLETED', collected: true },
                            { tier: 3, deposit: 20000, status: 'COMPLETED', collected: true }] }); }],
+        /* Взятая ступень: полоса отыгрыша, остаток и срок прямо на карточке */
+        ['Первая в отыгрыше · 0%', function () {
+          wpAt({ bonuses: [{ tier: 1, deposit: 20000, status: 'ACTIVE' }] }); }],
+        ['Первая в отыгрыше · половина', function () {
+          wpAt({ bonuses: [{ tier: 1, deposit: 20000, status: 'ACTIVE', wagered: 300000 }] }); }],
+        ['Первая отыграна · можно обменять', function () {
+          wpAt({ bonuses: [{ tier: 1, deposit: 20000, status: 'COMPLETED',
+                             wagered: 600000 }] }); }],
         ['Осталось меньше часа', function () { wpAt({ offerLeft: 47 * 60000 }); }],
         ['Срок вышел · ступени упущены', function () { wpAt({ offerLeft: -1000 }); }]
       ]]);
