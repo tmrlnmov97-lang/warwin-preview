@@ -3143,12 +3143,17 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnsec[hidden] { display: none; }
 .bnsec__h { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 700;
             font-size: 20px; line-height: 26px; color: var(--white); }
-/* Ступени пакета — четыре колонки по 261, как в макете: карточек три,
-   четвёртое место остаётся под будущую. Обычные карточки предложений живут
-   по-прежнему втроём в ряд и шире. */
-.bnwp, .bnp { display: grid; gap: 20px; }
-.bnwp { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.bnp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* Оба ряда — лента с прокруткой вбок, а не сетка вниз: предложений будет
+   больше трёх, и вертикальный список растил бы страницу. Карточки уже́ прежних,
+   чтобы в кадр помещалось больше. Уезжаем за поля колонки, чтобы соседняя
+   карточка выглядывала краем и было видно, что ленту можно тянуть. */
+.bnwp, .bnp { display: flex; gap: 16px; overflow-x: auto; overscroll-behavior-x: contain;
+              scroll-snap-type: x proximity; scrollbar-width: none;
+              margin: 0 -4px; padding: 2px 4px 6px; }
+.bnwp::-webkit-scrollbar, .bnp::-webkit-scrollbar { display: none; }
+.bnwp__c, .bnp .bncard { scroll-snap-align: start; }
+.bnwp__c { flex: 0 0 216px; }
+.bnp .bncard { flex: 0 0 268px; height: auto; }
 .bnp[hidden], .bnwp[hidden] { display: none; }
 
 .bn__empty { grid-column: 1 / -1; box-sizing: border-box; display: flex; flex-direction: column;
@@ -3188,7 +3193,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnwp__cap { margin-top: 4px; font-family: 'Work Sans', sans-serif; font-size: 14px;
              line-height: 20px; color: rgba(255, 255, 255, .8); text-align: center; }
 /* Часы: разряды отдельными клетками, иначе цифры прыгают по ширине каждую секунду */
-.bnwp__time { display: inline-flex; align-items: center; gap: 2px; margin-top: 12px;
+.bnwp__time { display: inline-flex; align-items: center; gap: 2px; margin: 12px 0 16px;
               padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, .22);
               font-family: 'Instrument Sans', sans-serif; font-weight: 700;
               font-size: 14px; line-height: 20px; color: #fff;
@@ -3201,13 +3206,15 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .bnwp__bar[hidden] { display: none; }
 .bnwp__bar i { display: block; width: 0; height: 100%; border-radius: 999px;
                background: #fff; transition: width .32s cubic-bezier(.4, 0, .2, 1); }
-.bnwp__note { margin-top: 6px; font-family: 'Work Sans', sans-serif;
+.bnwp__note { margin: 6px 0 16px; font-family: 'Work Sans', sans-serif;
               font-size: 13px; line-height: 18px; text-align: center;
               color: rgba(255, 255, 255, .85); }
 .bnwp__note[hidden] { display: none; }
 .bnwp__time i { font-style: normal; min-width: 20px; text-align: center; }
 .bnwp__time em { font-style: normal; color: rgba(255, 255, 255, .5); }
-.bnwp__go { margin-top: 16px; align-self: stretch; height: 48px; border: 0;
+/* Кнопку прижимаем к низу: у узкой карточки подпись «2-й депозит · до 150 000»
+   встаёт в две строки, и без этого кнопки в ряду вставали на разной высоте. */
+.bnwp__go { margin-top: auto; padding-top: 0; align-self: stretch; height: 48px; border: 0;
             border-radius: 12px; cursor: pointer; background: #fff; color: #0e132a;
             font-family: 'Instrument Sans', sans-serif; font-weight: 700;
             font-size: 14px; line-height: 20px;
@@ -3417,9 +3424,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 
 @media (max-width: 1279px) {
   .bn__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  /* Четыре колонки живут только на полной ширине: ниже 261 карточка ломается */
-  .bnwp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .bnp { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
   /* 300 на панель из узкой колонки уже не выкроить */
   .bnact { grid-template-columns: 1fr; gap: 18px; }
   /* Панель ложится строкой: два денежных блока рядом */
@@ -3431,7 +3436,12 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   .bn__h1 { font-size: 26px; line-height: 32px; }
   .bn__list { grid-template-columns: 1fr; gap: 12px; }
   .bn__list--offers { gap: 24px; }
-  .bnwp, .bnp { grid-template-columns: 1fr; gap: 12px; }
+  /* На узком экране лента выходит за поля страницы: соседняя карточка
+     выглядывает у края, и подсказка «тянется вбок» остаётся. */
+  .bnwp, .bnp { gap: 12px; margin: 0 calc(-1 * var(--edge, 16px));
+                padding: 2px var(--edge, 16px) 6px; }
+  .bnwp__c { flex: 0 0 196px; }
+  .bnp .bncard { flex: 0 0 248px; }
   .bnsec__h { font-size: 18px; line-height: 24px; }
   .bn__chip { font-size: 14px; padding: 7px 14px; }
   /* На узком экране полоса складывается в столбец: три колонки в 390 не живут */
