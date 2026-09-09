@@ -2898,6 +2898,7 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 .vipro__lvl--general { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
 .vipro__lvl--warlord { background: rgba(7, 148, 255, .18); color: #6bb8ff; }
 .vipro__badge { position: absolute; right: 31px; top: 31px; width: 217px; height: 217px; }
+.vipro__badge[hidden] { display: none; }
 
 /* Чипы уровней в карточках — металл своего уровня */
 .vlvl__chip { display: inline-flex; align-items: center; height: 30px; padding: 0 14px;
@@ -7571,8 +7572,14 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               <span class="vipro__next">Next level: Silver</span>
             </div>
             <!-- Знак берём прозрачным из спрайта: выгрузка узла из Figma
-                 приходит с запечённым фоном и даёт видимый прямоугольник -->
-            <img loading="lazy" decoding="async" class="vipro__badge" src="a/274357f383.webp" alt="" width="217" height="217">
+                 приходит с запечённым фоном и даёт видимый прямоугольник.
+                 Все четыре лежат в разметке и переключаются видимостью:
+                 сборка переименовывает файлы, и подстановка пути скриптом
+                 давала битую картинку — на превью знак пропадал. -->
+            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="soldier" src="a/274357f383.webp" alt="" width="217" height="217">
+            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="captain" src="a/3c38490295.webp" alt="" width="217" height="217" hidden>
+            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="general" src="a/ab8492bd00.webp" alt="" width="217" height="217" hidden>
+            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="warlord" src="a/aba35aeabd.webp" alt="" width="217" height="217" hidden>
           </div>
         </section>
 
@@ -20925,7 +20932,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         vipView.querySelector('.vipro__track i').style.width = pct + '%';
         vipView.querySelector('.vipro__next').textContent =
           top ? T('Top level reached') : T('Next level: {name}', { name: lv.next });
-        vipView.querySelector('.vipro__badge').src = 'assets/vip-lvl-' + lv.key + '.png';
+        vipView.querySelectorAll('[data-vip-badge]').forEach(function (img) {
+          img.hidden = img.dataset.vipBadge !== lv.key;
+        });
         /* Пройденные ступени гасим отдельно от текущей: «здесь я» стояло на
            первой карточке при любом уровне, и лестница ничего не сообщала. */
         [].slice.call(vipView.querySelectorAll('.vlvl__i')).forEach(function (li, n) {
