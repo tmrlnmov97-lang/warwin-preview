@@ -5181,47 +5181,58 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
    Номер шага и его состояние, между шагами — линия. Линию рисует ::after
    у пункта, а не отдельный элемент: иначе последний шаг тянул бы хвост
    в пустоту, и его пришлось бы прятать отдельным правилом. */
-.vfs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
-       margin: 0; padding: 0; list-style: none; }
-.vfs__item { position: relative; min-width: 0; }
-.vfs__item + .vfs__item::after {
-  content: ''; position: absolute; left: -50%; right: 50%; top: 20px; height: 2px;
-  margin: 0 28px; border-radius: 2px; background: var(--white-10); }
-.vfs__item.is-done::after, .vfs__item.is-current::after { background: var(--register); }
-.vfs__btn { position: relative; z-index: 1; box-sizing: border-box;
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-            width: 100%; padding: 0 8px; border: 0; background: none; cursor: pointer; }
+/* ── Степпер верификации ──
+   Раньше это были четыре кружка во всю ширину с линией между ними: они
+   отвечали только на «где я», занимали строку целиком и на четырёх шагах
+   расползались. Теперь сверху строка «шаг 2 из 4» с процентом и тонкая
+   полоса — сколько закрыто, — а под ней компактные плитки шагов. */
+.vfs { display: flex; flex-direction: column; gap: 10px;
+       padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, .03);
+       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05); }
+.vfs__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.vfs__now { font-family: 'Work Sans', sans-serif; font-weight: 600;
+            font-size: 15px; line-height: 21px; color: var(--white); }
+.vfs__pct { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+            font-size: 14px; line-height: 20px; color: var(--primary);
+            font-variant-numeric: tabular-nums; }
+.vfs__bar { display: block; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, .08); }
+.vfs__bar i { display: block; width: 0; height: 100%; border-radius: 999px;
+              background: linear-gradient(90deg, var(--primary), #5ec6ff);
+              transition: width .32s cubic-bezier(.4, 0, .2, 1); }
+.vfs__row { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px;
+            grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.vfs__item { min-width: 0; }
+.vfs__btn { box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border: 0; border-radius: 12px; cursor: pointer; text-align: left;
+            background: rgba(255, 255, 255, .04);
+            transition: background-color .16s ease, box-shadow .16s ease; }
 .vfs__btn[disabled] { cursor: default; }
-.vfs__mark { display: grid; place-items: center; width: 40px; height: 40px; flex: none;
-             border-radius: 50%; box-sizing: border-box;
-             background: var(--chrome); box-shadow: inset 0 0 0 2px var(--white-10);
+.vfs__btn:not([disabled]):hover { background: rgba(255, 255, 255, .08); }
+/* Кружок со ступенью: цифра, галочка на закрытом, восклицательный на сбое */
+.vfs__mark { display: grid; place-items: center; width: 28px; height: 28px; flex: none;
+             border-radius: 50%; background: rgba(255, 255, 255, .08); color: var(--dp-label);
              font-family: 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 15px; line-height: 1; color: var(--dp-label);
-             transition: background-color .16s ease, color .16s ease, box-shadow .16s ease; }
-.vfs__item.is-current .vfs__mark { background: var(--primary); color: #05203a;
-                                   box-shadow: inset 0 0 0 2px var(--primary); }
-/* Пройденный шаг показывает галочку вместо номера: номер уже ничего
-   не сообщает, а галочка сразу читается как «сделано». */
-.vfs__item.is-done .vfs__mark { background: var(--register); color: #06210d;
-                                box-shadow: inset 0 0 0 2px var(--register); }
+             font-size: 13px; line-height: 1; }
+.vfs__item.is-current .vfs__btn { background: var(--pick-bg);
+                                  box-shadow: inset 0 0 0 1px var(--pick-line); }
+.vfs__item.is-current .vfs__mark { background: var(--primary); color: #04213a; }
+.vfs__item.is-done .vfs__mark { background: var(--register); color: #06210d; }
 .vfs__item.is-done .vfs__mark b { font-size: 0; }
-.vfs__item.is-done .vfs__mark b::after { content: '\2713'; font-size: 17px; }
-.vfs__item.is-bad .vfs__mark { background: #e5484d; color: #fff;
-                               box-shadow: inset 0 0 0 2px #e5484d; }
+.vfs__item.is-done .vfs__mark b::after { content: '\2713'; font-size: 14px; }
+.vfs__item.is-bad .vfs__mark { background: #e5484d; color: #fff; }
 .vfs__item.is-bad .vfs__mark b { font-size: 0; }
-.vfs__item.is-bad .vfs__mark b::after { content: '!'; font-size: 18px; }
-.vfs__btn:not([disabled]):hover .vfs__mark { box-shadow: inset 0 0 0 2px var(--white-16); }
-.vfs__item.is-done .vfs__btn:hover .vfs__mark,
-.vfs__item.is-current .vfs__btn:hover .vfs__mark { box-shadow: none; filter: brightness(1.08); }
-.vfs__text { display: flex; flex-direction: column; align-items: center; gap: 2px;
-             min-width: 0; text-align: center; }
-.vfs__name { font-family: 'Instrument Sans', sans-serif; font-weight: 600;
-             font-size: 14px; line-height: 18px; color: var(--white); }
+.vfs__item.is-bad .vfs__mark b::after { content: '!'; font-size: 15px; }
+.vfs__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.vfs__name { font-family: 'Work Sans', sans-serif; font-weight: 600;
+             font-size: 14px; line-height: 19px; color: var(--white);
+             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .vfs__item.is-locked .vfs__name { color: var(--dp-label); }
-.vfs__state { font-family: 'Work Sans', sans-serif; font-style: normal;
-              font-size: 12px; line-height: 16px; color: var(--dp-label); }
-.vfs__btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 4px;
-                          border-radius: 12px; }
+.vfs__state { font-style: normal; font-family: 'Work Sans', sans-serif;
+              font-size: 12px; line-height: 16px; color: var(--dp-label);
+              overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vfs__item.is-done .vfs__state { color: var(--register); }
+.vfs__item.is-current .vfs__state { color: var(--primary); }
+.vfs__btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 /* ── Общая рамка шага ──
    Тот же фон и кант, что у карточек на General: вкладки одной страницы,
@@ -5247,8 +5258,11 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
           transition: filter .16s ease, transform .12s ease; }
 .vf__go:hover { background: var(--primary-hover); transform: translateY(-1px); }
 .vf__go:active { transform: translateY(0); background: var(--primary-active); }
-.vf__go[disabled] { background: var(--white-10); color: rgba(255, 255, 255, .4);
+/* Выключенная кнопка остаётся синей, как в форме входа: серая читалась как
+   другая кнопка, а не как та же самая, которой пока нечего делать. */
+.vf__go[disabled] { background: rgba(7, 148, 255, .3); color: rgba(255, 255, 255, .55);
                     cursor: default; filter: none; transform: none; }
+.vf__go[disabled]:hover { background: rgba(7, 148, 255, .3); }
 .vf__go[hidden] { display: none; }
 .vf__back { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: 12px;
             cursor: pointer; background: var(--white-06); color: var(--white);
@@ -5277,6 +5291,9 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
              font-family: 'Work Sans', sans-serif; font-weight: 600;
              font-size: 12px; line-height: 16px; }
 .vf__badge img { display: block; }
+/* display перебивал атрибут hidden, и рядом с «не подтверждён» стояла
+   зелёная галочка — метка спорила сама с собой. */
+.vf__badge img[hidden] { display: none; }
 .vf__badge--ok { background: rgba(0, 201, 40, .14); color: var(--register); }
 .vf__badge--warn { background: rgba(229, 72, 77, .14); color: #ff8e91; }
 .vf__mail { display: flex; flex-direction: column; gap: 12px; max-width: 460px; }
@@ -5478,10 +5495,13 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
   .vf { gap: 20px; }
   .vf__step { padding: 18px 16px; }
   .vf__res { padding: 32px 16px; }
-  .vfs__mark { width: 34px; height: 34px; font-size: 14px; }
-  .vfs__item + .vfs__item::after { top: 17px; margin: 0 22px; }
-  .vfs__btn { padding: 0 4px; gap: 6px; }
-  .vfs__name { font-size: 13px; line-height: 17px; }
+  /* На узком экране плитки встают в два ряда: четыре колонки по 90 px
+     обрезали бы и название, и состояние. */
+  .vfs { padding: 14px; }
+  .vfs__row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vfs__btn { padding: 9px 10px; gap: 8px; }
+  .vfs__mark { width: 26px; height: 26px; font-size: 12px; }
+  .vfs__name { font-size: 13px; line-height: 18px; }
   .vfs__state { font-size: 11px; line-height: 15px; }
   /* Кнопки в одну строку: главная забирает остаток, «Назад» по содержимому.
      Раньше главная растягивалась на всю ширину и вставала над «Назад» —
@@ -7021,7 +7041,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               </div>
             </div>
             <div class="prof__cell">
-              <span class="prof__label">Phone <em class="prof__badge prof__badge--warn">not verified</em></span>
+              <span class="prof__label">Phone <em class="prof__badge prof__badge--warn" data-prof-telbadge>not verified</em></span>
               <div class="prof__box">
                 <span class="prof__value">+55 11 992••••38</span>
                 <button class="prof__link" type="button" data-fgo="tab:verification">Verify</button>
@@ -7128,31 +7148,46 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           <div class="vf" data-vf>
             <div class="vf__intro">
               <h2 class="vf__h2">Verification</h2>
-              <p>Needed once before your first withdrawal. Three steps, a&nbsp;couple of&nbsp;minutes.</p>
+              <p>Needed once before your first withdrawal. Four steps, a&nbsp;couple of&nbsp;minutes.</p>
             </div>
 
-            <!-- Степпер. Кнопкой можно вернуться на пройденный шаг; на шаг
-                 вперёд кнопка выключена, пока текущий не пройден. -->
-            <ol class="vfs" aria-label="Verification steps">
+            <!-- Степпер. Полоса сверху отвечает на «сколько ещё осталось»,
+                 плитки — на «где я сейчас». Кружки во всю ширину отвечали
+                 только на второе и занимали строку целиком. Кнопкой можно
+                 вернуться на пройденный шаг; вперёд — только пройдя текущий. -->
+            <div class="vfs">
+              <div class="vfs__head">
+                <b class="vfs__now" data-vfs-now></b>
+                <span class="vfs__pct" data-vfs-pct></span>
+              </div>
+              <span class="vfs__bar" aria-hidden="true"><i data-vfs-fill></i></span>
+              <ol class="vfs__row" aria-label="Verification steps">
               <li class="vfs__item" data-vfs="email">
                 <button class="vfs__btn" type="button">
                   <span class="vfs__mark" aria-hidden="true"><b>1</b></span>
-                  <span class="vfs__text"><b class="vfs__name">E-mail</b><em class="vfs__state">In progress</em></span>
+                  <span class="vfs__text"><b class="vfs__name">E-mail</b><em class="vfs__state">Not started</em></span>
+                </button>
+              </li>
+              <li class="vfs__item" data-vfs="phone">
+                <button class="vfs__btn" type="button">
+                  <span class="vfs__mark" aria-hidden="true"><b>2</b></span>
+                  <span class="vfs__text"><b class="vfs__name">Phone</b><em class="vfs__state">Not started</em></span>
                 </button>
               </li>
               <li class="vfs__item" data-vfs="type">
                 <button class="vfs__btn" type="button">
-                  <span class="vfs__mark" aria-hidden="true"><b>2</b></span>
+                  <span class="vfs__mark" aria-hidden="true"><b>3</b></span>
                   <span class="vfs__text"><b class="vfs__name">Document</b><em class="vfs__state">Not started</em></span>
                 </button>
               </li>
               <li class="vfs__item" data-vfs="upload">
                 <button class="vfs__btn" type="button">
-                  <span class="vfs__mark" aria-hidden="true"><b>3</b></span>
+                  <span class="vfs__mark" aria-hidden="true"><b>4</b></span>
                   <span class="vfs__text"><b class="vfs__name">Upload</b><em class="vfs__state">Not started</em></span>
                 </button>
               </li>
-            </ol>
+              </ol>
+            </div>
 
             <!-- ── Шаг 1. Почта ── -->
             <section class="vf__step" data-vfstep="email" aria-labelledby="vf-email-h">
@@ -7182,7 +7217,39 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               </div>
 
               <div class="vf__acts">
-                <button class="vf__back" type="button" data-vf-edit hidden>Change</button>
+                <button class="vf__go" type="button" data-vf-next>Continue</button>
+              </div>
+            </section>
+
+            <!-- ── Шаг 2. Телефон ──
+                 В профиле номер стоял «не подтверждён» и кнопка «Verify» вела
+                 сюда, а подтверждать его тут было негде. -->
+            <section class="vf__step" data-vfstep="phone" hidden aria-labelledby="vf-tel-h">
+              <h3 class="vf__h3" id="vf-tel-h">Confirm your phone</h3>
+              <p class="vf__lead">Codes for&nbsp;withdrawals and&nbsp;access recovery come here as&nbsp;SMS.</p>
+
+              <div class="vf__field">
+                <label class="vf__lab" for="vf-tel">Phone number</label>
+                <div class="vf__ro">
+                  <input class="vf__inp" id="vf-tel" type="tel" value="+55 11 992••••38" readonly>
+                  <em class="vf__badge vf__badge--warn" data-vf-telbadge>
+                    <img loading="lazy" decoding="async" src="a/e09ef2fd57.svg" alt="" width="14" height="14" hidden><span>Not verified</span>
+                  </em>
+                </div>
+              </div>
+
+              <div class="vf__mail" data-vf-telbox hidden>
+                <p class="vf__note">We sent a&nbsp;six-digit code by&nbsp;SMS. It&nbsp;is valid for&nbsp;15&nbsp;minutes.</p>
+                <div class="vf__code">
+                  <input class="vf__inp vf__inp--code" data-vf-telcode inputmode="numeric" autocomplete="one-time-code"
+                         maxlength="6" placeholder="000000" aria-label="Confirmation code">
+                  <button class="vf__ghost" type="button" data-vf-telresend>Send the code again</button>
+                </div>
+                <p class="vf__err" data-vf-telerr hidden></p>
+              </div>
+
+              <div class="vf__acts">
+                <button class="vf__back" type="button" data-vf-prev>Back</button>
                 <button class="vf__go" type="button" data-vf-next>Continue</button>
               </div>
             </section>
@@ -7224,7 +7291,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
 
               <div class="vf__acts">
                 <button class="vf__back" type="button" data-vf-prev>Back</button>
-                <button class="vf__back" type="button" data-vf-edit hidden>Change</button>
                 <button class="vf__go" type="button" data-vf-next disabled>Continue</button>
               </div>
             </section>
@@ -14815,6 +14881,25 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      /* ── Верификация: шаг телефона и степпер ── */
+      'Phone': 'Телефон',
+      'Confirm your phone': 'Подтвердите телефон',
+      'Codes for withdrawals and access recovery come here as SMS.':
+        'Коды для вывода и восстановления доступа приходят сюда по SMS.',
+      'Phone number': 'Номер телефона',
+      'We sent a six-digit code by SMS. It is valid for 15 minutes.':
+        'Мы отправили шестизначный код по SMS. Он действует 15 минут.',
+      'Send the code again': 'Отправить код ещё раз',
+      'The SMS is on its way. It can take up to a minute.':
+        'SMS уже в пути. Иногда идёт до минуты.',
+      'Enter the six-digit code from the SMS.': 'Введите шестизначный код из SMS.',
+      'The code does not match. Check the SMS or ask for a new one.':
+        'Код не совпал. Проверьте SMS или запросите новый.',
+      'Phone confirmed.': 'Телефон подтверждён.',
+      'Step {n} of {all} · {name}': 'Шаг {n} из {all} · {name}',
+      'All steps done': 'Все шаги пройдены',
+      'verified': 'подтверждён',
+      'not verified': 'не подтверждён',
       /* Месяцы в коротких датах */
       'Jan': 'янв',
       'Feb': 'фев',
@@ -14873,8 +14958,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'The file is {size} — the limit is 5 MB.': 'Файл весит {size} — предел 5 МБ.',
       'Document sent for review.': 'Документ отправлен на проверку.',
       /* ── Верификация: три шага ── */
-      'Needed once before your first withdrawal. Three steps, a couple of minutes.':
-        'Нужна один раз перед первым выводом. Три шага, пара минут.',
+      'Needed once before your first withdrawal. Four steps, a couple of minutes.':
+        'Нужна один раз перед первым выводом. Четыре шага, пара минут.',
       'Verification steps': 'Шаги верификации',
       'Document': 'Документ',
       'Upload': 'Загрузка',
@@ -15565,6 +15650,25 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      /* ── Verificación: paso del teléfono y stepper ── */
+      'Phone': 'Teléfono',
+      'Confirm your phone': 'Confirmá tu teléfono',
+      'Codes for withdrawals and access recovery come here as SMS.':
+        'Los códigos para retirar y recuperar el acceso llegan acá por SMS.',
+      'Phone number': 'Número de teléfono',
+      'We sent a six-digit code by SMS. It is valid for 15 minutes.':
+        'Enviamos un código de seis dígitos por SMS. Vale por 15 minutos.',
+      'Send the code again': 'Enviar el código de nuevo',
+      'The SMS is on its way. It can take up to a minute.':
+        'El SMS está en camino. Puede tardar hasta un minuto.',
+      'Enter the six-digit code from the SMS.': 'Ingresá el código de seis dígitos del SMS.',
+      'The code does not match. Check the SMS or ask for a new one.':
+        'El código no coincide. Revisá el SMS o pedí uno nuevo.',
+      'Phone confirmed.': 'Teléfono confirmado.',
+      'Step {n} of {all} · {name}': 'Paso {n} de {all} · {name}',
+      'All steps done': 'Todos los pasos completados',
+      'verified': 'verificado',
+      'not verified': 'sin verificar',
       /* Meses en fechas cortas */
       'Jan': 'ene',
       'Feb': 'feb',
@@ -15623,8 +15727,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'The file is {size} — the limit is 5 MB.': 'El archivo pesa {size}: el límite es 5 MB.',
       'Document sent for review.': 'Documento enviado a revisión.',
       /* ── Verificación: tres pasos ── */
-      'Needed once before your first withdrawal. Three steps, a couple of minutes.':
-        'Se hace una sola vez, antes del primer retiro. Tres pasos, un par de minutos.',
+      'Needed once before your first withdrawal. Four steps, a couple of minutes.':
+        'Se hace una sola vez, antes del primer retiro. Cuatro pasos, un par de minutos.',
       'Verification steps': 'Pasos de verificación',
       'Document': 'Documento',
       'Upload': 'Carga',
@@ -18838,7 +18942,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       var vfRoot = profView.querySelector('[data-vf]');
       if (vfRoot) (function () {
         var KEY = 'ww-kyc';
-        var ORDER = ['email', 'type', 'upload'];
+        var ORDER = ['email', 'phone', 'type', 'upload'];
         var MAX = 10 * 1024 * 1024;
         var MIN_PX = 600;
         var TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
@@ -18855,7 +18959,20 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           id: 'Two photos — the front and the back of the card.'
         };
 
-        var st = { step: 'email', reached: 'email', mail: 'ok', type: '', slots: {}, res: '' };
+        var BLANK = function () {
+          return { step: 'email', reached: 'email', mail: 'ok', tel: 'no',
+                   type: '', slots: {}, res: '' };
+        };
+        var st = BLANK();
+        /* Почта приходит подтверждённой из профиля, поэтому первый шаг закрыт
+           сразу: держать его «в работе» рядом с зелёной галочкой было нечестно,
+           и человек жал «Продолжить» просто чтобы пройти мимо. */
+        var normalise = function () {
+          if (st.mail === 'ok' && st.reached === 'email') {
+            st.reached = 'phone';
+            if (st.step === 'email') st.step = 'phone';
+          }
+        };
 
         var read = function () {
           var raw = safeStore.get(KEY);
@@ -18866,6 +18983,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               if (ORDER.indexOf(o.step) >= 0) st.step = o.step;
               if (ORDER.indexOf(o.reached) >= 0) st.reached = o.reached;
               if (o.mail === 'ok' || o.mail === 'no') st.mail = o.mail;
+              if (o.tel === 'ok' || o.tel === 'no') st.tel = o.tel;
               if (SLOTS[o.type]) st.type = o.type;
               if (o.slots && typeof o.slots === 'object') st.slots = o.slots;
               if (typeof o.res === 'string') st.res = o.res;
@@ -18899,7 +19017,26 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           return 'Not started';
         };
 
+        var STEP_NAME = { email: 'E-mail', phone: 'Phone', type: 'Document', upload: 'Upload' };
+        var vfNow = vfRoot.querySelector('[data-vfs-now]');
+        var vfPct = vfRoot.querySelector('[data-vfs-pct]');
+        var vfFill = vfRoot.querySelector('[data-vfs-fill]');
+
         var paintSteps = function () {
+          /* Полоса считает закрытые шаги, а не текущий: пока шаг не пройден,
+             двигать её нечем, и рывок на нуле выглядел бы обманом. */
+          var done = ORDER.filter(function (n) {
+            return idx(n) < idx(st.reached) || (st.res && st.res !== 'no');
+          }).length;
+          var pct = Math.round(done / ORDER.length * 100);
+          if (vfFill) vfFill.style.width = pct + '%';
+          if (vfPct) vfPct.textContent = pct + '%';
+          if (vfNow) {
+            vfNow.textContent = st.res
+              ? T('All steps done')
+              : T('Step {n} of {all} · {name}',
+                  { n: idx(st.step) + 1, all: ORDER.length, name: T(STEP_NAME[st.step]) });
+          }
           ORDER.forEach(function (name) {
             var li = stepBtns[name];
             if (!li) return;
@@ -18945,7 +19082,52 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           notify(T('The e-mail is on its way. Check the spam folder if it is not there.'), 'ok');
         });
 
-        /* ── Шаг 2: тип документа ── */
+        /* ── Шаг 2: телефон ──
+           Повторяет обряд почты: бейдж, поле кода, повторная отправка. Код тот
+           же учебный, что и в почте, — настоящей отправки за прототипом нет. */
+        var telBadge = vfRoot.querySelector('[data-vf-telbadge]');
+        var telBox = vfRoot.querySelector('[data-vf-telbox]');
+        var telCode = vfRoot.querySelector('[data-vf-telcode]');
+        var telErr = vfRoot.querySelector('[data-vf-telerr]');
+
+        var paintTel = function () {
+          if (!telBadge) return;
+          var ok = st.tel === 'ok';
+          telBadge.className = 'vf__badge ' + (ok ? 'vf__badge--ok' : 'vf__badge--warn');
+          telBadge.querySelector('span').textContent = T(ok ? 'Verified' : 'Not verified');
+          telBadge.querySelector('img').hidden = !ok;
+          telBox.hidden = ok;
+          /* Тот же номер помечен в профиле: подтверждают его здесь, а смотрят
+             там, и метка «не подтверждён» осталась бы висеть после проверки. */
+          var pl = document.querySelector('[data-prof-telbadge]');
+          if (pl) {
+            pl.className = 'prof__badge ' + (ok ? 'prof__badge--ok' : 'prof__badge--warn');
+            pl.textContent = T(ok ? 'verified' : 'not verified');
+          }
+          var pv = pl && pl.closest('.prof__cell').querySelector('.prof__link');
+          if (pv) pv.hidden = ok;
+        };
+        var telSay = function (text) {
+          if (!telErr) return;
+          telErr.textContent = text || '';
+          telErr.hidden = !text;
+          telCode.classList.toggle('is-bad', !!text);
+        };
+        if (telCode) {
+          telCode.addEventListener('input', function () {
+            telCode.value = telCode.value.replace(/\D/g, '').slice(0, 6);
+            telSay('');
+          });
+        }
+        var telResend = vfRoot.querySelector('[data-vf-telresend]');
+        if (telResend) {
+          telResend.addEventListener('click', function () {
+            telSay('');
+            notify(T('The SMS is on its way. It can take up to a minute.'), 'ok');
+          });
+        }
+
+        /* ── Шаг 3: тип документа ── */
         var typeIns = [].slice.call(vfRoot.querySelectorAll('.vft__in'));
         typeIns.forEach(function (r) {
           r.addEventListener('change', function () {
@@ -19090,11 +19272,11 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         };
 
         /* ── Общая отрисовка ── */
-        var view = function () { return idx(st.step) < idx(st.reached); };
 
         var paint = function () {
           paintSteps();
           paintMail();
+          paintTel();
 
           var onRes = !!st.res;
           ORDER.forEach(function (name) { steps[name].hidden = onRes || name !== st.step; });
@@ -19122,18 +19304,17 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             return;
           }
 
-          var ro = view();
-          vfRoot.classList.toggle('is-view', ro);
+          /* Пройденный шаг больше не «только для чтения» с кнопкой «Изменить»:
+             кнопка появлялась сразу после выбора документа и выглядела как
+             лишний обряд. Вернулся на шаг — сразу и правишь. */
 
-          /* Шаг 2 */
+          /* Шаг 3: тип документа */
           typeIns.forEach(function (r) {
             r.checked = r.value === st.type;
-            r.disabled = ro;
             r.closest('.vft__card').classList.toggle('is-on', r.checked);
-            r.closest('.vft__card').classList.toggle('is-off', ro);
           });
 
-          /* Шаг 3: слоты по типу */
+          /* Шаг 4: слоты по типу */
           var list = SLOTS[st.type] || SLOTS.id;
           if (upLead) upLead.textContent = T(LEAD[st.type] || LEAD.id);
           Object.keys(drops).forEach(function (id) {
@@ -19141,7 +19322,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             list.forEach(function (s2) { if (String(s2.id) === String(id)) spec = s2; });
             var box = drops[id];
             box.hidden = !spec;
-            box.classList.toggle('is-off', ro);
             if (!spec) { delete st.slots[id]; return; }
             box.querySelector('.vfd__title').textContent = T(spec.title);
             paintSlot(id);
@@ -19149,36 +19329,22 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
 
           /* Кнопки */
           var next = steps[st.step].querySelector('[data-vf-next]');
-          if (next) {
-            next.textContent = T(ro ? 'Forward' : 'Continue');
-            next.disabled = !ro && st.step === 'type' && !st.type;
-          }
+          if (next) next.disabled = st.step === 'type' && !st.type;
           var send = vfRoot.querySelector('[data-vf-send]');
           if (send) {
-            var full = list.every(function (s2) { return !!st.slots[s2.id]; });
-            send.disabled = ro || !full;
-            send.hidden = ro;
+            send.disabled = !list.every(function (s2) { return !!st.slots[s2.id]; });
           }
-          vfRoot.querySelectorAll('[data-vf-edit]').forEach(function (el) { el.hidden = !ro; });
         };
 
         /* ── Переходы ── */
         var go = function (name) { st.step = name; write(); paint(); };
 
         vfRoot.addEventListener('click', function (e) {
-          var b = e.target.closest('[data-vf-next], [data-vf-prev], [data-vf-send], [data-vf-again], [data-vf-edit]');
+          var b = e.target.closest('[data-vf-next], [data-vf-prev], [data-vf-send], [data-vf-again]');
           if (!b || b.disabled) return;
 
           if (b.hasAttribute('data-vf-prev')) {
             go(ORDER[Math.max(0, idx(st.step) - 1)]);
-            return;
-          }
-          if (b.hasAttribute('data-vf-edit')) {
-            /* Вернуть правку на пройденный шаг: всё, что после него, теряет
-               силу — иначе остались бы снимки под прежний тип документа. */
-            st.reached = st.step;
-            if (st.step !== 'upload') st.slots = {};
-            write(); paint();
             return;
           }
           if (b.hasAttribute('data-vf-again')) {
@@ -19193,7 +19359,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           }
 
           /* Continue */
-          if (view()) { go(ORDER[idx(st.step) + 1]); return; }
           if (st.step === 'email' && st.mail !== 'ok') {
             var code = (mailCode.value || '').trim();
             if (code.length < 6) { mailSay(T('Enter the six-digit code from the e-mail.')); mailCode.focus(); return; }
@@ -19204,6 +19369,17 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             }
             st.mail = 'ok';
             notify(T('E-mail confirmed.'), 'ok');
+          }
+          if (st.step === 'phone' && st.tel !== 'ok') {
+            var tc = (telCode.value || '').trim();
+            if (tc.length < 6) { telSay(T('Enter the six-digit code from the SMS.')); telCode.focus(); return; }
+            if (tc !== '123456') {
+              telSay(T('The code does not match. Check the SMS or ask for a new one.'));
+              telCode.focus();
+              return;
+            }
+            st.tel = 'ok';
+            notify(T('Phone confirmed.'), 'ok');
           }
           if (st.step === 'type' && !st.type) return;
           var n = ORDER[idx(st.step) + 1];
@@ -19220,16 +19396,19 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             write(); paint();
           },
           reset: function () {
-            st = { step: 'email', reached: 'email', mail: 'ok', type: '', slots: {}, res: '' };
+            st = BLANK();
+            normalise();
             Object.keys(drops).forEach(function (id) { dropErr(drops[id], ''); });
-            mailSay('');
+            mailSay(''); telSay('');
             if (mailCode) mailCode.value = '';
+            if (telCode) telCode.value = '';
             write(); paint();
           },
           slotErr: function (id, text, retry) { dropErr(drops[id], T(text), !!retry); }
         };
 
         read();
+        normalise();
         if (st.type) { var pick = null; typeIns.forEach(function (r) { if (r.value === st.type) pick = r; }); if (pick) pick.checked = true; }
         paint();
       })();
@@ -20934,6 +21113,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
          иначе витрина показывала бы вид, которого в потоке не бывает. */
       var kycAt = function (patch, after) {
         if (!window.wwKyc) return;
+        /* Профиль закрыт для гостя: без входа showView увёл бы на форму, и
+           пункт витрины менял состояние страницы, которой не видно. */
+        document.body.classList.add('is-authed');
         showView('profile');
         var tab = document.querySelector('.prof__tab[data-tab="verification"]');
         if (tab) tab.click();
@@ -20942,37 +21124,43 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         if (after) after();
       };
       STATES.push(['Верификация · шаги', [
-        ['Шаг 1 · почта подтверждена', function () { kycAt({}); }],
-        ['Шаг 1 · почта не подтверждена', function () { kycAt({ mail: 'no' }); }],
-        ['Шаг 2 · тип не выбран', function () { kycAt({ step: 'type', reached: 'type' }); }],
-        ['Шаг 2 · выбран паспорт', function () {
-          kycAt({ step: 'type', reached: 'type', type: 'passport' }); }],
-        ['Шаг 2 · просмотр пройденного', function () {
-          kycAt({ step: 'type', reached: 'upload', type: 'id' }); }],
-        ['Шаг 3 · паспорт, один слот', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'passport' }); }],
-        ['Шаг 3 · права, два слота', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'licence' }); }],
-        ['Шаг 3 · один из двух загружен', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id',
+        ['Как открывается · почта уже зелёная', function () { kycAt({}); }],
+        ['Почта не подтверждена', function () {
+          kycAt({ step: 'email', reached: 'email', mail: 'no' }); }],
+        ['Телефон · код не введён', function () {
+          kycAt({ step: 'phone', reached: 'phone' }); }],
+        ['Телефон подтверждён', function () {
+          kycAt({ step: 'phone', reached: 'type', tel: 'ok' }); }],
+        ['Документ · тип не выбран', function () {
+          kycAt({ step: 'type', reached: 'type', tel: 'ok' }); }],
+        ['Документ · выбран паспорт', function () {
+          kycAt({ step: 'type', reached: 'type', tel: 'ok', type: 'passport' }); }],
+        ['Возврат на пройденный шаг', function () {
+          kycAt({ step: 'type', reached: 'upload', tel: 'ok', type: 'id' }); }],
+        ['Загрузка · паспорт, один слот', function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'passport' }); }],
+        ['Загрузка · права, два слота', function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'licence' }); }],
+        ['Загрузка · один из двух', function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id',
                   slots: { 1: { name: 'id-front.jpg', size: 1834000, thumb: '' } } }); }],
-        ['Шаг 3 · оба загружены', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id',
+        ['Загрузка · оба загружены', function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id',
                   slots: { 1: { name: 'id-front.jpg', size: 1834000, thumb: '' },
                            2: { name: 'id-back.jpg', size: 1610000, thumb: '' } } }); }]
       ]]);
       STATES.push(['Верификация · ошибки файла', [
         ['Не тот формат', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id' }, function () {
             window.wwKyc.slotErr(1, 'Only JPG, PNG or PDF are accepted.'); }); }],
         ['Файл больше 10 МБ', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id' }, function () {
             window.wwKyc.slotErr(1, 'The file is 14.2 MB — the limit is 10 MB.'); }); }],
         ['Слишком низкое разрешение', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id' }, function () {
             window.wwKyc.slotErr(1, 'The short side is 320 px — we need at least 600 px.'); }); }],
         ['Загрузка не прошла', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id' }, function () {
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id' }, function () {
             window.wwKyc.slotErr(1, 'The upload did not go through. Check the connection and try again.', true); }); }]
       ]]);
       /* ── Касса: бонус первого депозита ── */
@@ -21048,11 +21236,11 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       ]]);
       STATES.push(['Верификация · исход', [
         ['Документы на проверке', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id', res: 'review' }); }],
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id', res: 'review' }); }],
         ['Проверка пройдена', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id', res: 'ok' }); }],
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id', res: 'ok' }); }],
         ['Документы отклонены', function () {
-          kycAt({ step: 'upload', reached: 'upload', type: 'id', res: 'no' }); }]
+          kycAt({ step: 'upload', reached: 'upload', tel: 'ok', type: 'id', res: 'no' }); }]
       ]]);
 
       /* ── Состояния страницы бонусов ──
