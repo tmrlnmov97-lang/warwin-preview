@@ -156,16 +156,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Cora — коммерческий шрифт, в Google Fonts его нет.
-   Положи файлы в assets/fonts/ и раскомментируй, иначе используется Instrument Sans. */
-/*
+/* Cora — коммерческий шрифт, в Google Fonts его нет; лежит в assets/fonts.
+   Блок был обёрнут в /* … */ вместе с Barlow, но комментарии в CSS не
+   вложенные: первый же внутренний */ закрывал его, правила работали, а файлов
+   не было — отсюда два 404 в консоли и подстановочный шрифт в заголовках. */
 /* 1180:32166 — адрес в модалке депозита набран Barlow SemiBold */
 @font-face {
   font-family: 'Barlow';
   src: url(a/0f928c81ac.woff2) format('woff2');
   font-weight: 600; font-display: swap;
 }
-*/
 .f-cora { font-family: 'Cora', 'Instrument Sans', system-ui, sans-serif; }
 .f-work { font-family: 'Work Sans', 'Instrument Sans', system-ui, sans-serif; }
 .f-inter { font-family: 'Inter', system-ui, sans-serif; }
@@ -2237,6 +2237,10 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   /* 1647:19537 — 40/36: в макете две строки занимают ровно 72, поэтому
      интерлиньяж 36, а не «normal». С normal блок вырастал на 20 и кнопка
      уезжала к нижнему краю. */
+  /* Переносы стоят в самой строке: в макете они на своих местах, а поймать их
+     шириной нельзя — Figma рисует Cora подстановкой, метрики другие. */
+  .hero .hero__copy--authed .hero__title,
+  .hero .hero__copy--authed .hero__sub { white-space: pre-line; }
   .hero .hero__copy--authed .hero__title { margin: 0; width: 368px; font-size: 40px;
                                            line-height: 36px; font-weight: 500;
                                            color: #fff; }
@@ -2639,6 +2643,7 @@ body.nav-rail .sidebar.is-expanded .sidebar__inner { overflow: visible; }
   .mslide .hero__text { gap: 8px; width: 100%; }
   /* 1647:19751 — Cora Bold 24, интерлиньяж 1, ширина 236: заголовок нарочно
      шире копи-блока и заходит на арт. */
+  .mslide .hero__title, .mslide .hero__sub { white-space: pre-line; }
   .mslide .hero__title { width: 236px; margin: 0;
                          font-weight: 700; font-size: 24px; line-height: 1; }
   /* 1647:19752 — Instrument Sans Medium 14/14, ширина 160: две строки ровно
@@ -6460,8 +6465,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             <img class="hero__bg hero__bg--authed" src="a/c04edfeafe.webp" alt="">
             <div class="hero__copy hero__copy--authed">
               <div class="hero__text">
-                <h1 class="hero__title">TRIPLE WELCOME PACKAGE</h1>
-                <p class="hero__sub">UP&nbsp;TO&nbsp;350% ON&nbsp;YOUR FIRST THREE DEPOSITS</p>
+                <h1 class="hero__title">TRIPLE WELCOME&#10;PACKAGE</h1>
+                <p class="hero__sub">UP&nbsp;TO&nbsp;350% ON&nbsp;YOUR&#10;FIRST THREE DEPOSITS</p>
               </div>
               <div class="hero__row">
                 <button class="hero__cta hero__cta--join" type="button" data-fgo="view:bonuses">Join now</button>
@@ -6473,8 +6478,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             <img class="hero__bg hero__bg--authed" src="a/825eb8e950.webp" alt="">
             <div class="hero__copy hero__copy--authed hero__copy--soc">
               <div class="hero__text">
-                <h1 class="hero__title">SOCCER NIGHT BET&amp;WIN</h1>
-                <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY MATCH, EVERY DAY</p>
+                <h1 class="hero__title">SOCCER NIGHT&#10;BET&amp;WIN</h1>
+                <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY&#10;MATCH, EVERY DAY</p>
               </div>
               <div class="hero__row">
                 <button class="hero__cta hero__cta--join" type="button" data-fgo="view:sport">Join now</button>
@@ -6511,8 +6516,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           <img class="mslide__art" src="a/640fe88b75.webp" alt="">
           <div class="hero__copy hero__copy--mob-authed">
             <div class="hero__text">
-              <h2 class="hero__title">TRIPLE WELCOME PACKAGE</h2>
-              <p class="hero__sub">UP&nbsp;TO&nbsp;350% ON&nbsp;YOUR FIRST THREE DEPOSITS</p>
+              <h2 class="hero__title">TRIPLE WELCOME&#10;PACKAGE</h2>
+              <p class="hero__sub">UP&nbsp;TO&nbsp;350% ON&nbsp;YOUR&#10;FIRST THREE DEPOSITS</p>
             </div>
             <button class="hero__cta hero__cta--join" type="button" data-fgo="view:bonuses">Join now</button>
           </div>
@@ -6521,8 +6526,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           <img class="mslide__art" src="a/9231d9800b.webp" alt="">
           <div class="hero__copy hero__copy--mob-authed hero__copy--soc">
             <div class="hero__text">
-              <h2 class="hero__title">SOCCER NIGHT BET&amp;WIN</h2>
-              <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY MATCH, EVERY DAY</p>
+              <h2 class="hero__title">SOCCER NIGHT&#10;BET&amp;WIN</h2>
+              <p class="hero__sub">LIVE ODDS ON&nbsp;EVERY&#10;MATCH, EVERY DAY</p>
             </div>
             <button class="hero__cta hero__cta--join" type="button" data-fgo="view:sport">Join now</button>
           </div>
@@ -14916,10 +14921,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
       /* ── Баннеры после входа (макет 1647:19434 и 1647:19541) ── */
-      'TRIPLE WELCOME PACKAGE': 'ТРОЙНОЙ БОНУС НОВИЧКАМ',
-      'UP TO 350% ON YOUR FIRST THREE DEPOSITS': 'ДО 350% НА ПЕРВЫЕ ТРИ ДЕПОЗИТА',
-      'SOCCER NIGHT BET&WIN': 'ФУТБОЛЬНАЯ НОЧЬ СТАВЬ&ВЫИГРЫВАЙ',
-      'LIVE ODDS ON EVERY MATCH, EVERY DAY': 'ЖИВЫЕ КОЭФФИЦИЕНТЫ НА КАЖДЫЙ МАТЧ',
+      'TRIPLE WELCOME\nPACKAGE': 'ТРОЙНОЙ БОНУС\nНОВИЧКАМ',
+      'UP TO 350% ON YOUR\nFIRST THREE DEPOSITS': 'ДО 350% НА ПЕРВЫЕ\nТРИ ДЕПОЗИТА',
+      'SOCCER NIGHT\nBET&WIN': 'ФУТБОЛЬНАЯ НОЧЬ\nСТАВЬ&ВЫИГРЫВАЙ',
+      'LIVE ODDS ON EVERY\nMATCH, EVERY DAY': 'ЖИВЫЕ КОЭФФИЦИЕНТЫ\nНА КАЖДЫЙ МАТЧ',
       /* ── Витрина бонусов по макету 1377:18464 ── */
       'All': 'Все',
       'Referral': 'Рефералы',
@@ -15687,10 +15692,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
       /* ── Banners tras iniciar sesión (diseño 1647:19434 y 1647:19541) ── */
-      'TRIPLE WELCOME PACKAGE': 'TRIPLE PAQUETE DE BIENVENIDA',
-      'UP TO 350% ON YOUR FIRST THREE DEPOSITS': 'HASTA 350% EN TUS TRES PRIMEROS DEPÓSITOS',
-      'SOCCER NIGHT BET&WIN': 'NOCHE DE FÚTBOL APOSTÁ&GANÁ',
-      'LIVE ODDS ON EVERY MATCH, EVERY DAY': 'CUOTAS EN VIVO DEL PRIMER AL ÚLTIMO MINUTO',
+      'TRIPLE WELCOME\nPACKAGE': 'TRIPLE PAQUETE\nDE BIENVENIDA',
+      'UP TO 350% ON YOUR\nFIRST THREE DEPOSITS': 'HASTA 350% EN TUS\nTRES PRIMEROS DEPÓSITOS',
+      'SOCCER NIGHT\nBET&WIN': 'NOCHE DE FÚTBOL\nAPOSTÁ&GANÁ',
+      'LIVE ODDS ON EVERY\nMATCH, EVERY DAY': 'CUOTAS EN VIVO DEL\nPRIMER AL ÚLTIMO MINUTO',
       /* ── Vitrina de bonos según el diseño 1377:18464 ── */
       'All': 'Todos',
       'Referral': 'Referidos',
