@@ -4557,6 +4557,14 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp:not(.is-withdraw).is-fiat .dp__body > .dp__row,
 .dp:not(.is-withdraw).is-fiat .dp__qr-row,
 .dp:not(.is-withdraw).is-fiat .dp__note { display: none; }
+/* Блок бонуса живёт в обеих формах: своя копия для крипты, своя для фиата.
+   Показываем ту, что относится к открытому способу, и обе прячем на выводе. */
+.dp [data-dp-bonus] { display: none; }
+.dp:not(.is-withdraw):not(.is-fiat) [data-dp-bonus="crypto"],
+.dp:not(.is-withdraw).is-fiat [data-dp-bonus="fiat"] { display: flex; }
+.dp [data-dp-bonus][hidden] { display: none !important; }
+/* В криптоформе поля суммы нет, поэтому оценку показывать не от чего */
+[data-dp-bonus="crypto"] .dp__bonus-est { display: none; }
 .dp__fd .dp__row { display: flex; gap: 12px; width: 100%; }
 .dp__fd .dp__field { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .dp__fd-amount { display: flex; flex-direction: column; gap: 12px; width: 100%; }
@@ -14088,7 +14096,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                  две равные карточки одной радиогруппы: выбрать можно только
                  одно, и стрелками это работает само. Для повторных депозитов
                  блок скрывается целиком (data-bonus=hidden). -->
-            <div class="dp__bonus" data-bonus="selected">
+            <div class="dp__bonus" data-dp-bonus="fiat" data-bonus="selected">
               <div class="dp__bonus-head">
                 <span class="dp__bonus-h">Bonus</span>
                 <span class="dp__bonus-tier"></span>
@@ -14149,6 +14157,52 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               <p class="dp__addr" data-node-id="1180:32166">0x42fFe63917a4aa65294563De2c82</p>
               <button class="dp__copy" type="button" data-node-id="1180:32167">Copy Address</button>
             </div>
+          </div>
+          <!-- Тот же блок в криптоформе: предложение одно, а способ пополнения
+               на него не влияет. Выбор переносится между копиями скриптом:
+               радиогруппы у них свои, иначе отметка в невидимой копии гасила
+               выбор в видимой. -->
+          <div class="dp__bonus" data-dp-bonus="crypto" data-bonus="selected">
+            <div class="dp__bonus-head">
+              <span class="dp__bonus-h">Bonus</span>
+              <span class="dp__bonus-tier"></span>
+              <button class="dp__bonus-terms" type="button" data-dp-terms>View Full Terms</button>
+            </div>
+            <div class="dp__bonus-row" role="radiogroup" aria-label="Welcome package bonus">
+              <label class="dp__bonus-none">
+                <input class="dp__bonus-in" type="radio" name="dp-bonus-crypto" value="skip">
+                <span class="dp__bonus-pic dp__bonus-pic--no" aria-hidden="true"></span>
+                <b class="dp__bonus-name">No bonus</b>
+                <span class="dp__bonus-sub">the money is yours right away</span>
+              </label>
+              <label class="dp__bonus-offer">
+                <input class="dp__bonus-in" type="radio" name="dp-bonus-crypto" value="take" checked>
+                <!-- Арт лежит картинкой, а не фоном в стилях: сборка меряет
+                     именно теги img и пережимает их под показанный размер. -->
+                <!-- Коробка своей ступени, те же три, что на странице бонусов.
+                     Сундук отсюда убран: в него запечён «+100% BONUS», и на
+                     ступенях 120 и 130 он спорил с подписью карточки. Все три
+                     лежат в разметке и переключаются видимостью — сборка
+                     переименовывает файлы, и подстановка пути скриптом дала
+                     бы битую картинку. -->
+                <span class="dp__bonus-pic dp__bonus-pic--art" aria-hidden="true">
+                  <img loading="lazy" decoding="async" data-dp-gift="1" src="a/732e3d081a.webp" alt="" width="66" height="66">
+                  <img loading="lazy" decoding="async" data-dp-gift="2" src="a/a5b1a959aa.webp" alt="" width="66" height="66" hidden>
+                  <img loading="lazy" decoding="async" data-dp-gift="3" src="a/ff848de004.webp" alt="" width="66" height="66" hidden>
+                </span>
+                <b class="dp__bonus-name dp__bonus-pct">+100%</b>
+                <span class="dp__bonus-sub dp__bonus-cap">up to 150,000.00 ARS</span>
+              </label>
+            </div>
+            <!-- Второй и третий депозиты выбора не дают: ступень начисляется
+                 сама, и вместо кнопки отказа стоит объяснение. -->
+            <p class="dp__bonus-auto" hidden></p>
+            <!-- Оценка бонуса за введённую сумму. На бою её считает сервер;
+                 здесь тот же расчёт, что применится при подтверждении. -->
+            <p class="dp__bonus-est" hidden></p>
+            <!-- Предупреждение о расходе ступени. Отдельный элемент, а не
+                 .dp__error--fd: тот гасится на каждом нажатии клавиши. -->
+            <p class="dp__bonus-warn" hidden></p>
           </div>
         </div>
 
@@ -17572,95 +17626,114 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
              Показываем ТЕКУЩУЮ ступень: процент и потолок берём у движка, а не
              зашиваем в разметку. Когда все три ступени израсходованы, блок
              исчезает целиком — предлагать нечего. */
-          var fdBonus = dp.querySelector('.dp__bonus');
+          var fdBonus = dp.querySelector('[data-dp-bonus="fiat"]');
+          /* Блок один на оба способа пополнения: предложение не зависит от того,
+             криптой платят или картой. Копии рисуются одним проходом, а выбор
+             у них общий — переключатели лежат в одной радиогруппе. */
+          var bonusBoxes = [].slice.call(dp.querySelectorAll('.dp__bonus'));
           if (fdBonus) {
-            var bonusPct = fdBonus.querySelector('.dp__bonus-pct');
-            var bonusCap = fdBonus.querySelector('.dp__bonus-cap');
-            var bonusTier = fdBonus.querySelector('.dp__bonus-tier');
-            var bonusEst = fdBonus.querySelector('.dp__bonus-est');
-            var bonusWarn = fdBonus.querySelector('.dp__bonus-warn');
-            var bonusIns = [].slice.call(fdBonus.querySelectorAll('.dp__bonus-in'));
+            var bonusIns = [].slice.call(dp.querySelectorAll('.dp__bonus-in'));
             var bonusDeclined = function () {
               return fdBonus.querySelector('.dp__bonus-in[value="skip"]').checked;
             };
-            var bonusNone = fdBonus.querySelector('.dp__bonus-none');
-            var bonusSkip = fdBonus.querySelector('.dp__bonus-in[value="skip"]');
-            var bonusAuto = fdBonus.querySelector('.dp__bonus-auto');
-            var bonusPaint = function () {
+            var bonusPaintOne = function (box) {
+              var bonusPct = box.querySelector('.dp__bonus-pct');
+              var bonusCap = box.querySelector('.dp__bonus-cap');
+              var bonusTier = box.querySelector('.dp__bonus-tier');
+              var bonusEst = box.querySelector('.dp__bonus-est');
+              var bonusWarn = box.querySelector('.dp__bonus-warn');
+              var bonusNone = box.querySelector('.dp__bonus-none');
+              var bonusSkip = box.querySelector('.dp__bonus-in[value="skip"]');
+              var bonusAuto = box.querySelector('.dp__bonus-auto');
+              var fdBonus = box;
               var t = wwWelcome.nextTier();
               fdBonus.hidden = !t;
               if (!t) return;
-              /* Выбор «с бонусом / без бонуса» есть только на первом депозите.
-                 На втором и третьем ступень начисляется сама, и вариант отказа
-                 показывал бы решение, которого у игрока нет. */
-              var pick = t.tier === 1;
-              fdBonus.dataset.pick = pick ? '1' : '';
-              if (bonusNone) bonusNone.hidden = !pick;
-              if (bonusSkip) {
-                bonusSkip.disabled = !pick;
-                if (!pick) bonusSkip.checked = false;
-              }
-              if (!pick) fdBonus.querySelector('.dp__bonus-in[value="take"]').checked = true;
-              if (bonusAuto) {
-                bonusAuto.hidden = pick;
-                bonusAuto.textContent = T('Bonus {n} of 3 is credited with this deposit automatically.',
-                                          { n: t.tier });
-              }
-              var take = !bonusDeclined();
-              fdBonus.dataset.bonus = take ? 'selected' : 'declined';
-              fdBonus.querySelectorAll('[data-dp-gift]').forEach(function (img) {
-                img.hidden = parseInt(img.dataset.dpGift, 10) !== t.tier;
+                /* Выбор «с бонусом / без бонуса» есть только на первом депозите.
+                   На втором и третьем ступень начисляется сама, и вариант отказа
+                   показывал бы решение, которого у игрока нет. */
+                var pick = t.tier === 1;
+                fdBonus.dataset.pick = pick ? '1' : '';
+                if (bonusNone) bonusNone.hidden = !pick;
+                if (bonusSkip) {
+                  bonusSkip.disabled = !pick;
+                  if (!pick) bonusSkip.checked = false;
+                }
+                if (!pick) fdBonus.querySelector('.dp__bonus-in[value="take"]').checked = true;
+                if (bonusAuto) {
+                  bonusAuto.hidden = pick;
+                  bonusAuto.textContent = T('Bonus {n} of 3 is credited with this deposit automatically.',
+                                            { n: t.tier });
+                }
+                var take = !bonusDeclined();
+                fdBonus.dataset.bonus = take ? 'selected' : 'declined';
+                fdBonus.querySelectorAll('[data-dp-gift]').forEach(function (img) {
+                  img.hidden = parseInt(img.dataset.dpGift, 10) !== t.tier;
+                });
+                bonusPct.textContent = T('+{pct}%', { pct: t.pct });
+                bonusCap.textContent = T('up to {sum}', { sum: money(t.cap, wwWelcome.C.CUR) });
+                bonusTier.textContent = T('Bonus {n} of 3', { n: t.tier });
+
+                /* Оценка появляется, только когда сумма введена и бонус выбран */
+                var v = parseFloat((fdInput.value || '').replace(',', '.'));
+                if (!isFinite(v) || v < 0) v = 0;
+                var e = wwWelcome.estimate(v);
+                var showEst = take && v > 0 && e.bonus > 0;
+                bonusEst.hidden = !showEst;
+                if (showEst) {
+                  bonusEst.textContent = T('Bonus for this deposit: {sum} · wagering {wager}',
+                    { sum: money(e.bonus, wwWelcome.C.CUR), wager: money(e.wagering, wwWelcome.C.CUR) });
+                }
+
+                /* Три взаимоисключающих предупреждения по убыванию важности.
+                   Первые два про то, что ступень сгорит без бонуса — это главное,
+                   чего игрок не ожидает. */
+                var warn = '';
+                if (v > 0 && v < wwWelcome.C.MIN_DEPOSIT) {
+                  warn = T('This deposit is below the {min} minimum. It still uses up bonus {n} of 3 — you will not get it back.',
+                    { min: money(wwWelcome.C.MIN_DEPOSIT, wwWelcome.C.CUR), n: t.tier });
+                } else if (!take && pick) {
+                  warn = T('Declining still uses up bonus {n} of 3.', { n: t.tier });
+                } else if (wwWelcome.active()) {
+                  warn = T('You already have an active bonus. This one goes to the queue and you activate it yourself.');
+                }
+                bonusWarn.textContent = warn;
+                bonusWarn.hidden = !warn;
+              };
+            var bonusPaint = function () { bonusBoxes.forEach(bonusPaintOne); };
+            /* Копии в двух группах, поэтому выбор переносим руками: одна группа
+               на обе гасила отметку в невидимой копии, и отказ, сделанный
+               в крипте, до отправки формы не доходил. */
+            bonusIns.forEach(function (r) {
+              r.addEventListener('change', function () {
+                if (!r.checked) return;
+                bonusIns.forEach(function (o) {
+                  if (o !== r && o.value === r.value) o.checked = true;
+                });
+                bonusPaint();
               });
-              bonusPct.textContent = T('+{pct}%', { pct: t.pct });
-              bonusCap.textContent = T('up to {sum}', { sum: money(t.cap, wwWelcome.C.CUR) });
-              bonusTier.textContent = T('Bonus {n} of 3', { n: t.tier });
-
-              /* Оценка появляется, только когда сумма введена и бонус выбран */
-              var v = parseFloat((fdInput.value || '').replace(',', '.'));
-              if (!isFinite(v) || v < 0) v = 0;
-              var e = wwWelcome.estimate(v);
-              var showEst = take && v > 0 && e.bonus > 0;
-              bonusEst.hidden = !showEst;
-              if (showEst) {
-                bonusEst.textContent = T('Bonus for this deposit: {sum} · wagering {wager}',
-                  { sum: money(e.bonus, wwWelcome.C.CUR), wager: money(e.wagering, wwWelcome.C.CUR) });
-              }
-
-              /* Три взаимоисключающих предупреждения по убыванию важности.
-                 Первые два про то, что ступень сгорит без бонуса — это главное,
-                 чего игрок не ожидает. */
-              var warn = '';
-              if (v > 0 && v < wwWelcome.C.MIN_DEPOSIT) {
-                warn = T('This deposit is below the {min} minimum. It still uses up bonus {n} of 3 — you will not get it back.',
-                  { min: money(wwWelcome.C.MIN_DEPOSIT, wwWelcome.C.CUR), n: t.tier });
-              } else if (!take && pick) {
-                warn = T('Declining still uses up bonus {n} of 3.', { n: t.tier });
-              } else if (wwWelcome.active()) {
-                warn = T('You already have an active bonus. This one goes to the queue and you activate it yourself.');
-              }
-              bonusWarn.textContent = warn;
-              bonusWarn.hidden = !warn;
-            };
-            bonusIns.forEach(function (r) { r.addEventListener('change', bonusPaint); });
+            });
             /* Обе строки собирает скрипт, обход i18n их не тронет */
             document.addEventListener('ww:lang', bonusPaint);
             wwWelcome.on(bonusPaint);
-            var bonusTerms = fdBonus.querySelector('[data-dp-terms]');
-            if (bonusTerms) {
+            dp.querySelectorAll('[data-dp-terms]').forEach(function (bonusTerms) {
               bonusTerms.addEventListener('click', function () {
                 closeDep();
                 showView('promo');
                 var card = document.querySelector('.promo__card[data-key="welcomepack"]');
                 if (card) card.click();
               });
-            }
+            });
             bonusPaint();
             window.wwBonus = function (mode) {
-              fdBonus.hidden = mode === 'hidden' || !wwWelcome.nextTier();
+              var none = mode === 'hidden' || !wwWelcome.nextTier();
+              bonusBoxes.forEach(function (box) { box.hidden = none; });
+              var skip = fdBonus.querySelector('.dp__bonus-in[value="skip"]');
               var take = mode !== 'declined';
-              if (bonusSkip && bonusSkip.disabled) take = true;
-              fdBonus.querySelector('.dp__bonus-in[value="take"]').checked = take;
-              fdBonus.querySelector('.dp__bonus-in[value="skip"]').checked = !take;
+              if (skip && skip.disabled) take = true;
+              bonusIns.forEach(function (o) {
+                o.checked = o.value === (take ? 'take' : 'skip');
+              });
               bonusPaint();
             };
           }
