@@ -4470,6 +4470,7 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 /* Арт бонуса. Фон у картинки прозрачный, поэтому ни подложки, ни рамки
    клетке не нужно — сундук стоит прямо на карточке. */
 .dp__bonus-pic--art { width: 80px; height: 66px; }
+.dp__bonus-pic--art img[hidden] { display: none; }
 .dp__bonus-pic--art img { display: block; width: 100%; height: 100%;
                           object-fit: contain; transition: opacity .16s ease; }
 /* Когда бонус не выбран, арт приглушаем: иначе отказ рядом с ярким сундуком
@@ -14104,8 +14105,16 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                   <input class="dp__bonus-in" type="radio" name="dp-bonus" value="take" checked>
                   <!-- Арт лежит картинкой, а не фоном в стилях: сборка меряет
                        именно теги img и пережимает их под показанный размер. -->
+                  <!-- Коробка своей ступени, те же три, что на странице бонусов.
+                       Сундук отсюда убран: в него запечён «+100% BONUS», и на
+                       ступенях 120 и 130 он спорил с подписью карточки. Все три
+                       лежат в разметке и переключаются видимостью — сборка
+                       переименовывает файлы, и подстановка пути скриптом дала
+                       бы битую картинку. -->
                   <span class="dp__bonus-pic dp__bonus-pic--art" aria-hidden="true">
-                    <img loading="lazy" decoding="async" src="a/3183da3c56.webp" alt="" width="66" height="66">
+                    <img loading="lazy" decoding="async" data-dp-gift="1" src="a/732e3d081a.webp" alt="" width="66" height="66">
+                    <img loading="lazy" decoding="async" data-dp-gift="2" src="a/a5b1a959aa.webp" alt="" width="66" height="66" hidden>
+                    <img loading="lazy" decoding="async" data-dp-gift="3" src="a/ff848de004.webp" alt="" width="66" height="66" hidden>
                   </span>
                   <b class="dp__bonus-name dp__bonus-pct">+100%</b>
                   <span class="dp__bonus-sub dp__bonus-cap">up to 150,000.00 ARS</span>
@@ -17599,6 +17608,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               }
               var take = !bonusDeclined();
               fdBonus.dataset.bonus = take ? 'selected' : 'declined';
+              fdBonus.querySelectorAll('[data-dp-gift]').forEach(function (img) {
+                img.hidden = parseInt(img.dataset.dpGift, 10) !== t.tier;
+              });
               bonusPct.textContent = T('+{pct}%', { pct: t.pct });
               bonusCap.textContent = T('up to {sum}', { sum: money(t.cap, wwWelcome.C.CUR) });
               bonusTier.textContent = T('Bonus {n} of 3', { n: t.tier });
