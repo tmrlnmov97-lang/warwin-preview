@@ -4408,6 +4408,10 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp__bonus-est { margin: 0; font-family: 'Work Sans', sans-serif;
                  font-size: 12px; line-height: 16px; color: var(--modal-text-1, #bbc6cd); }
 .dp__bonus-est[hidden] { display: none; }
+/* Строка «начислится сам» стоит вместо выбора на втором и третьем депозите */
+.dp__bonus-auto { margin: 0; font-family: 'Work Sans', sans-serif;
+                  font-size: 13px; line-height: 18px; color: var(--muted); }
+.dp__bonus-auto[hidden] { display: none; }
 /* Расход ступени — не ошибка ввода, а последствие. Поэтому янтарный,
    а не красный: красным в кассе помечено то, что мешает продолжить. */
 .dp__bonus-warn { margin: 0; font-family: 'Work Sans', sans-serif;
@@ -4459,6 +4463,20 @@ body.dp-open .wallet__deposit { box-shadow: 0 0 0 2px rgba(205, 250, 80, .35),
 .dp__bonus[data-bonus="declined"] .dp__bonus-none {
   background: rgba(7, 148, 255, .1); box-shadow: inset 0 0 0 1px var(--primary, #0794ff); }
 .dp__bonus-offer:hover, .dp__bonus-none:hover { background: #2a3049; }
+/* Выбора нет — карточка перестаёт вести себя как кнопка: наводить и нажимать
+   на неё бессмысленно, решение уже принято правилами акции. */
+.dp__bonus-none[hidden] { display: none; }
+.dp__bonus[data-pick=""] .dp__bonus-offer { cursor: default; }
+.dp__bonus[data-pick=""] .dp__bonus-offer:hover { background: rgba(7, 148, 255, .1); }
+/* Одна карточка во всю ширину столбиком выглядела пустой: без второго варианта
+   ей не с чем держать высоту. Кладём набок — арт слева, числа справа. */
+.dp__bonus[data-pick=""] .dp__bonus-offer { flex-direction: row; justify-content: flex-start;
+                                            gap: 12px; min-height: 0; padding: 12px 14px;
+                                            text-align: left; flex-wrap: wrap; }
+.dp__bonus[data-pick=""] .dp__bonus-pic--art { width: 44px; height: 44px; flex: none; }
+.dp__bonus[data-pick=""] .dp__bonus-pic--art img { width: 44px; height: 44px; }
+.dp__bonus[data-pick=""] .dp__bonus-name { flex: none; }
+.dp__bonus[data-pick=""] .dp__bonus-sub { flex: 1 1 auto; }
 .dp__bonus-in:focus-visible ~ .dp__bonus-name { outline: 2px solid var(--focus-ring);
                                                 outline-offset: 4px; border-radius: 4px; }
 @media (prefers-reduced-motion: reduce) {
@@ -14058,12 +14076,15 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
                   <!-- Арт лежит картинкой, а не фоном в стилях: сборка меряет
                        именно теги img и пережимает их под показанный размер. -->
                   <span class="dp__bonus-pic dp__bonus-pic--art" aria-hidden="true">
-                    <img loading="lazy" decoding="async" src="a/3e64e7a598.webp" alt="" width="80" height="66">
+                    <img loading="lazy" decoding="async" src="a/3183da3c56.webp" alt="" width="66" height="66">
                   </span>
                   <b class="dp__bonus-name dp__bonus-pct">+100%</b>
                   <span class="dp__bonus-sub dp__bonus-cap">up to 150,000.00 ARS</span>
                 </label>
               </div>
+              <!-- Второй и третий депозиты выбора не дают: ступень начисляется
+                   сама, и вместо кнопки отказа стоит объяснение. -->
+              <p class="dp__bonus-auto" hidden></p>
               <!-- Оценка бонуса за введённую сумму. На бою её считает сервер;
                    здесь тот же расчёт, что применится при подтверждении. -->
               <p class="dp__bonus-est" hidden></p>
@@ -14881,6 +14902,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      'Bonus {n} of 3 is credited with this deposit automatically.':
+        'Бонус {n} из 3 начислится с этим депозитом автоматически.',
       /* ── Верификация: шаг телефона и степпер ── */
       'Phone': 'Телефон',
       'Confirm your phone': 'Подтвердите телефон',
@@ -14936,8 +14959,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Slots 100%, table 5%, live and sports 0%':
         'Слоты 100%, настольные 5%, live и спорт 0%',
       'Offer valid until': 'Предложение действует до',
-      'Steps open one after another: the next one unlocks with your next deposit.':
-        'Ступени открываются по очереди: следующая — со следующим депозитом.',
+      'Steps open one after another. Only the first one can be declined — steps 2 and 3 are credited automatically.':
+        'Ступени открываются по очереди. Отказаться можно только от первой — вторая и третья начисляются автоматически.',
       'Sign up and take the welcome package': 'Зарегистрируйтесь и заберите приветственный пакет',
       'Three deposits, three bonuses — the first one lands on your first deposit.':
         'Три депозита, три бонуса — первый приходит на первый же депозит.',
@@ -15650,6 +15673,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      'Bonus {n} of 3 is credited with this deposit automatically.':
+        'El bono {n} de 3 se acredita con este depósito automáticamente.',
       /* ── Verificación: paso del teléfono y stepper ── */
       'Phone': 'Teléfono',
       'Confirm your phone': 'Confirmá tu teléfono',
@@ -15705,8 +15730,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Slots 100%, table 5%, live and sports 0%':
         'Tragamonedas 100%, mesa 5%, live y deportes 0%',
       'Offer valid until': 'La oferta vale hasta',
-      'Steps open one after another: the next one unlocks with your next deposit.':
-        'Los pasos se abren en orden: el siguiente llega con tu próximo depósito.',
+      'Steps open one after another. Only the first one can be declined — steps 2 and 3 are credited automatically.':
+        'Los pasos se abren en orden. Solo el primero se puede rechazar: el 2 y el 3 se acreditan automáticamente.',
       'Sign up and take the welcome package': 'Registrate y llevate el paquete de bienvenida',
       'Three deposits, three bonuses — the first one lands on your first deposit.':
         'Tres depósitos, tres bonos: el primero llega con tu primer depósito.',
@@ -16307,7 +16332,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         };
         st.bonuses.push(b);
 
-        if (opt.declined) {
+        /* Отказ принимаем только на первом депозите: выбор «без бонуса» есть
+           лишь там, дальше ступень начисляется сама. */
+        if (opt.declined && st.deposits === 1) {
           close(b, 'DECLINED', 'declined');
           save();
           return { kind: 'declined', deposit: v, tier: t.tier, bonus: b };
@@ -17521,10 +17548,29 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             var bonusDeclined = function () {
               return fdBonus.querySelector('.dp__bonus-in[value="skip"]').checked;
             };
+            var bonusNone = fdBonus.querySelector('.dp__bonus-none');
+            var bonusSkip = fdBonus.querySelector('.dp__bonus-in[value="skip"]');
+            var bonusAuto = fdBonus.querySelector('.dp__bonus-auto');
             var bonusPaint = function () {
               var t = wwWelcome.nextTier();
               fdBonus.hidden = !t;
               if (!t) return;
+              /* Выбор «с бонусом / без бонуса» есть только на первом депозите.
+                 На втором и третьем ступень начисляется сама, и вариант отказа
+                 показывал бы решение, которого у игрока нет. */
+              var pick = t.tier === 1;
+              fdBonus.dataset.pick = pick ? '1' : '';
+              if (bonusNone) bonusNone.hidden = !pick;
+              if (bonusSkip) {
+                bonusSkip.disabled = !pick;
+                if (!pick) bonusSkip.checked = false;
+              }
+              if (!pick) fdBonus.querySelector('.dp__bonus-in[value="take"]').checked = true;
+              if (bonusAuto) {
+                bonusAuto.hidden = pick;
+                bonusAuto.textContent = T('Bonus {n} of 3 is credited with this deposit automatically.',
+                                          { n: t.tier });
+              }
               var take = !bonusDeclined();
               fdBonus.dataset.bonus = take ? 'selected' : 'declined';
               bonusPct.textContent = T('+{pct}%', { pct: t.pct });
@@ -17549,7 +17595,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               if (v > 0 && v < wwWelcome.C.MIN_DEPOSIT) {
                 warn = T('This deposit is below the {min} minimum. It still uses up bonus {n} of 3 — you will not get it back.',
                   { min: money(wwWelcome.C.MIN_DEPOSIT, wwWelcome.C.CUR), n: t.tier });
-              } else if (!take) {
+              } else if (!take && pick) {
                 warn = T('Declining still uses up bonus {n} of 3.', { n: t.tier });
               } else if (wwWelcome.active()) {
                 warn = T('You already have an active bonus. This one goes to the queue and you activate it yourself.');
@@ -17574,6 +17620,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             window.wwBonus = function (mode) {
               fdBonus.hidden = mode === 'hidden' || !wwWelcome.nextTier();
               var take = mode !== 'declined';
+              if (bonusSkip && bonusSkip.disabled) take = true;
               fdBonus.querySelector('.dp__bonus-in[value="take"]').checked = take;
               fdBonus.querySelector('.dp__bonus-in[value="skip"]').checked = !take;
               bonusPaint();
@@ -17600,7 +17647,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           fdSubmit.addEventListener('click', function () {
             if (fdSubmit.disabled) return;
             var v = parseFloat(fdInput.value.replace(',', '.')) || 0;
-            var declined = !!(fdBonus && bonusDeclined());
+            /* На втором и третьем депозите отказаться нельзя — выбора нет */
+            var declined = !!(fdBonus && fdBonus.dataset.pick === '1' && bonusDeclined());
             var est = wwWelcome.estimate(v);
             var A = wwWelcome.C.CUR;
             /* Когда ступень сгорает без бонуса, спрашиваем об этом прямо:
@@ -20610,7 +20658,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         ];
         wbModal(T('Step {n} of {all}', { n: n, all: wwWelcome.TIERS.length }),
                 T('Casino Welcome Package'), rows,
-                T('Steps open one after another: the next one unlocks with your next deposit.'));
+                T('Steps open one after another. Only the first one can be declined — steps 2 and 3 are credited automatically.'));
       };
       var wbBox = null;
       var wbModal = function (kicker, title, rows, note) {
@@ -21164,7 +21212,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             window.wwKyc.slotErr(1, 'The upload did not go through. Check the connection and try again.', true); }); }]
       ]]);
       /* ── Касса: бонус первого депозита ── */
-      var bonusAt = function (mode) {
+      var bonusAt = function (mode, seed) {
+        /* Ступени пакета живут в хранилище, поэтому каждый пункт задаёт их
+           явно: иначе следующий наследовал бы израсходованные предыдущим. */
+        wwWelcome.seed(seed || {});
         stOpen('deposit', 'fiat');
         /* Сохранённую карту сбрасываем: иначе состояние из прошлого пункта
            витрины оставалось бы на форме и мешало смотреть следующий. */
@@ -21174,6 +21225,15 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       STATES.push(['Касса · бонус депозита', [
         ['Первый деп · бонус выбран', function () { bonusAt('selected'); }],
         ['Первый деп · бонус отклонён', function () { bonusAt('declined'); }],
+        /* Первая ступень израсходована — касса показывает вторую, уже без
+           варианта «без бонуса»: отказаться можно только от первой. */
+        ['Второй деп · выбора нет', function () {
+          bonusAt('selected', { bonuses: [
+            { tier: 1, deposit: 20000, status: 'COMPLETED', collected: true }] }); }],
+        ['Третий деп · выбора нет', function () {
+          bonusAt('selected', { bonuses: [
+            { tier: 1, deposit: 20000, status: 'COMPLETED', collected: true },
+            { tier: 2, deposit: 20000, status: 'COMPLETED', collected: true }] }); }],
         ['Способ оплаты не запоминаем', function () {
           bonusAt('selected');
           var sw = document.querySelector('.dp__save');
