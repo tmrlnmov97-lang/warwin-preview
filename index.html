@@ -3149,7 +3149,11 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
    карточка выглядывала краем и было видно, что ленту можно тянуть. */
 .bnwp, .bnp { display: flex; gap: 16px; overflow-x: auto; overscroll-behavior-x: contain;
               scroll-snap-type: x proximity; scrollbar-width: none;
-              margin: 0 -4px; padding: 2px 4px 6px; }
+              margin: 0 -4px; padding: 2px 4px 6px;
+              /* Без этого притяжение равняет карточку по краю рамки, а не по
+                 внутреннему полю: лента сама уезжала на ширину поля, и первая
+                 карточка вставала левее заголовка. */
+              scroll-padding-inline: 4px; }
 .bnwp::-webkit-scrollbar, .bnp::-webkit-scrollbar { display: none; }
 .bnwp__c, .bnp .bncard { scroll-snap-align: start; }
 .bnwp__c { flex: 0 0 216px; }
@@ -3439,7 +3443,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
   /* На узком экране лента выходит за поля страницы: соседняя карточка
      выглядывает у края, и подсказка «тянется вбок» остаётся. */
   .bnwp, .bnp { gap: 12px; margin: 0 calc(-1 * var(--edge, 16px));
-                padding: 2px var(--edge, 16px) 6px; }
+                padding: 2px var(--edge, 16px) 6px;
+                scroll-padding-inline: var(--edge, 16px); }
   .bnwp__c { flex: 0 0 196px; }
   .bnp .bncard { flex: 0 0 248px; }
   .bnsec__h { font-size: 18px; line-height: 24px; }
@@ -20765,7 +20770,10 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             if (view === 'READY') {
               note.textContent = T('Wagered · {sum} to move', { sum: wbNum(b.released) });
             } else {
-              var days = Math.max(0, Math.ceil((b.expiresAt - Date.now()) / 864e5));
+              /* У ступени в очереди срок лежит в queueDeadline, а не в expiresAt:
+                 без этого вторая карточка показывала «0 days left». */
+              var days = Math.max(0, Math.ceil(
+                ((b.expiresAt || b.queueDeadline || 0) - Date.now()) / 864e5));
               note.textContent = T('{done} of {goal} · {n} days left',
                 { done: wbNum(b.wagered), goal: wbNum(b.wagerRequired), n: days });
             }
