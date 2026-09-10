@@ -107,6 +107,8 @@
      запросов за 200-байтными svg тоже не будет. */
   --ico-coins: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cellipse cx='12' cy='5.6' rx='7.6' ry='3.1'/%3E%3Cpath d='M4.4 8.2c1.6 1.5 4.4 2.4 7.6 2.4s6-.9 7.6-2.4v3.3c0 1.7-3.4 3.1-7.6 3.1s-7.6-1.4-7.6-3.1Z'/%3E%3Cpath d='M4.4 13.6c1.6 1.5 4.4 2.4 7.6 2.4s6-.9 7.6-2.4v3.3c0 1.7-3.4 3.1-7.6 3.1s-7.6-1.4-7.6-3.1Z'/%3E%3C/svg%3E");
   --ico-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 2.8 21.4 12.4H16v8.8H8v-8.8H2.6Z'/%3E%3C/svg%3E");
+  /* Две страницы внахлёст — знак копирования */
+  --ico-copy: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='11' height='11' rx='2.5'/%3E%3Cpath d='M6.5 15H5.5A1.5 1.5 0 0 1 4 13.5V5.5A1.5 1.5 0 0 1 5.5 4h8A1.5 1.5 0 0 1 15 5.5v1'/%3E%3C/svg%3E");
   --ico-gift: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Ccircle cx='8.1' cy='4.4' r='2.7'/%3E%3Ccircle cx='15.9' cy='4.4' r='2.7'/%3E%3Crect x='2.4' y='6.6' width='19.2' height='4.2' rx='1.3'/%3E%3Cpath d='M4 12.2h16v7.2a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19.4Z'/%3E%3C/svg%3E");
   --ico-in: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v12M6.5 9.5 12 15l5.5-5.5M4 20h16'/%3E%3C/svg%3E");
   --ico-chevrons: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.5 5.5 6 12l6.5 6.5M19 5.5 12.5 12l6.5 6.5'/%3E%3C/svg%3E");
@@ -6186,6 +6188,41 @@ body.cur-open .wallet__balance { background: var(--white-16); }
    и вход в неё не показываем, чтобы не вести в тупик с формой входа. */
 body:not(.is-authed) [data-auth-only] { display: none !important; }
 
+/* ── Номер счёта ──
+   Стоит у имени и на странице профиля, и в панели: поддержка спрашивает его
+   первым делом. Нажатие копирует, поэтому это кнопка, а не строка текста. */
+.prof__id { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; }
+.prof__id-lab { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+                color: var(--dp-label); }
+.prof__id b { font-family: 'Instrument Sans', sans-serif; font-weight: 700;
+              font-size: 14px; line-height: 18px; color: var(--white);
+              font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.prof__id-copy { width: 26px; height: 26px; flex: none; padding: 0; border: 0; cursor: pointer;
+                 border-radius: 8px; background: var(--white-06, rgba(255, 255, 255, .06));
+                 transition: background-color .15s ease; }
+.prof__id-copy::after { content: ''; display: block; width: 14px; height: 14px; margin: 0 auto;
+                        background: var(--muted);
+                        -webkit-mask: var(--ico-copy) center / contain no-repeat;
+                                mask: var(--ico-copy) center / contain no-repeat; }
+.prof__id-copy:hover { background: var(--white-10, rgba(255, 255, 255, .1)); }
+.prof__id-copy:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.prof__id.is-done .prof__id-copy::after,
+.prof__id-copy.is-done::after { background: var(--register); }
+
+/* В панели номер идёт третьей строкой под уровнем */
+.pm__id { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 0;
+          border: 0; background: none; cursor: pointer;
+          font-family: 'Instrument Sans', sans-serif; font-size: 13px; line-height: 18px;
+          color: var(--dp-label); transition: color .15s ease; }
+.pm__id b { font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pm__id::after { content: ''; width: 13px; height: 13px; background: var(--dp-label);
+                 -webkit-mask: var(--ico-copy) center / contain no-repeat;
+                         mask: var(--ico-copy) center / contain no-repeat; }
+.pm__id:hover, .pm__id:hover b { color: var(--white); }
+.pm__id:hover::after { background: var(--white); }
+.pm__id.is-done, .pm__id.is-done b { color: var(--register); }
+.pm__id.is-done::after { background: var(--register); }
+
 </style>
 </head>
 <body>
@@ -7093,6 +7130,13 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           <div class="prof__who-text">
             <b>Ricardo Destaole</b>
             <span>Player since March 2026 <i>·</i> <em class="prof__ok">Identity verified</em></span>
+            <!-- Номер счёта: его спрашивает поддержка первым делом, поэтому
+                 он стоит у имени и копируется одним нажатием. -->
+            <span class="prof__id">
+              <span class="prof__id-lab">Account ID</span>
+              <b data-acc-id></b>
+              <button class="prof__id-copy" type="button" data-copy-id aria-label="Copy account ID"></button>
+            </span>
           </div>
         </div>
 
@@ -13779,6 +13823,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       <div class="pm__who">
         <b class="pm__name">Ricardo Destaole</b>
         <span class="pm__status">Soldier</span>
+        <button class="pm__id" type="button" data-copy-id>
+          <span>ID</span><b data-acc-id></b>
+        </button>
       </div>
       <!-- Крестик картинкой, а не знаком «×»: у знака ink сидит выше середины
            строки, и в квадратной кнопке он вставал заметно криво. -->
@@ -15002,6 +15049,11 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Отыгрыш выполнен',
       '{sum} is ready to move to your balance': '{sum} можно перевести на баланс',
       'Exchange': 'Обменять',
+      'Account ID': 'Номер счёта',
+      'Copy account ID': 'Скопировать номер счёта',
+      'Account ID copied.': 'Номер счёта скопирован.',
+      'Could not copy the ID — select and copy it by hand.':
+        'Не удалось скопировать номер — выделите и скопируйте вручную.',
       'Exchange {sum}': 'Обменять {sum}',
       '{done} of {goal} · {n} days left': '{done} из {goal} · {n} дн.',
       'Wagered · {sum} to move': 'Отыграно · {sum} к переводу',
@@ -15768,6 +15820,11 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Wagering complete': 'Apuesta completada',
       '{sum} is ready to move to your balance': '{sum} listos para pasar al saldo',
       'Exchange': 'Canjear',
+      'Account ID': 'ID de cuenta',
+      'Copy account ID': 'Copiar el ID de cuenta',
+      'Account ID copied.': 'ID de cuenta copiado.',
+      'Could not copy the ID — select and copy it by hand.':
+        'No se pudo copiar el ID: seleccionalo y copialo a mano.',
       'Exchange {sum}': 'Canjear {sum}',
       '{done} of {goal} · {n} days left': '{done} de {goal} · {n} días',
       'Wagered · {sum} to move': 'Apostado · {sum} para pasar',
@@ -16886,6 +16943,43 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       document.documentElement.classList.add('cf-open');
       (ask ? no : yes).focus();
     };
+  })();
+
+  /* ── Номер счёта ──
+     Один на панель и на страницу профиля: вписанный руками в двух местах,
+     он бы со временем разошёлся. Копируется одним нажатием — поддержка
+     спрашивает его первым делом, а перепечатывать семь цифр с экрана
+     телефона неудобно. */
+  var wwAccId = (function () {
+    var ID = '4820137';
+    document.querySelectorAll('[data-acc-id]').forEach(function (el) { el.textContent = ID; });
+
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-copy-id]');
+      if (!btn) return;
+      var done = function () {
+        btn.classList.add('is-done');
+        setTimeout(function () { btn.classList.remove('is-done'); }, 1600);
+        notify(T('Account ID copied.'), 'ok');
+      };
+      var fail = function () {
+        notify(T('Could not copy the ID — select and copy it by hand.'), 'bad');
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(ID).then(done, fail);
+      } else {
+        /* Запасной путь для страниц без защищённого контекста */
+        var ta = document.createElement('textarea');
+        ta.value = ID; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+        document.body.removeChild(ta);
+        if (ok) done(); else fail();
+      }
+    });
+    return ID;
   })();
 
   /* ── Готовые состояния: касса, история, профиль ──
@@ -21275,6 +21369,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
          });
       };
       var profShow = function (what) {
+        /* Профиль закрыт для гостя: без входа showView увёл бы на форму,
+           и пункт витрины менял состояние страницы, которой не видно. */
+        document.body.classList.add('is-authed');
         var v = profGen(); if (!v) return;
         profRemember(v); profReset(v);
         var cards = v.querySelectorAll('#prof-general .prof__card');
