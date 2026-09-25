@@ -2914,6 +2914,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
               border-radius: 999px; border: 2px solid rgba(var(--vr-tint, 201, 138, 75), .45);
               background: radial-gradient(120% 120% at 30% 20%, #2a3560 0%, #141b38 100%); }
 .vpr__badge img { display: block; width: 175px; height: 175px; }
+/* display у картинки перебивает атрибут hidden — прячем явно */
+.vpr__badge img[hidden] { display: none; }
 
 /* ── секция ── */
 .vsec { display: flex; flex-direction: column; gap: 16px; }
@@ -7813,8 +7815,15 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             </div>
           </div>
           <!-- 1683:241 — слот знака 196: обод берёт цвет текущего ранга -->
+          <!-- Все пять знаков лежат в разметке, показан один: пути к файлам
+               сборщик переписывает только в атрибутах, собранный в скрипте
+               адрес в сборке не находится. -->
           <div class="vpr__badge vpr__badge--bronze">
-            <img loading="lazy" decoding="async" src="a/56ae7a3058.webp" alt="" width="175" height="175">
+            <img loading="lazy" decoding="async" src="a/56ae7a3058.webp" alt="" width="175" height="175" data-vip-badge="bronze">
+            <img loading="lazy" decoding="async" src="a/ea1ba40c69.webp" alt="" width="175" height="175" data-vip-badge="silver" hidden>
+            <img loading="lazy" decoding="async" src="a/6bcc8d27cf.webp" alt="" width="175" height="175" data-vip-badge="gold" hidden>
+            <img loading="lazy" decoding="async" src="a/d357fb613f.webp" alt="" width="175" height="175" data-vip-badge="platinum" hidden>
+            <img loading="lazy" decoding="async" src="a/5f4ce3b4e0.webp" alt="" width="175" height="175" data-vip-badge="diamond" hidden>
           </div>
         </section>
 
@@ -21755,7 +21764,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
 
           var badge = vq('.vpr__badge');
           badge.className = 'vpr__badge vpr__badge--' + rank.key;
-          badge.querySelector('img').src = 'assets/vip-rank-' + rank.key + '.png';
+          badge.querySelectorAll('[data-vip-badge]').forEach(function (img) {
+            img.hidden = img.dataset.vipBadge !== rank.key;
+          });
 
           [].slice.call(vipView.querySelectorAll('.vrank')).forEach(function (c, n) {
             c.classList.toggle('is-now', n === i);
