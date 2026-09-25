@@ -2876,6 +2876,8 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 /* ── 1683:214 прогресс ──────────────────────────────────────────────
    Слева состояние счёта, справа знак ранга. Градиент идёт по диагонали
    от тона полотна к синему: карточка отделяется от фона без канта. */
+/* display перебивает атрибут hidden — у гостя прячем явно */
+.vpr[hidden], .vip__guest[hidden] { display: none; }
 .vpr { box-sizing: border-box; display: flex; align-items: center; gap: 24px;
        padding: 28px 28px 28px 32px; border-radius: 24px;
        border: 1px solid rgba(255, 255, 255, .08);
@@ -6648,7 +6650,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             <img class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='8.1' cy='4.4' r='2.7'/%3E%3Ccircle cx='15.9' cy='4.4' r='2.7'/%3E%3Crect x='2.4' y='6.6' width='19.2' height='4.2' rx='1.3'/%3E%3Cpath d='M4 12.2h16v7.2a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19.4Z'/%3E%3Crect x='10.4' y='3.6' width='3.2' height='17.4' rx='.8' fill='%23222a45'/%3E%3C/svg%3E" alt="">
             <span class="side-item__label">Bonuses</span>
           </div>
-          <div class="side-item" data-auth-only>
+          <div class="side-item" >
             <img class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Cpath d='M2.4 6.9 6.6 11.6 12 4l5.4 7.6 4.2-4.7v10.6a1.6 1.6 0 0 1-1.6 1.6H4A1.6 1.6 0 0 1 2.4 17.5Z'/%3E%3C/svg%3E" alt="">
             <span class="side-item__label">VIP Club</span>
           </div>
@@ -7792,6 +7794,22 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
            военными рангами и накопительной суммой заменена целиком. -->
       <div class="view view--vip" id="view-vip" hidden data-node-id="1682:97">
         <h1 class="vip__h1">VIP Club</h1>
+
+        <!-- Гостю личного прогресса нет, поэтому на его месте стоит та же
+             полоса-приглашение, что на бонусах: оформление у неё общее,
+             дублировать правила незачем. Всё остальное на странице —
+             ранги, уровни, привилегии, правила, вопросы — видно всем. -->
+        <div class="bn__guest vip__guest" hidden>
+          <span class="bn__guest-ico" aria-hidden="true"></span>
+          <div class="bn__guest-text">
+            <b>Sign up and start at Bronze</b>
+            <span>Rakeback and weekly cashback work from the first level. The rank follows what you wager this month.</span>
+          </div>
+          <div class="bn__guest-btns">
+            <button class="bn__btn bn__btn--primary" type="button" data-vip-go="signup">Sign up</button>
+            <button class="bn__btn" type="button" data-vip-go="signin">Log in</button>
+          </div>
+        </div>
 
         <!-- 1683:214 — карта прогресса: слева состояние, справа знак ранга -->
         <section class="vpr" data-node-id="1683:214">
@@ -13650,7 +13668,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
               <ul class="fnav__list">
                 <li><button class="fnav__link" type="button" data-fgo="view:bonuses">Bonuses</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:promo">Promotions</button></li>
-                <li data-auth-only><button class="fnav__link" type="button" data-fgo="view:vip">VIP Club</button></li>
+                <li><button class="fnav__link" type="button" data-fgo="view:vip">VIP Club</button></li>
                 <li><button class="fnav__link" type="button">Affiliate Program</button></li>
                 <li><button class="fnav__link" type="button" data-fgo="view:about">About Us</button></li>
               </ul>
@@ -13810,7 +13828,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         <img loading="lazy" decoding="async" class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Ccircle cx='8.1' cy='4.4' r='2.7'/%3E%3Ccircle cx='15.9' cy='4.4' r='2.7'/%3E%3Crect x='2.4' y='6.6' width='19.2' height='4.2' rx='1.3'/%3E%3Cpath d='M4 12.2h16v7.2a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19.4Z'/%3E%3Crect x='10.4' y='3.6' width='3.2' height='17.4' rx='.8' fill='%23222a45'/%3E%3C/svg%3E" alt="" width="20" height="20">
         <span class="br__row-label">Bonuses</span>
       </button>
-      <button class="br__row" type="button" data-auth-only>
+      <button class="br__row" type="button" >
         <img loading="lazy" decoding="async" class="ico" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbc6cd'%3E%3Cpath d='M2.4 6.9 6.6 11.6 12 4l5.4 7.6 4.2-4.7v10.6a1.6 1.6 0 0 1-1.6 1.6H4A1.6 1.6 0 0 1 2.4 17.5Z'/%3E%3C/svg%3E" alt="" width="20" height="20">
         <span class="br__row-label">VIP Club</span>
       </button>
@@ -15382,8 +15400,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Log in': 'Войти',
       'Next level: {name}': 'Следующий уровень: {name}',
       'Top level reached': 'Верх лестницы — выше уровней нет',
-      'VIP Club is for signed-in players — the menu entry is hidden.':
-        'VIP-клуб — для вошедших: пункта в меню у гостя нет.',
       'Available after the wagering is complete': 'Будет доступно после отыгрыша',
       'Bonus moved to your balance.': 'Бонус переведён на баланс.',
       'Wagered {done} of {goal}': 'Отыграно {done} из {goal}',
@@ -15514,6 +15530,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Sign up with your email and set <br>a secure password.': 'Зарегистрируйтесь по почте и задайте <br>надёжный пароль.',
 
       /* ── 1682:97 VIP-клуб: ранги, уровни, привилегии, вопросы ── */
+      'Sign up and start at Bronze': 'Зарегистрируйтесь и начните с Бронзы',
+      'Rakeback and weekly cashback work from the first level. The rank follows what you wager this month.': 'Рейкбек и еженедельный кешбэк работают с первого уровня. Ранг зависит от того, сколько отыграно за месяц.',
       'A cash gift for your birthday. The amount increases at every rank.': 'Денежный подарок на день рождения. С каждым рангом сумма растёт.',
       'A cash gift on your birthday. It grows with every rank.': 'Денежный подарок на день рождения. Растёт с каждым рангом.',
       'A one-off payout the first time you reach a level. No forms, no waiting.': 'Разовая выплата при первом достижении уровня. Без заявок и ожидания.',
@@ -16258,8 +16276,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Log in': 'Entrar',
       'Next level: {name}': 'Siguiente nivel: {name}',
       'Top level reached': 'Nivel máximo alcanzado',
-      'VIP Club is for signed-in players — the menu entry is hidden.':
-        'El Club VIP es para jugadores con cuenta: el acceso no se muestra.',
       'Available after the wagering is complete': 'Disponible cuando termines el rollover',
       'Bonus moved to your balance.': 'El bono pasó a tu saldo.',
       'Wagered {done} of {goal}': 'Apostado {done} de {goal}',
@@ -16390,6 +16406,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Sign up with your email and set <br>a secure password.': 'Registrate con tu correo y creá <br>una contraseña segura.',
 
       /* ── 1682:97 VIP-клуб: ранги, уровни, привилегии, вопросы ── */
+      'Sign up and start at Bronze': 'Registrate y empezá en Bronce',
+      'Rakeback and weekly cashback work from the first level. The rank follows what you wager this month.': 'El rakeback y el cashback semanal funcionan desde el primer nivel. El rango depende de cuánto apostás este mes.',
       'A cash gift for your birthday. The amount increases at every rank.': 'Un regalo en efectivo por tu cumpleaños. El monto aumenta con cada rango.',
       'A cash gift on your birthday. It grows with every rank.': 'Un regalo en efectivo en tu cumpleaños. Crece con cada rango.',
       'A one-off payout the first time you reach a level. No forms, no waiting.': 'Un pago único la primera vez que alcanzás un nivel. Sin formularios ni esperas.',
@@ -18880,7 +18898,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
        Бонусы в список не входят: их витрина открыта всем, ради неё и
        регистрируются. VIP входит: там нет ничего, кроме собственного уровня
        игрока, и гостю страница показала бы чужой прогресс. */
-    var NEEDS_AUTH = { profile: 1, history: 1, transactions: 1, vip: 1 };
+    /* VIP открыт гостю: ранги, уровни и условия — это витрина программы,
+       ради неё сюда и заходят. Закрыт только личный прогресс. */
+    var NEEDS_AUTH = { profile: 1, history: 1, transactions: 1 };
     var showView = function (key) {
       if (NEEDS_AUTH[key] && !document.body.classList.contains('is-authed')) {
         var enter = document.querySelector('.header-actions .btn--ghost');
@@ -18912,6 +18932,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       });
       /* На бонусах гостю оставляем витрину предложений и убираем личные вкладки */
       if (key === 'bonuses' && bnSync) bnSync();
+      /* На VIP так же: витрина программы всем, личная карточка — вошедшим */
+      if (key === 'vip' && window.wwVipSync) window.wwVipSync();
       /* Переход по ссылке — это новая страница, а не прокрутка к её началу:
          из подвала длинного документа плавный скролл летел через весь текст. */
       scrollTo(0, 0);
@@ -21683,7 +21705,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             return;
           }
           rows.forEach(function (r, n) {
-            var here = key === vipRank && n + 1 === vipLevel;
+            var here = !vipGuest() && key === vipRank && n + 1 === vipLevel;
             var row = document.createElement('div');
             row.className = 'vlv__row' + (here ? ' is-now' : '');
             var b = document.createElement('b');
@@ -21720,12 +21742,36 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         });
 
         /* ── карточка прогресса и всё, что помечает текущий ранг ── */
+        var vipGuest = function () {
+          return !document.body.classList.contains('is-authed');
+        };
         var vipPaint = function () {
-          var i = vipIdx(vipRank), rank = VIP_RANKS[i];
+          var guest = vipGuest();
+          vq('.vip__guest').hidden = !guest;
+          vq('.vpr').hidden = guest;
+          var i = vipIdx(vipRank);
+          if (!guest) vipPaintCard(VIP_RANKS[i]);
+
+          /* Текущего ранга у гостя нет, поэтому ни одна карточка, точка и
+             строка не помечены: пометка означала бы «вы здесь». */
+          var mark = guest ? -1 : i;
+          [].slice.call(vipView.querySelectorAll('.vrank')).forEach(function (c, n) {
+            c.classList.toggle('is-now', n === mark);
+          });
+          [].slice.call(vipView.querySelectorAll('.vstep__dot')).forEach(function (d, n) {
+            d.classList.toggle('is-on', n === mark);
+          });
+          [].slice.call(vipView.querySelectorAll('.vunl__row')).forEach(function (r, n) {
+            r.classList.toggle('is-now', n === mark);
+          });
+          vlvShow(guest ? 'bronze' : vipRank);
+        };
+
+        /* Личная карточка: считается только когда её показывают */
+        var vipPaintCard = function (rank) {
           var rows = VLV[vipRank], row = rows && rows[vipLevel - 1];
           var steps = VLV_STEP[vipRank];
           var goal = steps && steps[vipLevel];      /* порог следующего уровня */
-
           vq('.vpr__reset').textContent = T('Resets in {time}', { time: vipReset });
           vq('.vpr__rank').textContent = T('{rank} · Level {n}',
                                            { rank: T(rank.name), n: vipLevel });
@@ -21744,8 +21790,9 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
             pct = 100;
             line1 = T('ARS {done} wagered this month',
                       { done: vipDone.toLocaleString('en-US') });
-            line2 = i + 1 < VIP_RANKS.length
-              ? T('Next rank: {rank}', { rank: T(VIP_RANKS[i + 1].name) })
+            var nx = vipIdx(vipRank) + 1;
+            line2 = nx < VIP_RANKS.length
+              ? T('Next rank: {rank}', { rank: T(VIP_RANKS[nx].name) })
               : T('Top rank reached');
           } else {
             line1 = T('{rank} levels are not published yet.', { rank: T(rank.name) });
@@ -21767,17 +21814,6 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           badge.querySelectorAll('[data-vip-badge]').forEach(function (img) {
             img.hidden = img.dataset.vipBadge !== rank.key;
           });
-
-          [].slice.call(vipView.querySelectorAll('.vrank')).forEach(function (c, n) {
-            c.classList.toggle('is-now', n === i);
-          });
-          [].slice.call(vipView.querySelectorAll('.vstep__dot')).forEach(function (d, n) {
-            d.classList.toggle('is-on', n === i);
-          });
-          [].slice.call(vipView.querySelectorAll('.vunl__row')).forEach(function (r, n) {
-            r.classList.toggle('is-now', n === i);
-          });
-          vlvShow(vipRank);
         };
         /* Витрина состояний и обработчики зовут одно и то же */
         window.wwVipSet = function (rank, level, done, reset) {
@@ -21802,6 +21838,17 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           });
         });
 
+        /* Кнопки полосы жмут те же кнопки шапки, что и на бонусах */
+        vipView.addEventListener('click', function (e) {
+          var t = e.target.closest('[data-vip-go]');
+          if (!t) return;
+          var want = t.dataset.vipGo === 'signup' ? 'register' : 'login';
+          var btn = [].slice.call(document.querySelectorAll('.header-actions .btn'))
+            .filter(function (b) { return (b.textContent || '').trim().toLowerCase() === want; })[0];
+          if (btn) btn.click();
+        });
+
+        window.wwVipSync = vipPaint;
         vipPaint();
         document.addEventListener('ww:lang', vipPaint);
       }
@@ -22199,10 +22246,15 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         ['Вопросы · общие', function () { vipTab('[data-vfaq="general"]'); }],
         ['Вопросы · привилегии', function () { vipTab('[data-vfaq="privileges"]'); }],
         ['Вопросы · менеджеры', function () { vipTab('[data-vfaq="managers"]'); }],
-        ['Гость · клуба в меню нет', function () {
+        ['Гость · витрина открыта', function () {
           document.body.classList.remove('is-authed');
-          showView('home');
-          notify(T('VIP Club is for signed-in players — the menu entry is hidden.'));
+          showView('vip');
+        }],
+        ['Гость · вопросы', function () {
+          document.body.classList.remove('is-authed');
+          showView('vip');
+          var b = document.querySelector('#view-vip [data-vfaq="privileges"]');
+          if (b) b.click();
         }]
       ]]);
       /* ── Пакет: ступени ──
