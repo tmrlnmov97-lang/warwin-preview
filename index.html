@@ -15052,7 +15052,7 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Next level: Silver': 'Следующий уровень: Silver',
       'Soldier': 'Soldier',
       'Captain': 'Captain',
-      'General': 'General',
+      'General': 'Общее',
       'Warlord I–III': 'Warlord I–III',
       'Privileges': 'Привилегии',
       'Rakeback': 'Рейкбек',
@@ -15502,7 +15502,110 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Added to favourites.': 'Добавлено в избранное.',
       'Fullscreen is not available here.': 'Полноэкранный режим здесь недоступен.',
       'Live chat opens in the mobile app — on the web write to support@warwin.com.': 'Живой чат работает в мобильном приложении — в вебе пишите на support@warwin.com.',
-      'Sign up with your email and set <br>a secure password.': 'Зарегистрируйтесь по почте и задайте <br>надёжный пароль.'
+      'Sign up with your email and set <br>a secure password.': 'Зарегистрируйтесь по почте и задайте <br>надёжный пароль.',
+
+      /* ── 1682:97 VIP-клуб: ранги, уровни, привилегии, вопросы ── */
+      'A cash gift for your birthday. The amount increases at every rank.': 'Денежный подарок на день рождения. С каждым рангом сумма растёт.',
+      'A cash gift on your birthday. It grows with every rank.': 'Денежный подарок на день рождения. Растёт с каждым рангом.',
+      'A one-off payout the first time you reach a level. No forms, no waiting.': 'Разовая выплата при первом достижении уровня. Без заявок и ожидания.',
+      'A one-time cash payment credited as soon as you reach the level. There are no forms to complete and no processing wait.': 'Разовая денежная выплата, начисляется сразу при достижении уровня. Заявок заполнять не нужно, ждать обработки — тоже.',
+      'A personal VIP manager unlocks at Diamond, together with the highest limits and special experiences.': 'Персональный VIP-менеджер открывается на Алмазе — вместе с максимальными лимитами и особыми событиями.',
+      'A portion of everything you wager comes back, whether you win or lose, and it is credited automatically. It runs from 2.00% at Bronze 1 up to 11.00% at Diamond 5.': 'Часть каждой ставки возвращается независимо от результата и начисляется автоматически. От 2.00% на Бронзе 1 до 11.00% на Алмазе 5.',
+      'ARS wagered / month': 'ARS отыгрыша в месяц',
+      'ARS {done} of {goal} wagered this month': 'ARS {done} из {goal} отыграно за месяц',
+      'ARS {done} wagered this month': 'ARS {done} отыграно за месяц',
+      'ARS {left} to Level {n}': 'ARS {left} до уровня {n}',
+      'Above Diamond there is an invite-only tier with individual terms.': 'Выше Алмаза есть ступень по приглашению — с индивидуальными условиями.',
+      'Amounts for this rank come from the loyalty programme document.': 'Суммы этого ранга берутся из документа программы лояльности.',
+      'An invitation-only level with personalized terms.': 'Уровень по приглашению с персональными условиями.',
+      'Birthday bonus': 'Бонус на день рождения',
+      'Bronze': 'Бронза',
+      'Bronze — rakeback, weekly cashback, birthday bonus, missions. Silver — weekly free spins, reload bonuses. Gold — faster withdrawals, higher limits, personalized promotions. Platinum — priority support, exclusive tournaments. Diamond — personal VIP manager, highest limits, special experiences.': 'Бронза — рейкбек, еженедельный кешбэк, бонус на день рождения, миссии. Серебро — еженедельные фриспины, бонусы на пополнение. Золото — быстрый вывод, повышенные лимиты, персональные акции. Платина — приоритетная поддержка, закрытые турниры. Алмаз — персональный VIP-менеджер, максимальные лимиты, особые события.',
+      'Deposit bonus': 'Бонус на депозит',
+      'Deposit bonuses': 'Бонусы на депозит',
+      'Diamond': 'Алмаз',
+      'Every rank keeps everything the ranks below already gave you.': 'Каждый ранг сохраняет всё, что дали ранги ниже.',
+      'Everything you wager from the 1st to the last day of the month counts. On the 1st the counter goes back to zero.': 'Считается всё, что отыграно с 1-го по последний день месяца. 1-го числа счётчик обнуляется.',
+      'Exclusive tournaments': 'Закрытые турниры',
+      'Extra funds on top of your deposit. More often on higher ranks.': 'Дополнительные средства сверх депозита. На высоких рангах — чаще.',
+      'Extra funds when you make a deposit. At higher ranks the bonus is offered more frequently.': 'Дополнительные средства при пополнении. На высоких рангах бонус предлагают чаще.',
+      'Faster withdrawals': 'Быстрый вывод',
+      'Faster withdrawals, higher limits, hand-picked promos': 'Быстрый вывод, повышенные лимиты, подобранные акции',
+      'Free spins': 'Фриспины',
+      'Free spins every week': 'Фриспины каждую неделю',
+      'Gold': 'Золото',
+      'Highest limits': 'Максимальные лимиты',
+      'How I keep my rank': 'Как сохранить ранг',
+      'How my rank is decided': 'От чего зависит ранг',
+      'How the month works': 'Как устроен месяц',
+      'If the week ends with a net loss, part of the lost amount comes back. The payment is made every Monday, from 5.00% at Bronze 1 up to 10.00% at Diamond 5.': 'Если неделя закончилась в минус, часть проигранного возвращается. Выплата каждый понедельник: от 5.00% на Бронзе 1 до 10.00% на Алмазе 5.',
+      'If you play less': 'Если играть меньше',
+      'Keeping your rank': 'Как сохраняется ранг',
+      'Level': 'Уровень',
+      'Level reward': 'Награда за уровень',
+      'Level {n}': 'Уровень {n}',
+      'Levels in your rank': 'Уровни внутри ранга',
+      'Lost more than you won this week? Part of it returns every Monday.': 'Неделя ушла в минус? Часть возвращается каждый понедельник.',
+      'Next rank: {rank}': 'Следующий ранг: {rank}',
+      'Next reward': 'Следующая награда',
+      'Part of everything you wager comes back, win or lose. Credited automatically.': 'Часть каждой ставки возвращается — и при выигрыше, и при проигрыше. Начисляется автоматически.',
+      'Personal VIP manager': 'Персональный VIP-менеджер',
+      'Personal VIP manager, highest limits, special events': 'Персональный VIP-менеджер, максимальные лимиты, особые события',
+      'Personal promos': 'Персональные акции',
+      'Platinum': 'Платина',
+      'Priority support': 'Приоритетная поддержка',
+      'Priority support unlocks at Platinum.': 'Приоритетная поддержка открывается на Платине.',
+      'Priority support, exclusive tournaments': 'Приоритетная поддержка, закрытые турниры',
+      'Rakeback from 2.00%': 'Рейкбек от 2.00%',
+      'Rakeback from 3.50%': 'Рейкбек от 3.50%',
+      'Rakeback from 5.00%': 'Рейкбек от 5.00%',
+      'Rakeback from 7.20%': 'Рейкбек от 7.20%',
+      'Rakeback up to 11.00%': 'Рейкбек до 11.00%',
+      'Rakeback, weekly cashback, birthday bonus, missions': 'Рейкбек, еженедельный кешбэк, бонус на день рождения, миссии',
+      'Ranks': 'Ранги',
+      'Reload bonus': 'Бонус на пополнение',
+      'Resets in {time}': 'Сброс через {time}',
+      'Rewards': 'Награды',
+      'Showing Bronze — switch ranks with the tabs above. All amounts in ARS.': 'Показана Бронза — ранг переключается вкладками выше. Все суммы в ARS.',
+      'Showing {rank} — switch ranks with the tabs above. All amounts in ARS.': 'Показан ранг {rank} — ранг переключается вкладками выше. Все суммы в ARS.',
+      'Silver': 'Серебро',
+      'The five things players ask support about. Kept on the page, not only in the terms.': 'Пять вопросов, с которыми чаще всего идут в поддержку. Держим их на странице, а не только в условиях.',
+      'The level goes up the moment you hit the amount. The new rakeback and cashback work right away and stay until the month ends.': 'Уровень поднимается в момент, когда набрана сумма. Новый рейкбек и кешбэк работают сразу и держатся до конца месяца.',
+      'The one-off payout lands the first time you reach a level. Meeting the terms again keeps the rank but does not pay twice.': 'Разовая выплата приходит при первом достижении уровня. Повторное выполнение условий сохраняет ранг, но второй раз не оплачивается.',
+      'The one-time cash reward is paid the first time you reach a level. Meeting the requirements again in later months keeps your rank, but the reward is not paid again.': 'Разовая денежная награда выплачивается при первом достижении уровня. Выполнение условий в следующие месяцы сохраняет ранг, но награда повторно не выплачивается.',
+      'The rank is confirmed at month end. Wager the same amount again and it stays with you.': 'Ранг подтверждается в конце месяца. Отыграйте ту же сумму снова — и он останется.',
+      'The reward is paid once, the first time you reach a level. Rakeback and cashback stay on while the level is yours.': 'Награда выплачивается один раз — при первом достижении уровня. Рейкбек и кешбэк работают, пока уровень за вами.',
+      'There are five ranks with five levels each. Your rank follows how much you wager during the calendar month: Bronze starts at 75K and Diamond runs from 100M to 600M ARS.': 'Пять рангов, в каждом пять уровней. Ранг зависит от того, сколько отыграно за календарный месяц: Бронза начинается с 75K, Алмаз идёт от 100M до 600M ARS.',
+      'Top rank reached': 'Верх лестницы',
+      'Wagered / month': 'Отыграно за месяц',
+      'Wagered this month': 'Отыграно за месяц',
+      'Wagering window': 'Окно отыгрыша',
+      'Wagers are counted from the first through the last day of the month. On the first day of each month the counter goes back to zero.': 'Ставки считаются с первого по последний день месяца. В первый день каждого месяца счётчик обнуляется.',
+      'Weekly cashback': 'Еженедельный кешбэк',
+      'Weekly cashback from 5.00%': 'Еженедельный кешбэк от 5.00%',
+      'Weekly free spins in selected games. They unlock at Silver.': 'Еженедельные фриспины в отобранных играх. Открываются на Серебре.',
+      'Weekly free spins, deposit bonuses': 'Еженедельные фриспины, бонусы на депозит',
+      'Weekly spins in selected games. Unlocks from Silver.': 'Еженедельные спины в отобранных играх. Открывается с Серебра.',
+      'What happens if I play less': 'Что будет, если играть меньше',
+      'What is above Diamond': 'Что выше Алмаза',
+      'What support I get before Diamond': 'Какая поддержка до Алмаза',
+      'What unlocks at each rank': 'Что открывается на каждом ранге',
+      'What unlocks with each rank': 'Что открывает каждый ранг',
+      'What you get': 'Что вы получаете',
+      'When I get a personal VIP manager': 'Когда появится персональный VIP-менеджер',
+      'When a new level starts working': 'Когда новый уровень начинает работать',
+      'When it starts': 'Когда начинает действовать',
+      'When the counter resets': 'Когда обнуляется счётчик',
+      'Whether the reward is paid twice': 'Выплачивается ли награда дважды',
+      'Works on every rank. The higher the level, the bigger the numbers.': 'Работает на любом ранге. Чем выше уровень, тем больше числа.',
+      'You are here': 'Вы здесь',
+      'You get one full grace month at your current rank, and we tell you the exact amount needed to keep it. After the grace month the rank drops by exactly one level — never more than one at a time.': 'Даётся один полный льготный месяц на текущем ранге, и мы называем точную сумму, чтобы его сохранить. После льготного месяца ранг опускается ровно на один уровень — не больше.',
+      'You get one full grace month on your current rank, and we show the exact amount to keep it. After that the rank drops by one level at most.': 'Даётся один полный льготный месяц на текущем ранге, и мы показываем точную сумму, чтобы его сохранить. После этого ранг опускается максимум на один уровень.',
+      'You move up the moment you reach the required amount. The higher rakeback and cashback take effect immediately and stay active until the end of the month.': 'Вы поднимаетесь в тот момент, когда набрана нужная сумма. Повышенные рейкбек и кешбэк вступают в силу сразу и действуют до конца месяца.',
+      'Your rank is confirmed at the end of each month. Reach the same wagering amount the following month and the rank stays with you.': 'Ранг подтверждается в конце каждого месяца. Наберите ту же сумму отыгрыша в следующем месяце — и ранг останется за вами.',
+      'Your rank is set by how much you wager in a calendar month. Five levels inside every rank.': 'Ранг определяется тем, сколько отыграно за календарный месяц. В каждом ранге пять уровней.',
+      '{rank} levels are not published yet.': 'Уровни ранга {rank} ещё не опубликованы.',
+      '{rank} · Level {n}': '{rank} · уровень {n}',
     },
 
     es: {
@@ -16275,7 +16378,110 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       'Added to favourites.': 'Agregado a favoritos.',
       'Fullscreen is not available here.': 'La pantalla completa no está disponible acá.',
       'Live chat opens in the mobile app — on the web write to support@warwin.com.': 'El chat en vivo funciona en la app móvil; en la web escribí a support@warwin.com.',
-      'Sign up with your email and set <br>a secure password.': 'Registrate con tu correo y creá <br>una contraseña segura.'
+      'Sign up with your email and set <br>a secure password.': 'Registrate con tu correo y creá <br>una contraseña segura.',
+
+      /* ── 1682:97 VIP-клуб: ранги, уровни, привилегии, вопросы ── */
+      'A cash gift for your birthday. The amount increases at every rank.': 'Un regalo en efectivo por tu cumpleaños. El monto aumenta con cada rango.',
+      'A cash gift on your birthday. It grows with every rank.': 'Un regalo en efectivo en tu cumpleaños. Crece con cada rango.',
+      'A one-off payout the first time you reach a level. No forms, no waiting.': 'Un pago único la primera vez que alcanzás un nivel. Sin formularios ni esperas.',
+      'A one-time cash payment credited as soon as you reach the level. There are no forms to complete and no processing wait.': 'Un pago único en efectivo acreditado apenas alcanzás el nivel. No hay formularios que completar ni esperas de procesamiento.',
+      'A personal VIP manager unlocks at Diamond, together with the highest limits and special experiences.': 'El gerente VIP personal se abre en Diamante, junto con los límites más altos y experiencias especiales.',
+      'A portion of everything you wager comes back, whether you win or lose, and it is credited automatically. It runs from 2.00% at Bronze 1 up to 11.00% at Diamond 5.': 'Una parte de todo lo que apostás vuelve, ganes o pierdas, y se acredita automáticamente. Va del 2.00% en Bronce 1 hasta el 11.00% en Diamante 5.',
+      'ARS wagered / month': 'ARS apostado / mes',
+      'ARS {done} of {goal} wagered this month': 'ARS {done} de {goal} apostado este mes',
+      'ARS {done} wagered this month': 'ARS {done} apostado este mes',
+      'ARS {left} to Level {n}': 'ARS {left} para el nivel {n}',
+      'Above Diamond there is an invite-only tier with individual terms.': 'Por encima de Diamante hay un nivel solo por invitación, con condiciones individuales.',
+      'Amounts for this rank come from the loyalty programme document.': 'Los montos de este rango provienen del documento del programa de fidelidad.',
+      'An invitation-only level with personalized terms.': 'Un nivel solo por invitación con condiciones personalizadas.',
+      'Birthday bonus': 'Bono de cumpleaños',
+      'Bronze': 'Bronce',
+      'Bronze — rakeback, weekly cashback, birthday bonus, missions. Silver — weekly free spins, reload bonuses. Gold — faster withdrawals, higher limits, personalized promotions. Platinum — priority support, exclusive tournaments. Diamond — personal VIP manager, highest limits, special experiences.': 'Bronce — rakeback, cashback semanal, bono de cumpleaños, misiones. Plata — giros gratis semanales, bonos de recarga. Oro — retiros más rápidos, límites más altos, promociones personalizadas. Platino — soporte prioritario, torneos exclusivos. Diamante — gerente VIP personal, los límites más altos, experiencias especiales.',
+      'Deposit bonus': 'Bono de depósito',
+      'Deposit bonuses': 'Bonos de depósito',
+      'Diamond': 'Diamante',
+      'Every rank keeps everything the ranks below already gave you.': 'Cada rango conserva todo lo que ya te dieron los rangos anteriores.',
+      'Everything you wager from the 1st to the last day of the month counts. On the 1st the counter goes back to zero.': 'Cuenta todo lo que apostás desde el 1 hasta el último día del mes. El día 1 el contador vuelve a cero.',
+      'Exclusive tournaments': 'Torneos exclusivos',
+      'Extra funds on top of your deposit. More often on higher ranks.': 'Fondos extra sobre tu depósito. Más seguido en los rangos altos.',
+      'Extra funds when you make a deposit. At higher ranks the bonus is offered more frequently.': 'Fondos extra cuando hacés un depósito. En los rangos altos el bono se ofrece con más frecuencia.',
+      'Faster withdrawals': 'Retiros más rápidos',
+      'Faster withdrawals, higher limits, hand-picked promos': 'Retiros más rápidos, límites más altos, promociones seleccionadas',
+      'Free spins': 'Giros gratis',
+      'Free spins every week': 'Giros gratis cada semana',
+      'Gold': 'Oro',
+      'Highest limits': 'Los límites más altos',
+      'How I keep my rank': 'Cómo mantengo mi rango',
+      'How my rank is decided': 'Cómo se define mi rango',
+      'How the month works': 'Cómo funciona el mes',
+      'If the week ends with a net loss, part of the lost amount comes back. The payment is made every Monday, from 5.00% at Bronze 1 up to 10.00% at Diamond 5.': 'Si la semana termina con pérdida neta, vuelve parte de lo perdido. El pago se hace todos los lunes, del 5.00% en Bronce 1 al 10.00% en Diamante 5.',
+      'If you play less': 'Si jugás menos',
+      'Keeping your rank': 'Cómo mantener tu rango',
+      'Level': 'Nivel',
+      'Level reward': 'Recompensa por nivel',
+      'Level {n}': 'Nivel {n}',
+      'Levels in your rank': 'Niveles dentro de tu rango',
+      'Lost more than you won this week? Part of it returns every Monday.': '¿Perdiste más de lo que ganaste esta semana? Una parte vuelve cada lunes.',
+      'Next rank: {rank}': 'Próximo rango: {rank}',
+      'Next reward': 'Próxima recompensa',
+      'Part of everything you wager comes back, win or lose. Credited automatically.': 'Una parte de todo lo que apostás vuelve, ganes o pierdas. Se acredita automáticamente.',
+      'Personal VIP manager': 'Gerente VIP personal',
+      'Personal VIP manager, highest limits, special events': 'Gerente VIP personal, los límites más altos, eventos especiales',
+      'Personal promos': 'Promociones personales',
+      'Platinum': 'Platino',
+      'Priority support': 'Soporte prioritario',
+      'Priority support unlocks at Platinum.': 'El soporte prioritario se abre en Platino.',
+      'Priority support, exclusive tournaments': 'Soporte prioritario, torneos exclusivos',
+      'Rakeback from 2.00%': 'Rakeback desde 2.00%',
+      'Rakeback from 3.50%': 'Rakeback desde 3.50%',
+      'Rakeback from 5.00%': 'Rakeback desde 5.00%',
+      'Rakeback from 7.20%': 'Rakeback desde 7.20%',
+      'Rakeback up to 11.00%': 'Rakeback hasta 11.00%',
+      'Rakeback, weekly cashback, birthday bonus, missions': 'Rakeback, cashback semanal, bono de cumpleaños, misiones',
+      'Ranks': 'Rangos',
+      'Reload bonus': 'Bono de recarga',
+      'Resets in {time}': 'Se reinicia en {time}',
+      'Rewards': 'Recompensas',
+      'Showing Bronze — switch ranks with the tabs above. All amounts in ARS.': 'Mostrando Bronce — cambiá de rango con las pestañas de arriba. Todos los montos en ARS.',
+      'Showing {rank} — switch ranks with the tabs above. All amounts in ARS.': 'Mostrando {rank} — cambiá de rango con las pestañas de arriba. Todos los montos en ARS.',
+      'Silver': 'Plata',
+      'The five things players ask support about. Kept on the page, not only in the terms.': 'Las cinco cosas que los jugadores le preguntan al soporte. Están en la página, no solo en los términos.',
+      'The level goes up the moment you hit the amount. The new rakeback and cashback work right away and stay until the month ends.': 'El nivel sube en el momento en que alcanzás el monto. El nuevo rakeback y cashback funcionan de inmediato y se mantienen hasta fin de mes.',
+      'The one-off payout lands the first time you reach a level. Meeting the terms again keeps the rank but does not pay twice.': 'El pago único llega la primera vez que alcanzás un nivel. Cumplir las condiciones otra vez mantiene el rango, pero no paga dos veces.',
+      'The one-time cash reward is paid the first time you reach a level. Meeting the requirements again in later months keeps your rank, but the reward is not paid again.': 'La recompensa única en efectivo se paga la primera vez que alcanzás un nivel. Cumplir los requisitos en meses posteriores mantiene tu rango, pero la recompensa no se vuelve a pagar.',
+      'The rank is confirmed at month end. Wager the same amount again and it stays with you.': 'El rango se confirma a fin de mes. Apostá el mismo monto otra vez y se queda con vos.',
+      'The reward is paid once, the first time you reach a level. Rakeback and cashback stay on while the level is yours.': 'La recompensa se paga una sola vez, la primera vez que alcanzás un nivel. El rakeback y el cashback siguen activos mientras el nivel sea tuyo.',
+      'There are five ranks with five levels each. Your rank follows how much you wager during the calendar month: Bronze starts at 75K and Diamond runs from 100M to 600M ARS.': 'Hay cinco rangos con cinco niveles cada uno. Tu rango depende de cuánto apostás durante el mes calendario: Bronce empieza en 75K y Diamante va de 100M a 600M ARS.',
+      'Top rank reached': 'Rango máximo alcanzado',
+      'Wagered / month': 'Apostado / mes',
+      'Wagered this month': 'Apostado este mes',
+      'Wagering window': 'Ventana de apuestas',
+      'Wagers are counted from the first through the last day of the month. On the first day of each month the counter goes back to zero.': 'Las apuestas se cuentan desde el primer hasta el último día del mes. El primer día de cada mes el contador vuelve a cero.',
+      'Weekly cashback': 'Cashback semanal',
+      'Weekly cashback from 5.00%': 'Cashback semanal desde 5.00%',
+      'Weekly free spins in selected games. They unlock at Silver.': 'Giros gratis semanales en juegos seleccionados. Se abren en Plata.',
+      'Weekly free spins, deposit bonuses': 'Giros gratis semanales, bonos de depósito',
+      'Weekly spins in selected games. Unlocks from Silver.': 'Giros semanales en juegos seleccionados. Se abre desde Plata.',
+      'What happens if I play less': 'Qué pasa si juego menos',
+      'What is above Diamond': 'Qué hay por encima de Diamante',
+      'What support I get before Diamond': 'Qué soporte tengo antes de Diamante',
+      'What unlocks at each rank': 'Qué se desbloquea en cada rango',
+      'What unlocks with each rank': 'Qué desbloquea cada rango',
+      'What you get': 'Qué obtenés',
+      'When I get a personal VIP manager': 'Cuándo obtengo un gerente VIP personal',
+      'When a new level starts working': 'Cuándo empieza a funcionar un nuevo nivel',
+      'When it starts': 'Cuándo empieza',
+      'When the counter resets': 'Cuándo se reinicia el contador',
+      'Whether the reward is paid twice': 'Si la recompensa se paga dos veces',
+      'Works on every rank. The higher the level, the bigger the numbers.': 'Funciona en todos los rangos. Cuanto más alto el nivel, más grandes los números.',
+      'You are here': 'Estás acá',
+      'You get one full grace month at your current rank, and we tell you the exact amount needed to keep it. After the grace month the rank drops by exactly one level — never more than one at a time.': 'Tenés un mes completo de gracia en tu rango actual, y te decimos el monto exacto para mantenerlo. Después del mes de gracia el rango baja exactamente un nivel, nunca más de uno a la vez.',
+      'You get one full grace month on your current rank, and we show the exact amount to keep it. After that the rank drops by one level at most.': 'Tenés un mes completo de gracia en tu rango actual y te mostramos el monto exacto para mantenerlo. Después de eso el rango baja como máximo un nivel.',
+      'You move up the moment you reach the required amount. The higher rakeback and cashback take effect immediately and stay active until the end of the month.': 'Subís en el momento en que alcanzás el monto requerido. El rakeback y el cashback más altos se aplican de inmediato y siguen activos hasta fin de mes.',
+      'Your rank is confirmed at the end of each month. Reach the same wagering amount the following month and the rank stays with you.': 'Tu rango se confirma al final de cada mes. Alcanzá el mismo monto apostado el mes siguiente y el rango se queda con vos.',
+      'Your rank is set by how much you wager in a calendar month. Five levels inside every rank.': 'Tu rango se define por cuánto apostás en un mes calendario. Cinco niveles dentro de cada rango.',
+      '{rank} levels are not published yet.': 'Los niveles de {rank} todavía no están publicados.',
+      '{rank} · Level {n}': '{rank} · Nivel {n}',
     }
   };
 
@@ -21410,10 +21616,167 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         i.dispatchEvent(new Event('input'));
       };
 
-      /* ═══ VIP: вкладки вопросов и вкладки рангов ═════════════════════ */
+      /* ═══ VIP: состояние страницы ════════════════════════════════════
+         Всё, что меняется на странице, идёт от одной пары «ранг + уровень».
+         Раньше карточка прогресса была прибита гвоздями в разметке, и
+         витрина состояний могла показать только один кадр из двадцати пяти.
+
+         Числа есть только у Бронзы — они опубликованы в макете. Для
+         остальных рангов известна лишь нижняя граница рейкбека с карточки
+         ранга, а пороги уровней и выплаты придут из документа программы.
+         Поэтому там, где числа нет, стоит прочерк, а не выдуманная сумма. */
       var vipView = document.getElementById('view-vip');
       if (vipView) {
-        /* Вопросы: три раздела, у каждого свой список */
+        var VIP_RANKS = [
+          { key: 'bronze',   name: 'Bronze',   rake: '2.00%' },
+          { key: 'silver',   name: 'Silver',   rake: '3.50%' },
+          { key: 'gold',     name: 'Gold',     rake: '5.00%' },
+          { key: 'platinum', name: 'Platinum', rake: '7.20%' },
+          /* У Алмаза на карточке «up to 11.00%» — это потолок ранга,
+             а не значение первого уровня, подставить его нельзя */
+          { key: 'diamond',  name: 'Diamond',  rake: null }
+        ];
+        /* Уровень: сумма отыгрыша, разовая выплата, рейкбек, кешбэк */
+        var VLV = {
+          bronze: [
+            ['ARS 75,000',  'ARS 150',   '2.00%', '5.00%'],
+            ['ARS 150,000', 'ARS 300',   '2.30%', '5.20%'],
+            ['ARS 250,000', 'ARS 500',   '2.60%', '5.40%'],
+            ['ARS 350,000', 'ARS 700',   '2.90%', '5.60%'],
+            ['ARS 500,000', 'ARS 1,000', '3.20%', '5.80%']
+          ]
+        };
+        var VLV_STEP = { bronze: [75000, 150000, 250000, 350000, 500000] };
+        var VLV_COL = ['Wagered / month', 'Reward', 'Rakeback', 'Weekly cashback'];
+        var DASH = '—';
+
+        var vipRank = 'bronze', vipLevel = 3, vipDone = 310000, vipReset = '11d 04:22';
+        var vipIdx = function (key) {
+          for (var i = 0; i < VIP_RANKS.length; i++) if (VIP_RANKS[i].key === key) return i;
+          return 0;
+        };
+        var vq = function (s) { return vipView.querySelector(s); };
+        var money = function (n) { return 'ARS ' + n.toLocaleString('en-US'); };
+
+        /* ── таблица уровней ── */
+        var vlvBody = vq('[data-vlv-body]');
+        var vlvNote = vq('[data-vlv-note]');
+        var vlvTabs = [].slice.call(vipView.querySelectorAll('[data-vlv]'));
+        var vlvPaint = function (key) {
+          var rows = VLV[key], rank = VIP_RANKS[vipIdx(key)];
+          vlvBody.innerHTML = '';
+          if (!rows) {
+            var e = document.createElement('div');
+            e.className = 'vlv__empty';
+            e.textContent = T('{rank} levels are not published yet.', { rank: T(rank.name) });
+            vlvBody.appendChild(e);
+            vlvNote.textContent = T('Amounts for this rank come from the loyalty programme document.');
+            return;
+          }
+          rows.forEach(function (r, n) {
+            var here = key === vipRank && n + 1 === vipLevel;
+            var row = document.createElement('div');
+            row.className = 'vlv__row' + (here ? ' is-now' : '');
+            var b = document.createElement('b');
+            b.textContent = T('Level {n}', { n: n + 1 });
+            row.appendChild(b);
+            /* Подпись в data-l — на мобильной она встаёт над числом:
+               там таблицы нет, и колонка сама себя не называет. */
+            ['span', 'span', 'i', 'i'].forEach(function (tag, k) {
+              var c = document.createElement(tag);
+              c.setAttribute('data-l', T(VLV_COL[k]));
+              c.textContent = r[k];
+              row.appendChild(c);
+            });
+            if (here) {
+              var em = document.createElement('em');
+              em.textContent = T('You are here');
+              row.appendChild(em);
+            }
+            vlvBody.appendChild(row);
+          });
+          vlvNote.textContent = T('Showing {rank} — switch ranks with the tabs above. All amounts in ARS.',
+                                  { rank: T(rank.name) });
+        };
+        var vlvShow = function (key) {
+          vlvTabs.forEach(function (o) {
+            var on = o.dataset.vlv === key;
+            o.classList.toggle('is-on', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          vlvPaint(key);
+        };
+        vlvTabs.forEach(function (t) {
+          t.addEventListener('click', function () { vlvShow(t.dataset.vlv); });
+        });
+
+        /* ── карточка прогресса и всё, что помечает текущий ранг ── */
+        var vipPaint = function () {
+          var i = vipIdx(vipRank), rank = VIP_RANKS[i];
+          var rows = VLV[vipRank], row = rows && rows[vipLevel - 1];
+          var steps = VLV_STEP[vipRank];
+          var goal = steps && steps[vipLevel];      /* порог следующего уровня */
+
+          vq('.vpr__reset').textContent = T('Resets in {time}', { time: vipReset });
+          vq('.vpr__rank').textContent = T('{rank} · Level {n}',
+                                           { rank: T(rank.name), n: vipLevel });
+
+          var pct = 0, line1, line2;
+          if (row && goal) {
+            pct = Math.max(0, Math.min(100, vipDone / goal * 100));
+            line1 = T('ARS {done} of {goal} wagered this month',
+                      { done: vipDone.toLocaleString('en-US'),
+                        goal: goal.toLocaleString('en-US') });
+            line2 = T('ARS {left} to Level {n}',
+                      { left: Math.max(0, goal - vipDone).toLocaleString('en-US'),
+                        n: vipLevel + 1 });
+          } else if (row) {
+            /* Верх ранга: следующего уровня внутри ранга нет */
+            pct = 100;
+            line1 = T('ARS {done} wagered this month',
+                      { done: vipDone.toLocaleString('en-US') });
+            line2 = i + 1 < VIP_RANKS.length
+              ? T('Next rank: {rank}', { rank: T(VIP_RANKS[i + 1].name) })
+              : T('Top rank reached');
+          } else {
+            line1 = T('{rank} levels are not published yet.', { rank: T(rank.name) });
+            line2 = '';
+          }
+          vq('.vpr__track i').style.width = pct + '%';
+          vq('.vpr__caption span').textContent = line1;
+          vq('.vpr__caption b').textContent = line2;
+
+          /* Рейкбек вне Бронзы известен только на первом уровне: на
+             карточке ранга это «from X», то есть нижняя граница. */
+          var stats = vipView.querySelectorAll('.vpr__stat b');
+          stats[0].textContent = row ? row[2] : (vipLevel === 1 && rank.rake ? rank.rake : DASH);
+          stats[1].textContent = row ? row[3] : DASH;
+          stats[2].textContent = row ? row[1] : DASH;
+
+          var badge = vq('.vpr__badge');
+          badge.className = 'vpr__badge vpr__badge--' + rank.key;
+          badge.querySelector('img').src = 'assets/vip-rank-' + rank.key + '.png';
+
+          [].slice.call(vipView.querySelectorAll('.vrank')).forEach(function (c, n) {
+            c.classList.toggle('is-now', n === i);
+          });
+          [].slice.call(vipView.querySelectorAll('.vstep__dot')).forEach(function (d, n) {
+            d.classList.toggle('is-on', n === i);
+          });
+          [].slice.call(vipView.querySelectorAll('.vunl__row')).forEach(function (r, n) {
+            r.classList.toggle('is-now', n === i);
+          });
+          vlvShow(vipRank);
+        };
+        /* Витрина состояний и обработчики зовут одно и то же */
+        window.wwVipSet = function (rank, level, done, reset) {
+          vipRank = rank; vipLevel = level;
+          vipDone = done === undefined ? 0 : done;
+          if (reset) vipReset = reset;
+          vipPaint();
+        };
+
+        /* ── вопросы: три раздела, у каждого свой список ── */
         var vipFaqTabs = [].slice.call(vipView.querySelectorAll('[data-vfaq]'));
         vipFaqTabs.forEach(function (t) {
           t.addEventListener('click', function () {
@@ -21428,76 +21791,8 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
           });
         });
 
-        /* Уровни внутри ранга. В макете заполнена только Бронза, и числа
-           остальных рангов идут из документа программы лояльности. Пока их
-           нет, вкладка говорит об этом прямо, а не показывает выдуманное. */
-        var VLV = {
-          bronze: [
-            ['Level 1', 'ARS 75,000',  'ARS 150',   '2.00%', '5.00%'],
-            ['Level 2', 'ARS 150,000', 'ARS 300',   '2.30%', '5.20%'],
-            ['Level 3', 'ARS 250,000', 'ARS 500',   '2.60%', '5.40%', 'You are here'],
-            ['Level 4', 'ARS 350,000', 'ARS 700',   '2.90%', '5.60%'],
-            ['Level 5', 'ARS 500,000', 'ARS 1,000', '3.20%', '5.80%']
-          ]
-        };
-        var VLV_NAME = { bronze: 'Bronze', silver: 'Silver', gold: 'Gold',
-                         platinum: 'Platinum', diamond: 'Diamond' };
-        var VLV_COL = ['Wagered / month', 'Reward', 'Rakeback', 'Weekly cashback'];
-        var vlvBody = vipView.querySelector('[data-vlv-body]');
-        var vlvNote = vipView.querySelector('[data-vlv-note]');
-        var vlvTabs = [].slice.call(vipView.querySelectorAll('[data-vlv]'));
-        var vlvPaint = function (key) {
-          var rows = VLV[key];
-          if (!rows) {
-            vlvBody.innerHTML = '';
-            var e = document.createElement('div');
-            e.className = 'vlv__empty';
-            e.textContent = T('{rank} levels are not published yet.',
-                              { rank: VLV_NAME[key] || key });
-            vlvBody.appendChild(e);
-            vlvNote.textContent = T('Amounts for this rank come from the loyalty programme document.');
-            return;
-          }
-          vlvBody.innerHTML = '';
-          rows.forEach(function (r) {
-            var row = document.createElement('div');
-            row.className = 'vlv__row' + (r[5] ? ' is-now' : '');
-            var b = document.createElement('b'); b.textContent = r[0]; row.appendChild(b);
-            /* Подпись в data-l — на мобильной она встаёт над числом:
-               там таблицы нет, и колонка сама себя не называет. */
-            [1, 2].forEach(function (n) {
-              var s = document.createElement('span');
-              s.setAttribute('data-l', T(VLV_COL[n - 1])); s.textContent = r[n];
-              row.appendChild(s);
-            });
-            [3, 4].forEach(function (n) {
-              var i = document.createElement('i');
-              i.setAttribute('data-l', T(VLV_COL[n - 1])); i.textContent = r[n];
-              row.appendChild(i);
-            });
-            if (r[5]) {
-              var em = document.createElement('em'); em.textContent = T(r[5]); row.appendChild(em);
-            }
-            vlvBody.appendChild(row);
-          });
-          vlvNote.textContent = T('Showing {rank} — switch ranks with the tabs above. All amounts in ARS.',
-                                  { rank: VLV_NAME[key] || key });
-        };
-        vlvTabs.forEach(function (t) {
-          t.addEventListener('click', function () {
-            vlvTabs.forEach(function (o) {
-              var on = o === t;
-              o.classList.toggle('is-on', on);
-              o.setAttribute('aria-selected', on ? 'true' : 'false');
-            });
-            vlvPaint(t.dataset.vlv);
-          });
-        });
-        /* Текущий язык применяем к уже отрисованной вкладке */
-        document.addEventListener('ww:lang', function () {
-          var on = vipView.querySelector('.vlv__tab.is-on');
-          if (on) vlvPaint(on.dataset.vlv);
-        });
+        vipPaint();
+        document.addEventListener('ww:lang', vipPaint);
       }
 
       var STATES = [
@@ -21862,20 +22157,37 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       /* ── VIP-клуб ──
          Клуб закрыт для гостя, поэтому каждое состояние сначала вводит игрока
          в аккаунт: иначе showView увёл бы на форму входа вместо страницы.
-         Страница статична по прогрессу, поэтому состояния показывают то,
-         что на ней действительно переключается: вкладки рангов и вопросов. */
-      var vipOpen = function (sel) {
+         Ранг и уровень задаются парой чисел — страница перерисовывается
+         целиком: карточка прогресса, знак, подсветка ранга, степпер,
+         строка привилегий и отметка в таблице уровней. */
+      var vipAt = function (rank, level, done, reset) {
+        document.body.classList.add('is-authed');
+        window.wwVipSet(rank, level, done, reset);
+        showView('vip');
+      };
+      /* Открыть вкладку, не трогая ранг: так показываются состояния
+         таблицы и вопросов при том же игроке */
+      var vipTab = function (sel) {
         document.body.classList.add('is-authed');
         showView('vip');
-        if (!sel) return;
         var b = document.querySelector('#view-vip ' + sel);
         if (b) b.click();
       };
       STATES.push(['VIP-клуб', [
-        ['Bronze · уровень 3', function () { vipOpen('[data-vlv="bronze"]'); }],
-        ['Ранг без чисел', function () { vipOpen('[data-vlv="gold"]'); }],
-        ['Вопросы · привилегии', function () { vipOpen('[data-vfaq="privileges"]'); }],
-        ['Вопросы · менеджеры', function () { vipOpen('[data-vfaq="managers"]'); }],
+        ['Бронза · уровень 1 · только вошёл', function () { vipAt('bronze', 1, 0, '11d 04:22'); }],
+        ['Бронза · уровень 1 · почти вторая', function () { vipAt('bronze', 1, 138000); }],
+        ['Бронза · уровень 3 · как в макете', function () { vipAt('bronze', 3, 310000); }],
+        ['Бронза · уровень 5 · дальше Серебро', function () { vipAt('bronze', 5, 500000); }],
+        ['Бронза · последний день месяца', function () { vipAt('bronze', 2, 190000, '0d 01:12'); }],
+        ['Серебро · уровень 1 · есть нижняя граница', function () { vipAt('silver', 1); }],
+        ['Серебро · уровень 3 · чисел нет', function () { vipAt('silver', 3); }],
+        ['Золото · уровень 1', function () { vipAt('gold', 1); }],
+        ['Платина · уровень 1', function () { vipAt('platinum', 1); }],
+        ['Алмаз · уровень 5 · верх лестницы', function () { vipAt('diamond', 5); }],
+        ['Таблица · вкладка без чисел', function () { vipTab('[data-vlv="gold"]'); }],
+        ['Вопросы · общие', function () { vipTab('[data-vfaq="general"]'); }],
+        ['Вопросы · привилегии', function () { vipTab('[data-vfaq="privileges"]'); }],
+        ['Вопросы · менеджеры', function () { vipTab('[data-vfaq="managers"]'); }],
         ['Гость · клуба в меню нет', function () {
           document.body.classList.remove('is-authed');
           showView('home');
