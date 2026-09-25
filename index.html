@@ -2856,213 +2856,248 @@ body.dp-open .wallet__deposit, body.dp-open .wallet__deposit::after { animation:
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   1462:13094 «VIP Club» и 1467:13191 — мобильная. Порядок разделов:
-   прогресс, лестница уровней, привилегии, вопросы, поддержка.
-   Проценты нигде не называются намеренно — это решение из макета.
+   1682:97 «VIP Club», 1688:97 — мобильная. Порядок разделов из макета:
+   прогресс, ранги, уровни внутри ранга, привилегии, что открывается,
+   правила месяца, вопросы.
+   Металл ранга задаётся одной парой значений на класс --vr-tint/--vr-ink,
+   а карточка, чип и обод знака берут их оттуда: добавить ранг — одна строка.
    ═══════════════════════════════════════════════════════════════════ */
 .view--vip { gap: 32px; }
-/* Заголовки разделов на этой странице на ступень крупнее общесайтовых:
-   вся шкала страницы сдвинута вверх по Tailwind */
-.view--vip .section__title h2 { font-size: 24px; line-height: 32px; }
 .vip__h1 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
            font-size: 36px; line-height: 40px; color: var(--white); }
 
-/* ── прогресс: 1484:13231, кадр 1103x276 ────────────────────────────
-   Подпись раздела стоит внутри баннера, поэтому отдельного заголовка
-   секции над ним нет. Поля и кегли взяты из кадра один в один. */
-.vipro { position: relative; overflow: hidden; box-sizing: border-box;
-         display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
-         padding: 32px; border-radius: 16px;
-         background: #16254e url(a/7887c6dd70.webp) center / cover no-repeat; }
-/* Водяной знак — логотип в цвет фона. Лежит под содержимым, поэтому
-   детям баннера задан position: relative */
-.vipro::before { content: ''; position: absolute; right: 1px; top: 0;
-                 width: 424px; height: 279px; pointer-events: none;
-                 background: url(a/726532d83e.svg) center / contain no-repeat; }
-.vipro > * { position: relative; }
-.vipro__head { font-family: 'Work Sans', sans-serif; font-weight: 600;
-               font-size: 16px; line-height: 22px; color: var(--muted); }
-.vipro__card { box-sizing: border-box; width: 555px; max-width: calc(100% - 260px);
-               display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
-               padding: 24px; border-radius: 16px; background: var(--card, #181e3b); }
-.vipro__who { display: flex; align-items: center; gap: 10px; }
-.vipro__who b { font-family: 'Work Sans', sans-serif; font-weight: 600;
-                font-size: 18px; line-height: 23px; color: var(--white); }
-.vipro__lvl { display: inline-flex; align-items: center; height: 25px; padding: 0 10px;
-              border-radius: 999px; background: rgba(214, 124, 66, .16); color: #e0a172;
-              font-family: 'Work Sans', sans-serif; font-weight: 600;
-              font-size: 14px; line-height: 17px; white-space: nowrap; }
-.vipro__pct { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-              font-size: 36px; line-height: 46px; color: var(--white);
-              font-variant-numeric: tabular-nums; }
-.vipro__track { display: block; align-self: stretch; height: 8px; border-radius: 999px;
-                background: #2d324d; }
-.vipro__track i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
-.vipro__next { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 19px;
-               color: var(--dp-label); }
-/* Те же металлы, что у чипов в лестнице: иначе шапка на Captain оставалась
-   бронзовой и спорила с карточкой уровня ниже. */
-.vipro__lvl--captain { background: rgba(159, 182, 217, .16); color: #c8d6ea; }
-.vipro__lvl--general { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
-.vipro__lvl--warlord { background: rgba(7, 148, 255, .18); color: #6bb8ff; }
-.vipro__badge { position: absolute; right: 31px; top: 31px; width: 217px; height: 217px; }
-.vipro__badge[hidden] { display: none; }
+/* Металлы рангов */
+.vrank--bronze,   .vrank__chip--bronze,   .vpr__badge--bronze   { --vr-tint: 201, 138, 75;  --vr-ink: #f0b27a; }
+.vrank--silver,   .vrank__chip--silver,   .vpr__badge--silver   { --vr-tint: 185, 194, 204; --vr-ink: #e3eaf2; }
+.vrank--gold,     .vrank__chip--gold,     .vpr__badge--gold     { --vr-tint: 224, 178, 60;  --vr-ink: #f7d783; }
+.vrank--platinum, .vrank__chip--platinum, .vpr__badge--platinum { --vr-tint: 143, 208, 232; --vr-ink: #cdeefa; }
+.vrank--diamond,  .vrank__chip--diamond,  .vpr__badge--diamond  { --vr-tint: 127, 156, 255; --vr-ink: #c3cfff; }
 
-/* Чипы уровней в карточках — металл своего уровня */
-.vlvl__chip { display: inline-flex; align-items: center; height: 30px; padding: 0 14px;
-              border-radius: 999px; font-family: 'Work Sans', sans-serif;
-              font-weight: 600; font-size: 16px; line-height: 24px; white-space: nowrap; }
-.vlvl__i--soldier .vlvl__chip { background: rgba(214, 124, 66, .16); color: #e0a172; }
-.vlvl__i--captain .vlvl__chip { background: rgba(159, 182, 217, .16); color: #c8d6ea; }
-.vlvl__i--general .vlvl__chip { background: rgba(230, 172, 58, .16); color: #f0cd6b; }
-.vlvl__i--warlord .vlvl__chip { background: rgba(7, 148, 255, .18); color: #6bb8ff; }
+/* ── 1683:214 прогресс ──────────────────────────────────────────────
+   Слева состояние счёта, справа знак ранга. Градиент идёт по диагонали
+   от тона полотна к синему: карточка отделяется от фона без канта. */
+.vpr { box-sizing: border-box; display: flex; align-items: center; gap: 24px;
+       padding: 28px 28px 28px 32px; border-radius: 24px;
+       border: 1px solid rgba(255, 255, 255, .08);
+       background: linear-gradient(112deg, #111d3f 0%, #192a57 58%, #1a3164 100%); }
+.vpr__left { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+.vpr__top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.vpr__eyebrow { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+                line-height: 20px; letter-spacing: .84px; text-transform: uppercase;
+                color: var(--muted); }
+/* Срок сброса — пилюлей: это состояние, а не действие, поэтому без канта */
+.vpr__reset { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; flex: none;
+              border-radius: 999px; background: rgba(255, 255, 255, .1);
+              font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 20px;
+              color: var(--white); font-variant-numeric: tabular-nums; }
+.vpr__rank { margin: -6px 0 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+             font-size: 38px; line-height: 44px; color: var(--white); }
+.vpr__progress { display: flex; flex-direction: column; gap: 10px; }
+.vpr__track { display: block; height: 10px; border-radius: 999px;
+              background: rgba(255, 255, 255, .12); overflow: hidden; }
+.vpr__track i { display: block; height: 100%; border-radius: 999px;
+                background: linear-gradient(90deg, #0794ff, #49c2ff); }
+.vpr__caption { display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+                font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 22px;
+                color: var(--dp-label); }
+.vpr__caption b { flex: none; font-weight: 600; color: var(--white); }
+.vpr__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.vpr__stat { box-sizing: border-box; display: flex; flex-direction: column; gap: 4px;
+             padding: 14px 16px; border-radius: 12px; background: rgba(255, 255, 255, .07); }
+.vpr__stat span { font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
+                  color: var(--dp-label); }
+.vpr__stat b { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+               font-size: 22px; line-height: 28px; color: var(--white); }
+/* Слот знака: обод берёт металл текущего ранга, заливка одна на все —
+   иначе пять разных кругов спорят с одной карточкой */
+.vpr__badge { flex: none; display: grid; place-items: center; width: 196px; height: 196px;
+              border-radius: 999px; border: 2px solid rgba(var(--vr-tint, 201, 138, 75), .45);
+              background: radial-gradient(120% 120% at 30% 20%, #2a3560 0%, #141b38 100%); }
+.vpr__badge img { display: block; width: 175px; height: 175px; }
 
-/* ── лестница уровней ── */
-/* Точки степпера стоят по центрам карточек, линия идёт от точки к точке:
-   так связь «это одна дорожка» видна без отдельной подложки */
-.vlvl { list-style: none; margin: 0; padding: 28px 0 0;
-        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-.vlvl__i { position: relative; display: flex; }
-/* Линия — ::before, точка — ::after: псевдоэлементы рисуются в этом порядке,
-   и раньше линия проходила поверх точки и прорезала её. Точка залита фоном
-   страницы, поэтому отрезок под ней не просвечивает и линия выглядит
-   идущей от края до края. Центры совпадают: линия 2px на -22, точка 12 на -27. */
-.vlvl__i::before { content: ''; position: absolute; top: -22px; left: 50%;
-                   right: calc(-50% - 16px); height: 2px; border-radius: 2px;
-                   background: #232942; }
-.vlvl__i:last-child::before { display: none; }
-.vlvl__i::after { content: ''; position: absolute; left: 50%; top: -27px;
-                  box-sizing: border-box; width: 12px; height: 12px; margin-left: -6px;
-                  border-radius: 50%; background: var(--bg, #0e132a);
-                  border: 2px solid #333a5c; }
-.vlvl__i.is-now::after { background: var(--primary); border-color: var(--primary);
-                         box-shadow: 0 0 0 4px rgba(7, 148, 255, .16); }
-/* Пройденное — залитой точкой без ореола: видно, что ступень позади, но
-   внимание остаётся на текущей. */
-.vlvl__i.is-done::after { background: rgba(7, 148, 255, .45); border-color: rgba(7, 148, 255, .45); }
-.vlvl__i.is-done::before { background: rgba(7, 148, 255, .45); }
-.vlvl__card { box-sizing: border-box; width: 100%; display: flex; flex-direction: column; gap: 10px;
-              padding: 18px; border-radius: 16px; background: var(--card, #181e3b);
-              border: 1px solid rgba(255, 255, 255, .05); }
-.vlvl__i.is-now .vlvl__card { border-color: rgba(7, 148, 255, .38); }
-.vlvl__chip { align-self: flex-start; }
-.vlvl__mark { display: block; width: 56px; height: 56px; }
-.vlvl__sum { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-             font-size: 24px; line-height: 32px; color: var(--white); }
-.vlvl__cap { margin-top: -6px; font-family: 'Work Sans', sans-serif; font-size: 16px;
-             line-height: 24px; color: var(--dp-label); }
-.vlvl__perks { list-style: none; margin: 0; padding: 0;
-               display: flex; flex-direction: column; gap: 8px; }
-.vlvl__perks li { position: relative; padding-left: 20px; font-family: 'Work Sans', sans-serif;
-                  font-size: 16px; line-height: 24px; color: var(--muted); }
-.vlvl__perks li::before { content: ''; position: absolute; left: 0; top: 9px;
-                          width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
-.vlvl__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
-              line-height: 24px; color: var(--dp-label); }
+/* ── секция ── */
+.vsec { display: flex; flex-direction: column; gap: 16px; }
+.vsec__head h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+                 font-size: 24px; line-height: 32px; color: var(--white); }
+.vsec__head p { margin: 6px 0 0; max-width: 780px; font-family: 'Work Sans', sans-serif;
+                font-size: 15px; line-height: 22px; color: var(--dp-label); }
+.vsec__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 20px;
+              color: var(--dp-label); }
 
-/* ── привилегии ── */
-.vprv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.vprv__i { box-sizing: border-box; display: flex; align-items: center; gap: 14px;
-           padding: 16px 20px; border-radius: 16px; background: var(--card, #181e3b); }
-.vprv__i img { display: block; width: 64px; height: 64px; flex: none; }
-.vprv__i h3 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600;
-              font-size: 16px; line-height: 24px; color: var(--white); }
-.vprv__i p { margin: 4px 0 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
-             line-height: 24px; color: var(--dp-label); }
+/* ── 1684:214 ранги ─────────────────────────────────────────────────
+   Степпер отдельной строкой над карточками: точки стоят по центрам
+   колонок, линия проходит от первой точки до последней. */
+.vstep { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+         align-items: center; height: 12px; margin-bottom: 4px; }
+.vstep__line { position: absolute; left: 10%; right: 10%; height: 2px; border-radius: 2px;
+               background: #232942; }
+.vstep__dot { position: relative; box-sizing: border-box; justify-self: center;
+              width: 12px; height: 12px; border-radius: 50%;
+              background: var(--page); border: 2px solid #333a5c; }
+.vstep__dot.is-on { background: var(--primary); border-color: var(--primary);
+                    box-shadow: 0 0 0 4px rgba(7, 148, 255, .16); }
 
-/* ── вопросы ── */
+.vranks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.vrank { box-sizing: border-box; display: flex; flex-direction: column; gap: 12px;
+         min-height: 280px; padding: 16px; border-radius: 12px;
+         background: var(--chrome); border: 1px solid rgba(255, 255, 255, .08); }
+/* Текущий ранг: кант в два пикселя и мягкая тень. Заливка сдвинута всего
+   на ступень — подсветка не должна перекрикивать содержимое карточки. */
+.vrank.is-now { background: #1d2749; border: 2px solid rgba(7, 148, 255, .85); padding: 15px;
+                box-shadow: 0 6px 24px rgba(7, 148, 255, .25); }
+.vrank__chip { align-self: flex-start; display: inline-flex; align-items: center; height: 28px;
+               padding: 0 12px; border-radius: 999px; white-space: nowrap;
+               background: rgba(var(--vr-tint, 201, 138, 75), .16); color: var(--vr-ink, #f0b27a);
+               font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+               line-height: 20px; }
+.vrank__badge { display: grid; place-items: center; width: 56px; height: 56px; }
+.vrank__badge img { display: block; width: 56px; height: 56px; }
+.vrank__amount { display: flex; flex-direction: column; gap: 2px; }
+.vrank__amount b { font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
+                   font-size: 20px; line-height: 26px; color: var(--white); }
+.vrank__amount span { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 18px;
+                      color: var(--dp-label); }
+.vrank__perks { list-style: none; margin: auto 0 0; padding: 0;
+                display: flex; flex-direction: column; gap: 6px; }
+.vrank__perks li { position: relative; padding-left: 16px; font-family: 'Work Sans', sans-serif;
+                   font-size: 13px; line-height: 19px; color: var(--muted); }
+.vrank__perks li::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px;
+                           height: 5px; border-radius: 50%;
+                           background: rgba(var(--vr-tint, 201, 138, 75), .9); }
+
+/* ── 1685:214 уровни внутри ранга ───────────────────────────────────
+   Шестая колонка пустая во всех строках: в ней стоит метка «вы здесь»
+   у текущего уровня. Так метка не растягивает строку и не двигает числа. */
+.vlv { box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;
+       padding: 24px; border-radius: 12px; background: var(--chrome); }
+.vlv__tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.vlv__tab { box-sizing: border-box; display: inline-flex; align-items: center; height: 36px;
+            padding: 0 18px; cursor: pointer; border: 1px solid transparent; border-radius: 999px;
+            background: rgba(255, 255, 255, .06); color: var(--muted);
+            font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px;
+            line-height: 20px; transition: background .15s ease, color .15s ease,
+            border-color .15s ease; }
+.vlv__tab:hover { background: rgba(255, 255, 255, .1); color: var(--white); }
+.vlv__tab.is-on, .vlv__tab.is-on:hover { background: rgba(7, 148, 255, .18);
+                                         border-color: rgba(7, 148, 255, .6); color: #7dc9ff; }
+.vlv__table { display: flex; flex-direction: column; gap: 8px; }
+.vlv__head, .vlv__row { display: grid; align-items: center; gap: 16px;
+                        grid-template-columns: 1.1fr 2.1fr 1.5fr 1.4fr 1.7fr 104px; }
+.vlv__head { padding: 0 14px; font-family: 'Work Sans', sans-serif; font-weight: 600;
+             font-size: 13px; line-height: 18px; letter-spacing: .5px; text-transform: uppercase;
+             color: var(--dp-label); }
+.vlv__body { display: flex; flex-direction: column; gap: 8px; }
+.vlv__row { box-sizing: border-box; padding: 14px 16px; border-radius: 10px;
+            border: 1px solid transparent; background: rgba(255, 255, 255, .04);
+            font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 22px;
+            color: var(--muted); font-variant-numeric: tabular-nums; }
+.vlv__row b { font-weight: 600; color: var(--white); }
+.vlv__row i { font-style: normal; color: var(--white); }
+.vlv__row.is-now { background: rgba(7, 148, 255, .12); border-color: rgba(7, 148, 255, .55); }
+.vlv__row em { justify-self: end; display: inline-flex; align-items: center; height: 24px;
+               padding: 0 10px; border-radius: 999px; background: rgba(7, 148, 255, .22);
+               font-style: normal; font-weight: 600; font-size: 12px; line-height: 18px;
+               white-space: nowrap; color: #9fd5ff; }
+.vlv__note { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 19px;
+             color: var(--dp-label); }
+/* Пустая вкладка: числа остальных рангов приходят из документа программы,
+   до них показываем причину, а не пустое место */
+.vlv__body:empty + .vlv__note, .vlv__empty { color: var(--dp-label); }
+.vlv__empty { box-sizing: border-box; display: grid; place-items: center; min-height: 148px;
+              padding: 24px; border-radius: 10px; background: rgba(255, 255, 255, .04);
+              font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 22px;
+              text-align: center; }
+
+/* ── 1686:214 привилегии ── */
+.vperks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.vperk { box-sizing: border-box; display: flex; align-items: flex-start; gap: 14px;
+         padding: 18px; border-radius: 12px; background: var(--chrome);
+         border: 1px solid rgba(255, 255, 255, .06); }
+.vperk__ico { flex: none; display: grid; place-items: center; width: 44px; height: 44px;
+              border-radius: 10px; background: rgba(7, 148, 255, .12); }
+.vperk__ico img { display: block; width: 34px; height: 34px; }
+.vperk h3 { margin: 0; font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px;
+            line-height: 22px; color: var(--white); }
+.vperk p { margin: 4px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+           line-height: 20px; color: var(--dp-label); }
+
+/* ── 1686:256 что открывается с рангом ──
+   Чип фиксированной ширины: пять строк читаются как таблица, взгляд
+   идёт по одной вертикали. */
+.vunl { display: flex; flex-direction: column; gap: 8px; }
+.vunl__row { box-sizing: border-box; display: flex; align-items: center; gap: 16px;
+             padding: 14px 16px; border-radius: 10px; border: 1px solid transparent;
+             background: rgba(255, 255, 255, .04); }
+.vunl__row.is-now { background: rgba(7, 148, 255, .1); border-color: rgba(7, 148, 255, .4); }
+.vunl__row .vrank__chip { flex: none; width: 104px; justify-content: center; align-self: auto; }
+.vunl__row p { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 22px;
+               color: var(--muted); }
+
+/* ── 1687:214 правила месяца ── */
+.vrules { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.vrule { box-sizing: border-box; display: flex; flex-direction: column; gap: 6px; padding: 18px;
+         border-radius: 12px; background: var(--chrome);
+         border: 1px solid rgba(255, 255, 255, .06); }
+.vrule i { font-family: 'Cora', 'Instrument Sans', sans-serif; font-style: normal; font-weight: 700;
+           font-size: 20px; line-height: 26px; color: rgba(7, 148, 255, .7); }
+.vrule b { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px;
+           line-height: 22px; color: var(--white); }
+.vrule p { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 19px;
+           color: var(--dp-label); }
+
+/* ── 1687:252 вопросы ── */
 .vfaq { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 24px; align-items: start; }
 .vfaq__tabs { display: flex; flex-direction: column; gap: 4px; }
 .vfaq__tab { display: flex; align-items: center; height: 48px; padding: 0 18px;
              border: 0; border-radius: 10px; background: none; cursor: pointer; text-align: left;
-             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 16px;
-             line-height: 24px; color: var(--dp-label);
+             font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px;
+             line-height: 22px; color: var(--dp-label);
              transition: background .15s ease, color .15s ease; }
 .vfaq__tab:hover { color: var(--white); }
-.vfaq__tab.is-active { background: #1f2439; color: var(--white); }
-.vfaq__lists { display: grid; }
-.vfaq__list { display: flex; flex-direction: column; gap: 12px; }
-.vfaq__list[hidden] { display: none; }
-.vfaq__q { box-sizing: border-box; padding: 16px 20px; border-radius: 12px;
-           background: var(--card, #181e3b); }
-.vfaq__q summary { position: relative; display: block; padding-right: 32px; cursor: pointer;
-                   list-style: none; font-family: 'Work Sans', sans-serif; font-weight: 600;
-                   font-size: 16px; line-height: 24px; color: var(--white); }
-.vfaq__q summary::-webkit-details-marker { display: none; }
-/* Плюс превращается в минус поворотом одной перекладины — так знак
-   меняется без второй иконки */
-.vfaq__q summary::before, .vfaq__q summary::after {
-  content: ''; position: absolute; right: 4px; top: 11px; width: 13px; height: 1.5px;
+.vfaq__tab.is-on { background: #1f2439; color: var(--white); }
+.vfaq__list { display: grid; }
+.vfaq__group { display: flex; flex-direction: column; gap: 10px; }
+.vfaq__group[hidden] { display: none; }
+.vfaq__item { box-sizing: border-box; padding: 16px 20px; border-radius: 12px;
+              background: var(--chrome); }
+.vfaq__item summary { position: relative; display: block; padding-right: 32px; cursor: pointer;
+                      list-style: none; font-family: 'Work Sans', sans-serif; font-weight: 600;
+                      font-size: 15px; line-height: 22px; color: var(--white); }
+.vfaq__item summary::-webkit-details-marker { display: none; }
+/* Плюс превращается в минус поворотом одной перекладины — знак меняется
+   без второй иконки */
+.vfaq__item summary::before, .vfaq__item summary::after {
+  content: ''; position: absolute; right: 4px; top: 10px; width: 13px; height: 1.5px;
   background: var(--muted); transition: transform .18s ease, opacity .18s ease; }
-.vfaq__q summary::after { transform: rotate(90deg); }
-.vfaq__q[open] summary::after { transform: rotate(0); opacity: 0; }
-.vfaq__q p { margin: 10px 0 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
-             line-height: 24px; color: var(--dp-label); }
+.vfaq__item summary::after { transform: rotate(90deg); }
+.vfaq__item[open] summary::after { transform: rotate(0); opacity: 0; }
+.vfaq__item p { margin: 10px 0 0; font-family: 'Work Sans', sans-serif; font-size: 14px;
+                line-height: 21px; color: var(--dp-label); }
 
-/* ── поддержка и условия ── */
-.vsup { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
-        gap: 24px; padding: 24px; border-radius: 16px; background: var(--card, #181e3b); }
-.vsup__text h2 { margin: 0; font-family: 'Cora', 'Instrument Sans', sans-serif; font-weight: 700;
-                 font-size: 24px; line-height: 32px; color: var(--white); }
-.vsup__text p { margin: 6px 0 0; font-family: 'Work Sans', sans-serif; font-size: 16px;
-                line-height: 24px; color: var(--dp-label); }
-.vsup__btns { display: flex; gap: 12px; flex: none; }
-.vsup__btn { display: grid; place-items: center; height: 48px; padding: 0 28px; flex: none;
-             border: 1px solid var(--white-10); border-radius: 10px; cursor: pointer;
-             background: none; color: var(--white); font-family: 'Work Sans', sans-serif;
-             font-weight: 600; font-size: 16px; line-height: 24px;
-             transition: background .15s ease, border-color .15s ease; }
-.vsup__btn:hover { background: var(--white-06); }
-.vsup__btn--primary { background: var(--primary); border-color: transparent; }
-.vsup__btn--primary:hover { background: var(--primary-hover); }
 .vip__terms { align-self: center; padding: 6px 8px; border: 0; background: none; cursor: pointer;
-              font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 24px;
+              font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 22px;
               color: var(--dp-label); transition: color .15s ease; }
 .vip__terms:hover { color: var(--white); text-decoration: underline; }
 
-/* Четыре в ряд только пока в карточку влезает «1,000,000 USDT+» одной
-   строкой: 24px это 222px плюс поля. Ниже — две колонки */
+/* Пять карточек ранга держат «100M – 600M» одной строкой до 1439.
+   Ниже — три колонки, и степпер снимаем: линия через разрыв ряда лжёт. */
 @media (max-width: 1439px) {
-  .vlvl { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 16px; }
-  /* при двух колонках линия к «следующей» карточке ушла бы вбок через
-     разрыв ряда — степпер здесь только точками */
-  .vlvl__i::before { display: none; }
-  .vprv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vranks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vstep { display: none; }
+  .vrules { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vpr__badge { width: 160px; height: 160px; }
+  .vpr__badge img { width: 142px; height: 142px; }
 }
 
-@media (max-width: 767px) {
-  .view--vip { gap: 24px; }
-  .vip__h1 { font-size: 30px; line-height: 36px; }
-  .vipro { align-items: stretch; padding: 20px; }
-  .vipro__card { width: auto; max-width: none; padding: 18px; }
-  /* Знак не показываем: в правый край он не влезает, а под карточкой
-     оставлял полбаннера пустым */
-  .vipro__badge { display: none; }
-  /* Лента уровней: карточка 300, следующая выглядывает — видно, что
-     список листается вбок */
-  .vlvl { display: flex; padding-top: 0; margin: 0 -16px;
-          padding-inline: 16px; gap: 12px;
-          overflow-x: auto; scroll-snap-type: x mandatory;
-          /* без scroll-padding привязка отсчитывается от края скроллера и
-             съедает поле: лента сразу приезжала на 16px влево */
-          scroll-padding-inline: 16px;
-          -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .vlvl::-webkit-scrollbar { display: none; }
-  .vlvl__i { flex: 0 0 300px; scroll-snap-align: start; }
-  .vlvl__i::before, .vlvl__i::after { display: none; }
-  .vprv { grid-template-columns: 1fr; gap: 12px; }
-  .vfaq { grid-template-columns: 1fr; gap: 16px; }
-  /* Лента с прокруткой: на 360 длинные подписи в строку не влезают */
-  .vfaq__tabs { flex-direction: row; gap: 8px; flex-wrap: nowrap;
-                overflow-x: auto; scrollbar-width: none;
-                margin: 0 calc(-1 * var(--edge, 16px)); padding: 0 var(--edge, 16px); }
-  .vfaq__tabs::-webkit-scrollbar { display: none; }
-  .vfaq__tab { flex: none; white-space: nowrap; }
-  .vfaq__tab { height: 36px; padding: 0 16px; border-radius: 999px; background: var(--white-06); }
-  .vfaq__tab.is-active { background: var(--pick-bg); box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
-  .vsup { flex-direction: column; align-items: stretch; gap: 18px; padding: 20px; }
-  .vsup__btns { flex: 1 1 auto; }
-  .vsup__btn { flex: 1 1 0; padding: 0; }
+@media (max-width: 1199px) {
+  .vperks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vranks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vrules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Таблица уровней в двух колонках уже не читается сеткой — на планшете
+     она уходит в горизонтальную прокрутку вместе с шапкой */
+  .vlv__table { overflow-x: auto; scrollbar-width: none; }
+  .vlv__table::-webkit-scrollbar { display: none; }
+  .vlv__head, .vlv__row { min-width: 720px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -6223,6 +6258,136 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
 .pm__id.is-done, .pm__id.is-done b { color: var(--register); }
 .pm__id.is-done::after { background: var(--register); }
 
+/* ═══════════════════════════════════════════════════════════════════
+   1688:97 — VIP на 402. Раскладка другая, не сжатая десктопная:
+   знак ранга уходит в строку с именем, ранги едут лентой, таблица
+   уровней разворачивается в карточки, привилегии и правила собираются
+   в одну плашку. Ставим блок в конце файла: он перебивает десктопные
+   правила выше по каскаду, а не спорит со специфичностью.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .view--vip { gap: 28px; }
+  .vip__h1 { font-size: 30px; line-height: 36px; }
+
+  /* Прогресс: знак 72 встаёт слева от имени ранга. display:contents
+     раскрывает .vpr__left в ту же сетку — иначе знак не подставить
+     к строке, которая лежит внутри соседней колонки. */
+  .vpr { display: grid; grid-template-columns: 72px minmax(0, 1fr);
+         gap: 16px 12px; padding: 19px; border-radius: 16px; }
+  .vpr__left { display: contents; }
+  .vpr__top { grid-column: 1 / -1; }
+  .vpr__badge { grid-column: 1; grid-row: 2; width: 72px; height: 72px; border-width: 2px; }
+  .vpr__badge img { width: 62px; height: 62px; }
+  .vpr__rank { grid-column: 2; grid-row: 2; align-self: center; margin: 0;
+               font-size: 26px; line-height: 34px; }
+  .vpr__progress, .vpr__stats { grid-column: 1 / -1; }
+  .vpr__caption { flex-direction: column; align-items: flex-start; gap: 2px;
+                  font-size: 13px; line-height: 18px; }
+  .vpr__stats { gap: 8px; }
+  .vpr__stat { padding: 10px; border-radius: 10px; }
+  .vpr__stat span { font-size: 12px; line-height: 16px; }
+  /* «Weekly cashback» в 105 не влезает одной строкой, и число уезжало
+     ниже соседних. Прижимаем значения к низу — коробки и так одной высоты. */
+  .vpr__stat b { margin-top: auto; font-size: 17px; line-height: 21px; }
+  .vpr__reset { height: 26px; font-size: 12px; }
+
+  .vsec { gap: 12px; }
+  .vsec__head h2 { font-size: 20px; line-height: 27px; }
+  .vsec__head p { font-size: 13px; line-height: 18px; }
+
+  /* Ранги лентой: карточка 158, следующая выглядывает — видно, что
+     список листается. Список привилегий здесь снят: пять пунктов в
+     карточку 158 не встают, а ранг узнают по сумме. */
+  .vranks { display: flex; gap: 10px; overflow-x: auto;
+            margin: 0 calc(-1 * var(--edge, 16px)); padding: 0 var(--edge, 16px);
+            scroll-snap-type: x mandatory; scroll-padding-inline: var(--edge, 16px);
+            -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .vranks::-webkit-scrollbar { display: none; }
+  .vrank { flex: 0 0 158px; min-height: 0; height: 169px; gap: 10px; padding: 16px;
+           scroll-snap-align: start; }
+  .vrank.is-now { padding: 15px; }
+  .vrank__badge, .vrank__badge img { width: 44px; height: 44px; }
+  .vrank__badge { order: -1; }
+  .vrank__chip { height: 25px; }
+  .vrank__amount b { font-size: 16px; line-height: 21px; }
+  .vrank__amount span { font-size: 12px; line-height: 17px; }
+  .vrank__perks { display: none; }
+
+  /* Уровни: строка таблицы становится карточкой. Шапку убираем — подписи
+     переезжают к числам из data-l, иначе на 402 колонки безымянные. */
+  .vlv { padding: 0; gap: 12px; background: none; }
+  .vlv__tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+               margin: 0 calc(-1 * var(--edge, 16px)); padding: 0 var(--edge, 16px); }
+  .vlv__tabs::-webkit-scrollbar { display: none; }
+  .vlv__tab { flex: none; height: 35px; }
+  /* Планшетный блок выше пускает таблицу в горизонтальную прокрутку и
+     держит строку в 720 — здесь строки больше нет, есть карточки */
+  .vlv__table { gap: 12px; overflow: visible; }
+  .vlv__head { display: none; }
+  .vlv__row { min-width: 0; }
+  .vlv__body { gap: 12px; }
+  .vlv__row { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: 12px; padding: 15px 17px; border-radius: 12px;
+              background: var(--chrome); border: 1px solid rgba(255, 255, 255, .06); }
+  .vlv__row.is-now { background: rgba(7, 148, 255, .1); border-color: rgba(7, 148, 255, .5); }
+  .vlv__row b { grid-column: 1 / -1; font-size: 16px; line-height: 22px; }
+  .vlv__row span, .vlv__row i { display: block; font-size: 15px; line-height: 21px;
+                                color: var(--white); }
+  .vlv__row span::before, .vlv__row i::before {
+    content: attr(data-l); display: block; margin-bottom: 2px; font-weight: 400;
+    font-size: 12px; line-height: 17px; color: var(--dp-label); }
+  /* Метка «вы здесь» — в строку заголовка, поверх сетки: в ячейке она
+     сдвигала бы числа на полколонки */
+  .vlv__row em { position: absolute; right: 17px; top: 15px; }
+  .vlv__note { font-size: 12px; line-height: 17px; }
+
+  /* Привилегии и правила — одной плашкой: шесть и пять отдельных карточек
+     на 402 превращают экран в лестницу из кантов */
+  .vperks, .vrules { display: block; padding: 7px 0; border-radius: 12px;
+                     background: var(--chrome); }
+  .vperk, .vrule { border: 0; background: none; padding: 13px 17px; border-radius: 0; }
+  .vperk { gap: 12px; }
+  .vperk p { font-size: 13px; line-height: 17px; }
+  /* Номер — кружком слева, заголовок и текст одной колонкой справа.
+     Сеткой, а не флексом: во флексе заголовок и текст лежат в одном
+     потоке с номером и переносятся каждый по отдельности. */
+  .vrule { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 3px 12px;
+           align-items: start; }
+  .vrule i { grid-column: 1; grid-row: 1 / span 2; display: grid; place-items: center;
+             width: 30px; height: 30px; border-radius: 50%;
+             background: rgba(7, 148, 255, .14); font-family: 'Work Sans', sans-serif;
+             font-weight: 600; font-size: 13px; line-height: 17px; color: #7dc9ff; }
+  .vrule b, .vrule p { grid-column: 2; }
+  .vrule b { align-self: center; }
+
+  /* Чип ранга встаёт над строкой привилегий: рядом с ней на 402
+     остаётся 250 и текст ломается на четыре строки */
+  .vunl__row { flex-direction: column; align-items: flex-start; gap: 8px;
+               padding: 13px 15px; }
+  .vunl__row .vrank__chip { width: auto; }
+  .vunl__row p { font-size: 13px; line-height: 18px; }
+
+  /* Вопросы: разделы лентой сверху, ответы под ними */
+  .vfaq { grid-template-columns: 1fr; gap: 12px; }
+  .vfaq__tabs { flex-direction: row; flex-wrap: nowrap; gap: 8px; overflow-x: auto;
+                scrollbar-width: none;
+                margin: 0 calc(-1 * var(--edge, 16px)); padding: 0 var(--edge, 16px); }
+  .vfaq__tabs::-webkit-scrollbar { display: none; }
+  .vfaq__tab { flex: none; height: 33px; padding: 0 14px; border-radius: 999px;
+               background: rgba(255, 255, 255, .06); white-space: nowrap; font-size: 14px; }
+  .vfaq__tab.is-on { background: var(--pick-bg);
+                     box-shadow: inset 0 0 0 1px var(--pick-line); color: var(--white); }
+  .vfaq__group { gap: 12px; }
+  .vfaq__item { padding: 15px 17px; }
+  .vfaq__item summary { font-size: 14px; line-height: 20px; }
+  .vfaq__item p { font-size: 13px; line-height: 17px; }
+
+  /* Условия — кнопкой во всю ширину: на тач-экране ссылка в 15px
+     не цель, а лотерея */
+  .vip__terms { align-self: stretch; height: 48px; border-radius: 10px;
+                border: 1px solid var(--white-10); font-weight: 600; color: var(--white); }
+}
+
 </style>
 </head>
 <body>
@@ -7620,167 +7785,238 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       <!-- 1462:13094 «VIP Club» — прогресс, лестница уровней, привилегии,
            частые вопросы и поддержка. Процентов на странице нет намеренно:
            они живут в аккаунте, а не в витрине. -->
-      <div class="view view--vip" id="view-vip" hidden data-node-id="1462:13094">
+      <!-- 1682:97 «VIP Club — desktop · новая программа». Ранги металлами,
+           счёт по сумме ставок за календарный месяц. Прежняя страница с
+           военными рангами и накопительной суммой заменена целиком. -->
+      <div class="view view--vip" id="view-vip" hidden data-node-id="1682:97">
         <h1 class="vip__h1">VIP Club</h1>
 
-        <!-- 1484:13231 — баннер 1103x276: подпись раздела внутри него,
-             поэтому заголовка секции сверху нет. Фон — своя картинка
-             (градиент с фактурой), поверх водяной знак логотипа. -->
-        <section class="section">
-          <div class="vipro">
-            <span class="vipro__head">Your VIP progress</span>
-            <div class="vipro__card">
-              <div class="vipro__who">
-                <b>username</b><span class="vipro__lvl">Soldier</span>
-              </div>
-              <span class="vipro__pct">0.00 %</span>
-              <span class="vipro__track"><i style="width:0%"></i></span>
-              <span class="vipro__next">Next level: Silver</span>
+        <!-- 1683:214 — карта прогресса: слева состояние, справа знак ранга -->
+        <section class="vpr" data-node-id="1683:214">
+          <div class="vpr__left">
+            <div class="vpr__top">
+              <span class="vpr__eyebrow">Your VIP progress</span>
+              <span class="vpr__reset">Resets in 11d 04:22</span>
             </div>
-            <!-- Знак берём прозрачным из спрайта: выгрузка узла из Figma
-                 приходит с запечённым фоном и даёт видимый прямоугольник.
-                 Все четыре лежат в разметке и переключаются видимостью:
-                 сборка переименовывает файлы, и подстановка пути скриптом
-                 давала битую картинку — на превью знак пропадал. -->
-            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="soldier" src="a/274357f383.webp" alt="" width="217" height="217">
-            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="captain" src="a/3c38490295.webp" alt="" width="217" height="217" hidden>
-            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="general" src="a/ab8492bd00.webp" alt="" width="217" height="217" hidden>
-            <img loading="lazy" decoding="async" class="vipro__badge" data-vip-badge="warlord" src="a/aba35aeabd.webp" alt="" width="217" height="217" hidden>
+            <p class="vpr__rank">Bronze&nbsp;· Level&nbsp;3</p>
+            <div class="vpr__progress">
+              <span class="vpr__track"><i style="width:62%"></i></span>
+              <div class="vpr__caption">
+                <span>ARS 310,000 of&nbsp;350,000 wagered this month</span>
+                <b>ARS 40,000 to&nbsp;Level 4</b>
+              </div>
+            </div>
+            <div class="vpr__stats">
+              <div class="vpr__stat"><span>Rakeback</span><b>2.60%</b></div>
+              <div class="vpr__stat"><span>Weekly cashback</span><b>5.40%</b></div>
+              <div class="vpr__stat"><span>Next reward</span><b>ARS 700</b></div>
+            </div>
+          </div>
+          <!-- 1683:241 — слот знака 196: обод берёт цвет текущего ранга -->
+          <div class="vpr__badge vpr__badge--bronze">
+            <img loading="lazy" decoding="async" src="a/56ae7a3058.webp" alt="" width="175" height="175">
           </div>
         </section>
 
-        <section class="section">
-          <div class="section__head"><div class="section__title"><h2>WarWin level system</h2></div></div>
-          <ol class="vlvl">
-            <li class="vlvl__i vlvl__i--soldier is-now">
-              <div class="vlvl__card">
-                <span class="vlvl__chip">Soldier</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/274357f383.webp" alt="">
-                <b class="vlvl__sum">10,000 USDT</b>
-                <span class="vlvl__cap">Wagered</span>
-                <ul class="vlvl__perks">
-                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up&nbsp;bonus</li>
-                </ul>
-              </div>
-            </li>
-            <li class="vlvl__i vlvl__i--captain">
-              <div class="vlvl__card">
-                <span class="vlvl__chip">Captain</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/3c38490295.webp" alt="">
-                <b class="vlvl__sum">50,000 USDT</b>
-                <span class="vlvl__cap">Wagered</span>
-                <ul class="vlvl__perks">
-                  <li>Weekly bonus</li><li>Monthly bonus</li><li>Rakeback</li><li>Level-up&nbsp;bonus</li><li>Higher bonuses</li>
-                </ul>
-              </div>
-            </li>
-            <li class="vlvl__i vlvl__i--general">
-              <div class="vlvl__card">
-                <span class="vlvl__chip">General</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/ab8492bd00.webp" alt="">
-                <b class="vlvl__sum">250,000 USDT</b>
-                <span class="vlvl__cap">Wagered</span>
-                <ul class="vlvl__perks">
-                  <li>Everything from Captain</li><li>Personal manager</li><li>Higher withdrawal limit</li>
-                </ul>
-              </div>
-            </li>
-            <li class="vlvl__i vlvl__i--warlord">
-              <div class="vlvl__card">
-                <span class="vlvl__chip">Warlord I&ndash;III</span>
-                <img loading="lazy" decoding="async" class="vlvl__mark" width="56" height="56" src="a/aba35aeabd.webp" alt="">
-                <b class="vlvl__sum">1,000,000 USDT+</b>
-                <span class="vlvl__cap">Wagered</span>
-                <ul class="vlvl__perks">
-                  <li>Everything from General</li><li>Custom terms</li><li>Daily reload</li>
-                </ul>
-              </div>
-            </li>
-          </ol>
-          <p class="vlvl__note">No&nbsp;percentages on&nbsp;this page on&nbsp;purpose &mdash; the&nbsp;numbers live in&nbsp;your account.</p>
+        <!-- 1684:214 — пять рангов, текущий подсвечен -->
+        <section class="vsec" data-node-id="1684:214">
+          <div class="vsec__head">
+            <h2>Ranks</h2>
+            <p>Your rank is&nbsp;set by&nbsp;how much you wager in&nbsp;a&nbsp;calendar month. Five levels inside every rank.</p>
+          </div>
+          <div class="vstep" aria-hidden="true">
+            <span class="vstep__line"></span>
+            <i class="vstep__dot is-on"></i><i class="vstep__dot"></i><i class="vstep__dot"></i><i class="vstep__dot"></i><i class="vstep__dot"></i>
+          </div>
+          <div class="vranks">
+            <article class="vrank vrank--bronze is-now">
+              <span class="vrank__chip">Bronze</span>
+              <span class="vrank__badge"><img loading="lazy" decoding="async" src="a/56ae7a3058.webp" alt="" width="56" height="56"></span>
+              <div class="vrank__amount"><b>75K – 500K</b><span>ARS wagered / month</span></div>
+              <ul class="vrank__perks">
+                <li>Rakeback from&nbsp;2.00%</li>
+                <li>Weekly cashback from&nbsp;5.00%</li>
+                <li>Birthday bonus</li>
+              </ul>
+            </article>
+            <article class="vrank vrank--silver">
+              <span class="vrank__chip">Silver</span>
+              <span class="vrank__badge"><img loading="lazy" decoding="async" src="a/ea1ba40c69.webp" alt="" width="56" height="56"></span>
+              <div class="vrank__amount"><b>500K – 3M</b><span>ARS wagered / month</span></div>
+              <ul class="vrank__perks">
+                <li>Rakeback from&nbsp;3.50%</li>
+                <li>Free spins every week</li>
+                <li>Deposit bonuses</li>
+              </ul>
+            </article>
+            <article class="vrank vrank--gold">
+              <span class="vrank__chip">Gold</span>
+              <span class="vrank__badge"><img loading="lazy" decoding="async" src="a/6bcc8d27cf.webp" alt="" width="56" height="56"></span>
+              <div class="vrank__amount"><b>3M – 20M</b><span>ARS wagered / month</span></div>
+              <ul class="vrank__perks">
+                <li>Rakeback from&nbsp;5.00%</li>
+                <li>Faster withdrawals</li>
+                <li>Personal promos</li>
+              </ul>
+            </article>
+            <article class="vrank vrank--platinum">
+              <span class="vrank__chip">Platinum</span>
+              <span class="vrank__badge"><img loading="lazy" decoding="async" src="a/d357fb613f.webp" alt="" width="56" height="56"></span>
+              <div class="vrank__amount"><b>20M – 100M</b><span>ARS wagered / month</span></div>
+              <ul class="vrank__perks">
+                <li>Rakeback from&nbsp;7.20%</li>
+                <li>Priority support</li>
+                <li>Exclusive tournaments</li>
+              </ul>
+            </article>
+            <article class="vrank vrank--diamond">
+              <span class="vrank__chip">Diamond</span>
+              <span class="vrank__badge"><img loading="lazy" decoding="async" src="a/5f4ce3b4e0.webp" alt="" width="56" height="56"></span>
+              <div class="vrank__amount"><b>100M – 600M</b><span>ARS wagered / month</span></div>
+              <ul class="vrank__perks">
+                <li>Rakeback up&nbsp;to&nbsp;11.00%</li>
+                <li>Personal VIP manager</li>
+                <li>Highest limits</li>
+              </ul>
+            </article>
+          </div>
+          <p class="vsec__note">Above Diamond there is&nbsp;an&nbsp;invite-only tier with individual terms.</p>
         </section>
 
-        <section class="section">
-          <div class="section__head"><div class="section__title"><h2>Privileges</h2></div></div>
-          <div class="vprv">
-            <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/cdf135e524.webp" alt="" width="64" height="64">
-              <div><h3>Boost</h3><p>Bonus for&nbsp;your activity every week and&nbsp;month</p></div>
+        <!-- 1685:214 — уровни внутри ранга. В макете заполнена Бронза;
+             остальные вкладки переключают заголовок и сноску, строки
+             появятся, когда придут числа из документа программы. -->
+        <section class="vsec" data-node-id="1685:214">
+          <div class="vsec__head">
+            <h2>Levels in&nbsp;your rank</h2>
+            <p>The reward is&nbsp;paid once, the&nbsp;first time you reach a&nbsp;level. Rakeback and&nbsp;cashback stay on&nbsp;while the&nbsp;level is&nbsp;yours.</p>
+          </div>
+          <div class="vlv">
+            <div class="vlv__tabs" role="tablist">
+              <button class="vlv__tab is-on" type="button" role="tab" aria-selected="true" data-vlv="bronze">Bronze</button>
+              <button class="vlv__tab" type="button" role="tab" aria-selected="false" data-vlv="silver">Silver</button>
+              <button class="vlv__tab" type="button" role="tab" aria-selected="false" data-vlv="gold">Gold</button>
+              <button class="vlv__tab" type="button" role="tab" aria-selected="false" data-vlv="platinum">Platinum</button>
+              <button class="vlv__tab" type="button" role="tab" aria-selected="false" data-vlv="diamond">Diamond</button>
+            </div>
+            <div class="vlv__table">
+              <div class="vlv__head">
+                <span>Level</span><span>Wagered this month</span><span>Reward</span><span>Rakeback</span><span>Weekly cashback</span>
+              </div>
+              <div class="vlv__body" data-vlv-body>
+                <div class="vlv__row"><b>Level 1</b><span data-l="Wagered / month">ARS 75,000</span><span data-l="Reward">ARS 150</span><i data-l="Rakeback">2.00%</i><i data-l="Weekly cashback">5.00%</i></div>
+                <div class="vlv__row"><b>Level 2</b><span data-l="Wagered / month">ARS 150,000</span><span data-l="Reward">ARS 300</span><i data-l="Rakeback">2.30%</i><i data-l="Weekly cashback">5.20%</i></div>
+                <div class="vlv__row is-now"><b>Level 3</b><span data-l="Wagered / month">ARS 250,000</span><span data-l="Reward">ARS 500</span><i data-l="Rakeback">2.60%</i><i data-l="Weekly cashback">5.40%</i><em>You are here</em></div>
+                <div class="vlv__row"><b>Level 4</b><span data-l="Wagered / month">ARS 350,000</span><span data-l="Reward">ARS 700</span><i data-l="Rakeback">2.90%</i><i data-l="Weekly cashback">5.60%</i></div>
+                <div class="vlv__row"><b>Level 5</b><span data-l="Wagered / month">ARS 500,000</span><span data-l="Reward">ARS 1,000</span><i data-l="Rakeback">3.20%</i><i data-l="Weekly cashback">5.80%</i></div>
+              </div>
+            </div>
+            <p class="vlv__note" data-vlv-note>Showing Bronze&nbsp;— switch ranks with the&nbsp;tabs above. All amounts in&nbsp;ARS.</p>
+          </div>
+        </section>
+
+        <!-- 1686:214 — шесть привилегий, работают на каждом ранге -->
+        <section class="vsec" data-node-id="1686:214">
+          <div class="vsec__head">
+            <h2>What you get</h2>
+            <p>Works on&nbsp;every rank. The&nbsp;higher the&nbsp;level, the&nbsp;bigger the&nbsp;numbers.</p>
+          </div>
+          <div class="vperks">
+            <article class="vperk">
+              <span class="vperk__ico"><img loading="lazy" decoding="async" src="a/db20a74fb1.webp" alt="" width="34" height="34"></span>
+              <div><h3>Level reward</h3><p>A&nbsp;one-off payout the&nbsp;first time you reach a&nbsp;level. No&nbsp;forms, no&nbsp;waiting.</p></div>
             </article>
-            <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/897608697f.webp" alt="" width="64" height="64">
-              <div><h3>Personal manager</h3><p>Handles your questions outside the&nbsp;general queue</p></div>
+            <article class="vperk">
+              <span class="vperk__ico"><img loading="lazy" decoding="async" src="a/cdf135e524.webp" alt="" width="34" height="34"></span>
+              <div><h3>Rakeback</h3><p>Part of&nbsp;everything you wager comes back, win or&nbsp;lose. Credited automatically.</p></div>
             </article>
-            <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/8b17613478.webp" alt="" width="64" height="64">
-              <div><h3>Play bonus</h3><p>Part of&nbsp;the&nbsp;losses back when you move up&nbsp;a&nbsp;level</p></div>
+            <article class="vperk">
+              <span class="vperk__ico"><img loading="lazy" decoding="async" src="a/8b17613478.webp" alt="" width="34" height="34"></span>
+              <div><h3>Weekly cashback</h3><p>Lost more than you won this week? Part of&nbsp;it&nbsp;returns every Monday.</p></div>
             </article>
-            <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/db20a74fb1.webp" alt="" width="64" height="64">
-              <div><h3>Level-up bonus</h3><p>The&nbsp;higher the&nbsp;level, the&nbsp;bigger the&nbsp;payout</p></div>
+            <article class="vperk">
+              <span class="vperk__ico"><img loading="lazy" decoding="async" src="a/3e6874f40e.webp" alt="" width="34" height="34"></span>
+              <div><h3>Birthday bonus</h3><p>A&nbsp;cash gift on&nbsp;your birthday. It&nbsp;grows with every rank.</p></div>
             </article>
-            <article class="vprv__i">
-              <img loading="lazy" decoding="async" src="a/3e6874f40e.webp" alt="" width="64" height="64">
-              <div><h3>Custom terms</h3><p>Privileges tuned through your manager</p></div>
+            <article class="vperk">
+              <span class="vperk__ico"><img loading="lazy" decoding="async" src="a/cdf135e524.webp" alt="" width="34" height="34"></span>
+              <div><h3>Deposit bonus</h3><p>Extra funds on&nbsp;top of&nbsp;your deposit. More often on&nbsp;higher ranks.</p></div>
+            </article>
+            <article class="vperk">
+              <span class="vperk__ico"><img loading="lazy" decoding="async" src="a/897608697f.webp" alt="" width="34" height="34"></span>
+              <div><h3>Free spins</h3><p>Weekly spins in&nbsp;selected games. Unlocks from Silver.</p></div>
             </article>
           </div>
         </section>
 
-        <section class="section">
-          <div class="section__head"><div class="section__title"><h2>FAQ</h2></div></div>
+        <!-- 1686:256 — что добавляет каждый ранг поверх предыдущих -->
+        <section class="vsec" data-node-id="1686:256">
+          <div class="vsec__head">
+            <h2>What unlocks with each rank</h2>
+            <p>Every rank keeps everything the&nbsp;ranks below already gave you.</p>
+          </div>
+          <div class="vunl">
+            <div class="vunl__row is-now"><span class="vrank__chip vrank__chip--bronze">Bronze</span><p>Rakeback, weekly cashback, birthday bonus, missions</p></div>
+            <div class="vunl__row"><span class="vrank__chip vrank__chip--silver">Silver</span><p>Weekly free spins, deposit bonuses</p></div>
+            <div class="vunl__row"><span class="vrank__chip vrank__chip--gold">Gold</span><p>Faster withdrawals, higher limits, hand-picked promos</p></div>
+            <div class="vunl__row"><span class="vrank__chip vrank__chip--platinum">Platinum</span><p>Priority support, exclusive tournaments</p></div>
+            <div class="vunl__row"><span class="vrank__chip vrank__chip--diamond">Diamond</span><p>Personal VIP manager, highest limits, special events</p></div>
+          </div>
+        </section>
+
+        <!-- 1687:214 — пять правил месяца, вынесены из условий на страницу -->
+        <section class="vsec" data-node-id="1687:214">
+          <div class="vsec__head">
+            <h2>How the&nbsp;month works</h2>
+            <p>The five things players ask support about. Kept on&nbsp;the&nbsp;page, not only in&nbsp;the&nbsp;terms.</p>
+          </div>
+          <div class="vrules">
+            <div class="vrule"><i>01</i><b>Wagering window</b><p>Everything you wager from the&nbsp;1st to&nbsp;the&nbsp;last day of&nbsp;the&nbsp;month counts. On&nbsp;the&nbsp;1st the&nbsp;counter goes back to&nbsp;zero.</p></div>
+            <div class="vrule"><i>02</i><b>When it&nbsp;starts</b><p>The level goes up&nbsp;the&nbsp;moment you hit the&nbsp;amount. The&nbsp;new rakeback and&nbsp;cashback work right away and&nbsp;stay until the&nbsp;month ends.</p></div>
+            <div class="vrule"><i>03</i><b>Keeping your rank</b><p>The rank is&nbsp;confirmed at&nbsp;month end. Wager the&nbsp;same amount again and&nbsp;it&nbsp;stays with you.</p></div>
+            <div class="vrule"><i>04</i><b>If you play less</b><p>You get one full grace month on&nbsp;your current rank, and&nbsp;we&nbsp;show the&nbsp;exact amount to&nbsp;keep it. After that the&nbsp;rank drops by&nbsp;one level at&nbsp;most.</p></div>
+            <div class="vrule"><i>05</i><b>Rewards</b><p>The one-off payout lands the&nbsp;first time you reach a&nbsp;level. Meeting the&nbsp;terms again keeps the&nbsp;rank but does not pay twice.</p></div>
+          </div>
+        </section>
+
+        <!-- 1687:252 — FAQ: слева разделы, справа раскрывающиеся ответы -->
+        <section class="vsec" data-node-id="1687:252">
+          <div class="vsec__head"><h2>FAQ</h2></div>
           <div class="vfaq">
             <div class="vfaq__tabs" role="tablist">
-              <button class="vfaq__tab is-active" type="button" role="tab" aria-selected="true" data-vipfaq="general">General</button>
-              <button class="vfaq__tab" type="button" role="tab" aria-selected="false" data-vipfaq="privileges">Privileges</button>
-              <button class="vfaq__tab" type="button" role="tab" aria-selected="false" data-vipfaq="managers">Managers</button>
+              <button class="vfaq__tab is-on" type="button" role="tab" aria-selected="true" data-vfaq="general">General</button>
+              <button class="vfaq__tab" type="button" role="tab" aria-selected="false" data-vfaq="privileges">Privileges</button>
+              <button class="vfaq__tab" type="button" role="tab" aria-selected="false" data-vfaq="managers">Managers</button>
             </div>
-            <div class="vfaq__lists">
-              <div class="vfaq__list" data-vipset="general">
-                <details class="vfaq__q" open>
-                  <summary>How to&nbsp;join the&nbsp;club</summary>
-                  <p>The&nbsp;club opens automatically once your wagering reaches the&nbsp;Soldier threshold. No&nbsp;application needed &mdash; the&nbsp;level and&nbsp;its perks turn on&nbsp;the&nbsp;same day.</p>
-                </details>
-                <details class="vfaq__q">
-                  <summary>How wagering is&nbsp;counted</summary>
-                  <p>Only real money counts, in&nbsp;casino and&nbsp;sportsbook alike. Bets placed with bonus funds and&nbsp;cancelled bets stay out of&nbsp;the&nbsp;total.</p>
-                </details>
-                <details class="vfaq__q">
-                  <summary>Does the&nbsp;level expire</summary>
-                  <p>The&nbsp;level stays as&nbsp;long as&nbsp;the&nbsp;wagering behind it&nbsp;does. It&nbsp;is&nbsp;recalculated once a&nbsp;month, and&nbsp;the&nbsp;drop is&nbsp;never more than one step at&nbsp;a&nbsp;time.</p>
-                </details>
-              </div>
-              <div class="vfaq__list" data-vipset="privileges" hidden>
-                <details class="vfaq__q" open>
-                  <summary>When bonuses are credited</summary>
-                  <p>The&nbsp;weekly bonus lands on&nbsp;Monday, the&nbsp;monthly one on&nbsp;the&nbsp;first day of&nbsp;the&nbsp;month. Both go straight to&nbsp;the&nbsp;balance &mdash; nothing to&nbsp;claim.</p>
-                </details>
-                <details class="vfaq__q">
-                  <summary>Do privileges stack</summary>
-                  <p>Every level keeps everything from the&nbsp;one below it&nbsp;and&nbsp;adds its own. Nothing is&nbsp;taken away when you move up.</p>
-                </details>
-              </div>
-              <div class="vfaq__list" data-vipset="managers" hidden>
-                <details class="vfaq__q" open>
-                  <summary>Who gets a&nbsp;manager</summary>
-                  <p>From General up. The&nbsp;manager writes first the&nbsp;day the&nbsp;level turns on.</p>
-                </details>
-                <details class="vfaq__q">
-                  <summary>How to&nbsp;reach the&nbsp;manager</summary>
-                  <p>In&nbsp;the&nbsp;same chat you already use. Messages from club players are answered outside the&nbsp;general queue.</p>
-                </details>
-              </div>
-            </div>
-          </div>
-        </section>
+            <div class="vfaq__list">
 
-        <section class="vsup">
-          <div class="vsup__text">
-            <h2>Support 24/7</h2>
-            <p>Live chat and&nbsp;email. Spanish and&nbsp;Portuguese planned from October</p>
-          </div>
-          <div class="vsup__btns">
-            <button class="vsup__btn" type="button" data-lang-open>Espa&ntilde;ol</button>
-            <button class="vsup__btn vsup__btn--primary" type="button" data-fgo="msg:Live chat opens in the mobile app — on the web write to support@warwin.com.">Chat</button>
+              <div class="vfaq__group" data-vfaq-group="general">
+                <details class="vfaq__item" open><summary>How my rank is&nbsp;decided</summary><p>There are five ranks with five levels each. Your rank follows how much you wager during the&nbsp;calendar month: Bronze starts at&nbsp;75K and&nbsp;Diamond runs from 100M to&nbsp;600M ARS.</p></details>
+                <details class="vfaq__item"><summary>When the&nbsp;counter resets</summary><p>Wagers are counted from the&nbsp;first through the&nbsp;last day of&nbsp;the&nbsp;month. On&nbsp;the&nbsp;first day of&nbsp;each month the&nbsp;counter goes back to&nbsp;zero.</p></details>
+                <details class="vfaq__item"><summary>When a&nbsp;new level starts working</summary><p>You move up&nbsp;the&nbsp;moment you reach the&nbsp;required amount. The&nbsp;higher rakeback and&nbsp;cashback take effect immediately and&nbsp;stay active until the&nbsp;end of&nbsp;the&nbsp;month.</p></details>
+                <details class="vfaq__item"><summary>How I&nbsp;keep my&nbsp;rank</summary><p>Your rank is&nbsp;confirmed at&nbsp;the&nbsp;end of&nbsp;each month. Reach the&nbsp;same wagering amount the&nbsp;following month and&nbsp;the&nbsp;rank stays with you.</p></details>
+                <details class="vfaq__item"><summary>What happens if&nbsp;I&nbsp;play less</summary><p>You get one full grace month at&nbsp;your current rank, and&nbsp;we&nbsp;tell you the&nbsp;exact amount needed to&nbsp;keep it. After the&nbsp;grace month the&nbsp;rank drops by&nbsp;exactly one level&nbsp;— never more than one at&nbsp;a&nbsp;time.</p></details>
+                <details class="vfaq__item"><summary>Whether the&nbsp;reward is&nbsp;paid twice</summary><p>The one-time cash reward is&nbsp;paid the&nbsp;first time you reach a&nbsp;level. Meeting the&nbsp;requirements again in&nbsp;later months keeps your rank, but the&nbsp;reward is&nbsp;not paid again.</p></details>
+                <details class="vfaq__item"><summary>What is&nbsp;above Diamond</summary><p>An invitation-only level with personalized terms.</p></details>
+              </div>
+
+              <div class="vfaq__group" data-vfaq-group="privileges" hidden>
+                <details class="vfaq__item" open><summary>Level reward</summary><p>A&nbsp;one-time cash payment credited as&nbsp;soon as&nbsp;you reach the&nbsp;level. There are no&nbsp;forms to&nbsp;complete and&nbsp;no&nbsp;processing wait.</p></details>
+                <details class="vfaq__item"><summary>Rakeback</summary><p>A&nbsp;portion of&nbsp;everything you wager comes back, whether you win or&nbsp;lose, and&nbsp;it&nbsp;is&nbsp;credited automatically. It&nbsp;runs from 2.00% at&nbsp;Bronze 1 up&nbsp;to&nbsp;11.00% at&nbsp;Diamond 5.</p></details>
+                <details class="vfaq__item"><summary>Weekly cashback</summary><p>If the&nbsp;week ends with a&nbsp;net loss, part of&nbsp;the&nbsp;lost amount comes back. The&nbsp;payment is&nbsp;made every Monday, from 5.00% at&nbsp;Bronze 1 up&nbsp;to&nbsp;10.00% at&nbsp;Diamond 5.</p></details>
+                <details class="vfaq__item"><summary>Birthday bonus</summary><p>A&nbsp;cash gift for&nbsp;your birthday. The&nbsp;amount increases at&nbsp;every rank.</p></details>
+                <details class="vfaq__item"><summary>Reload bonus</summary><p>Extra funds when you make a&nbsp;deposit. At&nbsp;higher ranks the&nbsp;bonus is&nbsp;offered more frequently.</p></details>
+                <details class="vfaq__item"><summary>Free spins</summary><p>Weekly free spins in&nbsp;selected games. They unlock at&nbsp;Silver.</p></details>
+                <details class="vfaq__item"><summary>What unlocks at&nbsp;each rank</summary><p>Bronze&nbsp;— rakeback, weekly cashback, birthday bonus, missions. Silver&nbsp;— weekly free spins, reload bonuses. Gold&nbsp;— faster withdrawals, higher limits, personalized promotions. Platinum&nbsp;— priority support, exclusive tournaments. Diamond&nbsp;— personal VIP manager, highest limits, special experiences.</p></details>
+              </div>
+
+              <div class="vfaq__group" data-vfaq-group="managers" hidden>
+                <details class="vfaq__item" open><summary>When I&nbsp;get a&nbsp;personal VIP manager</summary><p>A&nbsp;personal VIP manager unlocks at&nbsp;Diamond, together with the&nbsp;highest limits and&nbsp;special experiences.</p></details>
+                <details class="vfaq__item"><summary>What support I&nbsp;get before Diamond</summary><p>Priority support unlocks at&nbsp;Platinum.</p></details>
+                <details class="vfaq__item"><summary>What is&nbsp;above Diamond</summary><p>An invitation-only level with personalized terms.</p></details>
+              </div>
+
+            </div>
           </div>
         </section>
 
@@ -21174,65 +21410,95 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
         i.dispatchEvent(new Event('input'));
       };
 
-      /* ═══ VIP: вкладки вопросов ═════════════════════════════════════ */
+      /* ═══ VIP: вкладки вопросов и вкладки рангов ═════════════════════ */
       var vipView = document.getElementById('view-vip');
       if (vipView) {
-        var vipTabs = [].slice.call(vipView.querySelectorAll('[data-vipfaq]'));
-        vipTabs.forEach(function (t) {
+        /* Вопросы: три раздела, у каждого свой список */
+        var vipFaqTabs = [].slice.call(vipView.querySelectorAll('[data-vfaq]'));
+        vipFaqTabs.forEach(function (t) {
           t.addEventListener('click', function () {
-            vipTabs.forEach(function (o) {
+            vipFaqTabs.forEach(function (o) {
               var on = o === t;
-              o.classList.toggle('is-active', on);
+              o.classList.toggle('is-on', on);
               o.setAttribute('aria-selected', on ? 'true' : 'false');
             });
-            vipView.querySelectorAll('[data-vipset]').forEach(function (l) {
-              l.hidden = l.dataset.vipset !== t.dataset.vipfaq;
+            vipView.querySelectorAll('[data-vfaq-group]').forEach(function (g) {
+              g.hidden = g.dataset.vfaqGroup !== t.dataset.vfaq;
             });
           });
         });
+
+        /* Уровни внутри ранга. В макете заполнена только Бронза, и числа
+           остальных рангов идут из документа программы лояльности. Пока их
+           нет, вкладка говорит об этом прямо, а не показывает выдуманное. */
+        var VLV = {
+          bronze: [
+            ['Level 1', 'ARS 75,000',  'ARS 150',   '2.00%', '5.00%'],
+            ['Level 2', 'ARS 150,000', 'ARS 300',   '2.30%', '5.20%'],
+            ['Level 3', 'ARS 250,000', 'ARS 500',   '2.60%', '5.40%', 'You are here'],
+            ['Level 4', 'ARS 350,000', 'ARS 700',   '2.90%', '5.60%'],
+            ['Level 5', 'ARS 500,000', 'ARS 1,000', '3.20%', '5.80%']
+          ]
+        };
+        var VLV_NAME = { bronze: 'Bronze', silver: 'Silver', gold: 'Gold',
+                         platinum: 'Platinum', diamond: 'Diamond' };
+        var VLV_COL = ['Wagered / month', 'Reward', 'Rakeback', 'Weekly cashback'];
+        var vlvBody = vipView.querySelector('[data-vlv-body]');
+        var vlvNote = vipView.querySelector('[data-vlv-note]');
+        var vlvTabs = [].slice.call(vipView.querySelectorAll('[data-vlv]'));
+        var vlvPaint = function (key) {
+          var rows = VLV[key];
+          if (!rows) {
+            vlvBody.innerHTML = '';
+            var e = document.createElement('div');
+            e.className = 'vlv__empty';
+            e.textContent = T('{rank} levels are not published yet.',
+                              { rank: VLV_NAME[key] || key });
+            vlvBody.appendChild(e);
+            vlvNote.textContent = T('Amounts for this rank come from the loyalty programme document.');
+            return;
+          }
+          vlvBody.innerHTML = '';
+          rows.forEach(function (r) {
+            var row = document.createElement('div');
+            row.className = 'vlv__row' + (r[5] ? ' is-now' : '');
+            var b = document.createElement('b'); b.textContent = r[0]; row.appendChild(b);
+            /* Подпись в data-l — на мобильной она встаёт над числом:
+               там таблицы нет, и колонка сама себя не называет. */
+            [1, 2].forEach(function (n) {
+              var s = document.createElement('span');
+              s.setAttribute('data-l', T(VLV_COL[n - 1])); s.textContent = r[n];
+              row.appendChild(s);
+            });
+            [3, 4].forEach(function (n) {
+              var i = document.createElement('i');
+              i.setAttribute('data-l', T(VLV_COL[n - 1])); i.textContent = r[n];
+              row.appendChild(i);
+            });
+            if (r[5]) {
+              var em = document.createElement('em'); em.textContent = T(r[5]); row.appendChild(em);
+            }
+            vlvBody.appendChild(row);
+          });
+          vlvNote.textContent = T('Showing {rank} — switch ranks with the tabs above. All amounts in ARS.',
+                                  { rank: VLV_NAME[key] || key });
+        };
+        vlvTabs.forEach(function (t) {
+          t.addEventListener('click', function () {
+            vlvTabs.forEach(function (o) {
+              var on = o === t;
+              o.classList.toggle('is-on', on);
+              o.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            vlvPaint(t.dataset.vlv);
+          });
+        });
+        /* Текущий язык применяем к уже отрисованной вкладке */
+        document.addEventListener('ww:lang', function () {
+          var on = vipView.querySelector('.vlv__tab.is-on');
+          if (on) vlvPaint(on.dataset.vlv);
+        });
       }
-
-
-      /* ── VIP: уровень, прогресс, лестница ──
-         Раньше блок был прибит гвоздями: Soldier, 0.00 % и «Next level: Silver»,
-         хотя уровня Silver в лестнице нет вовсе. Держим уровень в одном месте,
-         чтобы страница умела показать всю дорожку, а не один кадр. */
-      var VIP_LVL = [
-        { key: 'soldier', name: 'Soldier',       next: 'Captain' },
-        { key: 'captain', name: 'Captain',       next: 'General' },
-        { key: 'general', name: 'General',       next: 'Warlord' },
-        { key: 'warlord', name: 'Warlord I\u2013III', next: '' }
-      ];
-      var vipAt = 0, vipPct = 0;
-      var vipPaint = function (i, pct) {
-        vipAt = i; vipPct = pct;
-        if (!vipView) return;
-        var lv = VIP_LVL[i] || VIP_LVL[0];
-        var top = !lv.next;
-        if (top) pct = 100;
-        /* Имя берём из панели профиля: в разметке стояло слово username */
-        var who = document.querySelector('.pm__name');
-        vipView.querySelector('.vipro__who b').textContent =
-          (who && who.textContent.trim()) || 'username';
-        var chip = vipView.querySelector('.vipro__lvl');
-        chip.textContent = lv.name;
-        chip.className = 'vipro__lvl vipro__lvl--' + lv.key;
-        vipView.querySelector('.vipro__pct').textContent = pct.toFixed(2) + ' %';
-        vipView.querySelector('.vipro__track i').style.width = pct + '%';
-        vipView.querySelector('.vipro__next').textContent =
-          top ? T('Top level reached') : T('Next level: {name}', { name: lv.next });
-        vipView.querySelectorAll('[data-vip-badge]').forEach(function (img) {
-          img.hidden = img.dataset.vipBadge !== lv.key;
-        });
-        /* Пройденные ступени гасим отдельно от текущей: «здесь я» стояло на
-           первой карточке при любом уровне, и лестница ничего не сообщала. */
-        [].slice.call(vipView.querySelectorAll('.vlvl__i')).forEach(function (li, n) {
-          li.classList.toggle('is-now', n === i);
-          li.classList.toggle('is-done', n < i);
-        });
-      };
-      vipPaint(0, 0);
-      document.addEventListener('ww:lang', function () { vipPaint(vipAt, vipPct); });
 
       var STATES = [
         ['Кошелёк · ввод', [
@@ -21595,18 +21861,21 @@ body:not(.is-authed) [data-auth-only] { display: none !important; }
       };
       /* ── VIP-клуб ──
          Клуб закрыт для гостя, поэтому каждое состояние сначала вводит игрока
-         в аккаунт: иначе showView увёл бы на форму входа вместо страницы. */
-      var vipAt2 = function (i, pct) {
+         в аккаунт: иначе showView увёл бы на форму входа вместо страницы.
+         Страница статична по прогрессу, поэтому состояния показывают то,
+         что на ней действительно переключается: вкладки рангов и вопросов. */
+      var vipOpen = function (sel) {
         document.body.classList.add('is-authed');
-        vipPaint(i, pct);
         showView('vip');
+        if (!sel) return;
+        var b = document.querySelector('#view-vip ' + sel);
+        if (b) b.click();
       };
       STATES.push(['VIP-клуб', [
-        ['Soldier · только вошёл', function () { vipAt2(0, 0); }],
-        ['Soldier · почти Captain', function () { vipAt2(0, 78.4); }],
-        ['Captain · вторая ступень', function () { vipAt2(1, 34.5); }],
-        ['General · есть менеджер', function () { vipAt2(2, 12.8); }],
-        ['Warlord · верх лестницы', function () { vipAt2(3, 100); }],
+        ['Bronze · уровень 3', function () { vipOpen('[data-vlv="bronze"]'); }],
+        ['Ранг без чисел', function () { vipOpen('[data-vlv="gold"]'); }],
+        ['Вопросы · привилегии', function () { vipOpen('[data-vfaq="privileges"]'); }],
+        ['Вопросы · менеджеры', function () { vipOpen('[data-vfaq="managers"]'); }],
         ['Гость · клуба в меню нет', function () {
           document.body.classList.remove('is-authed');
           showView('home');
